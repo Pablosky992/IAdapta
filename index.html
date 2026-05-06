@@ -465,12 +465,12 @@ window.SectionAnalyzer = function SectionAnalyzer() {
     if (form.banyo === 'banyera' || form.banyo === 'nada' || form.banyo === 'barras') {
       all.push({ 
         cond: true, icon: '🚿', prio: 'Alta', 
-        text: 'Evite reformas inmediatas usando productos de apoyo. Instale asideros de pared a 75cm de altura y utilice un asiento giratorio para acceder a la bañera con total seguridad y sin levantar las piernas.',
+        text: 'Para prevenir caídas durante la higiene diaria, la intervención prioritaria es evitar superar el bordillo de la bañera en bipedestación. Retire cualquier alfombra de tela suelta y seque bien el suelo tras su uso. Como solución principal y más segura (antes de pensar en reformas), utilice un asiento giratorio. Este dispositivo le permitirá sentarse desde fuera e introducir las piernas de forma suave y controlada. Acompáñelo de asideros de pared fijados a 75-80cm de altura para tener un apoyo firme al levantarse.',
         linkText: 'Ver asiento giratorio', linkUrl: 'https://amzn.to/4d3bjlv'
       });
       all.push({ 
         cond: true, icon: '🚽', prio: 'Alta', 
-        text: 'Añada un elevador de inodoro con reposabrazos para evitar realizar flexiones profundas de cadera y facilitar la incorporación autónoma.',
+        text: 'La transferencia al inodoro supone un gran esfuerzo articular y un riesgo de desequilibrio si hay debilidad en las piernas. Mantenga el papel higiénico a una altura accesible sin necesidad de girar el tronco. Para facilitar el sentarse y levantarse de forma autónoma, añada un elevador de inodoro con reposabrazos. Esto reduce drásticamente la flexión de cadera y rodilla requerida, protegiendo sus articulaciones.',
         linkText: 'Ver elevador de inodoro', linkUrl: 'https://amzn.to/42hlsWU'
       });
     }
@@ -478,14 +478,14 @@ window.SectionAnalyzer = function SectionAnalyzer() {
     if (form.iluminacion !== 'buena' && form.iluminacion !== '') {
       all.push({ 
         cond: true, icon: '💡', prio: 'Media', 
-        text: 'Modifique el entorno sin obra: instale luces con sensor de movimiento cerca del suelo para los recorridos nocturnos y aumente el contraste cromático en las zonas de paso oscuro.'
+        text: 'Una correcta agudeza visual es el primer mecanismo para evitar tropiezos. Mantenga libres las ventanas durante el día y evite productos de limpieza que dejen el suelo excesivamente reflectante, ya que los destellos pueden causar desorientación. Además, modifique el entorno nocturno de forma sencilla: instale luces automáticas con sensor de movimiento cerca del rodapié en los trayectos al baño y marque posibles desniveles con cinta adhesiva de alto contraste.'
       });
     }
 
     if (form.puertas === 'estrechas' || form.puertas === 'normal') {
       all.push({ 
         cond: true, icon: '🛏️', prio: 'Media', 
-        text: 'Antes de ensanchar puertas estructuralmente, reorganice los muebles para garantizar pasillos de al menos 80cm libres. En el dormitorio, eleve la altura de descanso para facilitar levantarse.',
+        text: 'Las transferencias desde la cama requieren vencer la gravedad, siendo extenuantes si el colchón está muy bajo. Primero, despeje el dormitorio reorganizando mesas o sillas para garantizar pasillos interiores de al menos 80cm, permitiendo giros seguros. En segundo lugar, en vez de comprar una cama nueva, eleve los puntos de apoyo de su estructura actual utilizando tacos elevadores en las patas; notará un gran alivio al levantarse por las mañanas.',
         linkText: 'Ver tacos elevadores de cama', linkUrl: 'https://amzn.to/4tXN3Zo'
       });
     }
@@ -493,13 +493,13 @@ window.SectionAnalyzer = function SectionAnalyzer() {
     if (form.movilidad === 'baston' || form.movilidad === 'andador') {
       all.push({ 
         cond: true, icon: '🦯', prio: 'Alta', 
-        text: 'Retire TODAS las alfombras decorativas del domicilio para evitar enganches. Asegúrese de que las gomas de su andador o bastón estén en perfecto estado y cámbielas por modelos anchos.',
+        text: 'El uso de ayudas técnicas exige un entorno libre de obstáculos. Es vital que retire inmediatamente TODAS las alfombras decorativas y recoja cualquier cable suelto en zonas de paso. La seguridad de su marcha depende de la adherencia al suelo; revise periódicamente el desgaste de la goma inferior de su dispositivo y cámbielas siempre por conteras antideslizantes de base ancha, que aportan muchísima más estabilidad.',
         linkText: 'Ver conteras antideslizantes', linkUrl: 'https://amzn.to/4uw9fth'
       });
     } else if (form.movilidad === 'silla' || form.movilidad === 'ninguna') {
       all.push({ 
         cond: true, icon: '🍳', prio: 'Media', 
-        text: 'En la cocina, reorganice los objetos de uso diario entre la altura de la cintura y los hombros. Utilice productos ergonómicos para reducir el esfuerzo en las manos.',
+        text: 'La fatiga articular en la cocina limita gravemente la autonomía. Cocine en posición sentada siempre que sea posible y acerque los electrodomésticos pesados al borde de la encimera. Para compensar la pérdida de fuerza y proteger sus articulaciones, sustituya sus utensilios estándar por un set de cubiertos con mangos engrosados ergonómicos, reduciendo el dolor al comer o preparar alimentos.',
         linkText: 'Ver set de cubiertos adaptados', linkUrl: 'https://amzn.to/4wi1BVq'
       });
     }
@@ -507,7 +507,7 @@ window.SectionAnalyzer = function SectionAnalyzer() {
     if (form.nivelMovilidad === 'encamado' || form.nivelMovilidad === 'asistencia') {
       all.push({
         cond: true, icon: '🛏️', prio: 'Alta',
-        text: 'Dado el nivel de dependencia, es prioritario facilitar las transferencias. Instale un trapecio universal en la cama para promover la movilidad autónoma y reducir la carga física del cuidador.',
+        text: 'Ante un grado de dependencia alto, el objetivo es doble: fomentar los movimientos propios del usuario y proteger la espalda del cuidador. Le sugerimos coordinar los cambios posturales con la respiración. Para potenciar la autonomía en giros e incorporaciones, instale un trapecio universal en el cabecero. Esto permite usar la fuerza de los brazos para acomodarse, reduciendo drásticamente la carga de peso asistida.',
         linkText: 'Ver trapecio universal', linkUrl: 'https://amzn.to/3PqiHj4'
       });
     }
@@ -515,7 +515,7 @@ window.SectionAnalyzer = function SectionAnalyzer() {
     if (form.capacidadesMotoras === 'debilidad' || form.capacidadesMotoras === 'inestabilidad') {
       all.push({
         cond: true, icon: '🍽️', prio: 'Media',
-        text: 'Para compensar la pérdida de fuerza o el riesgo de inestabilidad, incorpore ayudas técnicas como tablas de cortar adaptadas que permitan fijar alimentos y cocinar con una sola mano.',
+        text: 'Cocinar con inestabilidad o debilidad incrementa el riesgo de accidentes, cortes y quemaduras. Acostúmbrese a deslizar las ollas pesadas en lugar de levantarlas a pulso. Para garantizar una manipulación segura, incorpore una tabla de cortar adaptada. Sus ventosas y clavos de fijación le permitirán pelar y cortar alimentos usando una sola mano sin que la tabla se resbale por la encimera.',
         linkText: 'Ver tabla de cortar adaptada', linkUrl: 'https://amzn.to/42CtdHf'
       });
     }
@@ -523,7 +523,7 @@ window.SectionAnalyzer = function SectionAnalyzer() {
     if (sc < 80) {
       all.push({ 
         cond: true, icon: '📋', prio: 'Info', 
-        text: 'Reforma Estructural (Última opción): Solo si la seguridad del usuario es imposible de garantizar mediante productos de apoyo y organización, plantéese ejecutar obras como sustituir la bañera por un plato de ducha enrasado a nivel del suelo.' 
+        text: 'Reforma Estructural (Última línea de intervención): Si tras retirar obstáculos, instalar los productos de apoyo recomendados y adaptar sus rutinas, la seguridad sigue comprometida de forma severa, valore ejecutar obras estructurales. Las intervenciones con mayor impacto suelen ser la sustitución de la bañera por un plato de ducha continuo (enrasado) y la ampliación de marcos de puertas a 80 cm.' 
       });
     }
 
