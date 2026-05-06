@@ -1,0 +1,166 @@
+/* ===================================================
+   GLOBAL RESET & BASE
+   =================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;          /* Base large for elderly readability */
+  line-height: 1.75;
+  color: #1e3a8a;
+  background: #ffffff;
+}
+
+/* ===================================================
+   ACCESSIBILITY
+   =================================================== */
+.skip-link {
+  position: absolute;
+  top: -120px;
+  left: 1rem;
+  background: #2563eb;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 0 0 0.5rem 0.5rem;
+  z-index: 9999;
+  transition: top 0.25s ease;
+  text-decoration: none;
+}
+.skip-link:focus { top: 0; outline: 3px solid #fff; outline-offset: 2px; }
+
+*:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ===================================================
+   HERO GRADIENT
+   =================================================== */
+.hero-gradient {
+  background: linear-gradient(135deg,
+    #eff6ff 0%,
+    #dbeafe 35%,
+    #e0f2fe 65%,
+    #f0fdf4 100%
+  );
+}
+
+/* ===================================================
+   ANIMATIONS
+   =================================================== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pulseBlue {
+  0%,100% { box-shadow: 0 0 0 0   rgba(37,99,235,0.40); }
+  50%      { box-shadow: 0 0 0 12px rgba(37,99,235,0.00); }
+}
+
+@keyframes spinOnce {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes dashFill {
+  to { stroke-dashoffset: 0; }
+}
+
+.anim-fade-up        { animation: fadeInUp 0.65s ease-out both; }
+.anim-fade-up-d1     { animation: fadeInUp 0.65s ease-out 0.10s both; }
+.anim-fade-up-d2     { animation: fadeInUp 0.65s ease-out 0.20s both; }
+.anim-fade-up-d3     { animation: fadeInUp 0.65s ease-out 0.30s both; }
+.anim-fade-up-d4     { animation: fadeInUp 0.65s ease-out 0.40s both; }
+.anim-fade-in        { animation: fadeIn   0.50s ease-out both; }
+.anim-scale-in       { animation: scaleIn  0.50s ease-out both; }
+.anim-spin           { animation: spinOnce 1.0s linear infinite; }
+.btn-pulse           { animation: pulseBlue 2.2s ease-in-out infinite; }
+
+/* ===================================================
+   CARD HOVER LIFT
+   =================================================== */
+.card-lift {
+  transition: transform 0.28s cubic-bezier(.4,0,.2,1),
+              box-shadow 0.28s cubic-bezier(.4,0,.2,1);
+}
+.card-lift:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 24px 48px rgba(37,99,235,0.13);
+}
+
+/* ===================================================
+   SECTION DIVIDER
+   =================================================== */
+.section-divider {
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #bfdbfe, #2563eb, #bfdbfe);
+}
+
+/* ===================================================
+   NAVBAR BLUR
+   =================================================== */
+.nav-blur {
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 1px 24px rgba(37,99,235,0.09);
+}
+
+/* ===================================================
+   TIMELINE
+   =================================================== */
+.timeline-line::before {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 40px;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, #3b82f6 0%, #bfdbfe 100%);
+}
+
+/* ===================================================
+   AI ANALYZER
+   =================================================== */
+.score-ring {
+  stroke-dasharray: 283;
+  stroke-dashoffset: 283;
+  transition: stroke-dashoffset 1.6s ease;
+  transform-origin: center;
+  transform: rotate(-90deg);
+}
+
+/* ===================================================
+   SCROLLBAR (aesthetic)
+   =================================================== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #eff6ff; }
+::-webkit-scrollbar-thumb {
+  background: #93c5fd;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+
+/* ===================================================
+   PRINT
+   =================================================== */
+@media print {
+  nav, footer, .no-print { display: none !important; }
+  body { font-size: 12pt; color: #000; }
+}
