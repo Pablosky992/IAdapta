@@ -770,16 +770,25 @@ window.ArticleBlock = function ArticleBlock({ article, getAmazonLink }) {
         </h5>
         <ul className="space-y-4">
           {article.materials.map((mat, i) => (
-            <li key={i} className="flex flex-col gap-2 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-              <span className="font-semibold text-gray-800 text-sm leading-tight">{mat.name}</span>
+            <li key={i} className="group/card bg-white rounded-xl border border-gray-200 shadow-sm hover:border-brand-300 hover:shadow-md transition-all overflow-hidden cursor-pointer">
               <a 
-                href={getAmazonLink(mat.query)} 
+                href={mat.link || getAmazonLink(mat.query)} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-[#FF9900] hover:text-[#ffaa22] font-bold text-sm transition-colors group"
+                className="flex gap-4 p-4 items-start w-full h-full outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
               >
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 group-hover:scale-110 transition-transform"><path d="M11.996 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12 12 12 0 0 0-12-12zm-3.078 18.066c-2.484 0-4.636-1.077-6.22-2.793.18-.12.443-.095.682.023 1.58 1.484 3.655 2.375 5.86 2.375 2.155 0 4.19-.884 5.753-2.316.204-.155.515-.155.707.012-1.615 1.74-3.838 2.7-6.782 2.7zm8.172-3.155c-.204.36-.635.48-1.043.25-.407-.228-.622-.683-.49-1.114.6-2.095-.084-4.526-1.796-6.19-2.06-2.012-5.46-2.348-8.29-.683-.406.24-.91.07-1.125-.335-.216-.407-.06-.922.347-1.162 3.424-2.012 7.555-1.593 10.057.85 2.107 2.06 2.873 5.09 2.34 7.384z"/></svg>
-                Buscar en Amazon
+                {mat.image && (
+                  <img src={mat.image} alt={mat.name} className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg border border-gray-100 shrink-0 shadow-sm group-hover/card:border-brand-200 transition-colors" />
+                )}
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <span className="font-semibold text-gray-900 text-sm sm:text-base leading-tight group-hover/card:text-brand-700 transition-colors">{mat.name}</span>
+                  {mat.desc && <p className="text-xs sm:text-sm text-gray-500 leading-snug">{mat.desc}</p>}
+                  
+                  <div className="inline-flex items-center gap-2 text-[#FF9900] group-hover/card:text-[#ffaa22] font-bold text-sm sm:text-base mt-1 transition-colors">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 group-hover/card:scale-110 transition-transform"><path d="M11.996 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12 12 12 0 0 0-12-12zm-3.078 18.066c-2.484 0-4.636-1.077-6.22-2.793.18-.12.443-.095.682.023 1.58 1.484 3.655 2.375 5.86 2.375 2.155 0 4.19-.884 5.753-2.316.204-.155.515-.155.707.012-1.615 1.74-3.838 2.7-6.782 2.7zm8.172-3.155c-.204.36-.635.48-1.043.25-.407-.228-.622-.683-.49-1.114.6-2.095-.084-4.526-1.796-6.19-2.06-2.012-5.46-2.348-8.29-.683-.406.24-.91.07-1.125-.335-.216-.407-.06-.922.347-1.162 3.424-2.012 7.555-1.593 10.057.85 2.107 2.06 2.873 5.09 2.34 7.384z"/></svg>
+                    Ver en Amazon
+                  </div>
+                </div>
               </a>
             </li>
           ))}
@@ -877,9 +886,27 @@ window.SectionGuides = function SectionGuides() {
             </div>
           ),
           materials: [
-            { name: 'Asiento giratorio para bañera', query: 'asiento giratorio bañera ortopedia' },
-            { name: 'Elevador de inodoro con reposabrazos', query: 'elevador inodoro con reposabrazos' },
-            { name: 'Alfombra antideslizante extrafuerte', query: 'alfombra ducha antideslizante ancianos' }
+            { 
+              name: 'Asiento giratorio para bañera', 
+              desc: 'Permite entrar y salir de la bañera cómodamente sin levantar las piernas.',
+              image: 'assets/asiento_banera.jpg',
+              link: 'https://amzn.to/4d3bjlv', 
+              query: 'asiento giratorio bañera ortopedia' 
+            },
+            { 
+              name: 'Elevador de inodoro con reposabrazos', 
+              desc: 'Aumenta la altura del WC y da soporte firme al levantarse o sentarse.',
+              image: 'assets/elevador_wc.jpg',
+              link: 'https://amzn.to/42hlsWU', 
+              query: 'elevador inodoro con reposabrazos' 
+            },
+            { 
+              name: 'Agarraderas / Barras de apoyo', 
+              desc: 'Asideros de pared imprescindibles para prevenir caídas en la ducha.',
+              image: 'assets/asideros.jpg',
+              link: 'https://amzn.to/4u4JBw3', 
+              query: 'asidero barra apoyo baño' 
+            }
           ]
         }
       ]
@@ -956,9 +983,27 @@ window.SectionGuides = function SectionGuides() {
             </div>
           ),
           materials: [
-            { name: 'Barandilla asidero para cama', query: 'barandilla asidero cama ancianos' },
-            { name: 'Luces LED nocturnas con sensor', query: 'luces led nocturnas sensor movimiento cama' },
-            { name: 'Tacos elevadores para patas de cama', query: 'tacos elevadores cama' }
+            { 
+              name: 'Barandilla extensible', 
+              desc: 'Asidero seguro para facilitar la incorporación y evitar caídas nocturnas.',
+              image: 'assets/barandilla_cama.jpg',
+              link: 'https://amzn.to/42hT9Yu', 
+              query: 'barandilla asidero cama ancianos' 
+            },
+            { 
+              name: 'Trapecio Universal', 
+              desc: 'Estructura de apoyo superior para facilitar la incorporación y cambios posturales en cama.',
+              image: 'assets/trapecio_cama.jpg',
+              link: 'https://amzn.to/3PqiHj4',
+              query: 'trapecio incorporador cama' 
+            },
+            { 
+              name: 'Tacos elevadores para patas de cama', 
+              desc: 'Aumentan la altura de la cama para facilitar levantarse sin esfuerzo articular.',
+              image: 'assets/tacos_cama.jpg',
+              link: 'https://amzn.to/4tXN3Zo',
+              query: 'tacos elevadores cama' 
+            }
           ]
         }
       ]
@@ -1037,9 +1082,27 @@ window.SectionGuides = function SectionGuides() {
             </div>
           ),
           materials: [
-            { name: 'Taburete alto ergonómico (percha)', query: 'taburete plancha cocina regulable' },
-            { name: 'Abrebotes automático', query: 'abrebotes automatico artritis' },
-            { name: 'Pinza de alcance de mango largo', query: 'pinza alcance objetos ancianos' }
+            { 
+              name: 'Set de cubiertos adaptados', 
+              desc: 'Mangos engrosados que facilitan el agarre para personas con artritis o pérdida de fuerza.',
+              image: 'assets/cubiertos_adaptados.jpg',
+              link: 'https://amzn.to/4wi1BVq', 
+              query: 'cubiertos adaptados mango grueso' 
+            },
+            { 
+              name: 'Cuchillo Nelson', 
+              desc: 'Permite cortar con una sola mano gracias a su diseño de hoja curva oscilante.',
+              image: 'assets/cuchillo_nelson.jpg',
+              link: 'https://amzn.to/3QPzqgd', 
+              query: 'cuchillo nelson adaptado' 
+            },
+            { 
+              name: 'Tabla de cortar adaptada', 
+              desc: 'Con ventosas y clavos de sujeción para fijar los alimentos y manipularlos con seguridad.',
+              image: 'assets/tabla_cortar.jpg',
+              link: 'https://amzn.to/42CtdHf', 
+              query: 'tabla de cortar adaptada una mano' 
+            }
           ]
         }
       ]
@@ -1114,9 +1177,27 @@ window.SectionGuides = function SectionGuides() {
             </div>
           ),
           materials: [
-            { name: 'Andador de aluminio con asiento', query: 'andador ancianos aluminio asiento' },
-            { name: 'Bastón cuadrípode estable', query: 'baston cuadripode base ancha' },
-            { name: 'Conteras antideslizantes anchas', query: 'conteras goma baston antideslizante' }
+            { 
+              name: 'Andador de aluminio para interior', 
+              desc: 'Ligero y estrecho, con ruedas delanteras para maniobrar por pasillos y puertas de casa.',
+              image: 'assets/andador_interior.jpg',
+              link: 'https://amzn.to/49eGadM', 
+              query: 'andador interior estrecho ancianos' 
+            },
+            { 
+              name: 'Andador tipo Rollator (exterior)', 
+              desc: 'Con cuatro ruedas grandes, asiento y frenos para paseos seguros en la calle.',
+              image: 'assets/andador_exterior.jpg',
+              link: 'https://amzn.to/4nioy6O', 
+              query: 'andador rollator exterior aluminio' 
+            },
+            { 
+              name: 'Conteras antideslizantes', 
+              desc: 'Gomas anchas de repuesto para bastones o andadores. Máximo agarre en el suelo.',
+              image: 'assets/conteras.jpg',
+              link: 'https://amzn.to/4uw9fth', 
+              query: 'conteras antideslizantes baston' 
+            }
           ]
         }
       ]
