@@ -371,6 +371,14 @@
       );
     };
 
+    // Lista de modelos oficiales y retrocompatibles
+    const modelsToTry = [
+      "gemini-1.5-flash",
+      "gemini-1.5-flash-latest",
+      "gemini-1.5-pro",
+      "gemini-pro-vision"
+    ];
+
     // --- LEVELS CONFIG FOR ORDER GAME ---
     const ORDER_LEVELS = [
       { id: 1, count: 6, cols: 'grid-cols-3' },
@@ -881,10 +889,31 @@
       const handleFile = (selectedFile) => {
         setFile(selectedFile);
         setPreview(URL.createObjectURL(selectedFile));
+        
         const reader = new FileReader();
         reader.onloadend = () => {
-          const base64String = reader.result.replace('data:', '').replace(/^.+,/, '');
-          setBase64(base64String);
+          const base64Str = reader.result;
+          
+          // Compresión inmediata al cargar
+          const img = new Image();
+          img.src = base64Str;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            const MAX_SIZE = 800;
+            if (width > height) {
+              if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+            } else {
+              if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+            }
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            const optimized = canvas.toDataURL('image/jpeg', 0.6); // 60% calidad para ligereza total
+            setBase64(optimized.split(',')[1]);
+          };
         };
         reader.readAsDataURL(selectedFile);
       };
@@ -1008,56 +1037,15 @@
         setAiError('');
         setAiResponse('');
 
-        // Función para redimensionar la imagen antes de enviarla
-        const resizeImage = (base64Str) => {
-          return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onerror = () => reject(new Error("Error al cargar la imagen para redimensionar"));
-            img.src = base64Str;
-            img.onload = () => {
-              try {
-                const canvas = document.createElement('canvas');
-                let width = img.width;
-                let height = img.height;
-                const MAX_SIZE = 800; // Máxima compatibilidad y velocidad
-
-                if (width > height) {
-                  if (width > MAX_SIZE) {
-                    height *= MAX_SIZE / width;
-                    width = MAX_SIZE;
-                  }
-                } else {
-                  if (height > MAX_SIZE) {
-                    width *= MAX_SIZE / height;
-                    height = MAX_SIZE;
-                  }
-                }
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
-                resolve(canvas.toDataURL('image/jpeg', 0.7)); 
-              } catch (e) {
-                reject(e);
-              }
-            };
-          });
-        };
+// Se ha eliminado la función redundante resizeImage aquí porque ahora se hace en handleFile
 
         if (base64) {
           try {
-            let optimizedBase64 = base64;
-            try {
-              optimizedBase64 = await resizeImage(base64);
-            } catch (reErr) {
-              console.warn("Fallo el redimensionamiento, intentando enviar original...", reErr);
-            }
-
             const response = await fetch('/api/analyze', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                base64: optimizedBase64.includes(',') ? optimizedBase64.split(',')[1] : optimizedBase64,
+                base64: base64, // Ya viene comprimido de handleFile
                 mimeType: 'image/jpeg',
                 answers: form
               })

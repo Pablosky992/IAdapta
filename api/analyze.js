@@ -20,10 +20,11 @@ export default async function handler(req, res) {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // Lista de modelos con nombres oficiales estables
+    // Lista de modelos oficiales y retrocompatibles
     const modelsToTry = [
-      "gemini-1.5-flash-latest",
       "gemini-1.5-flash",
+      "gemini-1.5-flash-latest",
+      "gemini-1.5-pro",
       "gemini-pro-vision"
     ];
 
