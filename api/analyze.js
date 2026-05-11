@@ -4,32 +4,50 @@ export default async function handler(req, res) {
   const apiKey = (process.env.GEMINI_API_KEY || '').trim().replace(/^["']|["']$/g, '');
   
   try {
-    // 1. INTENTO DE ANÁLISIS DIRECTO
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const { base64, mimeType, answers } = req.body;
+    const answersText = answers ? Object.entries(answers).map(([q, a]) => `${q}: ${a}`).join('\n') : '';
+
+    const prompt = `Analiza esta imagen de accesibilidad universal desde la perspectiva de Terapia Ocupacional.
+RESPUESTAS DEL CUESTIONARIO:
+${answersText}
+
+Estructura el informe así:
+### 1. DIAGNÓSTICO TÉCNICO
+Identifica barreras reales.
+### 2. PLAN DE ADAPTACIÓN Y PRODUCTOS
+Indica productos usando etiquetas [[PRODUCTO:1]] (Tabla bañera), [[PRODUCTO:2]] (Asiento ducha), [[PRODUCTO:3]] (Barras), [[PRODUCTO:4]] (Alza WC).
+### 3. CONCLUSIÓN PROFESIONAL
+
+IMPORTANTE: El informe debe empezar con el aviso de que es un análisis por IA en fase de pruebas.`;
+
+    // Usamos el modelo que tu llave sí permite: gemini-2.0-flash
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+    
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: "Analiza" }] }]
+        contents: [{
+          parts: [
+            { text: prompt },
+            { inlineData: { mimeType: mimeType || 'image/jpeg', data: base64 } }
+          ]
+        }]
       })
     });
 
     const data = await response.json();
 
     if (data.error) {
-      // 2. SI FALLA, PEDIMOS A GOOGLE LA LISTA DE MODELOS DISPONIBLES PARA ESTA LLAVE
-      const listUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
-      const listResp = await fetch(listUrl);
-      const listData = await listResp.json();
-      
-      const availableModels = listData.models 
-        ? listData.models.map(m => m.name.replace('models/', '')).join(', ') 
-        : 'Ninguno encontrado';
-
-      throw new Error(`Tu llave API NO tiene acceso a gemini-1.5-flash. Los modelos que sí puede ver son: [${availableModels}]. Google dice: ${data.error.message}`);
+      throw new Error(`Google Error: ${data.error.message}`);
     }
 
-    return res.status(200).json({ text: "Conexión exitosa. Re-activando análisis de imagen..." });
+    if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+      const text = data.candidates[0].content.parts[0].text;
+      return res.status(200).json({ text });
+    } else {
+      throw new Error("No se pudo obtener una respuesta válida de la IA.");
+    }
 
   } catch (error) {
     return res.status(500).json({ error: error.message });
