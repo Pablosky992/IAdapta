@@ -599,15 +599,20 @@
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {cards.map((c, i) => (
-                  <article key={c.id} className="bg-white rounded-3xl p-8 border border-blue-100 shadow-md card-lift flex flex-col anim-fade-up" style={{ animationDelay: `${0.15 * i + 0.1}s` }}>
-                    <div className={`w-14 h-14 ${c.color} rounded-2xl flex items-center justify-center mb-5 shadow-sm`}>{c.icon}</div>
+                  <article 
+                    key={c.id} 
+                    onClick={c.action}
+                    className="bg-white rounded-3xl p-8 border border-blue-100 shadow-md card-lift flex flex-col anim-fade-up cursor-pointer group" 
+                    style={{ animationDelay: `${0.15 * i + 0.1}s` }}
+                  >
+                    <div className={`w-14 h-14 ${c.color} rounded-2xl flex items-center justify-center mb-5 shadow-sm group-hover:scale-110 transition-transform`}>{c.icon}</div>
                     <span className="text-xs font-bold uppercase tracking-widest text-brand-400 mb-2">{c.badge}</span>
                     <h2 className="font-display text-2xl font-bold text-brand-900 mb-3">{c.title}</h2>
                     <p className="text-gray-600 text-lg leading-relaxed flex-1">{c.desc}</p>
-                    <button onClick={c.action} className="mt-6 inline-flex items-center gap-2 text-brand-600 font-bold text-lg hover:text-brand-800 transition-colors group">
+                    <div className="mt-6 inline-flex items-center gap-2 text-brand-600 font-bold text-lg hover:text-brand-800 transition-colors">
                       {c.cta}
                       <span className="transition-transform group-hover:translate-x-1"><Icons.ArrowRight /></span>
-                    </button>
+                    </div>
                   </article>
                 ))}
               </div>
