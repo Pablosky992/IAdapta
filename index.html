@@ -958,14 +958,46 @@
         setAiError('');
         setAiResponse('');
 
+        // Función para redimensionar la imagen antes de enviarla
+        const resizeImage = (base64Str) => {
+          return new Promise((resolve) => {
+            const img = new Image();
+            img.src = base64Str;
+            img.onload = () => {
+              const canvas = document.createElement('canvas');
+              let width = img.width;
+              let height = img.height;
+              const MAX_SIZE = 1200; // Tamaño máximo suficiente para IA
+
+              if (width > height) {
+                if (width > MAX_SIZE) {
+                  height *= MAX_SIZE / width;
+                  width = MAX_SIZE;
+                }
+              } else {
+                if (height > MAX_SIZE) {
+                  width *= MAX_SIZE / height;
+                  height = MAX_SIZE;
+                }
+              }
+              canvas.width = width;
+              canvas.height = height;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, width, height);
+              resolve(canvas.toDataURL('image/jpeg', 0.8)); // 80% calidad es perfecto para IA
+            };
+          });
+        };
+
         if (base64) {
           try {
+            const optimizedBase64 = await resizeImage(base64);
             const response = await fetch('/api/analyze', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                base64: base64,
-                mimeType: file ? file.type : 'image/jpeg',
+                base64: optimizedBase64.split(',')[1],
+                mimeType: 'image/jpeg',
                 answers: form
               })
             });
