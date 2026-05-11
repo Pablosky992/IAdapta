@@ -918,7 +918,10 @@
             });
 
             const data = await response.json();
-            if (data.error) throw new Error(data.error);
+            if (data.error) {
+              const errorMsg = typeof data.error === 'string' ? data.error : (data.error.message || 'Error desconocido');
+              throw new Error(errorMsg);
+            }
 
             if (data.text) {
               setAiResponse(data.text);
