@@ -8,6 +8,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Error del servidor: La clave GEMINI_API_KEY no está configurada.' });
     }
 
+  try {
     const { base64, mimeType } = req.body;
     
     if (!base64 || !mimeType) {
