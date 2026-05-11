@@ -20,11 +20,18 @@ export default async function handler(req, res) {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // Dejamos solo el modelo que confirmó actividad en el panel del usuario
-    const modelName = "gemini-1.5-flash";
+    // Lista optimizada para evitar errores 404 en la región EU
+    const modelsToTry = [
+      "gemini-1.5-flash-latest",
+      "gemini-1.5-flash-001",
+      "gemini-2.0-flash-exp"
+    ];
 
-    try {
-        // FORZAMOS v1: Es la clave para que no dé error 404 en tu cuenta
+    let lastError = null;
+    let text = "";
+
+    for (const modelName of modelsToTry) {
+      try {
         const model = genAI.getGenerativeModel({ model: modelName }, { apiVersion: 'v1' });
         const prompt = `IMPORTANTE: El informe DEBE comenzar siempre con este texto exacto:
 "Este análisis ha sido generado mediante Inteligencia Artificial (modelo Gemini 2.0 Flash) en fase de pruebas. La información proporcionada es orientativa y puede contener errores. Debe ser validada por un profesional cualificado antes de realizar cualquier cambio estructural."
@@ -83,13 +90,21 @@ REGLAS DE ORO: NO inventes URLs. Tono profesional y empático pero resolutivo. N
           }
         ]);
 
-        const text = result.response.text();
-        return res.status(200).json({ text });
+        text = result.response.text();
+        if (text) return res.status(200).json({ text });
+
+      } catch (error) {
+        lastError = error;
+        console.warn(`Fallo con ${modelName}:`, error.message);
+      }
+    }
+
+    throw lastError;
 
     } catch (error) {
-      console.error('Error en el análisis:', error);
+      console.error('Error final:', error);
       return res.status(500).json({ 
-        error: `Error al procesar con la IA (Modelo: gemini-1.5-flash): ` + error.message,
+        error: `Fallo tras probar modelos de respaldo: ` + error.message,
         details: error
       });
     }
