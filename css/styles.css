@@ -9,8 +9,8 @@ body {
   font-family: 'Inter', sans-serif;
   font-size: 18px;          /* Base large for elderly readability */
   line-height: 1.75;
-  color: #1e3a8a;
-  background: #ffffff;
+  color: #1A3052;
+  background: #F2F0E9;
 }
 
 /* ===================================================
@@ -43,10 +43,10 @@ body {
    =================================================== */
 .hero-gradient {
   background: linear-gradient(135deg,
-    #eff6ff 0%,
-    #dbeafe 35%,
-    #e0f2fe 65%,
-    #f0fdf4 100%
+    #F2F0E9 0%,
+    #E9E5D9 35%,
+    #E2DCCA 65%,
+    #D6CDAF 100%
   );
 }
 
@@ -63,9 +63,9 @@ body {
   to   { opacity: 1; }
 }
 
-@keyframes pulseBlue {
-  0%,100% { box-shadow: 0 0 0 0   rgba(37,99,235,0.40); }
-  50%      { box-shadow: 0 0 0 12px rgba(37,99,235,0.00); }
+@keyframes pulseBrand {
+  0%,100% { box-shadow: 0 0 0 0   rgba(232, 125, 85, 0.40); }
+  50%      { box-shadow: 0 0 0 12px rgba(232, 125, 85, 0.00); }
 }
 
 @keyframes spinOnce {
@@ -89,7 +89,7 @@ body {
 .anim-fade-in        { animation: fadeIn   0.50s ease-out both; }
 .anim-scale-in       { animation: scaleIn  0.50s ease-out both; }
 .anim-spin           { animation: spinOnce 1.0s linear infinite; }
-.btn-pulse           { animation: pulseBlue 2.2s ease-in-out infinite; }
+.btn-pulse           { animation: pulseBrand 2.2s ease-in-out infinite; }
 
 /* ===================================================
    CARD HOVER LIFT
@@ -100,7 +100,7 @@ body {
 }
 .card-lift:hover {
   transform: translateY(-7px);
-  box-shadow: 0 24px 48px rgba(37,99,235,0.13);
+  box-shadow: 0 24px 48px rgba(26, 48, 82, 0.13);
 }
 
 /* ===================================================
@@ -109,7 +109,7 @@ body {
 .section-divider {
   height: 3px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #bfdbfe, #2563eb, #bfdbfe);
+  background: linear-gradient(90deg, #E87D55, #1A3052, #E87D55);
 }
 
 /* ===================================================
@@ -132,7 +132,7 @@ body {
   top: 40px;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(180deg, #3b82f6 0%, #bfdbfe 100%);
+  background: linear-gradient(180deg, #1A3052 0%, #E87D55 100%);
 }
 
 /* ===================================================
