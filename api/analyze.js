@@ -1,8 +1,12 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const apiKey = (process.env.GEMINI_API_KEY || '').trim();
-  if (!apiKey) return res.status(500).json({ error: 'Falta API Key' });
+  // LIMPIEZA EXTREMA: Quitamos espacios, comillas y cualquier carácter invisible
+  const apiKey = (process.env.GEMINI_API_KEY || '').trim().replace(/^["']|["']$/g, '');
+  
+  if (!apiKey || apiKey.length < 10) {
+    return res.status(500).json({ error: 'La API Key no es válida o no está configurada en Vercel.' });
+  }
 
   try {
     const { base64, mimeType, answers } = req.body;
@@ -10,10 +14,10 @@ export default async function handler(req, res) {
 
     const prompt = `Analiza esta imagen de accesibilidad.
 RESPUESTAS: ${answersText}
-Estructura: ### 1. DIAGNÓSTICO, ### 2. PRODUCTOS (usa [[PRODUCTO:1]] Tabla bañera, [[PRODUCTO:2]] Asiento ducha, [[PRODUCTO:3]] Barras, [[PRODUCTO:4]] Alza WC), ### 3. CONCLUSIÓN.`;
+Estructura: ### 1. DIAGNÓSTICO, ### 2. PRODUCTOS (usa [[PRODUCTO:1]], [[PRODUCTO:2]], [[PRODUCTO:3]], [[PRODUCTO:4]]), ### 3. CONCLUSIÓN.`;
 
-    // CORRECCIÓN CRÍTICA: Google usa inlineData (CamelCase), no inline_data
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // Usamos v1 (Estable) que es la que mejor funciona con claves Tier 1
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
     
     const response = await fetch(url, {
       method: 'POST',
@@ -31,7 +35,24 @@ Estructura: ### 1. DIAGNÓSTICO, ### 2. PRODUCTOS (usa [[PRODUCTO:1]] Tabla bañ
     const data = await response.json();
 
     if (data.error) {
-      throw new Error(`Google Error: ${data.error.message}`);
+      // Si falla, probamos con gemini-1.5-flash-8b que es el más compatible
+      const urlFallback = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-8b:generateContent?key=${apiKey}`;
+      const respFallback = await fetch(urlFallback, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }, { inlineData: { mimeType: 'image/jpeg', data: base64 } }] }]
+        })
+      });
+      const dataFallback = await respFallback.json();
+      
+      if (dataFallback.error) {
+        throw new Error(`Google Error: ${dataFallback.error.message} (${dataFallback.error.status})`);
+      }
+      
+      if (dataFallback.candidates) {
+        return res.status(200).json({ text: dataFallback.candidates[0].content.parts[0].text });
+      }
     }
 
     if (data.candidates && data.candidates[0] && data.candidates[0].content) {
