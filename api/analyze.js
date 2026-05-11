@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Faltan datos de la imagen.' });
     }
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -31,21 +31,8 @@ export default async function handler(req, res) {
     const data = await response.json();
     if (data.error) {
       console.error('Gemini API Error:', data.error);
-      
-      // Si el modelo no se encuentra, intentamos listar qué modelos SÍ están disponibles para esta clave
-      let modelsList = '';
-      try {
-        const modelsRes = await fetch(`https://generativelanguage.googleapis.com/v1/models?key=${apiKey}`);
-        const modelsData = await modelsRes.json();
-        if (modelsData.models) {
-          modelsList = ' Modelos disponibles para tu clave: ' + modelsData.models.map(m => m.name.replace('models/', '')).join(', ');
-        }
-      } catch (e) {
-        console.error('Error al listar modelos:', e);
-      }
-
       return res.status(response.status).json({ 
-        error: (data.error.message || 'Error en la API') + modelsList,
+        error: data.error.message || 'Error en la API de Gemini',
         details: data.error
       });
     }
