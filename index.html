@@ -1167,46 +1167,30 @@
               <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-10">
                 Sube una foto de una estancia (baño, cocina...) y nuestra conexión con Gemini Vision identificará las barreras arquitectónicas.
               </p>
+              
+              {savedReports.length > 0 && step === 'form' && (
+                <div className="mb-10 p-6 bg-white border-2 border-indigo-100 rounded-3xl shadow-sm text-left">
+                  <h3 className="text-xl font-bold text-indigo-900 mb-4 flex items-center gap-2">
+                    <Icons.History /> Mis Informes Guardados
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {savedReports.map(report => (
+                      <div key={report.id} onClick={() => loadFromHistory(report)} className="p-4 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 rounded-2xl cursor-pointer transition-all group">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-sm font-bold text-indigo-800">{report.date}</span>
+                          <span className="text-xs font-bold px-2 py-1 bg-white text-indigo-600 rounded-lg shadow-sm">Puntuación: {report.score}/100</span>
+                        </div>
+                        <p className="text-xs text-indigo-600 group-hover:text-indigo-800 transition-colors">Click para ver detalles del informe</p>
+                      </div>
+                    ))}
+                  </div>
+                  <button onClick={() => { localStorage.removeItem('iadapta_reports'); setSavedReports([]); }} className="mt-4 text-xs text-red-500 hover:text-red-700 underline">Borrar todo el historial</button>
+                </div>
+              )}
             </div>
 
             {step === 'form' && (
               <div className="anim-fade-up">
-                
-                {/* HISTORIAL DE INFORMES */}
-                {savedReports.length > 0 && (
-                  <div className="mb-12 bg-indigo-50/50 border border-indigo-100 rounded-3xl p-6 sm:p-8">
-                    <h3 className="text-xl font-bold text-indigo-900 mb-6 flex items-center gap-3">
-                      <Icons.History /> Mis Informes Guardados
-                    </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {savedReports.map(report => (
-                        <div 
-                          key={report.id} 
-                          onClick={() => loadFromHistory(report)}
-                          className="bg-white p-5 rounded-2xl border border-indigo-100 shadow-sm hover:shadow-md hover:border-indigo-300 transition-all cursor-pointer group relative"
-                        >
-                          <button 
-                            onClick={(e) => deleteFromHistory(e, report.id)}
-                            className="absolute top-2 right-2 p-2 text-gray-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
-                            title="Eliminar informe"
-                          >
-                            <Icons.X />
-                          </button>
-                          <div className="flex items-center gap-3 mb-3">
-                            <div className="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center font-bold">
-                              {report.score}
-                            </div>
-                            <p className="text-sm font-bold text-gray-500">{report.date}</p>
-                          </div>
-                          <p className="text-brand-900 font-bold truncate">
-                            {report.form.tipo === 'banyo' ? 'Análisis de Baño' : report.form.tipo === 'cocina' ? 'Análisis de Cocina' : 'Análisis de Vivienda'}
-                          </p>
-                          <p className="text-xs text-brand-600 font-semibold mt-1">Hacer clic para ver informe →</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
 
                 <form onSubmit={handleAnalyze} className="bg-white rounded-3xl border border-brand-100 shadow-xl p-8 md:p-10 anim-scale-in" noValidate>
 
