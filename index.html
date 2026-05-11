@@ -933,9 +933,11 @@
             if (data.error) throw new Error(data.error);
 
             if (data.text) {
-              // Formateamos las negritas (Markdown ** a <strong>)
-              const formattedText = data.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-              setAiResponse(formattedText);
+              // Formateamos títulos ### a h3 estilizados
+              let formatted = data.text.replace(/^### (.*?)$/gm, '<h3 class="text-xl font-bold text-indigo-900 mt-6 mb-3 border-b border-indigo-100 pb-2">$1</h3>');
+              // Formateamos negritas (Markdown ** a <strong>)
+              formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+              setAiResponse(formatted);
             } else {
               throw new Error('No se pudo generar una respuesta.');
             }
@@ -949,7 +951,13 @@
         setScore(sc);
         setStep('results');
         setTimeout(() => setRingOffset(283 - (283 * sc / 100)), 100);
-        setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+        setTimeout(() => {
+          resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // Esperamos 1.5 segundos a que el usuario vea que ha terminado y lanzamos el PDF automático
+          setTimeout(() => {
+            if (base64) window.print();
+          }, 1500);
+        }, 200);
       };
 
       const reset = () => {
@@ -1216,13 +1224,45 @@
                       <p className="text-red-700">{aiError}</p>
                     ) : (
                       <div className="prose prose-indigo max-w-none text-gray-700 whitespace-pre-wrap text-lg ai-report-content">
-                        {aiResponse.split(/(https?:\/\/[^\s]+)/g).map((part, i) => 
-                          part.match(/^https?:\/\//) 
-                            ? <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="text-brand-600 font-bold underline hover:text-brand-800">{part}</a>
-                            : <span key={i} dangerouslySetInnerHTML={{ __html: part }} />
-                        )}
+                        {aiResponse.split(/(\[\[PRODUCTO:\d+\]\])/g).map((part, i) => {
+                          const productMatch = part.match(/\[\[PRODUCTO:(\d+)\]\]/);
+                          if (productMatch) {
+                            const productId = productMatch[1];
+                            const products = {
+                              '1': { name: 'Tabla de bañera', url: 'https://amzn.to/4uLnkU5', img: 'assets/tabla_banera.png' },
+                              '2': { name: 'Asiento para ducha', url: 'https://amzn.to/4dfjkUJ', img: 'assets/asiento_ducha.png' },
+                              '3': { name: 'Barras de apoyo', url: 'https://amzn.to/4u4JBw3', img: 'assets/barras_apoyo.png' },
+                              '4': { name: 'Alza de WC', url: 'https://amzn.to/42hlsWU', img: 'assets/alza_wc.png' }
+                            };
+                            const p = products[productId];
+                            if (!p) return null;
+                            return (
+                              <div key={i} className="my-8 bg-white border border-brand-100 rounded-2xl p-4 shadow-md flex flex-col sm:flex-row items-center gap-6 no-print">
+                                <img src={p.img} alt={p.name} className="w-32 h-32 object-cover rounded-xl border border-gray-100" />
+                                <div className="flex-1 text-center sm:text-left">
+                                  <h4 className="text-xl font-bold text-brand-900 mb-2">{p.name}</h4>
+                                  <p className="text-sm text-gray-500 mb-4">Producto técnico recomendado profesionalmente.</p>
+                                  <a href={p.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#FF9900] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#e68a00] transition-all shadow-sm">
+                                    Ver en Amazon
+                                  </a>
+                                </div>
+                              </div>
+                            );
+                          }
+                          return <div key={i} dangerouslySetInnerHTML={{ __html: part }} />;
+                        })}
                       </div>
                     )}
+                    
+                    <div className="mt-10 flex justify-center no-print">
+                      <button 
+                        onClick={() => window.print()} 
+                        className="flex items-center gap-3 px-8 py-4 bg-brand-800 text-white font-bold rounded-2xl hover:bg-brand-900 transition-all shadow-xl"
+                      >
+                        <Icons.Download />
+                        Descargar Informe en PDF
+                      </button>
+                    </div>
                   </div>
                 )}
 

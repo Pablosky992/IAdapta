@@ -146,6 +146,10 @@ body {
   transform: rotate(-90deg);
 }
 
+.ai-report-content p { margin-bottom: 1.25rem; }
+.ai-report-content ul { margin-bottom: 1.25rem; list-style-type: disc; padding-left: 1.5rem; }
+.ai-report-content li { margin-bottom: 0.5rem; }
+
 /* ===================================================
    SCROLLBAR (aesthetic)
    =================================================== */
@@ -161,8 +165,28 @@ body {
    PRINT
    =================================================== */
 @media print {
-  nav, footer, .no-print { display: none !important; }
-  body { font-size: 12pt; color: #000; }
+  /* Ocultar todo por defecto */
+  body * { visibility: hidden; }
+  
+  /* Mostrar solo el contenedor del informe y su contenido */
+  #analyzer-full, #analyzer-full * { visibility: visible; }
+  
+  /* Ajustes de posición para que el informe ocupe toda la página */
+  #analyzer-full {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Ocultar elementos específicos dentro del informe que no queremos en el PDF */
+  .no-print, .no-print * { display: none !important; visibility: hidden !important; }
+  
+  /* Ajustes de texto para impresión */
+  body { font-size: 11pt; color: #000; background: white !important; }
+  h2, h3, h4 { color: #1A3052 !important; }
 }
 
 /* ===================================================

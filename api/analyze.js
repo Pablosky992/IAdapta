@@ -34,28 +34,31 @@ export default async function handler(req, res) {
     for (const modelName of modelsToTry) {
       try {
         const model = genAI.getGenerativeModel({ model: modelName });
-        const prompt = `Actúa como un asesor técnico experto en Terapia Ocupacional. Genera un informe detallado basado en la IMAGEN adjunta y en las RESPUESTAS del cuestionario del usuario.
-        
+        const prompt = `Actúa como un asesor técnico experto en Terapia Ocupacional. Genera un informe clínico DIRECTO y CATEGÓRICO basado en la IMAGEN adjunta y en las RESPUESTAS del cuestionario.
+
+REGLAS CRÍTICAS DE LENGUAJE:
+- PROHIBIDO usar lenguaje condicional como "Si detectas...", "Si tienes...", "Podrías valorar...".
+- USA lenguaje imperativo y directo: "Se observa...", "Instala...", "Es necesario...".
+- SÉ ESPECÍFICO: Si el cuestionario dice que no hay ascensor, no menciones el ascensor como una opción, céntrate en la barrera que eso supone.
+
 RESPUESTAS DEL CUESTIONARIO:
 ${answersText}
 
-Tu objetivo es generar un informe detallado que mezcle consejos técnicos con recomendaciones de productos concretos. Prioriza siempre la seguridad y la autonomía.
+Estructura del Informe (USA ### PARA TÍTULOS):
+### 1. DIAGNÓSTICO TÉCNICO
+Analiza la imagen y cruza los datos con el cuestionario. Identifica barreras reales y puntos de seguridad existentes.
+### 2. PLAN DE ADAPTACIÓN Y PRODUCTOS
+Mezcla el consejo clínico con la solución. Cuando recomiendes uno de estos productos, DEBES insertar exactamente su etiqueta especial para que yo pueda mostrar la foto:
+   - Tabla de bañera -> Usa la etiqueta: [[PRODUCTO:1]]
+   - Asiento para ducha -> Usa la etiqueta: [[PRODUCTO:2]]
+   - Barras de apoyo -> Usa la etiqueta: [[PRODUCTO:3]]
+   - Alza de WC -> Usa la etiqueta: [[PRODUCTO:4]]
+### 3. SEGURIDAD Y ACCESIBILIDAD EXTERIOR
+Si el cuestionario indica falta de ascensor o puertas estrechas, dicta aquí las medidas de seguridad urgentes.
+### 4. CONCLUSIÓN PROFESIONAL
+Un párrafo final con la hoja de ruta clara para la autonomía del usuario.
 
-Estructura del Informe:
-1. DIAGNÓSTICO POR ÁREAS: Sé descriptivo. Para cada elemento analizado (puertas, baño, iluminación, etc.):
-   - Identifica BARRERAS o riesgos detectados.
-   - Identifica PUNTOS CORRECTOS (lo que ya está bien adaptado o es seguro).
-2. RECOMENDACIONES TÉCNICAS Y PRODUCTOS: Mezcla el 'por qué' clínico con la solución. Usa estos enlaces exclusivamente:
-   - Tabla de bañera (https://amzn.to/4uLnkU5)
-   - Asiento para ducha (https://amzn.to/4dfjkUJ)
-   - Barras de apoyo (https://amzn.to/4u4JBw3)
-   - Alza de WC (https://amzn.to/42hlsWU)
-3. AVISO CRÍTICO / ACCESIBILIDAD EXTERIOR:
-   - Si detectas pasos ≤ 60 cm: 'AVISO: Tus pasos de puerta son reducidos. Asegúrate de que el producto no supere los 55 cm de ancho total'.
-   - Si detectas o se menciona que NO hay ascensor en un piso o casa de varias plantas: Sugiere valorar con la comunidad o propietarios la instalación de un ascensor, salvaescaleras o rampa normativa.
-4. ANÁLISIS GENERAL: Finaliza con un párrafo que resuma el estado global de la estancia, destacando sus puntos fuertes y una hoja de ruta clara para mejorar los puntos débiles.
-
-REGLAS DE ORO: NO inventes URLs. Usa un tono profesional, clínico y empático. Si el espacio es muy pequeño, prioriza el consejo de seguridad sobre la recomendación de compra.`;
+REGLAS DE ORO: NO inventes URLs. Tono profesional y empático pero resolutivo. No pongas los enlaces de Amazon directamente, usa solo las etiquetas [[PRODUCTO:X]].`;
 
         const result = await model.generateContent([
           prompt,
