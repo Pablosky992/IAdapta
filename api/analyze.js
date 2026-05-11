@@ -3,50 +3,33 @@ export default async function handler(req, res) {
 
   const apiKey = (process.env.GEMINI_API_KEY || '').trim().replace(/^["']|["']$/g, '');
   
-  if (!apiKey || apiKey.length < 10) {
-    return res.status(500).json({ error: 'La API Key en Vercel está vacía o es demasiado corta.' });
-  }
-
   try {
-    const { base64, mimeType, answers } = req.body;
-    const answersText = answers ? Object.entries(answers).map(([q, a]) => `${q}: ${a}`).join('\n') : '';
-
-    const prompt = `Analiza esta imagen de accesibilidad.
-RESPUESTAS: ${answersText}
-Estructura: ### 1. DIAGNÓSTICO, ### 2. PRODUCTOS, ### 3. CONCLUSIÓN.`;
-
-    // Intentamos v1beta con gemini-1.5-flash
+    // 1. INTENTO DE ANÁLISIS DIRECTO
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-    
     const response = await fetch(url, {
       method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'x-goog-api-key': apiKey // Enviamos la llave también por cabecera por si acaso
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{
-          parts: [
-            { text: prompt },
-            { inlineData: { mimeType: mimeType || 'image/jpeg', data: base64 } }
-          ]
-        }]
+        contents: [{ parts: [{ text: "Analiza" }] }]
       })
     });
 
     const data = await response.json();
 
     if (data.error) {
-      // Si falla, el error vendrá de Google directamente
-      throw new Error(`Google dice: ${data.error.message} (${data.error.status})`);
+      // 2. SI FALLA, PEDIMOS A GOOGLE LA LISTA DE MODELOS DISPONIBLES PARA ESTA LLAVE
+      const listUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
+      const listResp = await fetch(listUrl);
+      const listData = await listResp.json();
+      
+      const availableModels = listData.models 
+        ? listData.models.map(m => m.name.replace('models/', '')).join(', ') 
+        : 'Ninguno encontrado';
+
+      throw new Error(`Tu llave API NO tiene acceso a gemini-1.5-flash. Los modelos que sí puede ver son: [${availableModels}]. Google dice: ${data.error.message}`);
     }
 
-    if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-      const text = data.candidates[0].content.parts[0].text;
-      return res.status(200).json({ text });
-    }
-
-    throw new Error("No se pudo obtener una respuesta válida de la IA.");
+    return res.status(200).json({ text: "Conexión exitosa. Re-activando análisis de imagen..." });
 
   } catch (error) {
     return res.status(500).json({ error: error.message });
