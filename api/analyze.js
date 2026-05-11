@@ -24,7 +24,8 @@ export default async function handler(req, res) {
     const modelName = "gemini-1.5-flash";
 
     try {
-        const model = genAI.getGenerativeModel({ model: modelName });
+        // FORZAMOS v1: Es la clave para que no dé error 404 en tu cuenta
+        const model = genAI.getGenerativeModel({ model: modelName }, { apiVersion: 'v1' });
         const prompt = `IMPORTANTE: El informe DEBE comenzar siempre con este texto exacto:
 "Este análisis ha sido generado mediante Inteligencia Artificial (modelo Gemini 2.0 Flash) en fase de pruebas. La información proporcionada es orientativa y puede contener errores. Debe ser validada por un profesional cualificado antes de realizar cualquier cambio estructural."
  Genera un informe clínico DIRECTO y CATEGÓRICO basado en la IMAGEN adjunta y en las RESPUESTAS del cuestionario.
