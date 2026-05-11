@@ -18,12 +18,12 @@ export default async function handler(req, res) {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // Lista de modelos a probar en orden de prioridad
+    // Lista de modelos detectados en tu panel de control
     const modelsToTry = [
+      "gemini-2-flash",
+      "gemini-2.5-flash",
       "gemini-1.5-flash-latest",
-      "gemini-1.5-flash-002",
-      "gemini-2.0-flash-exp",
-      "gemini-1.5-flash"
+      "gemini-2.0-flash-exp"
     ];
 
     let lastError = null;
