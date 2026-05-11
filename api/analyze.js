@@ -17,10 +17,9 @@ export default async function handler(req, res) {
     }
 
     const answersText = answers ? Object.entries(answers).map(([q, a]) => `- ${q}: ${a}`).join('\n') : 'No se proporcionaron respuestas.';
-
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // Lista optimizada para evitar errores 404 en la región EU
+    // Modelos en cascada para máxima fiabilidad
     const modelsToTry = [
       "gemini-1.5-flash-latest",
       "gemini-1.5-flash-001",
@@ -28,7 +27,6 @@ export default async function handler(req, res) {
     ];
 
     let lastError = null;
-    let text = "";
 
     for (const modelName of modelsToTry) {
       try {
@@ -90,26 +88,22 @@ REGLAS DE ORO: NO inventes URLs. Tono profesional y empático pero resolutivo. N
           }
         ]);
 
-        text = result.response.text();
-        if (text) return res.status(200).json({ text });
-
-      } catch (error) {
-        lastError = error;
-        console.warn(`Fallo con ${modelName}:`, error.message);
+        const text = result.response.text();
+        if (text) {
+          return res.status(200).json({ text });
+        }
+      } catch (err) {
+        lastError = err;
+        console.warn(`Fallo con ${modelName}:`, err.message);
       }
     }
 
-    throw lastError;
-
-    } catch (error) {
-      console.error('Error final:', error);
-      return res.status(500).json({ 
-        error: `Fallo tras probar modelos de respaldo: ` + error.message,
-        details: error
-      });
+    if (lastError) {
+      return res.status(500).json({ error: `Fallo tras probar modelos de respaldo: ` + lastError.message });
     }
-  } catch (outerError) {
-    console.error('Error externo:', outerError);
-    return res.status(500).json({ error: 'Error interno del servidor: ' + outerError.message });
+
+  } catch (error) {
+    console.error('Error crítico:', error);
+    return res.status(500).json({ error: 'Error interno del servidor: ' + error.message });
   }
 }
