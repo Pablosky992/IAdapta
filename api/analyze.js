@@ -20,21 +20,10 @@ export default async function handler(req, res) {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // Lista exhaustiva de modelos para forzar la conexión
-    const modelsToTry = [
-      "gemini-1.5-flash",
-      "gemini-1.5-flash-latest",
-      "gemini-1.5-pro",
-      "gemini-1.5-flash-8b",
-      "gemini-pro-vision",
-      "gemini-1.0-pro-vision-latest"
-    ];
+    // Dejamos solo el modelo que confirmó actividad en el panel del usuario
+    const modelName = "gemini-1.5-flash";
 
-    let lastError = null;
-    let text = "";
-
-    for (const modelName of modelsToTry) {
-      try {
+    try {
         const model = genAI.getGenerativeModel({ model: modelName });
         const prompt = `IMPORTANTE: El informe DEBE comenzar siempre con este texto exacto:
 "Este análisis ha sido generado mediante Inteligencia Artificial (modelo Gemini 2.0 Flash) en fase de pruebas. La información proporcionada es orientativa y puede contener errores. Debe ser validada por un profesional cualificado antes de realizar cualquier cambio estructural."
@@ -93,25 +82,13 @@ REGLAS DE ORO: NO inventes URLs. Tono profesional y empático pero resolutivo. N
           }
         ]);
 
-        text = result.response.text();
-        if (text) break; // Si tenemos éxito, salimos del bucle
-      } catch (error) {
-        lastError = error;
-        console.warn(`Fallo con el modelo ${modelName}, probando el siguiente...`, error.message);
-      }
-    }
-
-    if (text) {
-      return res.status(200).json({ text });
-    } else {
-      throw lastError; // Si todos fallan, lanzamos el último error
-    }
+        const text = result.response.text();
+        return res.status(200).json({ text });
 
     } catch (error) {
     console.error('Error en el análisis:', error);
-    const lastModel = modelsToTry[modelsToTry.length - 1];
     return res.status(500).json({ 
-      error: `Error al procesar con la IA (Modelo final: ${lastModel}): ` + error.message,
+      error: `Error al procesar con la IA (Modelo: gemini-1.5-flash): ` + error.message,
       details: error
     });
   }
