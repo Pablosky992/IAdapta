@@ -898,33 +898,44 @@
         return positives;
       };
 
+      const isQuestionnaireComplete = () => {
+        const requiredFields = ['tipo', 'ascensor', 'tipoBanyo', 'barras', 'alzaWC', 'iluminacion', 'puertas', 'movilidad', 'nivelMovilidad', 'capacidadesMotoras'];
+        return requiredFields.every(field => form[field] !== '');
+      };
+
       const prioBadge = { Alta: 'bg-red-100 text-red-700', Media: 'bg-amber-100 text-amber-700', Info: 'bg-brand-100 text-brand-700' };
 
       const handleAnalyze = async (e) => {
         e.preventDefault();
+        
+        if (!isQuestionnaireComplete()) {
+          setAiError("Por favor, completa todas las preguntas del cuestionario antes de realizar el análisis por IA.");
+          return;
+        }
+
         setStep('loading');
         setAiError('');
         setAiResponse('');
 
-        if (file) {
+        if (base64) {
           try {
             const response = await fetch('/api/analyze', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 base64: base64,
-                mimeType: file.type
+                mimeType: file ? file.type : 'image/jpeg',
+                answers: form
               })
             });
 
             const data = await response.json();
-            if (data.error) {
-              const errorMsg = typeof data.error === 'string' ? data.error : (data.error.message || 'Error desconocido');
-              throw new Error(errorMsg);
-            }
+            if (data.error) throw new Error(data.error);
 
             if (data.text) {
-              setAiResponse(data.text);
+              // Formateamos las negritas (Markdown ** a <strong>)
+              const formattedText = data.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+              setAiResponse(formattedText);
             } else {
               throw new Error('No se pudo generar una respuesta.');
             }
@@ -1204,11 +1215,11 @@
                     {aiError ? (
                       <p className="text-red-700">{aiError}</p>
                     ) : (
-                      <div className="prose prose-indigo max-w-none text-gray-700 whitespace-pre-wrap text-lg">
+                      <div className="prose prose-indigo max-w-none text-gray-700 whitespace-pre-wrap text-lg ai-report-content">
                         {aiResponse.split(/(https?:\/\/[^\s]+)/g).map((part, i) => 
                           part.match(/^https?:\/\//) 
                             ? <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="text-brand-600 font-bold underline hover:text-brand-800">{part}</a>
-                            : part
+                            : <span key={i} dangerouslySetInnerHTML={{ __html: part }} />
                         )}
                       </div>
                     )}
