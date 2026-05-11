@@ -31,8 +31,21 @@ export default async function handler(req, res) {
     const data = await response.json();
     if (data.error) {
       console.error('Gemini API Error:', data.error);
+      
+      // Si el modelo no se encuentra, intentamos listar qué modelos SÍ están disponibles para esta clave
+      let modelsList = '';
+      try {
+        const modelsRes = await fetch(`https://generativelanguage.googleapis.com/v1/models?key=${apiKey}`);
+        const modelsData = await modelsRes.json();
+        if (modelsData.models) {
+          modelsList = ' Modelos disponibles para tu clave: ' + modelsData.models.map(m => m.name.replace('models/', '')).join(', ');
+        }
+      } catch (e) {
+        console.error('Error al listar modelos:', e);
+      }
+
       return res.status(response.status).json({ 
-        error: data.error.message || 'Error en la API de Gemini',
+        error: (data.error.message || 'Error en la API') + modelsList,
         details: data.error
       });
     }
