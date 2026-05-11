@@ -930,8 +930,8 @@
             if (data.error) throw new Error(data.error);
 
             if (data.text) {
-              // Formateamos títulos ### a h3 estilizados
-              let formatted = data.text.replace(/^### (.*?)$/gm, '<h3 class="text-xl font-bold text-indigo-900 mt-6 mb-3 border-b border-indigo-100 pb-2">$1</h3>');
+              // Formateamos títulos ## y ### a h3 estilizados (limpieza total de símbolos)
+              let formatted = data.text.replace(/^[#]{2,3}\s?(.*?)$/gm, '<h3 class="text-xl font-bold text-indigo-900 mt-6 mb-3 border-b border-indigo-100 pb-2">$1</h3>');
               // Formateamos negritas (Markdown ** a <strong>)
               formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
               setAiResponse(formatted);
@@ -950,10 +950,10 @@
         setTimeout(() => setRingOffset(283 - (283 * sc / 100)), 100);
         setTimeout(() => {
           resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          // Esperamos 1.5 segundos a que el usuario vea que ha terminado y lanzamos el PDF automático
+          // Esperamos 2 segundos a que todo el DOM se renderice bien antes de lanzar el PDF automático
           setTimeout(() => {
-            if (base64) window.print();
-          }, 1500);
+            window.print();
+          }, 2000);
         }, 200);
       };
 
@@ -1221,8 +1221,8 @@
                       <p className="text-red-700">{aiError}</p>
                     ) : (
                       <div className="prose prose-indigo max-w-none text-gray-700 whitespace-pre-wrap text-lg ai-report-content">
-                        {aiResponse.split(/(\[\[PRODUCTO:\d+\]\])/g).map((part, i) => {
-                          const productMatch = part.match(/\[\[PRODUCTO:(\d+)\]\]/);
+                        {aiResponse.split(/(\[+PRODUCTO?[:\s]*\d+\]+)/gi).map((part, i) => {
+                          const productMatch = part.match(/PRODUCTO?[:\s]*(\d+)/i);
                           if (productMatch) {
                             const productId = productMatch[1];
                             const products = {

@@ -48,11 +48,13 @@ Estructura del Informe (USA ### PARA TÍTULOS):
 ### 1. DIAGNÓSTICO TÉCNICO
 Analiza la imagen y cruza los datos con el cuestionario. Identifica barreras reales y puntos de seguridad existentes.
 ### 2. PLAN DE ADAPTACIÓN Y PRODUCTOS
-Mezcla el consejo clínico con la solución. Cuando recomiendes uno de estos productos, DEBES insertar exactamente su etiqueta especial para que yo pueda mostrar la foto:
+Mezcla el consejo clínico con la solución. Cuando recomiendes uno de estos productos, INSERTA OBLIGATORIAMENTE su etiqueta especial para que yo pueda mostrar la foto:
    - Tabla de bañera -> Usa la etiqueta: [[PRODUCTO:1]]
    - Asiento para ducha -> Usa la etiqueta: [[PRODUCTO:2]]
    - Barras de apoyo -> Usa la etiqueta: [[PRODUCTO:3]]
    - Alza de WC -> Usa la etiqueta: [[PRODUCTO:4]]
+   
+IMPORTANTE: Escribe la etiqueta EXACTAMENTE como [[PRODUCTO:X]], incluyendo los dobles corchetes. No pongas enlaces de Amazon en texto, solo la etiqueta.
 ### 3. SEGURIDAD Y ACCESIBILIDAD EXTERIOR
 Si el cuestionario indica falta de ascensor o puertas estrechas, dicta aquí las medidas de seguridad urgentes.
 ### 4. CONCLUSIÓN PROFESIONAL
