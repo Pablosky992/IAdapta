@@ -86,10 +86,14 @@ REGLAS DE ORO: NO inventes URLs. Tono profesional y empático pero resolutivo. N
         return res.status(200).json({ text });
 
     } catch (error) {
-    console.error('Error en el análisis:', error);
-    return res.status(500).json({ 
-      error: `Error al procesar con la IA (Modelo: gemini-1.5-flash): ` + error.message,
-      details: error
-    });
+      console.error('Error en el análisis:', error);
+      return res.status(500).json({ 
+        error: `Error al procesar con la IA (Modelo: gemini-1.5-flash): ` + error.message,
+        details: error
+      });
+    }
+  } catch (outerError) {
+    console.error('Error externo:', outerError);
+    return res.status(500).json({ error: 'Error interno del servidor: ' + outerError.message });
   }
 }
