@@ -20,10 +20,14 @@ export default async function handler(req, res) {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // Nombres exactos confirmados en el panel del usuario
+    // Lista exhaustiva de modelos para forzar la conexión
     const modelsToTry = [
       "gemini-1.5-flash",
-      "gemini-1.5-pro"
+      "gemini-1.5-flash-latest",
+      "gemini-1.5-pro",
+      "gemini-1.5-flash-8b",
+      "gemini-pro-vision",
+      "gemini-1.0-pro-vision-latest"
     ];
 
     let lastError = null;
@@ -103,10 +107,11 @@ REGLAS DE ORO: NO inventes URLs. Tono profesional y empático pero resolutivo. N
       throw lastError; // Si todos fallan, lanzamos el último error
     }
 
-  } catch (error) {
+    } catch (error) {
     console.error('Error en el análisis:', error);
+    const lastModel = modelsToTry[modelsToTry.length - 1];
     return res.status(500).json({ 
-      error: 'Error al procesar la imagen con la IA oficial: ' + error.message,
+      error: `Error al procesar con la IA (Modelo final: ${lastModel}): ` + error.message,
       details: error
     });
   }
