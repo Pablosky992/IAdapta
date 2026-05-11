@@ -164,3 +164,19 @@ body {
   nav, footer, .no-print { display: none !important; }
   body { font-size: 12pt; color: #000; }
 }
+
+/* ===================================================
+   MEMORY GAME 3D EFFECTS
+   =================================================== */
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}

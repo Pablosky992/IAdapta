@@ -59,6 +59,9 @@
 
   <!-- Custom styles -->
   <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Confetti for the game completion -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </head>
 
 <body class="bg-white text-gray-900 antialiased">
@@ -103,8 +106,243 @@
       Lightbulb: () => <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" /></svg>,
       Heart: () => <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>,
       Home2: () => <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>,
-      FileText: () => <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
+      FileText: () => <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>,
+      Timer: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+      Refresh: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>,
+      // Game Icons
+      Keys: () => <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3L15.5 7.5z" /></svg>,
+      Smartphone: () => <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /><path d="M12 18h.01" /></svg>,
+      Utensils: () => <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" /></svg>,
+      Watch: () => <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="7" /><path d="M12 9v3l2 2M16.51 17.35l-.35 3.83a2 2 0 0 1-2 1.82H9.84a2 2 0 0 1-2-1.82l-.35-3.83m.01-10.7l.35-3.83A2 2 0 0 1 9.83 1h4.35a2 2 0 0 1 2 1.82l.35 3.83" /></svg>,
+      Glasses: () => <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><circle cx="6" cy="15" r="4" /><circle cx="18" cy="15" r="4" /><path d="M14 15a2 2 0 0 0-2-2 2 2 0 0 0-2 2M2.5 13L5 7c.7-1.3 1.4-2 3-2M21.5 13L19 7c-.7-1.3-1.4-2-3-2" /></svg>,
+      Coffee: () => <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path d="M17 8h1a4 4 0 1 1 0 8h-1M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" /><path d="M6 2v2M10 2v2M14 2v2" /></svg>,
+      Lamp: () => <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path d="M12 2v2M5 22h14M9 22v-4a3 3 0 0 1 6 0v4M14 10a2 2 0 0 1-2 2 2 2 0 0 1-2-2V7a2 2 0 0 1 2-2 2 2 0 0 1 2 2v3ZM12 12v3" /></svg>,
+      Shirt: () => <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 1.9l.58 14.33c.05 1.1.96 1.97 2.06 1.97h14.16c1.1 0 2.01-.87 2.06-1.97l.58-14.33a2 2 0 0 0-1.34-1.9ZM12 4.41V21M12 4.41l-2 1M12 4.41l2 1" /></svg>,
     };
+
+    // --- SECTION COGNITIVE ---
+    window.SectionCognitive = function SectionCognitive({ isTeaser, navigateTo }) {
+      const [cards, setCards] = useState([]);
+      const [flipped, setFlipped] = useState([]);
+      const [matched, setMatched] = useState([]);
+      const [moves, setMoves] = useState(0);
+      const [timer, setTimer] = useState(0);
+      const [isActive, setIsActive] = useState(false);
+      const [gameFinished, setGameFinished] = useState(false);
+
+      const items = [
+        { name: 'Keys', icon: <Icons.Keys /> },
+        { name: 'Smartphone', icon: <Icons.Smartphone /> },
+        { name: 'Utensils', icon: <Icons.Utensils /> },
+        { name: 'Watch', icon: <Icons.Watch /> },
+        { name: 'Glasses', icon: <Icons.Glasses /> },
+        { name: 'Coffee', icon: <Icons.Coffee /> },
+        { name: 'Lamp', icon: <Icons.Lamp /> },
+        { name: 'Shirt', icon: <Icons.Shirt /> },
+      ];
+
+      const initGame = () => {
+        const board = [...items, ...items]
+          .sort(() => Math.random() - 0.5)
+          .map((item, index) => ({ ...item, id: index }));
+        setCards(board);
+        setFlipped([]);
+        setMatched([]);
+        setMoves(0);
+        setTimer(0);
+        setIsActive(false);
+        setGameFinished(false);
+      };
+
+      useEffect(() => {
+        if (!isTeaser) initGame();
+      }, [isTeaser]);
+
+      useEffect(() => {
+        let interval = null;
+        if (isActive && !gameFinished) {
+          interval = setInterval(() => {
+            setTimer(t => t + 1);
+          }, 1000);
+        } else {
+          clearInterval(interval);
+        }
+        return () => clearInterval(interval);
+      }, [isActive, gameFinished]);
+
+      useEffect(() => {
+        if (matched.length === items.length && items.length > 0) {
+          setGameFinished(true);
+          setIsActive(false);
+          if (window.confetti) {
+            window.confetti({
+              particleCount: 150,
+              spread: 70,
+              origin: { y: 0.6 },
+              colors: ['#E87D55', '#1A3052', '#F2F0E9']
+            });
+          }
+        }
+      }, [matched]);
+
+      const handleFlip = (index) => {
+        if (!isActive && matched.length === 0) setIsActive(true);
+        if (flipped.length === 2 || flipped.includes(index) || matched.includes(cards[index].name)) return;
+
+        const newFlipped = [...flipped, index];
+        setFlipped(newFlipped);
+
+        if (newFlipped.length === 2) {
+          setMoves(m => m + 1);
+          const [first, second] = newFlipped;
+          if (cards[first].name === cards[second].name) {
+            setMatched([...matched, cards[first].name]);
+            setFlipped([]);
+          } else {
+            setTimeout(() => setFlipped([]), 1000);
+          }
+        }
+      };
+
+      const formatTime = (seconds) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+      };
+
+      if (isTeaser) {
+        return (
+          <section id="cognitive" className="py-24 px-4 bg-white">
+            <div className="max-w-4xl mx-auto text-center">
+              <span className="inline-block bg-brand-100 text-brand-700 rounded-full px-5 py-2 text-base font-bold uppercase tracking-widest mb-4">Entrena tu Mente</span>
+              <h2 className="font-display text-4xl sm:text-5xl font-bold text-brand-900 mb-6">Estimulación Cognitiva</h2>
+              <div className="section-divider w-24 mx-auto mb-8"></div>
+              
+              <div className="space-y-6 mb-10">
+                <p className="text-xl sm:text-2xl text-gray-700 leading-relaxed max-w-3xl mx-auto">
+                  Mantener la mente activa es tan vital como el ejercicio físico para preservar la autonomía. Fortalecer nuestra reserva cognitiva permite al cerebro adaptarse mejor al paso del tiempo, mejorando nuestra agilidad mental y bienestar diario.
+                </p>
+                <p className="text-lg text-gray-500 font-medium">
+                  Estos son algunos ejercicios prácticos diseñados para estimular la atención y la memoria:
+                </p>
+              </div>
+
+              <div className="bg-emerald-50 border-l-4 border-emerald-500 p-6 rounded-r-2xl shadow-sm mb-12 text-left max-w-3xl mx-auto">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-2xl">💡</span>
+                  <h5 className="font-bold text-emerald-800 uppercase tracking-wide text-base">El Consejo del Terapeuta Ocupacional</h5>
+                </div>
+                <p className="text-emerald-900 italic text-base leading-relaxed">
+                  "El cerebro se fortalece con la novedad. No te limites a lo que ya dominas: intenta aprender algo nuevo cada día, por pequeño que sea. El aprendizaje continuo es la mejor herramienta para mantener una mente joven y resiliente."
+                </p>
+              </div>
+
+              <button
+                onClick={() => window.open(window.location.origin + window.location.pathname + '?page=memory', '_blank')}
+                className="px-10 py-5 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 transition-all shadow-xl hover:shadow-2xl btn-pulse flex items-center gap-3 mx-auto"
+              >
+                <Icons.Brain />
+                Memoriza sus parejas
+              </button>
+            </div>
+          </section>
+        );
+      }
+
+      return (
+        <section id="cognitive-full" className="min-h-screen pt-32 pb-20 px-4 bg-gradient-to-b from-brand-50 to-white">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-10">
+              <button
+                onClick={() => navigateTo('main')}
+                className="mb-8 inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors"
+              >
+                <svg className="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                Volver al inicio
+              </button>
+              <h2 className="font-display text-4xl sm:text-5xl font-bold text-brand-900 mb-4">Juego de Memoria</h2>
+              <p className="text-lg text-gray-600">Entrena tu mente emparejando los objetos cotidianos.</p>
+            </div>
+
+            <div className="bg-white rounded-3xl border border-brand-100 shadow-2xl overflow-hidden anim-scale-in">
+              <div className="p-6 sm:p-8 bg-brand-900 text-white flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-2">
+                    <Icons.Timer />
+                    <span className="text-2xl font-mono font-bold tracking-wider">{formatTime(timer)}</span>
+                  </div>
+                  <div className="text-brand-300 text-sm font-bold uppercase tracking-widest">
+                    Movimientos: <span className="text-white text-xl ml-1">{moves}</span>
+                  </div>
+                </div>
+                <button
+                  onClick={initGame}
+                  className="flex items-center gap-2 bg-accent-coral hover:bg-orange-600 text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-md active:scale-95"
+                >
+                  <Icons.Refresh /> Reiniciar
+                </button>
+              </div>
+
+              <div className="p-4 sm:p-8 bg-gray-50">
+                {!gameFinished ? (
+                  <div className="grid grid-cols-4 gap-3 sm:gap-6 max-w-md mx-auto aspect-square">
+                    {cards.map((card, index) => {
+                      const isFlipped = flipped.includes(index) || matched.includes(card.name);
+                      return (
+                        <div
+                          key={card.id}
+                          onClick={() => handleFlip(index)}
+                          className={`relative cursor-pointer transition-all duration-500 preserve-3d h-full w-full ${isFlipped ? 'rotate-y-180' : ''}`}
+                        >
+                          {/* Front (Hidden) */}
+                          <div className="absolute inset-0 bg-brand-200 border-2 border-white rounded-xl sm:rounded-2xl shadow-sm flex items-center justify-center backface-hidden">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 border-4 border-brand-300 rounded-full opacity-30"></div>
+                          </div>
+                          {/* Back (Visible) */}
+                          <div className="absolute inset-0 bg-white border-2 border-brand-400 rounded-xl sm:rounded-2xl shadow-md flex items-center justify-center rotate-y-180 backface-hidden text-brand-900">
+                            {card.icon}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-center py-12 anim-fade-in">
+                    <div className="mb-6 inline-block p-6 bg-brand-100 rounded-full text-brand-600">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    <h3 className="text-3xl font-display font-bold text-brand-900 mb-2">¡Increíble trabajo!</h3>
+                    <p className="text-xl text-gray-600 mb-8">Has completado el ejercicio en <strong className="text-brand-900">{formatTime(timer)}</strong> y con <strong className="text-brand-900">{moves}</strong> movimientos.</p>
+                    <button
+                      onClick={initGame}
+                      className="bg-brand-900 hover:bg-brand-800 text-white px-10 py-4 rounded-2xl font-bold text-xl transition-all shadow-xl hover:shadow-2xl active:scale-95"
+                    >
+                      Jugar de nuevo
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="mt-12 grid md:grid-cols-2 gap-6">
+              <div className="bg-white p-6 rounded-2xl border border-brand-100 shadow-sm">
+                <h4 className="font-bold text-brand-900 text-lg mb-2 flex items-center gap-2">
+                  <span className="text-xl">🧠</span> Beneficios
+                </h4>
+                <p className="text-gray-600">Fortalece la memoria de trabajo y la atención sostenida, funciones críticas para las actividades de la vida diaria.</p>
+              </div>
+              <div className="bg-white p-6 rounded-2xl border border-brand-100 shadow-sm">
+                <h4 className="font-bold text-brand-900 text-lg mb-2 flex items-center gap-2">
+                  <span className="text-xl">⌚</span> Constancia
+                </h4>
+                <p className="text-gray-600">Pequeñas sesiones de 10-15 minutos al día son más efectivas que sesiones largas esporádicas.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    };
+
 
     // --- NAVBAR ---
     window.Navbar = function Navbar({ activeSection, scrollTo, currentPage, navigateTo }) {
@@ -120,6 +358,7 @@
       const linksMain = [
         { id: 'home', label: 'Inicio' },
         { id: 'about', label: 'Sobre Mí' },
+        { id: 'cognitive', label: 'Área Cognitiva' },
         { id: 'analyzer', label: 'Analizador IA' },
         { id: 'guides', label: 'Guías' },
         { id: 'contact', label: 'Contacto' },
@@ -405,7 +644,7 @@
     };
 
     // --- SECTION ANALYZER ---
-    window.SectionAnalyzer = function SectionAnalyzer() {
+    window.SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
       const { useState, useRef } = React;
       const [step, setStep] = useState('form');
       const [score, setScore] = useState(0);
@@ -601,20 +840,62 @@
       const fieldClass = "w-full border-2 border-brand-200 rounded-xl px-4 py-3 text-lg text-gray-800 bg-white focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200 transition-all appearance-none";
       const labelClass = "block text-base font-bold text-brand-800 mb-2";
 
+      if (isTeaser) {
+        return (
+          <section id="analyzer" className="py-24 px-4 bg-gradient-to-b from-sky-50 to-white">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-14">
+                <span className="inline-block bg-sky-100 text-sky-700 rounded-full px-5 py-2 text-base font-bold uppercase tracking-widest mb-4">Inteligencia Artificial</span>
+                <h2 className="font-display text-4xl sm:text-5xl font-bold text-brand-900 mb-4">Analizador de Accesibilidad</h2>
+                <div className="section-divider w-24 mx-auto mb-6"></div>
+                <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-10">
+                  Sube una foto de una estancia o responde a nuestro cuestionario para identificar barreras arquitectónicas en tu hogar.
+                </p>
+
+                <div 
+                  onClick={() => window.open(window.location.origin + window.location.pathname + '?page=analyzer', '_blank')}
+                  className="rounded-3xl overflow-hidden shadow-2xl border border-brand-100 max-w-3xl mx-auto mb-10 relative group cursor-pointer"
+                >
+                  <img src="assets/ai_analyzer.jpg" alt="Analizador de Accesibilidad" className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-brand-900/10 group-hover:bg-transparent transition-colors flex items-center justify-center">
+                    <div className="bg-white/90 p-4 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity transform scale-90 group-hover:scale-100">
+                      <Icons.Brain />
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => window.open(window.location.origin + window.location.pathname + '?page=analyzer', '_blank')}
+                  className="px-10 py-5 bg-sky-600 text-white rounded-2xl font-bold text-xl hover:bg-sky-700 transition-all shadow-xl hover:shadow-2xl btn-pulse flex items-center gap-3 mx-auto"
+                >
+                  <Icons.Brain />
+                  Abrir Analizador IA
+                </button>
+              </div>
+            </div>
+          </section>
+        );
+      }
+
       return (
-        <section id="analyzer" className="py-24 px-4 bg-gradient-to-b from-sky-50 to-white">
+        <section id="analyzer-full" className={`py-24 px-4 ${isStandalone ? 'pt-32' : ''} bg-gradient-to-b from-sky-50 to-white min-h-screen`}>
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-14">
+              {isStandalone && (
+                <button
+                  onClick={() => window.close()}
+                  className="mb-8 inline-flex items-center gap-2 text-sky-600 font-bold hover:text-sky-800 transition-colors"
+                >
+                  <svg className="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                  Cerrar ventana
+                </button>
+              )}
               <span className="inline-block bg-sky-100 text-sky-700 rounded-full px-5 py-2 text-base font-bold uppercase tracking-widest mb-4">Inteligencia Artificial</span>
               <h2 className="font-display text-4xl sm:text-5xl font-bold text-brand-900 mb-4">Analizador de Accesibilidad</h2>
               <div className="section-divider w-24 mx-auto mb-6"></div>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-10">
-                Sube una foto de una estancia (baño, cocina...) y nuestra conexión con Gemini Vision identificará las barreras arquitectónicas. También puedes responder al cuestionario manual para un análisis general.
+                Sube una foto de una estancia (baño, cocina...) y nuestra conexión con Gemini Vision identificará las barreras arquitectónicas.
               </p>
-
-              <div className="rounded-3xl overflow-hidden shadow-2xl border border-brand-100 max-w-5xl mx-auto mb-8 relative group">
-                <img src="assets/ai_analyzer.jpg" alt="Terapeuta mostrando el Analizador de Accesibilidad" className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700" />
-              </div>
             </div>
 
             {step === 'form' && (
@@ -1144,7 +1425,7 @@
                       <div className="bg-emerald-50 border-l-4 border-emerald-500 p-6 rounded-r-2xl shadow-sm mt-8">
                         <div className="flex items-center gap-2 mb-3">
                           <span className="text-2xl">💡</span>
-                          <h5 className="font-bold text-emerald-800 uppercase tracking-wide text-base">El Consejo de la Terapia Ocupacional</h5>
+                          <h5 className="font-bold text-emerald-800 uppercase tracking-wide text-base">El Consejo del Terapeuta Ocupacional</h5>
                         </div>
                         <p className="text-emerald-900 italic text-base leading-relaxed">
                           "El mayor enemigo de la seguridad en el dormitorio son las alfombras decorativas; el riesgo de tropiezo o deslizamiento es extremadamente alto, por lo que recomendamos retirarlas por completo de las zonas de paso. Para optimizar la seguridad, instala una tira de luz LED con sensor de movimiento bajo la estructura de la cama. Al detectar que el usuario baja los pies, iluminará suavemente el suelo y las zapatillas, guiando el camino hacia el baño sin necesidad de buscar interruptores y evitando deslumbramientos que puedan causar desorientación."
@@ -1243,7 +1524,7 @@
                       <div className="bg-emerald-50 border-l-4 border-emerald-500 p-6 rounded-r-2xl shadow-sm mt-8">
                         <div className="flex items-center gap-2 mb-3">
                           <span className="text-2xl">💡</span>
-                          <h5 className="font-bold text-emerald-800 uppercase tracking-wide text-base">El Consejo de la Terapia Ocupacional</h5>
+                          <h5 className="font-bold text-emerald-800 uppercase tracking-wide text-base">El Consejo del Terapeuta Ocupacional</h5>
                         </div>
                         <p className="text-emerald-900 italic text-base leading-relaxed">
                           "Sustituye la vajilla de cerámica pesada o gres por alternativas de vidrio templado ligero (tipo Opal) o polímeros de alta resistencia libres de BPA. Estas opciones mantienen una estética excelente, son aptas para microondas y pesan hasta un 50% menos, reduciendo el esfuerzo en muñecas y hombros. Además, acostúmbrate a deslizar los recipientes por la bancada siempre que sea posible; tu espalda y tus articulaciones te lo agradecerán al final del día."
@@ -1350,7 +1631,7 @@
                       <div className="bg-emerald-50 border-l-4 border-emerald-500 p-6 rounded-r-2xl shadow-sm mt-8">
                         <div className="flex items-center gap-2 mb-3">
                           <span className="text-2xl">💡</span>
-                          <h5 className="font-bold text-emerald-800 uppercase tracking-wide text-base">El Consejo de la Terapia Ocupacional</h5>
+                          <h5 className="font-bold text-emerald-800 uppercase tracking-wide text-base">El Consejo del Terapeuta Ocupacional</h5>
                         </div>
                         <p className="text-emerald-900 italic text-base leading-relaxed">
                           "Existe un error muy extendido: utilizar el bastón en el mismo lado que la pierna débil. Para una marcha fisiológica, el bastón debe empuñarse SIEMPRE con la mano contraria a la pierna lesionada o dolorida. Esto permite que el brazo y la pierna contraria avancen a la vez, simulando el balanceo natural del cuerpo, repartiendo las cargas de forma simétrica y protegiendo tu cadera."
@@ -1449,7 +1730,7 @@
                       <div className="bg-emerald-50 border-l-4 border-emerald-500 p-6 rounded-r-2xl shadow-sm mt-8">
                         <div className="flex items-center gap-2 mb-3">
                           <span className="text-2xl">💡</span>
-                          <h5 className="font-bold text-emerald-800 uppercase tracking-wide text-base">El Consejo de la TO</h5>
+                          <h5 className="font-bold text-emerald-800 uppercase tracking-wide text-base">El Consejo del Terapeuta Ocupacional</h5>
                         </div>
                         <p className="text-emerald-900 italic text-base leading-relaxed">
                           "Si necesitas una adaptación muy específica que no encuentras en el mercado convencional, no descartes las soluciones de bajo coste mediante impresión 3D. Actualmente, conocemos diseños de código abierto para engrosadores, pinzas de sujeción y soportes de vasos que se pueden fabricar a medida por una fracción del precio de una ortopedia tradicional. Además, un pequeño truco casero: si un plato se resbala y no tienes una base técnica, una bayeta húmeda o una goma elástica ancha alrededor del vaso pueden mejorar drásticamente el agarre y la estabilidad de forma inmediata."
@@ -1542,7 +1823,7 @@
                       <div className="bg-emerald-50 border-l-4 border-emerald-500 p-6 rounded-r-2xl shadow-sm mt-8">
                         <div className="flex items-center gap-2 mb-3">
                           <span className="text-2xl">💡</span>
-                          <h5 className="font-bold text-emerald-800 uppercase tracking-wide text-base">El Consejo de la TO</h5>
+                          <h5 className="font-bold text-emerald-800 uppercase tracking-wide text-base">El Consejo del Terapeuta Ocupacional</h5>
                         </div>
                         <p className="text-emerald-900 italic text-base leading-relaxed">
                           "La silla de ruedas no es un mueble, es una prótesis de movilidad. Un error crítico es no prestar atención al cojín antiescaras; de nada sirve la mejor silla eléctrica del mercado si la superficie de apoyo no gestiona correctamente las presiones. Asimismo, recuerda que una silla eléctrica multifunción no es solo comodidad: la capacidad de elevar las piernas por encima del nivel del corazón o cambiar el ángulo de apoyo es una intervención médica constante que previene complicaciones graves y mejora el confort diario."
@@ -1748,6 +2029,7 @@
                     { id: 'home', label: 'Inicio', isPage: false },
                     { id: 'cv', label: 'CV Interactivo', isPage: true },
                     { id: 'analyzer', label: 'Analizador IA', isPage: false },
+                    { id: 'cognitive', label: 'Área Cognitiva', isPage: true },
                     { id: 'contact', label: 'Contacto', isPage: false },
                   ].map(l => (
                     <li key={l.id}>
@@ -1826,8 +2108,16 @@
       const [activeSection, setActiveSection] = useState('home');
 
       useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('page') === 'memory') {
+          setCurrentPage('cognitive');
+        }
+        if (params.get('page') === 'analyzer') {
+          setCurrentPage('analyzer');
+        }
+
         if (currentPage !== 'main') return;
-        const sections = ['home', 'about', 'analyzer', 'guides', 'contact'];
+        const sections = ['home', 'about', 'cognitive', 'analyzer', 'guides', 'contact'];
         const onScroll = () => {
           const scrollY = window.scrollY + 120;
           let current = 'home';
@@ -1852,15 +2142,20 @@
         window.scrollTo({ top: 0, behavior: 'instant' });
       }, []);
 
+      const params = new URLSearchParams(window.location.search);
+      const isStandalone = params.get('page') === 'memory' || params.get('page') === 'analyzer';
+
       return (
         <>
-          <Navbar activeSection={activeSection} scrollTo={scrollTo} currentPage={currentPage} navigateTo={navigateTo} />
+          {!isStandalone && <Navbar activeSection={activeSection} scrollTo={scrollTo} currentPage={currentPage} navigateTo={navigateTo} />}
           <main id="main-content">
             {currentPage === 'main' && (
               <>
                 <SectionHome scrollTo={scrollTo} navigateTo={navigateTo} />
                 <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>
-                <SectionAnalyzer />
+                <SectionCognitive isTeaser={true} navigateTo={navigateTo} />
+                <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>
+                <SectionAnalyzer isTeaser={true} isStandalone={false} />
                 <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>
                 <SectionGuides />
                 <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>
@@ -1870,12 +2165,18 @@
             {currentPage === 'cv' && (
               <SectionCV />
             )}
+            {currentPage === 'cognitive' && (
+              <SectionCognitive isTeaser={false} navigateTo={navigateTo} isStandalone={isStandalone} />
+            )}
+            {currentPage === 'analyzer' && (
+              <SectionAnalyzer isTeaser={false} isStandalone={isStandalone} />
+            )}
             {currentPage === 'cookies' && (
               <SectionCookies />
             )}
           </main>
-          <Footer scrollTo={scrollTo} navigateTo={navigateTo} />
-          <CookieBanner navigateTo={navigateTo} />
+          {!isStandalone && <Footer scrollTo={scrollTo} navigateTo={navigateTo} />}
+          {!isStandalone && <CookieBanner navigateTo={navigateTo} />}
         </>
       );
     }
