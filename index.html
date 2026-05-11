@@ -809,8 +809,58 @@
       const [aiResponse, setAiResponse] = useState('');
       const [isDragging, setIsDragging] = useState(false);
       const [aiError, setAiError] = useState('');
+      const [savedReports, setSavedReports] = useState([]);
 
       const resultRef = useRef(null);
+
+      // Cargar historial al inicio
+      useEffect(() => {
+        const localData = localStorage.getItem('iadapta_reports');
+        if (localData) {
+          try { setSavedReports(JSON.parse(localData)); } catch (e) {}
+        }
+      }, []);
+
+      // Guardar informe en el historial
+      const saveToHistory = (dataText, sc) => {
+        const newReport = {
+          id: Date.now(),
+          date: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+          score: sc,
+          aiResponse: dataText,
+          form: { ...form }
+        };
+        const updated = [newReport, ...savedReports].slice(0, 10);
+        setSavedReports(updated);
+        localStorage.setItem('iadapta_reports', JSON.stringify(updated));
+      };
+
+      // Auto-guardado de borrador
+      useEffect(() => {
+        const draft = localStorage.getItem('iadapta_draft');
+        if (draft) {
+          try { setForm(JSON.parse(draft)); } catch(e) {}
+        }
+      }, []);
+
+      useEffect(() => {
+        localStorage.setItem('iadapta_draft', JSON.stringify(form));
+      }, [form]);
+
+      const loadFromHistory = (report) => {
+        setForm(report.form);
+        setAiResponse(report.aiResponse);
+        setScore(report.score);
+        setStep('results');
+        setTimeout(() => setRingOffset(283 - (283 * report.score / 100)), 100);
+      };
+
+      const deleteFromHistory = (e, id) => {
+        e.stopPropagation();
+        const updated = savedReports.filter(r => r.id !== id);
+        setSavedReports(updated);
+        localStorage.setItem('iadapta_reports', JSON.stringify(updated));
+      };
 
       const handleChange = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
@@ -960,43 +1010,54 @@
 
         // Función para redimensionar la imagen antes de enviarla
         const resizeImage = (base64Str) => {
-          return new Promise((resolve) => {
+          return new Promise((resolve, reject) => {
             const img = new Image();
+            img.onerror = () => reject(new Error("Error al cargar la imagen para redimensionar"));
             img.src = base64Str;
             img.onload = () => {
-              const canvas = document.createElement('canvas');
-              let width = img.width;
-              let height = img.height;
-              const MAX_SIZE = 1200; // Tamaño máximo suficiente para IA
+              try {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                const MAX_SIZE = 1000; // Reducimos un poco más para máxima velocidad
 
-              if (width > height) {
-                if (width > MAX_SIZE) {
-                  height *= MAX_SIZE / width;
-                  width = MAX_SIZE;
+                if (width > height) {
+                  if (width > MAX_SIZE) {
+                    height *= MAX_SIZE / width;
+                    width = MAX_SIZE;
+                  }
+                } else {
+                  if (height > MAX_SIZE) {
+                    width *= MAX_SIZE / height;
+                    height = MAX_SIZE;
+                  }
                 }
-              } else {
-                if (height > MAX_SIZE) {
-                  width *= MAX_SIZE / height;
-                  height = MAX_SIZE;
-                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                resolve(canvas.toDataURL('image/jpeg', 0.7)); 
+              } catch (e) {
+                reject(e);
               }
-              canvas.width = width;
-              canvas.height = height;
-              const ctx = canvas.getContext('2d');
-              ctx.drawImage(img, 0, 0, width, height);
-              resolve(canvas.toDataURL('image/jpeg', 0.8)); // 80% calidad es perfecto para IA
             };
           });
         };
 
         if (base64) {
           try {
-            const optimizedBase64 = await resizeImage(base64);
+            let optimizedBase64 = base64;
+            try {
+              optimizedBase64 = await resizeImage(base64);
+            } catch (reErr) {
+              console.warn("Fallo el redimensionamiento, intentando enviar original...", reErr);
+            }
+
             const response = await fetch('/api/analyze', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                base64: optimizedBase64.split(',')[1],
+                base64: optimizedBase64.includes(',') ? optimizedBase64.split(',')[1] : optimizedBase64,
                 mimeType: 'image/jpeg',
                 answers: form
               })
@@ -1020,31 +1081,33 @@
               }
               
               setAiResponse(formatted);
+              setStep('results');
+              saveToHistory(formatted, calcScore()); // Guardamos automáticamente
             } else {
               throw new Error('No se pudo generar una respuesta.');
             }
           } catch (err) {
             console.error(err);
             setAiError(err.message || 'Error al procesar la imagen con la IA.');
+            setStep('results');
           }
+        } else {
+          setStep('results');
         }
 
         const sc = calcScore();
         setScore(sc);
-        setStep('results');
         setTimeout(() => setRingOffset(283 - (283 * sc / 100)), 100);
         setTimeout(() => {
           resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          // Esperamos 2 segundos a que todo el DOM se renderice bien antes de lanzar el PDF automático
-          setTimeout(() => {
-            window.print();
-          }, 2000);
         }, 200);
       };
 
       const reset = () => {
         setStep('form'); setScore(0); setRingOffset(283);
-        setForm({ tipo: '', ascensor: '', anchoAscensor: '', largoAscensor: '', tipoBanyo: '', barras: '', alzaWC: '', iluminacion: '', puertas: '', movilidad: '', nivelMovilidad: '', capacidadesMotoras: '', notas: '' });
+        const emptyForm = { tipo: '', ascensor: '', anchoAscensor: '', largoAscensor: '', tipoBanyo: '', barras: '', alzaWC: '', iluminacion: '', puertas: '', movilidad: '', nivelMovilidad: '', capacidadesMotoras: '', notas: '' };
+        setForm(emptyForm);
+        localStorage.removeItem('iadapta_draft');
         setFile(null); setPreview(null); setBase64(null); setAiResponse(''); setAiError('');
       };
 
@@ -1119,7 +1182,45 @@
             </div>
 
             {step === 'form' && (
-              <form onSubmit={handleAnalyze} className="bg-white rounded-3xl border border-brand-100 shadow-xl p-8 md:p-10 anim-scale-in" noValidate>
+              <div className="anim-fade-up">
+                
+                {/* HISTORIAL DE INFORMES */}
+                {savedReports.length > 0 && (
+                  <div className="mb-12 bg-indigo-50/50 border border-indigo-100 rounded-3xl p-6 sm:p-8">
+                    <h3 className="text-xl font-bold text-indigo-900 mb-6 flex items-center gap-3">
+                      <Icons.History /> Mis Informes Guardados
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {savedReports.map(report => (
+                        <div 
+                          key={report.id} 
+                          onClick={() => loadFromHistory(report)}
+                          className="bg-white p-5 rounded-2xl border border-indigo-100 shadow-sm hover:shadow-md hover:border-indigo-300 transition-all cursor-pointer group relative"
+                        >
+                          <button 
+                            onClick={(e) => deleteFromHistory(e, report.id)}
+                            className="absolute top-2 right-2 p-2 text-gray-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                            title="Eliminar informe"
+                          >
+                            <Icons.X />
+                          </button>
+                          <div className="flex items-center gap-3 mb-3">
+                            <div className="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center font-bold">
+                              {report.score}
+                            </div>
+                            <p className="text-sm font-bold text-gray-500">{report.date}</p>
+                          </div>
+                          <p className="text-brand-900 font-bold truncate">
+                            {report.form.tipo === 'banyo' ? 'Análisis de Baño' : report.form.tipo === 'cocina' ? 'Análisis de Cocina' : 'Análisis de Vivienda'}
+                          </p>
+                          <p className="text-xs text-brand-600 font-semibold mt-1">Hacer clic para ver informe →</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <form onSubmit={handleAnalyze} className="bg-white rounded-3xl border border-brand-100 shadow-xl p-8 md:p-10 anim-scale-in" noValidate>
 
                 {/* DRAG AND DROP ZONE */}
                 <div className="mb-10">
@@ -1283,7 +1384,8 @@
                   </div>
                 </div>
               </form>
-            )}
+            </div>
+          )}
 
             {step === 'loading' && (
               <div className="text-center py-20 anim-fade-in">

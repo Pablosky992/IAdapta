@@ -20,12 +20,11 @@ export default async function handler(req, res) {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // Lista de modelos detectados en tu panel de control
+    // Priorizamos los modelos más rápidos para evitar timeouts en Vercel
     const modelsToTry = [
       "gemini-2-flash",
-      "gemini-2.5-flash",
       "gemini-1.5-flash-latest",
-      "gemini-2.0-flash-exp"
+      "gemini-1.5-flash"
     ];
 
     let lastError = null;
