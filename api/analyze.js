@@ -20,10 +20,10 @@ export default async function handler(req, res) {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // Usamos los nombres de modelos más estables y compatibles con la API v1
+    // Nombres exactos confirmados en el panel del usuario
     const modelsToTry = [
       "gemini-1.5-flash",
-      "gemini-1.5-flash-latest"
+      "gemini-1.5-pro"
     ];
 
     let lastError = null;
@@ -31,8 +31,7 @@ export default async function handler(req, res) {
 
     for (const modelName of modelsToTry) {
       try {
-        // Forzamos la versión v1 de la API para evitar errores de v1beta
-        const model = genAI.getGenerativeModel({ model: modelName }, { apiVersion: 'v1' });
+        const model = genAI.getGenerativeModel({ model: modelName });
         const prompt = `IMPORTANTE: El informe DEBE comenzar siempre con este texto exacto:
 "Este análisis ha sido generado mediante Inteligencia Artificial (modelo Gemini 2.0 Flash) en fase de pruebas. La información proporcionada es orientativa y puede contener errores. Debe ser validada por un profesional cualificado antes de realizar cualquier cambio estructural."
  Genera un informe clínico DIRECTO y CATEGÓRICO basado en la IMAGEN adjunta y en las RESPUESTAS del cuestionario.
