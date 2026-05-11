@@ -1033,7 +1033,7 @@
 
         if (base64) {
           try {
-            const response = await fetch('/api/analyze', {
+            const response = await fetch('/api/analyze?t=' + Date.now(), {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
