@@ -20,8 +20,8 @@ Indica productos usando etiquetas [[PRODUCTO:1]] (Tabla bañera), [[PRODUCTO:2]]
 
 IMPORTANTE: El informe debe empezar con el aviso de que es un análisis por IA en fase de pruebas.`;
 
-    // Usamos el modelo que tu llave sí permite: gemini-2.0-flash
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+    // Usamos el modelo más moderno disponible para tu llave en 2026: gemini-2.5-flash
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     
     const response = await fetch(url, {
       method: 'POST',
