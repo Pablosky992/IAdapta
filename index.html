@@ -27,6 +27,14 @@
 
   <!-- Marked.js for Markdown parsing -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    marked.setOptions({
+      breaks: true,
+      gfm: true,
+      headerIds: false,
+      mangle: false
+    });
+  </script>
 
   <!-- Tailwind config -->
   <script>
@@ -1956,7 +1964,7 @@
                                 </div>
                               );
                             }
-                            return <div key={i} className="mb-4 whitespace-normal" dangerouslySetInnerHTML={{ __html: marked.parse(part) }} />;
+                            return <div key={i} className="mb-2" dangerouslySetInnerHTML={{ __html: marked.parse(part.trim()) }} />;
                           })}
                         </div>
                       );

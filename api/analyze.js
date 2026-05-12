@@ -7,18 +7,27 @@ export default async function handler(req, res) {
     const { base64, mimeType, answers } = req.body;
     const answersText = answers ? Object.entries(answers).map(([q, a]) => `${q}: ${a}`).join('\n') : '';
 
-    const prompt = `Analiza esta imagen de accesibilidad universal desde la perspectiva de Terapia Ocupacional.
-RESPUESTAS DEL CUESTIONARIO:
+    const prompt = `Actúa como un experto Terapeuta Ocupacional especializado en Accesibilidad Universal.
+Analiza esta imagen y las respuestas del cuestionario para generar un informe clínico detallado.
+
+DATOS DEL PACIENTE/ENTORNO:
 ${answersText}
 
-Estructura el informe así:
+FORMATO DE RESPUESTA (MUY IMPORTANTE):
+- Usa Markdown estándar.
+- Usa ### para los encabezados de sección.
+- Usa asteriscos (*) para crear listas de puntos.
+- Deja SIEMPRE una línea en blanco entre párrafos y entre puntos de una lista para asegurar la legibilidad.
+- Incluye las etiquetas de productos [[PRODUCTO:X]] dentro del texto donde sea relevante.
+
+Estructura del informe:
 ### 1. DIAGNÓSTICO TÉCNICO
-Identifica barreras reales.
+Identifica barreras reales observadas y riesgos potenciales.
 ### 2. PLAN DE ADAPTACIÓN Y PRODUCTOS
-Indica productos usando etiquetas [[PRODUCTO:1]] (Tabla bañera), [[PRODUCTO:2]] (Asiento ducha), [[PRODUCTO:3]] (Barras), [[PRODUCTO:4]] (Alza WC).
+Propuestas concretas de mejora usando etiquetas como [[PRODUCTO:1]] (Tabla bañera), [[PRODUCTO:2]] (Asiento ducha), [[PRODUCTO:3]] (Barras), [[PRODUCTO:4]] (Alza WC), [[PRODUCTO:17]] (Muletas).
 ### 3. CONCLUSIÓN PROFESIONAL
 
-IMPORTANTE: El informe debe empezar con el aviso de que es un análisis por IA en fase de pruebas.`;
+IMPORTANTE: El informe debe empezar con un aviso indicando que es un análisis por IA en fase beta para apoyo profesional.`;
 
     // Usamos el modelo más moderno disponible para tu llave en 2026: gemini-2.5-flash
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;

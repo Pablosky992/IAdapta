@@ -136,7 +136,7 @@ body {
 }
 
 /* ===================================================
-   AI ANALYZER
+   AI ANALYZER & REPORT
    =================================================== */
 .score-ring {
   stroke-dasharray: 283;
@@ -146,47 +146,75 @@ body {
   transform: rotate(-90deg);
 }
 
-.ai-report-content p { margin-bottom: 1.25rem; }
-.ai-report-content ul { margin-bottom: 1.25rem; list-style-type: disc; padding-left: 1.5rem; }
-.ai-report-content li { margin-bottom: 0.5rem; }
-
-/* ===================================================
-   SCROLLBAR (aesthetic)
-   =================================================== */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #eff6ff; }
-::-webkit-scrollbar-thumb {
-  background: #93c5fd;
-  border-radius: 999px;
+.ai-report-content {
+  color: #334155;
+  font-size: 1.1rem;
 }
-::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+
+.ai-report-content p {
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+}
+
+.ai-report-content ul, .ai-report-content ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.75rem;
+  list-style-type: disc;
+}
+
+.ai-report-content li {
+  margin-bottom: 0.75rem;
+}
+
+.ai-report-content h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1A3052;
+  margin-top: 2.5rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0.5rem;
+}
 
 /* ===================================================
-   PRINT
+   PRINT & PDF
    =================================================== */
 @media print {
-  /* Ocultar todo por defecto */
-  body * { visibility: hidden; }
+  @page {
+    margin: 2cm;
+    size: A4;
+  }
   
-  /* Mostrar solo el contenedor del informe y su contenido */
+  /* Ocultar todo lo que no sea el informe */
+  body * { visibility: hidden; }
+  .no-print, .no-print * { display: none !important; }
+  
+  /* Mostrar el informe */
   #analyzer-full, #analyzer-full * { visibility: visible; }
   
-  /* Ajustes de posición para que el informe ocupe toda la página */
   #analyzer-full {
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
-    margin: 0;
-    padding: 0;
+    background: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
   }
 
-  /* Ocultar elementos específicos dentro del informe que no queremos en el PDF */
-  .no-print, .no-print * { display: none !important; visibility: hidden !important; }
+  .bg-gradient-to-br { background: white !important; }
+  .rounded-3xl, .rounded-2xl { border-radius: 0 !important; }
   
-  /* Ajustes de texto para impresión */
-  body { font-size: 11pt; color: #000; background: white !important; }
-  h2, h3, h4 { color: #1A3052 !important; }
+  .ai-report-content {
+    font-size: 11pt;
+    line-height: 1.6;
+    color: black;
+  }
+  
+  .ai-report-content p { margin-bottom: 12pt; }
+  .ai-report-content h3 { margin-top: 20pt; color: #1A3052 !important; }
 }
 
 /* ===================================================
