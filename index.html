@@ -171,7 +171,8 @@
       ),
       List: () => <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M10 6h11M10 12h11M10 18h11M4 6h1v4M4 10h2M7 18H4v-2c0-1 1-2 2-2h1M7 14h-3"/></svg>,
       History: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
-      X: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+      X: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>,
+      Search: () => <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
     };
 
 
@@ -263,41 +264,86 @@
                   </p>
                 </div>
 
-                <div className="grid sm:grid-cols-2 gap-8 mb-16">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10 mb-16">
                   {/* Game 1 Teaser */}
-                  <div className="bg-gradient-to-br from-brand-50 to-white rounded-3xl p-8 border border-brand-100 shadow-lg hover:shadow-xl transition-all group">
-                    <div className="w-16 h-16 bg-brand-600 text-white rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-md group-hover:scale-110 transition-transform">
-                      <Icons.Brain />
+                  <div 
+                    onClick={() => openStandalone('memory')}
+                    className="bg-white rounded-[2.5rem] overflow-hidden border border-brand-50 shadow-xl hover:shadow-2xl transition-all group flex flex-col cursor-pointer"
+                  >
+                    <div className="relative h-56 overflow-hidden">
+                      <img src="memory_game_thumbnail.png" alt="Juego de Memoria" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-900/60 to-transparent"></div>
+                      <div className="absolute bottom-4 left-6 flex items-center gap-3">
+                        <div className="w-12 h-12 bg-brand-600 text-white rounded-xl flex items-center justify-center text-2xl shadow-lg border border-brand-400/30">
+                          <Icons.Brain />
+                        </div>
+                        <span className="text-white font-bold text-lg">Memoria</span>
+                      </div>
                     </div>
-                    <h3 className="font-display text-2xl font-bold text-brand-900 mb-4">Memoriza sus parejas</h3>
-                    <p className="text-gray-600 text-lg mb-8">
-                      Un clásico ejercicio de memoria episódica y concentración. Supera los 5 niveles de dificultad creciente.
-                    </p>
-                    <button
-                      onClick={() => openStandalone('memory')}
-                      className="w-full py-4 bg-brand-900 text-white rounded-xl font-bold text-lg hover:bg-brand-800 transition-all flex items-center justify-center gap-3"
-                    >
-                      Jugar ahora
-                      <Icons.ArrowRight />
-                    </button>
+                    <div className="p-8 flex flex-col flex-1">
+                      <h3 className="font-display text-2xl font-bold text-brand-900 mb-4">Memoriza sus parejas</h3>
+                      <p className="text-gray-600 text-lg mb-8 flex-1 leading-relaxed">
+                        Un clásico ejercicio de memoria episódica y concentración. Supera los 5 niveles de dificultad creciente.
+                      </p>
+                      <button className="w-full py-4 bg-brand-900 text-white rounded-2xl font-bold text-lg group-hover:bg-brand-800 transition-all flex items-center justify-center gap-3 shadow-lg shadow-brand-900/20">
+                        Jugar ahora
+                        <Icons.ArrowRight />
+                      </button>
+                    </div>
                   </div>
 
                   {/* Game 2 Teaser */}
-                  <div className="bg-gradient-to-br from-sky-50 to-white rounded-3xl p-8 border border-sky-100 shadow-lg hover:shadow-xl transition-all group">
-                    <div className="w-16 h-16 bg-sky-600 text-white rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-md group-hover:scale-110 transition-transform">
-                      <Icons.List />
+                  <div 
+                    onClick={() => openStandalone('order')}
+                    className="bg-white rounded-[2.5rem] overflow-hidden border border-sky-50 shadow-xl hover:shadow-2xl transition-all group flex flex-col cursor-pointer"
+                  >
+                    <div className="relative h-56 overflow-hidden">
+                      <img src="order_game_thumbnail.png" alt="Juego de Orden" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-sky-900/60 to-transparent"></div>
+                      <div className="absolute bottom-4 left-6 flex items-center gap-3">
+                        <div className="w-12 h-12 bg-sky-600 text-white rounded-xl flex items-center justify-center text-2xl shadow-lg border border-sky-400/30">
+                          <Icons.List />
+                        </div>
+                        <span className="text-white font-bold text-lg">Atención</span>
+                      </div>
                     </div>
-                    <h3 className="font-display text-2xl font-bold text-brand-900 mb-4">En orden</h3>
-                    <p className="text-gray-600 text-lg mb-8">
-                      Entrena la atención sostenida y el rastreo visual tocando los números en orden lo más rápido posible.
-                    </p>
-                    <button
-                      onClick={() => openStandalone('order')}
-                      className="w-full py-4 bg-sky-900 text-white rounded-xl font-bold text-lg hover:bg-sky-800 transition-all flex items-center justify-center gap-3"
-                    >
-                      Jugar ahora
-                      <Icons.ArrowRight />
-                    </button>
+                    <div className="p-8 flex flex-col flex-1">
+                      <h3 className="font-display text-2xl font-bold text-brand-900 mb-4">En orden</h3>
+                      <p className="text-gray-600 text-lg mb-8 flex-1 leading-relaxed">
+                        Entrena la atención sostenida y el rastreo visual tocando los números en orden lo más rápido posible.
+                      </p>
+                      <button className="w-full py-4 bg-sky-900 text-white rounded-2xl font-bold text-lg group-hover:bg-sky-800 transition-all flex items-center justify-center gap-3 shadow-lg shadow-sky-900/20">
+                        Jugar ahora
+                        <Icons.ArrowRight />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Game 3 Teaser */}
+                  <div 
+                    onClick={() => openStandalone('wordsearch')}
+                    className="bg-white rounded-[2.5rem] overflow-hidden border border-emerald-50 shadow-xl hover:shadow-2xl transition-all group flex flex-col cursor-pointer"
+                  >
+                    <div className="relative h-56 overflow-hidden">
+                      <img src="word_search_thumbnail.png" alt="Sopa de Letras" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/60 to-transparent"></div>
+                      <div className="absolute bottom-4 left-6 flex items-center gap-3">
+                        <div className="w-12 h-12 bg-emerald-600 text-white rounded-xl flex items-center justify-center text-2xl shadow-lg border border-emerald-400/30">
+                          <Icons.Search />
+                        </div>
+                        <span className="text-white font-bold text-lg">Rastreo</span>
+                      </div>
+                    </div>
+                    <div className="p-8 flex flex-col flex-1">
+                      <h3 className="font-display text-2xl font-bold text-brand-900 mb-4">Sopa de Letras</h3>
+                      <p className="text-gray-600 text-lg mb-8 flex-1 leading-relaxed">
+                        Estimula el rastreo visual y la atención semántica buscando palabras relacionadas con la vida diaria.
+                      </p>
+                      <button className="w-full py-4 bg-emerald-900 text-white rounded-2xl font-bold text-lg group-hover:bg-emerald-800 transition-all flex items-center justify-center gap-3 shadow-lg shadow-emerald-900/20">
+                        Jugar ahora
+                        <Icons.ArrowRight />
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -382,6 +428,336 @@
       { id: 5, count: 50, cols: 'grid-cols-5 sm:grid-cols-10' }
     ];
 
+    // --- LEVELS CONFIG FOR WORD SEARCH ---
+    const WORDSEARCH_LEVELS = [
+      { id: 1, name: 'Fácil', rows: 10, cols: 8, wordCount: 6, directions: [0, 1], hints: 1 },
+      { id: 2, name: 'Medio', rows: 12, cols: 10, wordCount: 10, directions: [0, 1, 2], hints: 1 },
+      { id: 3, name: 'Difícil', rows: 15, cols: 10, wordCount: 14, directions: [0, 1, 2, 3, 4], hints: 1 },
+      { id: 4, name: 'Muy Difícil', rows: 18, cols: 12, wordCount: 18, directions: [0, 1, 2, 3, 4, 5, 6, 7], hints: 1 },
+      { id: 5, name: '¿Imposible?', rows: 20, cols: 12, wordCount: 22, directions: [0, 1, 2, 3, 4, 5, 6, 7], hints: 2 }
+    ];
+
+    // --- SECTION WORD SEARCH GAME ---
+    window.SectionWordSearch = function SectionWordSearch({ isStandalone }) {
+      const { useState, useEffect, useCallback, useRef } = React;
+      
+      const WORD_LIST = ['DUCHA', 'COMER', 'CAMINADOR', 'SILLA', 'MOVIL', 'TELEFONO', 'DORMIR', 'JUGAR', 'ASEO', 'VESTIR', 'COCINAR', 'PASEAR', 'LLAVES', 'GAFAS', 'RELOJ', 'PASTILLA', 'SOPA', 'AGUA', 'RADIO', 'LIBRO', 'CUIDADO', 'AYUDA', 'VASO', 'PLATO', 'CAMA', 'SOFA', 'MESA', 'ROPA', 'ZAPATOS', 'BANIO', 'COCINA', 'PASILLO', 'ESPEJO', 'RELOJ', 'TIEMPO', 'LUZ', 'MANO', 'PIE', 'SALUD'];
+
+      const [levelIdx, setLevelIdx] = useState(0);
+      const [grid, setGrid] = useState([]);
+      const [wordsToFind, setWordsToFind] = useState([]);
+      const [foundWords, setFoundWords] = useState([]);
+      const [selection, setSelection] = useState(null);
+      const [gameStatus, setGameStatus] = useState('playing');
+      const [startTime, setStartTime] = useState(null);
+      const [timeElapsed, setTimeElapsed] = useState(0);
+      const [hintsUsed, setHintsUsed] = useState([]); // indices of words hinted
+
+      const currentLevel = WORDSEARCH_LEVELS[levelIdx];
+
+      const generateGrid = useCallback(() => {
+        const { rows, cols, wordCount, directions } = currentLevel;
+        const newGrid = Array(rows).fill(0).map(() => Array(cols).fill(''));
+        const placedWords = [];
+        const pool = [...WORD_LIST].sort(() => Math.random() - 0.5).slice(0, wordCount);
+
+        pool.forEach(word => {
+          let placed = false;
+          let attempts = 0;
+          while (!placed && attempts < 250) {
+            attempts++;
+            const dirType = directions[Math.floor(Math.random() * directions.length)];
+            let dr, dc;
+
+            // 0:H, 1:V, 2:D, 3:HR, 4:VR, 5:DR, 6:D2, 7:D2R
+            if (dirType === 0) { dr = 0; dc = 1; }
+            else if (dirType === 1) { dr = 1; dc = 0; }
+            else if (dirType === 2) { dr = 1; dc = 1; }
+            else if (dirType === 3) { dr = 0; dc = -1; }
+            else if (dirType === 4) { dr = -1; dc = 0; }
+            else if (dirType === 5) { dr = -1; dc = -1; }
+            else if (dirType === 6) { dr = 1; dc = -1; }
+            else if (dirType === 7) { dr = -1; dc = 1; }
+
+            const r = Math.floor(Math.random() * rows);
+            const c = Math.floor(Math.random() * cols);
+            const endR = r + (word.length - 1) * dr;
+            const endC = c + (word.length - 1) * dc;
+
+            if (endR < 0 || endR >= rows || endC < 0 || endC >= cols) continue;
+
+            let fits = true;
+            for (let i = 0; i < word.length; i++) {
+              const rr = r + i * dr;
+              const cc = c + i * dc;
+              if (newGrid[rr][cc] !== '' && newGrid[rr][cc] !== word[i]) {
+                fits = false;
+                break;
+              }
+            }
+
+            if (fits) {
+              const cells = [];
+              for (let i = 0; i < word.length; i++) {
+                const rr = r + i * dr;
+                const cc = c + i * dc;
+                newGrid[rr][cc] = word[i];
+                cells.push({ r: rr, c: cc });
+              }
+              placedWords.push({ word, cells });
+              placed = true;
+            }
+          }
+        });
+
+        const letters = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            if (newGrid[r][c] === '') {
+              newGrid[r][c] = letters[Math.floor(Math.random() * letters.length)];
+            }
+          }
+        }
+
+        setGrid(newGrid);
+        setWordsToFind(placedWords);
+        setFoundWords([]);
+        setHintsUsed([]);
+        setGameStatus('playing');
+        setStartTime(Date.now());
+      }, [currentLevel]);
+
+      useEffect(() => {
+        generateGrid();
+      }, [generateGrid]);
+
+      const getCellFromEvent = (e) => {
+        const touch = e.touches ? e.touches[0] : e;
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        if (target && target.dataset.r !== undefined) {
+          return { r: parseInt(target.dataset.r), c: parseInt(target.dataset.c) };
+        }
+        return null;
+      };
+
+      const handleStart = (e) => {
+        if (gameStatus !== 'playing') return;
+        const cell = getCellFromEvent(e);
+        if (!cell) return;
+        if (selection && selection.isFirstClick) {
+          const dr = Math.abs(cell.r - selection.start.r);
+          const dc = Math.abs(cell.c - selection.start.c);
+          if (dr === 0 || dc === 0 || dr === dc) {
+            validateSelection(selection.start, cell);
+          } else {
+            setSelection(null);
+          }
+        } else {
+          setSelection({ start: cell, end: cell, isDragging: true });
+        }
+      };
+
+      const handleMove = (e) => {
+        if (!selection || !selection.isDragging || gameStatus !== 'playing') return;
+        const cell = getCellFromEvent(e);
+        if (cell) {
+          const dr = Math.abs(cell.r - selection.start.r);
+          const dc = Math.abs(cell.c - selection.start.c);
+          if (dr === 0 || dc === 0 || dr === dc) {
+            setSelection(prev => ({ ...prev, end: cell }));
+          }
+        }
+      };
+
+      const handleEnd = () => {
+        if (!selection || gameStatus !== 'playing') return;
+        if (selection.isDragging) {
+          if (selection.start.r === selection.end.r && selection.start.c === selection.end.c) {
+            setSelection({ ...selection, isDragging: false, isFirstClick: true });
+          } else {
+            validateSelection(selection.start, selection.end);
+          }
+        }
+      };
+
+      const validateSelection = (start, end) => {
+        const dr = Math.sign(end.r - start.r);
+        const dc = Math.sign(end.c - start.c);
+        const len = Math.max(Math.abs(end.r - start.r), Math.abs(end.c - start.c)) + 1;
+        let wordStr = '';
+        for (let i = 0; i < len; i++) {
+          wordStr += grid[start.r + i * dr][start.c + i * dc];
+        }
+        const match = wordsToFind.find(w => w.word === wordStr || w.word === wordStr.split('').reverse().join(''));
+        if (match && !foundWords.some(fw => fw.word === match.word)) {
+          const newFound = [...foundWords, match];
+          setFoundWords(newFound);
+          if (window.confetti) {
+            window.confetti({ particleCount: 100, spread: 70, origin: { y: 0.7 }, colors: ['#10b981', '#3b82f6', '#f59e0b', '#E87D55'] });
+          }
+          if (newFound.length === wordsToFind.length) {
+            setGameStatus('won');
+            setTimeElapsed(((Date.now() - startTime) / 1000).toFixed(0));
+            if (window.confetti) {
+              setTimeout(() => { window.confetti({ particleCount: 200, spread: 160, origin: { y: 0.6 } }); }, 500);
+            }
+          }
+        }
+        setSelection(null);
+      };
+
+      const isCellSelected = (r, c) => {
+        if (!selection) return false;
+        const { start, end } = selection;
+        const dr = Math.sign(end.r - start.r);
+        const dc = Math.sign(end.c - start.c);
+        const len = Math.max(Math.abs(end.r - start.r), Math.abs(end.c - start.c)) + 1;
+        for (let i = 0; i < len; i++) {
+          if (start.r + i * dr === r && start.c + i * dc === c) return true;
+        }
+        return false;
+      };
+
+      const isCellFound = (r, c) => foundWords.some(fw => fw.cells.some(cell => cell.r === r && cell.c === c));
+
+      const isCellHinted = (r, c) => {
+        return hintsUsed.some(idx => {
+          const word = wordsToFind[idx];
+          return word.cells[0].r === r && word.cells[0].c === c;
+        });
+      };
+
+      const useHint = () => {
+        if (hintsUsed.length >= currentLevel.hints || gameStatus !== 'playing') return;
+        const remainingIndices = wordsToFind
+          .map((w, i) => i)
+          .filter(i => !foundWords.some(fw => fw.word === wordsToFind[i].word) && !hintsUsed.includes(i));
+        
+        if (remainingIndices.length > 0) {
+          const randomIdx = remainingIndices[Math.floor(Math.random() * remainingIndices.length)];
+          setHintsUsed([...hintsUsed, randomIdx]);
+        }
+      };
+
+      const nextLevel = () => {
+        if (levelIdx < WORDSEARCH_LEVELS.length - 1) {
+          setLevelIdx(levelIdx + 1);
+        } else {
+          setLevelIdx(0);
+        }
+      };
+
+      return (
+        <section className={`py-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-32' : ''}`}>
+          <div className="max-w-4xl w-full text-center">
+            {isStandalone && (
+              <button onClick={() => window.close()} className="mb-8 inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors">
+                <svg className="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                Cerrar juego
+              </button>
+            )}
+            <div className="flex flex-col items-center mb-6">
+              <h2 className="font-display text-4xl font-bold text-brand-900 mb-2">Sopa de Letras</h2>
+              <div className="flex items-center gap-3">
+                <span className="bg-brand-900 text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-widest">Nivel {currentLevel.id}</span>
+                <span className="text-brand-600 font-bold uppercase tracking-widest">{currentLevel.name}</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col lg:flex-row gap-8 items-start justify-center mb-12">
+              <div 
+                className="bg-white p-3 rounded-3xl shadow-2xl border-8 border-brand-100 select-none touch-none grid gap-1 w-full max-w-[420px] relative overflow-hidden"
+                style={{ gridTemplateColumns: `repeat(${currentLevel.cols}, minmax(0, 1fr))`, aspectRatio: `${currentLevel.cols}/${currentLevel.rows}` }}
+                onMouseDown={handleStart} onMouseMove={handleMove} onMouseUp={handleEnd} onMouseLeave={handleEnd}
+                onTouchStart={handleStart} onTouchMove={handleMove} onTouchEnd={handleEnd}
+              >
+                {grid.map((row, r) => row.map((letter, c) => {
+                  const selected = isCellSelected(r, c);
+                  const found = isCellFound(r, c);
+                  const hinted = isCellHinted(r, c);
+                  return (
+                    <div key={`${r}-${c}`} data-r={r} data-c={c}
+                      className={`flex items-center justify-center text-xl sm:text-2xl font-bold rounded-lg transition-all duration-200
+                        ${found ? 'bg-emerald-500 text-white shadow-sm scale-95' : 
+                          selected ? 'bg-brand-600 text-white shadow-lg scale-105 z-10' : 
+                          hinted ? 'bg-amber-100 text-amber-700 border-2 border-amber-400 animate-pulse' : 'text-brand-900 hover:bg-brand-50'}`}
+                    >
+                      {letter}
+                    </div>
+                  );
+                }))}
+              </div>
+
+              <div className="flex flex-col gap-6 w-full lg:max-w-[320px]">
+                <div className="bg-white p-6 rounded-3xl shadow-xl border border-brand-100">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-display text-xl font-bold text-brand-900 flex items-center gap-2">Ayudas</h3>
+                    <span className="text-brand-500 font-bold">{currentLevel.hints - hintsUsed.length} restantes</span>
+                  </div>
+                  <button 
+                    onClick={useHint}
+                    disabled={hintsUsed.length >= currentLevel.hints || gameStatus !== 'playing'}
+                    className={`w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all
+                      ${hintsUsed.length >= currentLevel.hints ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-amber-100 text-amber-700 hover:bg-amber-200 active:scale-95'}`}
+                  >
+                    <Icons.Lightbulb /> Pedir Pista
+                  </button>
+                </div>
+
+                <div className="bg-white p-6 rounded-[2rem] shadow-xl border border-brand-100 flex-1">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="font-display text-2xl font-bold text-brand-900 flex items-center gap-2"><Icons.List /> Palabras</h3>
+                    <span className="bg-brand-100 text-brand-700 px-3 py-1 rounded-full text-sm font-bold">{foundWords.length}/{wordsToFind.length}</span>
+                  </div>
+                  <div className="grid grid-cols-2 lg:grid-cols-1 gap-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                    {wordsToFind.map((w, i) => (
+                      <div key={i} className={`text-base font-semibold py-2 px-3 rounded-xl transition-all duration-300 border ${foundWords.some(fw => fw.word === w.word) ? 'text-emerald-300 line-through bg-emerald-50 border-emerald-100' : 'text-brand-700 bg-white border-brand-50 shadow-sm'}`}>{w.word}</div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {gameStatus === 'won' && (
+              <div className="fixed inset-0 z-[60] bg-brand-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+                <div className="bg-white rounded-3xl p-10 shadow-2xl max-w-sm w-full text-center anim-scale-in border-4 border-emerald-500">
+                  <div className="text-7xl mb-6">🏆</div>
+                  <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Nivel {currentLevel.id} Superado!</h3>
+                  
+                  {/* Motivational Message */}
+                  <p className="text-emerald-600 font-bold italic mb-6">
+                    {(() => {
+                      const messages = [
+                        "¡Excelente trabajo! Tu agudeza visual está en plena forma.",
+                        "¡Increíble! Has demostrado una gran concentración.",
+                        "¡Bravo! Estás fortaleciendo tu mente con cada palabra.",
+                        "¡Espectacular! Tu rapidez mental es envidiable.",
+                        "¡Muy bien hecho! Tu atención es excepcional.",
+                        "¡Fantástico! Has dominado este nivel por completo."
+                      ];
+                      return messages[Math.floor(Math.random() * messages.length)];
+                    })()}
+                  </p>
+
+                  <div className="bg-brand-50 rounded-2xl p-4 mb-8">
+                    <p className="text-gray-500 text-sm uppercase font-bold tracking-widest mb-1">Tiempo total</p>
+                    <p className="text-4xl font-bold text-brand-900">{timeElapsed}s</p>
+                  </div>
+                  
+                  <div className="flex flex-col gap-3">
+                    <button onClick={nextLevel} className="w-full py-4 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 shadow-lg transition-all btn-pulse">
+                      {levelIdx < WORDSEARCH_LEVELS.length - 1 ? 'Siguiente Nivel' : 'Reiniciar Desafío'}
+                    </button>
+                    <button onClick={generateGrid} className="w-full py-3 bg-brand-100 text-brand-700 rounded-2xl font-bold hover:bg-brand-200 transition-all">Repetir nivel</button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      );
+    };
+
     // --- SECTION ORDER GAME ---
     window.SectionOrderGame = function SectionOrderGame({ isStandalone }) {
       const [levelIndex, setLevelIndex] = React.useState(0);
@@ -445,7 +821,22 @@
               <div className="bg-white rounded-3xl p-10 shadow-xl anim-scale-in border-2 border-emerald-200">
                 <div className="text-6xl mb-6">🏆</div>
                 <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Nivel Completado!</h3>
-                <p className="text-xl text-gray-600 mb-8">Tiempo: <span className="font-bold text-emerald-600">{finalTime}s</span></p>
+                <p className="text-emerald-600 font-bold italic mb-6">
+                  {(() => {
+                    const messages = [
+                      "¡Fantástico! Tu orden y lógica son impecables.",
+                      "¡Muy bien! Estás entrenando tu mente para el éxito.",
+                      "¡Excelente! Tu capacidad de secuencia es asombrosa.",
+                      "¡Bravo! Has mantenido el enfoque perfectamente.",
+                      "¡Genial! Tu velocidad de procesamiento es excelente."
+                    ];
+                    return messages[Math.floor(Math.random() * messages.length)];
+                  })()}
+                </p>
+                <div className="bg-brand-50 rounded-2xl p-4 mb-8">
+                  <p className="text-gray-500 text-sm uppercase font-bold tracking-widest mb-1">Tiempo total</p>
+                  <p className="text-4xl font-bold text-brand-900">{finalTime}s</p>
+                </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <button onClick={initLevel} className="px-8 py-3 bg-brand-100 text-brand-700 font-bold rounded-xl hover:bg-brand-200 transition-all">Repetir Nivel</button>
                   <button onClick={nextLevel} className="px-8 py-3 bg-brand-600 text-white font-bold rounded-xl hover:bg-brand-700 shadow-lg transition-all btn-pulse">
@@ -606,21 +997,25 @@
         {
           id: 'analyzer', icon: <Icons.Brain />, color: 'bg-sky-100 text-sky-600', badge: 'Inteligencia Artificial',
           title: 'Analizador de Accesibilidad', desc: 'Introduce las características de tu hogar o espacio y evaluaremos las barreras arquitectónicas.', cta: 'Analizar espacio',
+          img: 'ai_analyzer_thumbnail.png',
           action: () => scrollTo('analyzer')
         },
         {
           id: 'guides', icon: <Icons.Book />, color: 'bg-indigo-100 text-indigo-600', badge: 'Recursos',
           title: 'Guías de Adaptación', desc: 'Consejos prácticos para facilitar la vida diaria, prevención de caídas y adaptaciones del hogar.', cta: 'Explorar guías',
+          img: 'adaptation_guides_thumbnail.png',
           action: () => scrollTo('guides')
         },
         {
           id: 'cognitive', icon: <Icons.Puzzle />, color: 'bg-emerald-100 text-emerald-600', badge: 'Entrenamiento Mental',
           title: 'Ejercicios Mentales', desc: 'Ejercicios prácticos de memoria y atención diseñados para fortalecer tu agilidad mental diaria.', cta: 'Entrenar ahora',
+          img: 'mental_exercises_thumbnail.png',
           action: () => scrollTo('cognitive')
         },
         {
           id: 'cv', icon: <Icons.FileText />, color: 'bg-blue-100 text-blue-600', badge: 'Perfil Profesional',
           title: 'Mi Trayectoria', desc: 'Conoce mi formación, experiencia clínica en geriatría y ortopedia, y competencias en impresión 3D.', cta: 'Ver CV',
+          img: 'cv_trayectoria_thumbnail_ot.png',
           action: () => navigateTo('cv')
         },
       ];
@@ -630,17 +1025,12 @@
           <section className="hero-gradient min-h-[90vh] flex flex-col justify-center pt-32 pb-20 px-4">
             <div className="max-w-7xl mx-auto w-full">
               <div className="text-center mb-16">
-                <span className="inline-flex items-center gap-2 bg-white/80 text-brand-700 border border-brand-200 rounded-full px-5 py-2 text-base font-semibold mb-6 anim-fade-up shadow-sm">
-                  <span className="w-2.5 h-2.5 bg-brand-500 rounded-full animate-pulse"></span>
-                  Terapeuta Ocupacional
-                </span>
                 <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-brand-900 leading-tight mb-6 anim-fade-up anim-fade-up-d1">
                   Tu bienestar y<br /><span className="text-brand-500">autonomía</span>, primero
                 </h1>
                 <p className="text-xl sm:text-2xl text-gray-600 leading-relaxed max-w-2xl mx-auto mb-10 anim-fade-up anim-fade-up-d2">
                   Especialista en geriatría y adaptación del entorno. Te acompaño hacia una vida más <strong className="text-brand-700">independiente y plena</strong>.
                 </p>
-                {/* Botones de acción eliminados por petición del usuario */}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -648,16 +1038,24 @@
                   <article 
                     key={c.id} 
                     onClick={c.action}
-                    className="bg-white rounded-3xl p-8 border border-blue-100 shadow-md card-lift flex flex-col anim-fade-up cursor-pointer group" 
+                    className="bg-white rounded-3xl overflow-hidden border border-blue-50 shadow-lg card-lift flex flex-col anim-fade-up cursor-pointer group" 
                     style={{ animationDelay: `${0.15 * i + 0.1}s` }}
                   >
-                    <div className={`w-14 h-14 ${c.color} rounded-2xl flex items-center justify-center mb-5 shadow-sm group-hover:scale-110 transition-transform`}>{c.icon}</div>
-                    <span className="text-xs font-bold uppercase tracking-widest text-brand-400 mb-2">{c.badge}</span>
-                    <h2 className="font-display text-2xl font-bold text-brand-900 mb-3">{c.title}</h2>
-                    <p className="text-gray-600 text-lg leading-relaxed flex-1">{c.desc}</p>
-                    <div className="mt-6 inline-flex items-center gap-2 text-brand-600 font-bold text-lg hover:text-brand-800 transition-colors">
-                      {c.cta}
-                      <span className="transition-transform group-hover:translate-x-1"><Icons.ArrowRight /></span>
+                    <div className="relative h-44 overflow-hidden">
+                      <img src={c.img} alt={c.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                      <div className={`absolute top-4 right-4 w-12 h-12 ${c.color} rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-6 transition-transform`}>
+                        {c.icon}
+                      </div>
+                    </div>
+                    <div className="p-6 flex flex-col flex-1">
+                      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-400 mb-2">{c.badge}</span>
+                      <h2 className="font-display text-xl font-bold text-brand-900 mb-3 group-hover:text-brand-600 transition-colors leading-tight">{c.title}</h2>
+                      <p className="text-gray-600 text-sm leading-relaxed flex-1 line-clamp-3">{c.desc}</p>
+                      <div className="mt-6 inline-flex items-center gap-2 text-brand-600 font-bold text-sm group-hover:gap-3 transition-all">
+                        {c.cta}
+                        <Icons.ArrowRight />
+                      </div>
                     </div>
                   </article>
                 ))}
@@ -2462,6 +2860,8 @@
           setCurrentPage('cognitive');
         } else if (pageParam === 'order') {
           setCurrentPage('order');
+        } else if (pageParam === 'wordsearch') {
+          setCurrentPage('wordsearch');
         } else if (pageParam === 'analyzer') {
           setCurrentPage('analyzer');
         }
@@ -2494,7 +2894,7 @@
 
       const params = new URLSearchParams(window.location.search);
       const pageParam = params.get('page');
-      const isStandalone = pageParam === 'memory' || pageParam === 'order' || pageParam === 'analyzer';
+      const isStandalone = pageParam === 'memory' || pageParam === 'order' || pageParam === 'wordsearch' || pageParam === 'analyzer';
 
       return (
         <>
@@ -2523,6 +2923,9 @@
             )}
             {currentPage === 'order' && (
               <SectionOrderGame isStandalone={isStandalone} />
+            )}
+            {currentPage === 'wordsearch' && (
+              <SectionWordSearch isStandalone={isStandalone} />
             )}
             {currentPage === 'analyzer' && (
               <SectionAnalyzer isTeaser={false} isStandalone={isStandalone} />
