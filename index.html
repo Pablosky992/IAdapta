@@ -1630,7 +1630,7 @@
               <h2 className="font-display text-4xl sm:text-5xl font-bold text-brand-900 mb-4">Analizador de Accesibilidad</h2>
               <div className="section-divider w-24 mx-auto mb-6"></div>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-10">
-                Sube una foto de una estancia (baño, cocina...) y nuestra conexión con Gemini Vision identificará las barreras arquitectónicas.
+                Envía una foto de tu hogar y nuestro sistema identificará qué barreras debes eliminar.
               </p>
               
               {savedReports.length > 0 && step === 'form' && (
@@ -1881,11 +1881,19 @@
                 <div className="mt-8 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
                   <p className="text-base text-gray-500 flex items-center gap-2"><Icons.Shield /> Tus datos no se envían a ningún servidor.</p>
                   <div className="flex flex-col items-center sm:items-end w-full sm:w-auto mt-4 sm:mt-0">
-                    <button type="submit" className="px-10 py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xl rounded-2xl shadow-lg transition-all btn-pulse w-full sm:w-auto">
-                      {file ? 'Analizar con Gemini IA' : 'Analizar Cuestionario'}
+                    <button 
+                      type="submit" 
+                      disabled={!isQuestionnaireComplete()}
+                      className={`px-10 py-4 font-bold text-xl rounded-2xl shadow-lg transition-all w-full sm:w-auto ${
+                        isQuestionnaireComplete() 
+                        ? 'bg-brand-600 hover:bg-brand-700 text-white btn-pulse' 
+                        : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-70'
+                      }`}
+                    >
+                      {!isQuestionnaireComplete() ? 'Completa el cuestionario' : 'Analizar'}
                     </button>
                     <p className="text-xs text-gray-400 mt-3 text-center sm:text-right max-w-xs">
-                      * El análisis por IA se encuentra en fase beta (v1.5.1).
+                      * El análisis por IA se encuentra en fase beta, por lo que puede contener errores. El resultado es una orientación general. Consulte siempre con un profesional cualificado.
                     </p>
                   </div>
                 </div>
