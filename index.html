@@ -5,8 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description"
-    content="Terapeuta Ocupacional profesional especializada en adaptación del entorno y autonomía personal para personas mayores y con discapacidad." />
-  <title>Terapia Ocupacional | Marca Personal Profesional</title>
+    content="IAdapta - Terapia Ocupacional especializada en adaptación del entorno, accesibilidad y autonomía personal para personas mayores y con discapacidad." />
+  <title>IAdapta | Terapia Ocupacional y Accesibilidad</title>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -24,6 +24,9 @@
 
   <!-- Babel Standalone (JSX in browser) -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Marked.js for Markdown parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <!-- Tailwind config -->
   <script>
@@ -1338,10 +1341,8 @@
       };
 
       const calcScore = () => {
-        let pts = 50;
+        let pts = 60;
         if (form.tipoBanyo === 'ducha') pts += 10;
-        if (form.barras === 'si') pts += 10;
-        if (form.alzaWC === 'si') pts += 10;
         if (form.iluminacion === 'buena') pts += 10; else if (form.iluminacion === 'media') pts += 5;
         if (form.puertas === 'ancha') pts += 10; else if (form.puertas === 'estandar') pts += 5;
 
@@ -1349,7 +1350,9 @@
         if (form.anchoAscensor === 'estrecha' || form.puertas === 'estrecha') pts -= 15;
 
         if (form.nivelMovilidad === 'asistencia' || form.nivelMovilidad === 'encamado') pts -= 15;
-        if (form.capacidadesMotoras === 'inestabilidad') pts -= 10;
+        if (form.destrezaManos === 'temblor' || form.destrezaManos === 'no-funcional') pts -= 5;
+        if (form.caidas === 'si') pts -= 15;
+        if (form.percepcionSeguridad && parseInt(form.percepcionSeguridad) < 5) pts -= 10;
 
         return Math.max(0, Math.min(pts, 100));
       };
@@ -1362,6 +1365,47 @@
           all.push({
             cond: true, icon: '⚠️', prio: 'Alta',
             text: 'AVISO DE ACCESIBILIDAD PRIORITARIO: Tus pasos de puerta o el acceso al ascensor son reducidos (≤ 60 cm). Antes de comprar cualquier silla o andador, asegúrate de que el ancho total del producto no supere los 55 cm para garantizar un paso seguro y sin colisiones.',
+          });
+        }
+
+        if (form.caidas === 'si') {
+          const fear = parseInt(form.percepcionSeguridad) || 5;
+          let mobilityAdvice = '';
+          let link = { text: 'Ver ayudas a la marcha', url: 'https://amzn.to/4nioy6O' };
+          
+          if (fear <= 3) {
+            mobilityAdvice = ' Dada la frecuencia de caídas y tu baja seguridad, es fundamental valorar el uso de un andador (rollator) que proporcione una base de apoyo estable.';
+            link = { text: 'Ver andadores recomendados', url: 'https://amzn.to/4nioy6O' };
+          } else {
+            mobilityAdvice = ' Debido a los tropiezos recientes, el uso de unas muletas ergonómicas con apoyo de antebrazo te proporcionará el apoyo extra necesario sin sobrecargar tus muñecas.';
+            link = { text: 'Ver muletas ergonómicas', url: 'https://amzn.to/4dE2H6n' };
+          }
+
+          all.push({
+            cond: true, icon: '🚨', prio: 'Alta',
+            text: `ALERTA DE SEGURIDAD: Al haber sufrido caídas recientemente, el riesgo de recidiva es muy alto. Es URGENTE eliminar alfombras y mejorar la iluminación.${mobilityAdvice}`,
+            linkText: link.text, linkUrl: link.url
+          });
+        }
+
+        if (form.percepcionSeguridad && parseInt(form.percepcionSeguridad) < 5) {
+          all.push({
+            cond: true, icon: '😟', prio: 'Media',
+            text: 'ATENCIÓN MULTIDISCIPLINAR: Una baja percepción de seguridad (miedo a caer) provoca una reducción de la actividad que debilita los músculos y aumenta el riesgo real de caída. Te recomendamos consultar con un equipo de profesionales (Terapeuta Ocupacional, Fisioterapeuta y Psicólogo) para realizar un entrenamiento integral de equilibrio, fuerza y gestión del miedo.',
+          });
+        }
+
+        if (form.convivencia === 'solo' && form.caidas === 'si') {
+          all.push({
+            cond: true, icon: '🏠', prio: 'Alta',
+            text: 'SEGURIDAD DOMICILIARIA: Al vivir solo y haber tenido caídas, es IMPRESCINDIBLE contar con un sistema de teleasistencia o un dispositivo de detección de caídas. Esto garantiza que, en caso de incidente, el aviso a los servicios de emergencia o familiares sea automático e inmediato.',
+          });
+        }
+
+        if (form.limitacionPrincipal === 'fatiga') {
+          all.push({
+            cond: true, icon: '🫁', prio: 'Media',
+            text: 'GESTIÓN DE LA ENERGÍA: Al identificar la fatiga como limitación principal, es vital aplicar técnicas de simplificación de tareas. Realiza las actividades sentado (higiene, cocina) y planifica periodos de descanso breves pero frecuentes para evitar el agotamiento que aumenta el riesgo de caídas.',
           });
         }
 
@@ -1387,22 +1431,6 @@
           });
         }
 
-        if (form.barras === 'no') {
-          all.push({
-            cond: true, icon: '🦾', prio: 'Alta',
-            text: 'La ausencia de barras de apoyo incrementa el riesgo de pérdida de equilibrio. Instalar asideros técnicos en puntos estratégicos (entrada de ducha e inodoro) es vital para ofrecer puntos de palanca seguros y compensar posibles debilidades musculares.',
-            linkText: 'Ver barras de apoyo', linkUrl: 'https://amzn.to/4u4JBw3'
-          });
-        }
-
-        if (form.alzaWC === 'no') {
-          all.push({
-            cond: true, icon: '🚽', prio: 'Media',
-            text: 'Un inodoro a altura estándar puede ser difícil de usar si hay debilidad en las piernas. Un alza de WC reduce el esfuerzo requerido para sentarse y levantarse, protegiendo las articulaciones de cadera y rodilla y fomentando tu autonomía.',
-            linkText: 'Ver alza de WC', linkUrl: 'https://amzn.to/42hlsWU'
-          });
-        }
-
         // Otras recomendaciones (mantenidas y adaptadas)
         if (form.iluminacion !== 'buena' && form.iluminacion !== '') {
           all.push({
@@ -1419,14 +1447,20 @@
           });
         }
 
+        if (form.destrezaManos === 'fina' || form.destrezaManos === 'fuerza' || form.destrezaManos === 'temblor') {
+          all.push({
+            cond: true, icon: '🍴', prio: 'Media',
+            text: 'AUTONOMÍA EN ALIMENTACIÓN: Al detectar dificultades en la destreza manual, el uso de cubiertos con mango engrosado y platos con reborde facilitará tu independencia durante las comidas, reduciendo el esfuerzo y la frustración.',
+            linkText: 'Ver cubiertos adaptados', linkUrl: 'https://amzn.to/4wi1BVq'
+          });
+        }
+
         return all;
       };
 
       const getPositiveFindings = () => {
         const positives = [];
         if (form.tipoBanyo === 'ducha') positives.push({ icon: '✅', text: 'Dispones de plato de ducha, lo que facilita enormemente el acceso y reduce el riesgo de tropiezos comparado con una bañera.' });
-        if (form.barras === 'si') positives.push({ icon: '✅', text: 'Cuentas con barras de apoyo instaladas, un elemento clave para la estabilidad en las transferencias.' });
-        if (form.alzaWC === 'si') positives.push({ icon: '✅', text: 'El uso de alza de WC es un punto fuerte que protege tus articulaciones y facilita la bipedestación.' });
         if (form.iluminacion === 'buena') positives.push({ icon: '✅', text: 'La buena iluminación detectada es fundamental para la seguridad visual y la prevención de caídas.' });
         if (form.puertas === 'ancha') positives.push({ icon: '✅', text: 'Tus puertas anchas garantizan un paso fluido y son compatibles con la mayoría de ayudas técnicas.' });
         if (form.nivelMovilidad === 'independiente') positives.push({ icon: '✅', text: 'Tu nivel de independencia actual es un gran activo; las adaptaciones ayudarán a preservarlo por más tiempo.' });
@@ -1434,7 +1468,7 @@
       };
 
       const isQuestionnaireComplete = () => {
-        const requiredFields = ['tipo', 'ascensor', 'tipoBanyo', 'barras', 'alzaWC', 'iluminacion', 'puertas', 'movilidad', 'nivelMovilidad', 'capacidadesMotoras'];
+        const requiredFields = ['nombre', 'edad', 'tipo', 'ascensor', 'tipoBanyo', 'iluminacion', 'puertas', 'movilidad', 'nivelMovilidad', 'destrezaManos', 'caidas', 'percepcionSeguridad', 'convivencia', 'limitacionPrincipal'];
         return requiredFields.every(field => form[field] !== '');
       };
 
@@ -1516,7 +1550,7 @@
 
       const reset = () => {
         setStep('form'); setScore(0); setRingOffset(283);
-        const emptyForm = { tipo: '', ascensor: '', anchoAscensor: '', largoAscensor: '', tipoBanyo: '', barras: '', alzaWC: '', iluminacion: '', puertas: '', movilidad: '', nivelMovilidad: '', capacidadesMotoras: '', notas: '' };
+        const emptyForm = { nombre: '', edad: '', tipo: '', ascensor: '', anchoAscensor: '', largoAscensor: '', tipoBanyo: '', iluminacion: '', puertas: '', movilidad: '', nivelMovilidad: '', destrezaManos: '', caidas: '', percepcionSeguridad: '', convivencia: '', limitacionPrincipal: '', notas: '' };
         setForm(emptyForm);
         localStorage.removeItem('iadapta_draft');
         setFile(null); setPreview(null); setBase64(null); setAiResponse(''); setAiError('');
@@ -1652,6 +1686,31 @@
                 </h3>
 
                 <div className="grid sm:grid-cols-2 gap-6">
+                  <div className="sm:col-span-1">
+                    <label className={labelClass}>Tu Nombre</label>
+                    <input 
+                      type="text" 
+                      name="nombre" 
+                      value={form.nombre} 
+                      onChange={handleChange} 
+                      placeholder="Ej: María García"
+                      className={fieldClass} 
+                      required 
+                    />
+                  </div>
+                  <div className="sm:col-span-1">
+                    <label className={labelClass}>Edad</label>
+                    <input 
+                      type="number" 
+                      name="edad" 
+                      value={form.edad} 
+                      onChange={handleChange} 
+                      placeholder="Ej: 75"
+                      className={fieldClass} 
+                      required 
+                    />
+                  </div>
+
                   <div>
                     <label className={labelClass}>Tipo de vivienda</label>
                     <select name="tipo" value={form.tipo} onChange={handleChange} className={fieldClass} required>
@@ -1701,22 +1760,6 @@
                       <option value="ducha">Ducha</option>
                     </select>
                   </div>
-                  <div>
-                    <label className={labelClass}>¿Tiene barras de apoyo instaladas?</label>
-                    <select name="barras" value={form.barras} onChange={handleChange} className={fieldClass}>
-                      <option value="">— Selecciona —</option>
-                      <option value="si">Sí</option>
-                      <option value="no">No</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className={labelClass}>¿Tiene alza de WC?</label>
-                    <select name="alzaWC" value={form.alzaWC} onChange={handleChange} className={fieldClass}>
-                      <option value="">— Selecciona —</option>
-                      <option value="si">Sí</option>
-                      <option value="no">No</option>
-                    </select>
-                  </div>
 
                   <div>
                     <label className={labelClass}>Ancho de puertas de la casa</label>
@@ -1748,6 +1791,64 @@
                     </select>
                   </div>
                   <div>
+                    <label className={labelClass}>¿Caídas en los últimos 12 meses?</label>
+                    <select name="caidas" value={form.caidas} onChange={handleChange} className={fieldClass} required>
+                      <option value="">— Selecciona —</option>
+                      <option value="si">Sí, he tenido algún tropiezo o caída</option>
+                      <option value="no">No, ninguna</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Seguridad al caminar (1-10)</label>
+                    <div className="flex items-center gap-4">
+                      <input 
+                        type="range" 
+                        name="percepcionSeguridad" 
+                        min="1" max="10" 
+                        value={form.percepcionSeguridad || '5'} 
+                        onChange={handleChange} 
+                        className={`flex-1 h-2 rounded-lg appearance-none cursor-pointer accent-current ${
+                          (form.percepcionSeguridad || 5) <= 3 ? 'text-red-500' : 
+                          (form.percepcionSeguridad || 5) <= 6 ? 'text-amber-500' : 'text-green-500'
+                        }`}
+                        style={{ backgroundColor: '#e5e7eb' }}
+                      />
+                      <span className={`w-12 h-12 flex items-center justify-center font-bold rounded-xl text-xl border-2 shadow-sm transition-colors ${
+                        (form.percepcionSeguridad || 5) <= 3 ? 'bg-red-50 text-red-700 border-red-200' : 
+                        (form.percepcionSeguridad || 5) <= 6 ? 'bg-amber-50 text-amber-700 border-amber-200' : 
+                        'bg-green-50 text-green-700 border-green-200'
+                      }`}>
+                        {form.percepcionSeguridad || '5'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between mt-2 text-xs font-bold uppercase tracking-tighter">
+                      <span className="text-red-500">Inseguro (1)</span>
+                      <span className="text-green-600">Muy Seguro (10)</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Situación de convivencia</label>
+                    <select name="convivencia" value={form.convivencia} onChange={handleChange} className={fieldClass} required>
+                      <option value="">— Selecciona —</option>
+                      <option value="solo">Vivo solo/a</option>
+                      <option value="familia">Vivo acompañado/a (familia)</option>
+                      <option value="ayuda">Cuento con ayuda profesional diaria</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Principal limitación actual</label>
+                    <select name="limitacionPrincipal" value={form.limitacionPrincipal} onChange={handleChange} className={fieldClass} required>
+                      <option value="">— Selecciona —</option>
+                      <option value="dolor">Dolor articular / Reuma</option>
+                      <option value="equilibrio">Falta de equilibrio</option>
+                      <option value="debilidad">Debilidad en un lado (Hemiparesia)</option>
+                      <option value="fatiga">Fatiga / Cansancio rápido</option>
+                      <option value="vision">Problemas de visión</option>
+                      <option value="temblor">Temblores / Parkinson</option>
+                      <option value="otra">Otra limitación</option>
+                    </select>
+                  </div>
+                  <div>
                     <label className={labelClass}>Nivel de movilidad</label>
                     <select name="nivelMovilidad" value={form.nivelMovilidad} onChange={handleChange} className={fieldClass}>
                       <option value="">— Selecciona —</option>
@@ -1758,12 +1859,14 @@
                     </select>
                   </div>
                   <div>
-                    <label className={labelClass}>Capacidades motoras</label>
-                    <select name="capacidadesMotoras" value={form.capacidadesMotoras} onChange={handleChange} className={fieldClass}>
+                    <label className={labelClass}>Uso de las manos y agarre</label>
+                    <select name="destrezaManos" value={form.destrezaManos} onChange={handleChange} className={fieldClass} required>
                       <option value="">— Selecciona —</option>
-                      <option value="conservadas">Fuerza y equilibrio normales</option>
-                      <option value="debilidad">Pérdida de fuerza o artritis</option>
-                      <option value="inestabilidad">Problemas de equilibrio frecuentes</option>
+                      <option value="funcional">Funcional (sin problemas)</option>
+                      <option value="fina">Dificultad en pinza fina (botones, llaves)</option>
+                      <option value="fuerza">Falta de fuerza (agarre grueso)</option>
+                      <option value="temblor">Temblor que interfiere</option>
+                      <option value="no-funcional">No funcional (requiere ayuda total)</option>
                     </select>
                   </div>
                 </div>
@@ -1797,60 +1900,67 @@
                 {(aiResponse || aiError) && (
                   <div className={`rounded-3xl border shadow-xl p-8 md:p-10 mb-8 ${aiError ? 'bg-red-50 border-red-200' : 'bg-gradient-to-br from-indigo-50 to-white border-indigo-100'}`}>
                     <h3 className={`font-display text-2xl font-bold mb-4 flex items-center gap-3 ${aiError ? 'text-red-800' : 'text-indigo-900'}`}>
-                      <Icons.Brain /> {aiError ? 'Error en el Análisis IA' : 'Diagnóstico Preliminar Gemini Vision'}
+                      <Icons.Brain /> {aiError ? 'Error en el Análisis IA' : `Informe de Accesibilidad para ${form.nombre || 'el usuario'}`}
                     </h3>
                     {aiError ? (
                       <p className="text-red-700">{aiError}</p>
-                    ) : (
-                      <div className="prose prose-indigo max-w-none text-gray-700 whitespace-pre-wrap text-lg ai-report-content">
-                        {aiResponse.split(/(\[+PRODUCTO?[:\s]*\d+\]+)/gi).map((part, i) => {
-                          const productMatch = part.match(/PRODUCTO?[:\s]*(\d+)/i);
-                          if (productMatch) {
-                            const productId = productMatch[1];
-                            const products = {
-                              // BAÑO
-                              '1': { name: 'Tabla de bañera', url: 'https://amzn.to/4uLnkU5', img: 'assets/tabla_banera.png' },
-                              '2': { name: 'Asiento para ducha', url: 'https://amzn.to/4dfjkUJ', img: 'assets/asiento_ducha.png' },
-                              '3': { name: 'Barras de apoyo', url: 'https://amzn.to/4u4JBw3', img: 'assets/barras_apoyo.png' },
-                              '4': { name: 'Alza de WC', url: 'https://amzn.to/42hlsWU', img: 'assets/alza_wc.png' },
-                              '5': { name: 'Asiento giratorio bañera', url: 'https://amzn.to/4d3bjlv', img: 'assets/asiento_banera.jpg' },
+                    ) : (() => {
+                      const renderedProducts = new Set();
+                      return (
+                        <div className="prose prose-indigo max-w-none text-gray-700 text-lg ai-report-content">
+                          {aiResponse.split(/(\[+PRODUCTO?[:\s]*\d+\]+)/gi).map((part, i) => {
+                            const productMatch = part.match(/PRODUCTO?[:\s]*(\d+)/i);
+                            if (productMatch) {
+                              const productId = productMatch[1];
+                              if (renderedProducts.has(productId)) return null;
+                              renderedProducts.add(productId);
                               
-                              // DORMITORIO
-                              '6': { name: 'Barandilla extensible', url: 'https://amzn.to/42hT9Yu', img: 'assets/barandilla_cama.jpg' },
-                              '7': { name: 'Trapecio Universal', url: 'https://amzn.to/3PqiHj4', img: 'assets/trapecio_cama.jpg' },
-                              '8': { name: 'Tacos elevadores cama', url: 'https://amzn.to/4tXN3Zo', img: 'assets/tacos_cama.jpg' },
-                              
-                              // COCINA / ALIMENTACIÓN
-                              '9': { name: 'Cubiertos adaptados', url: 'https://amzn.to/4wi1BVq', img: 'assets/cubiertos_adaptados.jpg' },
-                              '10': { name: 'Cuchillo Nelson', url: 'https://amzn.to/3QPzqgd', img: 'assets/cuchillo_nelson.jpg' },
-                              '11': { name: 'Tabla de cortar adaptada', url: 'https://amzn.to/42CtdHf', img: 'assets/tabla_cortar.jpg' },
-                              '12': { name: 'Plato con reborde alto', url: 'https://amzn.to/4d2KwXN', img: 'assets/plato_reborde.jpg' },
-                              '13': { name: 'Vaso con escotadura nasal', url: 'https://amzn.to/3R1tYXJ', img: 'assets/vaso_escotadura.jpg' },
-                              
-                              // MOVILIDAD
-                              '14': { name: 'Andador interior', url: 'https://amzn.to/49eGadM', img: 'assets/andador_interior.jpg' },
-                              '15': { name: 'Andador Rollator (exterior)', url: 'https://amzn.to/4nioy6O', img: 'assets/andador_exterior.jpg' },
-                              '16': { name: 'Conteras antideslizantes', url: 'https://amzn.to/4uw9fth', img: 'assets/conteras.jpg' }
-                            };
-                            const p = products[productId];
-                            if (!p) return null;
-                            return (
-                              <div key={i} className="my-8 bg-white border border-brand-100 rounded-2xl p-4 shadow-md flex flex-col sm:flex-row items-center gap-6 no-print">
-                                <img src={p.img} alt={p.name} className="w-32 h-32 object-cover rounded-xl border border-gray-100" />
-                                <div className="flex-1 text-center sm:text-left">
-                                  <h4 className="text-xl font-bold text-brand-900 mb-2">{p.name}</h4>
-                                  <p className="text-sm text-gray-500 mb-4">Producto técnico recomendado profesionalmente.</p>
-                                  <a href={p.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#FF9900] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#e68a00] transition-all shadow-sm">
-                                    Ver en Amazon
-                                  </a>
+                              const products = {
+                                // BAÑO
+                                '1': { name: 'Tabla de bañera', url: 'https://amzn.to/4uLnkU5', img: 'tabla_banera.png' },
+                                '2': { name: 'Asiento para ducha', url: 'https://amzn.to/4dfjkUJ', img: 'asiento_ducha.png' },
+                                '3': { name: 'Barras de apoyo', url: 'https://amzn.to/4u4JBw3', img: 'barras_apoyo.png' },
+                                '4': { name: 'Alza de WC', url: 'https://amzn.to/42hlsWU', img: 'alza_wc.png' },
+                                '5': { name: 'Asiento giratorio bañera', url: 'https://amzn.to/4d3bjlv', img: 'asiento_banera.png' },
+                                
+                                // DORMITORIO
+                                '6': { name: 'Barandilla extensible', url: 'https://amzn.to/42hT9Yu', img: 'barandilla_cama.png' },
+                                '7': { name: 'Trapecio Universal', url: 'https://amzn.to/3PqiHj4', img: 'trapecio_cama.png' },
+                                '8': { name: 'Tacos elevadores cama', url: 'https://amzn.to/4tXN3Zo', img: 'tacos_cama.png' },
+                                
+                                // COCINA / ALIMENTACIÓN
+                                '9': { name: 'Cubiertos adaptados', url: 'https://amzn.to/4wi1BVq', img: 'cubiertos_adaptados.png' },
+                                '10': { name: 'Cuchillo Nelson', url: 'https://amzn.to/3QPzqgd', img: 'cuchillo_nelson.png' },
+                                '11': { name: 'Tabla de cortar adaptada', url: 'https://amzn.to/42CtdHf', img: 'tabla_cortar.png' },
+                                '12': { name: 'Plato con reborde alto', url: 'https://amzn.to/4d2KwXN', img: 'plato_reborde.png' },
+                                '13': { name: 'Vaso con escotadura nasal', url: 'https://amzn.to/3R1tYXJ', img: 'vaso_escotadura.png' },
+                                
+                                // MOVILIDAD
+                                '14': { name: 'Andador interior', url: 'https://amzn.to/49eGadM', img: 'andador_interior.png' },
+                                '15': { name: 'Andador Rollator (exterior)', url: 'https://amzn.to/4nioy6O', img: 'andador_exterior.png' },
+                                '16': { name: 'Conteras antideslizantes', url: 'https://amzn.to/4uw9fth', img: 'conteras.png' },
+                                '17': { name: 'Muletas Ergonómicas (Par)', url: 'https://amzn.to/4dE2H6n', img: 'muletas_ergonomicas.png' }
+                              };
+                              const p = products[productId];
+                              if (!p) return null;
+                              return (
+                                <div key={i} className="my-8 bg-white border border-brand-100 rounded-2xl p-4 shadow-md flex flex-col sm:flex-row items-center gap-6 no-print">
+                                  <img src={p.img} alt={p.name} className="w-32 h-32 object-cover rounded-xl border border-gray-100" />
+                                  <div className="flex-1 text-center sm:text-left">
+                                    <h4 className="text-xl font-bold text-brand-900 mb-2">{p.name}</h4>
+                                    <p className="text-sm text-gray-500 mb-4">Producto técnico recomendado profesionalmente.</p>
+                                    <a href={p.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#FF9900] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#e68a00] transition-all shadow-sm">
+                                      Ver en Amazon
+                                    </a>
+                                  </div>
                                 </div>
-                              </div>
-                            );
-                          }
-                          return <div key={i} dangerouslySetInnerHTML={{ __html: part }} />;
-                        })}
-                      </div>
-                    )}
+                              );
+                            }
+                            return <div key={i} className="mb-4 whitespace-normal" dangerouslySetInnerHTML={{ __html: marked.parse(part) }} />;
+                          })}
+                        </div>
+                      );
+                    })()}
                     
                     <div className="mt-10 flex justify-center no-print">
                       <button 
