@@ -17,14 +17,16 @@ FORMATO DE RESPUESTA (MUY IMPORTANTE):
 - Usa Markdown estándar.
 - Usa ### para los encabezados de sección.
 - Usa asteriscos (*) para crear listas de puntos.
-- Deja SIEMPRE una línea en blanco entre párrafos y entre puntos de una lista para asegurar la legibilidad.
-- Incluye las etiquetas de productos [[PRODUCTO:X]] dentro del texto donde sea relevante.
+- Deja SIEMPRE una línea en blanco entre párrafos.
+- Coloca las etiquetas [[PRODUCTO:X]] SIEMPRE al final del párrafo o sección donde las recomiendes, no entre medias del texto.
+- NO añadidas el nombre del producto al lado de la etiqueta (ejemplo: NO pongas [[PRODUCTO:1]] (Tabla bañera)). Pon solo la etiqueta [[PRODUCTO:1]].
 
 Estructura del informe:
 ### 1. DIAGNÓSTICO TÉCNICO
 Identifica barreras reales observadas y riesgos potenciales.
 ### 2. PLAN DE ADAPTACIÓN Y PRODUCTOS
-Propuestas concretas de mejora usando etiquetas como [[PRODUCTO:1]] (Tabla bañera), [[PRODUCTO:2]] (Asiento ducha), [[PRODUCTO:3]] (Barras), [[PRODUCTO:4]] (Alza WC), [[PRODUCTO:17]] (Muletas).
+Propuestas concretas de mejora. Coloca las etiquetas al final de cada bloque de recomendación.
+Productos disponibles: [[PRODUCTO:1]] (Tabla bañera), [[PRODUCTO:2]] (Asiento ducha), [[PRODUCTO:3]] (Barras), [[PRODUCTO:4]] (Alza WC), [[PRODUCTO:17]] (Muletas).
 ### 3. CONCLUSIÓN PROFESIONAL
 
 IMPORTANTE: El informe debe empezar con un aviso indicando que es un análisis por IA en fase beta para apoyo profesional.`;

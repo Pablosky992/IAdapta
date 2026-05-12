@@ -1916,55 +1916,62 @@
                       const renderedProducts = new Set();
                       return (
                         <div className="prose prose-indigo max-w-none text-gray-700 text-lg ai-report-content">
-                          {aiResponse.split(/(\[+PRODUCTO?[:\s]*\d+\]+)/gi).map((part, i) => {
-                            const productMatch = part.match(/PRODUCTO?[:\s]*(\d+)/i);
-                            if (productMatch) {
-                              const productId = productMatch[1];
-                              if (renderedProducts.has(productId)) return null;
-                              renderedProducts.add(productId);
-                              
-                              const products = {
-                                // BAÑO
-                                '1': { name: 'Tabla de bañera', url: 'https://amzn.to/4uLnkU5', img: 'tabla_banera.png' },
-                                '2': { name: 'Asiento para ducha', url: 'https://amzn.to/4dfjkUJ', img: 'asiento_ducha.png' },
-                                '3': { name: 'Barras de apoyo', url: 'https://amzn.to/4u4JBw3', img: 'barras_apoyo.png' },
-                                '4': { name: 'Alza de WC', url: 'https://amzn.to/42hlsWU', img: 'alza_wc.png' },
-                                '5': { name: 'Asiento giratorio bañera', url: 'https://amzn.to/4d3bjlv', img: 'asiento_banera.png' },
+                          {aiResponse.split(/\n\n+/).map((paragraph, pIdx) => {
+                            if (!paragraph.trim()) return null;
+
+                            // Extraer todas las etiquetas de producto del párrafo
+                            const productRegex = /\[\[PRODUCTO?[:\s]*(\d+)\]\]/gi;
+                            const matches = [...paragraph.matchAll(productRegex)];
+                            const productIds = [...new Set(matches.map(m => m[1]))];
+
+                            // Limpiar el texto del párrafo de las etiquetas para que no se vean
+                            const cleanText = paragraph.replace(productRegex, '').trim();
+
+                            return (
+                              <div key={pIdx} className="mb-8">
+                                {/* Texto del párrafo procesado por Marked */}
+                                <div dangerouslySetInnerHTML={{ __html: marked.parse(cleanText) }} />
                                 
-                                // DORMITORIO
-                                '6': { name: 'Barandilla extensible', url: 'https://amzn.to/42hT9Yu', img: 'barandilla_cama.png' },
-                                '7': { name: 'Trapecio Universal', url: 'https://amzn.to/3PqiHj4', img: 'trapecio_cama.png' },
-                                '8': { name: 'Tacos elevadores cama', url: 'https://amzn.to/4tXN3Zo', img: 'tacos_cama.png' },
-                                
-                                // COCINA / ALIMENTACIÓN
-                                '9': { name: 'Cubiertos adaptados', url: 'https://amzn.to/4wi1BVq', img: 'cubiertos_adaptados.png' },
-                                '10': { name: 'Cuchillo Nelson', url: 'https://amzn.to/3QPzqgd', img: 'cuchillo_nelson.png' },
-                                '11': { name: 'Tabla de cortar adaptada', url: 'https://amzn.to/42CtdHf', img: 'tabla_cortar.png' },
-                                '12': { name: 'Plato con reborde alto', url: 'https://amzn.to/4d2KwXN', img: 'plato_reborde.png' },
-                                '13': { name: 'Vaso con escotadura nasal', url: 'https://amzn.to/3R1tYXJ', img: 'vaso_escotadura.png' },
-                                
-                                // MOVILIDAD
-                                '14': { name: 'Andador interior', url: 'https://amzn.to/49eGadM', img: 'andador_interior.png' },
-                                '15': { name: 'Andador Rollator (exterior)', url: 'https://amzn.to/4nioy6O', img: 'andador_exterior.png' },
-                                '16': { name: 'Conteras antideslizantes', url: 'https://amzn.to/4uw9fth', img: 'conteras.png' },
-                                '17': { name: 'Muletas Ergonómicas (Par)', url: 'https://amzn.to/4dE2H6n', img: 'muletas_ergonomicas.png' }
-                              };
-                              const p = products[productId];
-                              if (!p) return null;
-                              return (
-                                <div key={i} className="my-8 bg-white border border-brand-100 rounded-2xl p-4 shadow-md flex flex-col sm:flex-row items-center gap-6 no-print">
-                                  <img src={p.img} alt={p.name} className="w-32 h-32 object-cover rounded-xl border border-gray-100" />
-                                  <div className="flex-1 text-center sm:text-left">
-                                    <h4 className="text-xl font-bold text-brand-900 mb-2">{p.name}</h4>
-                                    <p className="text-sm text-gray-500 mb-4">Producto técnico recomendado profesionalmente.</p>
-                                    <a href={p.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#FF9900] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#e68a00] transition-all shadow-sm">
-                                      Ver en Amazon
-                                    </a>
+                                {/* Renderizar las fichas de producto al final del párrafo */}
+                                {productIds.length > 0 && (
+                                  <div className="flex flex-col gap-4 mt-6 no-print">
+                                    {productIds.map(id => {
+                                      const products = {
+                                        '1': { name: 'Tabla para bañera', url: 'https://amzn.to/3Wv4Cun', img: 'tabla_banera.png' },
+                                        '2': { name: 'Asiento para ducha', url: 'https://amzn.to/3C6M8mH', img: 'asiento_ducha.png' },
+                                        '3': { name: 'Barras de apoyo', url: 'https://amzn.to/3C8YQv0', img: 'barras_apoyo.png' },
+                                        '4': { name: 'Alza de WC', url: 'https://amzn.to/4f8Hw3D', img: 'alza_wc.png' },
+                                        '5': { name: 'Asiento bañera giratorio', url: 'https://amzn.to/42uR2Yj', img: 'asiento_banera.png' },
+                                        '6': { name: 'Barandilla cama', url: 'https://amzn.to/42A4N8z', img: 'barandilla_cama.png' },
+                                        '7': { name: 'Trapecio de cama', url: 'https://amzn.to/4hB9pnt', img: 'trapecio_cama_png.png' },
+                                        '8': { name: 'Tacos elevadores cama', url: 'https://amzn.to/406o6H7', img: 'tacos_cama_png.png' },
+                                        '9': { name: 'Cubiertos adaptados', url: 'https://amzn.to/4wi1BVq', img: 'cubiertos_adaptados.png' },
+                                        '10': { name: 'Cuchillo Nelson', url: 'https://amzn.to/42xOfK7', img: 'cuchillo_nelson.png' },
+                                        '11': { name: 'Tabla de corte 1 mano', url: 'https://amzn.to/42C4uV9', img: 'tabla_cortar.png' },
+                                        '12': { name: 'Plato con reborde', url: 'https://amzn.to/4hAd51Q', img: 'plato_reborde.png' },
+                                        '13': { name: 'Vaso con escotadura', url: 'https://amzn.to/3E9hN5B', img: 'vaso_escotadura.png' },
+                                        '14': { name: 'Andador interior', url: 'https://amzn.to/49eGadM', img: 'andador_interior.png' },
+                                        '15': { name: 'Andador Rollator (exterior)', url: 'https://amzn.to/4nioy6O', img: 'andador_exterior.png' },
+                                        '16': { name: 'Conteras antideslizantes', url: 'https://amzn.to/4uw9fth', img: 'conteras.png' },
+                                        '17': { name: 'Muletas Ergonómicas (Par)', url: 'https://amzn.to/4dE2H6n', img: 'muletas_ergonomicas.png' }
+                                      };
+                                      const p = products[id];
+                                      if (!p) return null;
+                                      return (
+                                        <div key={id} className="bg-white border border-brand-100 rounded-2xl p-4 shadow-sm flex items-center gap-4 anim-scale-in">
+                                          <img src={p.img} alt={p.name} className="w-20 h-20 object-contain rounded-lg bg-brand-50" />
+                                          <div className="flex-1">
+                                            <h4 className="font-bold text-brand-900 text-lg">{p.name}</h4>
+                                            <p className="text-sm text-brand-500 mb-2">Producto técnico recomendado profesionalmente.</p>
+                                            <a href={p.url} target="_blank" rel="noopener" className="inline-block bg-accent-coral text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-opacity-90 transition-all">Ver en Amazon</a>
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
                                   </div>
-                                </div>
-                              );
-                            }
-                            return <div key={i} className="mb-2" dangerouslySetInnerHTML={{ __html: marked.parse(part.trim()) }} />;
+                                )}
+                              </div>
+                            );
                           })}
                         </div>
                       );
