@@ -1231,7 +1231,7 @@
 
       const handleSearch = (val) => {
         setSearchTerm(val);
-        if (val.trim().length < 2) {
+        if (val.trim().length < 4) {
           setSearchResults([]);
           return;
         }
@@ -1443,11 +1443,20 @@
                     </div>
                     <h4 className="text-2xl font-bold mb-4">¿Qué estás buscando hoy?</h4>
                     <p className="text-brand-100 text-lg max-w-md mx-auto leading-relaxed">
-                      Escribe al menos <span className="text-white font-bold underline decoration-accent-coral underline-offset-4">2 caracteres</span> para explorar el catálogo oficial de prestaciones ortoprotéticas 2025.
+                      Escribe al menos <span className="text-white font-bold underline decoration-accent-coral underline-offset-4">4 caracteres</span> para explorar el catálogo oficial de prestaciones ortoprotéticas 2025.
                     </p>
                   </div>
                 </div>
               )}
+
+              <div className="mt-8 pt-8 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em]">
+                  Catálogo Oficial PAO | Servei Català de la Salut (CatSalut)
+                </p>
+                <p className="text-[10px] text-brand-500 font-black uppercase tracking-widest bg-brand-50 px-3 py-1 rounded-full">
+                  Última actualización: Noviembre 2025
+                </p>
+              </div>
             </div>
           </div>
         </section>
