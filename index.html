@@ -3683,8 +3683,14 @@
         const params = new URLSearchParams(window.location.search);
         const pageParam = params.get('page');
         
-        if (pageParam === 'memory') {
+        if (pageParam === 'home') {
+          setCurrentPage('main');
+        } else if (pageParam === 'resources') {
+          setCurrentPage('resources');
+        } else if (pageParam === 'cognitive') {
           setCurrentPage('cognitive');
+        } else if (pageParam === 'memory') {
+          setCurrentPage('memory');
         } else if (pageParam === 'order') {
           setCurrentPage('order');
         } else if (pageParam === 'wordsearch') {
@@ -3693,12 +3699,8 @@
           setCurrentPage('math');
         } else if (pageParam === 'analyzer') {
           setCurrentPage('analyzer');
-        } else if (pageParam === 'games') {
-          setCurrentPage('main'); // We will use main but with a filter if needed, or a new page
-          setTimeout(() => {
-            const el = document.getElementById('cognitive');
-            if (el) el.scrollIntoView({ behavior: 'instant' });
-          }, 0);
+        } else if (pageParam === 'cv') {
+          setCurrentPage('cv');
         }
 
         if (currentPage !== 'main') return;
@@ -3723,6 +3725,12 @@
       }, []);
 
       const navigateTo = useCallback((page) => {
+        // If switching between major "App" views, force reload to swap manifest and trigger PWA prompt
+        if (page === 'main' || page === 'resources' || page === 'cognitive') {
+          const baseUrl = window.location.href.split('?')[0];
+          window.location.href = `${baseUrl}?page=${page === 'main' ? 'home' : page}`;
+          return;
+        }
         setCurrentPage(page);
         window.scrollTo({ top: 0, behavior: 'instant' });
       }, []);
