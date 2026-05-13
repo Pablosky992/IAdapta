@@ -230,6 +230,7 @@
       // Card sequence for levels (pairs)
       const levelSequence = useMemo(() => [2, 4, 6, 8, 12.5], []); // Pairs count (12.5 means 25 cards total, last one can be a special)
       const [level, setLevel] = useState(0);
+      const [gameStarted, setGameStarted] = useState(false);
       const [cards, setCards] = useState([]);
       const [flipped, setFlipped] = useState([]);
       const [matched, setMatched] = useState([]);
@@ -254,11 +255,14 @@
         setMatched([]);
         setGameFinished(false);
         setLevel(levelIdx);
+        setGameStarted(true);
       }, [levelSequence]);
 
       useEffect(() => {
-        if (!isTeaser) initGame(0);
-      }, [isTeaser, initGame]);
+        if (!isTeaser && gameStarted) {
+          // Re-init if needed? Usually handled by setGameStarted
+        }
+      }, [isTeaser, gameStarted]);
 
       const handleFlip = (index) => {
         if (flipped.length === 2 || matched.includes(cards[index].name) || flipped.includes(index)) return;
@@ -478,52 +482,107 @@
       return (
         <section className={`py-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-32' : ''}`}>
           <div className="max-w-4xl w-full text-center">
-            {isStandalone && (
-              <button onClick={() => window.close()} className="mb-8 inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors">
-                <svg className="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
-                Cerrar juego
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+              <button 
+                onClick={() => navigateTo('cognitive')} 
+                className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-100"
+              >
+                <Icons.ArrowRight className="rotate-180" />
+                Volver
               </button>
-            )}
-            <h2 className="font-display text-4xl font-bold text-brand-900 mb-2">Ejercicios Mentales</h2>
-            <p className="text-brand-600 font-bold mb-8 uppercase tracking-widest">Nivel {level + 1}: Memoriza las parejas</p>
-
-            <div className="bg-white rounded-3xl border border-brand-100 shadow-2xl p-6 sm:p-10">
-              {!gameFinished ? (
-                <div className={`grid ${gridCols} gap-3 sm:gap-4 max-w-2xl mx-auto`}>
-                  {cards.map((card, index) => {
-                    const isFlipped = flipped.includes(index) || matched.includes(card.name);
-                    return (
-                      <div
-                        key={card.id}
-                        onClick={() => handleFlip(index)}
-                        className={`relative cursor-pointer transition-all duration-500 preserve-3d aspect-square ${isFlipped ? 'rotate-y-180' : ''}`}
-                      >
-                        {/* Front (Hidden) */}
-                        <div className="absolute inset-0 bg-brand-100 rounded-2xl flex items-center justify-center border-2 border-brand-200 shadow-inner backface-hidden text-3xl font-bold text-brand-300">
-                          ?
-                        </div>
-                        {/* Back (Revealed) */}
-                        <div className="absolute inset-0 bg-white border-4 border-brand-400 rounded-2xl flex items-center justify-center rotate-y-180 backface-hidden text-4xl sm:text-5xl shadow-md">
-                          {card.icon}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="text-center py-12 anim-scale-in">
-                  <div className="text-6xl mb-6">🧠✨</div>
-                  <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Increíble memoria!</h3>
-                  <p className="text-xl text-gray-600 mb-8">Has completado el nivel {level + 1} con éxito.</p>
-                  <button
-                    onClick={nextLevel}
-                    className="px-10 py-5 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 shadow-xl transition-all btn-pulse"
-                  >
-                    {level < levelSequence.length - 1 ? 'Siguiente Nivel' : 'Reiniciar Desafío'}
-                  </button>
-                </div>
+              {isStandalone && (
+                <button onClick={() => window.close()} className="text-brand-400 text-sm font-bold hover:text-brand-600 transition-colors">
+                  Cerrar App
+                </button>
               )}
             </div>
+
+            <h2 className="font-display text-4xl font-bold text-brand-900 mb-2">Juego de Memoria</h2>
+            
+            {!gameStarted ? (
+              <div className="bg-white rounded-[3rem] border border-brand-100 shadow-2xl p-10 max-w-2xl mx-auto anim-scale-in">
+                <div className="text-6xl mb-6">🧠</div>
+                <h3 className="text-2xl font-bold text-brand-900 mb-6">Selecciona la dificultad</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {levelSequence.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => initGame(idx)}
+                      className="group p-6 rounded-2xl border-2 border-brand-50 hover:border-brand-500 hover:bg-brand-50 transition-all flex flex-col items-center gap-2"
+                    >
+                      <span className="text-brand-900 font-bold text-xl">Nivel {idx + 1}</span>
+                      <span className="text-brand-500 text-sm font-medium">
+                        {idx === 0 ? 'Muy Fácil (2 parejas)' : 
+                         idx === 1 ? 'Fácil (4 parejas)' : 
+                         idx === 2 ? 'Medio (6 parejas)' : 
+                         idx === 3 ? 'Difícil (8 parejas)' : 'Experto (12 parejas)'}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <>
+                <p className="text-brand-600 font-bold mb-8 uppercase tracking-widest flex items-center justify-center gap-3">
+                  <span className="bg-brand-900 text-white px-3 py-1 rounded-lg text-sm">Nivel {level + 1}</span>
+                  Memoriza las parejas
+                </p>
+
+                <div className="bg-white rounded-3xl border border-brand-100 shadow-2xl p-6 sm:p-10 relative">
+                  <button 
+                    onClick={() => setGameStarted(false)} 
+                    className="absolute top-4 right-4 text-brand-400 hover:text-brand-600 p-2"
+                    title="Cambiar nivel"
+                  >
+                    <Icons.Refresh />
+                  </button>
+
+                  {!gameFinished ? (
+                    <div className={`grid ${gridCols} gap-3 sm:gap-4 max-w-2xl mx-auto`}>
+                      {cards.map((card, index) => {
+                        const isFlipped = flipped.includes(index) || matched.includes(card.name);
+                        return (
+                          <div
+                            key={card.id}
+                            onClick={() => handleFlip(index)}
+                            className={`relative cursor-pointer transition-all duration-500 preserve-3d aspect-square ${isFlipped ? 'rotate-y-180' : ''}`}
+                          >
+                            {/* Front (Hidden) */}
+                            <div className="absolute inset-0 bg-brand-100 rounded-2xl flex items-center justify-center border-2 border-brand-200 shadow-inner backface-hidden text-3xl font-bold text-brand-300">
+                              ?
+                            </div>
+                            {/* Back (Revealed) */}
+                            <div className="absolute inset-0 bg-white border-4 border-brand-400 rounded-2xl flex items-center justify-center rotate-y-180 backface-hidden text-4xl sm:text-5xl shadow-md">
+                              {card.icon}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12 anim-scale-in">
+                      <div className="text-6xl mb-6">🧠✨</div>
+                      <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Increíble memoria!</h3>
+                      <p className="text-xl text-gray-600 mb-8">Has completado el nivel {level + 1} con éxito.</p>
+                      <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button
+                          onClick={() => setGameStarted(false)}
+                          className="px-8 py-4 bg-brand-100 text-brand-700 rounded-2xl font-bold text-lg hover:bg-brand-200 transition-all"
+                        >
+                          Cambiar Dificultad
+                        </button>
+                        <button
+                          onClick={nextLevel}
+                          className="px-10 py-5 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 shadow-xl transition-all btn-pulse"
+                        >
+                          {level < levelSequence.length - 1 ? 'Siguiente Nivel' : 'Reiniciar Desafío'}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </section>
       );
@@ -548,11 +607,12 @@
     ];
 
     // --- SECTION WORD SEARCH GAME ---
-    window.SectionWordSearch = function SectionWordSearch({ isStandalone }) {
+    window.SectionWordSearch = function SectionWordSearch({ isStandalone, navigateTo }) {
       const { useState, useEffect, useCallback, useRef } = React;
       
       const WORD_LIST = ['DUCHA', 'COMER', 'CAMINADOR', 'SILLA', 'MOVIL', 'TELEFONO', 'DORMIR', 'JUGAR', 'ASEO', 'VESTIR', 'COCINAR', 'PASEAR', 'LLAVES', 'GAFAS', 'RELOJ', 'PASTILLA', 'SOPA', 'AGUA', 'RADIO', 'LIBRO', 'CUIDADO', 'AYUDA', 'VASO', 'PLATO', 'CAMA', 'SOFA', 'MESA', 'ROPA', 'ZAPATOS', 'BAÑO', 'COCINA', 'PASILLO', 'ESPEJO', 'RELOJ', 'TIEMPO', 'LUZ', 'MANO', 'PIE', 'SALUD'];
 
+      const [gameStarted, setGameStarted] = useState(false);
       const [levelIdx, setLevelIdx] = useState(0);
       const [grid, setGrid] = useState([]);
       const [wordsToFind, setWordsToFind] = useState([]);
@@ -566,6 +626,7 @@
       const currentLevel = WORDSEARCH_LEVELS[levelIdx];
 
       const generateGrid = useCallback(() => {
+        if (!gameStarted) return;
         const { rows, cols, wordCount, directions } = currentLevel;
         const newGrid = Array(rows).fill(0).map(() => Array(cols).fill(''));
         const placedWords = [];
@@ -635,11 +696,16 @@
         setHintsUsed([]);
         setGameStatus('playing');
         setStartTime(Date.now());
-      }, [currentLevel]);
+      }, [currentLevel, gameStarted]);
 
       useEffect(() => {
-        generateGrid();
-      }, [generateGrid]);
+        if (gameStarted) generateGrid();
+      }, [generateGrid, gameStarted]);
+
+      const startGame = (idx) => {
+        setLevelIdx(idx);
+        setGameStarted(true);
+      };
 
       const getCellFromEvent = (e) => {
         const touch = e.touches ? e.touches[0] : e;
@@ -759,109 +825,148 @@
 
       return (
         <section className={`py-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-32' : ''}`}>
-          <div className="max-w-4xl w-full text-center">
-            {isStandalone && (
-              <button onClick={() => window.close()} className="mb-8 inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors">
-                <svg className="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
-                Cerrar juego
+          <div className="max-w-6xl w-full text-center">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+              <button 
+                onClick={() => navigateTo('cognitive')} 
+                className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-100"
+              >
+                <Icons.ArrowRight className="rotate-180" />
+                Volver
               </button>
-            )}
-            <div className="flex flex-col items-center mb-6">
-              <h2 className="font-display text-4xl font-bold text-brand-900 mb-2">Sopa de Letras</h2>
-              <div className="flex items-center gap-3">
-                <span className="bg-brand-900 text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-widest">Nivel {currentLevel.id}</span>
-                <span className="text-brand-600 font-bold uppercase tracking-widest">{currentLevel.name}</span>
-              </div>
+              {isStandalone && (
+                <button onClick={() => window.close()} className="text-brand-400 text-sm font-bold hover:text-brand-600 transition-colors">
+                  Cerrar App
+                </button>
+              )}
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-8 items-start justify-center mb-12">
-              <div 
-                className="bg-white p-3 rounded-3xl shadow-2xl border-8 border-brand-100 select-none touch-none grid gap-1 w-full max-w-[420px] relative overflow-hidden"
-                style={{ gridTemplateColumns: `repeat(${currentLevel.cols}, minmax(0, 1fr))`, aspectRatio: `${currentLevel.cols}/${currentLevel.rows}` }}
-                onMouseDown={handleStart} onMouseMove={handleMove} onMouseUp={handleEnd} onMouseLeave={handleEnd}
-                onTouchStart={handleStart} onTouchMove={handleMove} onTouchEnd={handleEnd}
-              >
-                {grid.map((row, r) => row.map((letter, c) => {
-                  const selected = isCellSelected(r, c);
-                  const found = isCellFound(r, c);
-                  const hinted = isCellHinted(r, c);
-                  return (
-                    <div key={`${r}-${c}`} data-r={r} data-c={c}
-                      className={`flex items-center justify-center text-xl sm:text-2xl font-bold rounded-lg transition-all duration-200
-                        ${found ? 'bg-emerald-500 text-white shadow-sm scale-95' : 
-                          selected ? 'bg-brand-600 text-white shadow-lg scale-105 z-10' : 
-                          hinted ? 'bg-amber-100 text-amber-700 border-2 border-amber-400 animate-pulse' : 'text-brand-900 hover:bg-brand-50'}`}
-                    >
-                      {letter}
-                    </div>
-                  );
-                }))}
-              </div>
-
-              <div className="flex flex-col gap-6 w-full lg:max-w-[320px]">
-                <div className="bg-white p-6 rounded-3xl shadow-xl border border-brand-100">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-display text-xl font-bold text-brand-900 flex items-center gap-2">Ayudas</h3>
-                    <span className="text-brand-500 font-bold">{currentLevel.hints - hintsUsed.length} restantes</span>
-                  </div>
-                  <button 
-                    onClick={useHint}
-                    disabled={hintsUsed.length >= currentLevel.hints || gameStatus !== 'playing'}
-                    className={`w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all
-                      ${hintsUsed.length >= currentLevel.hints ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-amber-100 text-amber-700 hover:bg-amber-200 active:scale-95'}`}
-                  >
-                    <Icons.Lightbulb /> Pedir Pista
-                  </button>
-                </div>
-
-                <div className="bg-white p-6 rounded-[2rem] shadow-xl border border-brand-100 flex-1">
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="font-display text-2xl font-bold text-brand-900 flex items-center gap-2"><Icons.List /> Palabras</h3>
-                    <span className="bg-brand-100 text-brand-700 px-3 py-1 rounded-full text-sm font-bold">{foundWords.length}/{wordsToFind.length}</span>
-                  </div>
-                  <div className="grid grid-cols-2 lg:grid-cols-1 gap-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                    {wordsToFind.map((w, i) => (
-                      <div key={i} className={`text-base font-semibold py-2 px-3 rounded-xl transition-all duration-300 border ${foundWords.some(fw => fw.word === w.word) ? 'text-emerald-300 line-through bg-emerald-50 border-emerald-100' : 'text-brand-700 bg-white border-brand-50 shadow-sm'}`}>{w.word}</div>
+            {!gameStarted ? (
+              <div className="max-w-2xl mx-auto text-center">
+                <h2 className="font-display text-4xl font-bold text-brand-900 mb-8">Sopa de Letras</h2>
+                <div className="bg-white rounded-[3rem] border border-brand-100 shadow-2xl p-10 anim-scale-in">
+                  <div className="text-6xl mb-6">🔍</div>
+                  <h3 className="text-2xl font-bold text-brand-900 mb-6">Selecciona la dificultad</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {WORDSEARCH_LEVELS.map((level, idx) => (
+                      <button
+                        key={level.id}
+                        onClick={() => startGame(idx)}
+                        className="group p-6 rounded-2xl border-2 border-brand-50 hover:border-brand-500 hover:bg-brand-50 transition-all flex flex-col items-center gap-2"
+                      >
+                        <span className="text-brand-900 font-bold text-xl">{level.name}</span>
+                        <span className="text-brand-500 text-sm font-medium">Nivel {level.id}</span>
+                      </button>
                     ))}
                   </div>
                 </div>
               </div>
-            </div>
-
-            {gameStatus === 'won' && (
-              <div className="fixed inset-0 z-[60] bg-brand-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-                <div className="bg-white rounded-3xl p-10 shadow-2xl max-w-sm w-full text-center anim-scale-in border-4 border-emerald-500">
-                  <div className="text-7xl mb-6">🏆</div>
-                  <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Nivel {currentLevel.id} Superado!</h3>
-                  
-                  {/* Motivational Message */}
-                  <p className="text-emerald-600 font-bold italic mb-6">
-                    {(() => {
-                      const messages = [
-                        "¡Excelente trabajo! Tu agudeza visual está en plena forma.",
-                        "¡Increíble! Has demostrado una gran concentración.",
-                        "¡Bravo! Estás fortaleciendo tu mente con cada palabra.",
-                        "¡Espectacular! Tu rapidez mental es envidiable.",
-                        "¡Muy bien hecho! Tu atención es excepcional.",
-                        "¡Fantástico! Has dominado este nivel por completo."
-                      ];
-                      return messages[Math.floor(Math.random() * messages.length)];
-                    })()}
-                  </p>
-
-                  <div className="bg-brand-50 rounded-2xl p-4 mb-8">
-                    <p className="text-gray-500 text-sm uppercase font-bold tracking-widest mb-1">Tiempo total</p>
-                    <p className="text-4xl font-bold text-brand-900">{timeElapsed}s</p>
-                  </div>
-                  
-                  <div className="flex flex-col gap-3">
-                    <button onClick={nextLevel} className="w-full py-4 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 shadow-lg transition-all btn-pulse">
-                      {levelIdx < WORDSEARCH_LEVELS.length - 1 ? 'Siguiente Nivel' : 'Reiniciar Desafío'}
-                    </button>
-                    <button onClick={generateGrid} className="w-full py-3 bg-brand-100 text-brand-700 rounded-2xl font-bold hover:bg-brand-200 transition-all">Repetir nivel</button>
+            ) : (
+              <>
+                <div className="flex flex-col items-center mb-6 relative">
+                  <button 
+                    onClick={() => setGameStarted(false)} 
+                    className="absolute top-0 right-0 sm:right-[-40px] text-brand-400 hover:text-brand-600 p-2"
+                    title="Cambiar nivel"
+                  >
+                    <Icons.Refresh />
+                  </button>
+                  <h2 className="font-display text-4xl font-bold text-brand-900 mb-2">Sopa de Letras</h2>
+                  <div className="flex items-center gap-3">
+                    <span className="bg-brand-900 text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-widest">Nivel {currentLevel.id}</span>
+                    <span className="text-brand-600 font-bold uppercase tracking-widest">{currentLevel.name}</span>
                   </div>
                 </div>
-              </div>
+
+                <div className="flex flex-col lg:flex-row gap-8 items-start justify-center mb-12">
+                  <div 
+                    className="bg-white p-3 rounded-3xl shadow-2xl border-8 border-brand-100 select-none touch-none grid gap-1 w-full max-w-[420px] relative overflow-hidden"
+                    style={{ gridTemplateColumns: `repeat(${currentLevel.cols}, minmax(0, 1fr))`, aspectRatio: `${currentLevel.cols}/${currentLevel.rows}` }}
+                    onMouseDown={handleStart} onMouseMove={handleMove} onMouseUp={handleEnd} onMouseLeave={handleEnd}
+                    onTouchStart={handleStart} onTouchMove={handleMove} onTouchEnd={handleEnd}
+                  >
+                    {grid.map((row, r) => row.map((letter, c) => {
+                      const selected = isCellSelected(r, c);
+                      const found = isCellFound(r, c);
+                      const hinted = isCellHinted(r, c);
+                      return (
+                        <div key={`${r}-${c}`} data-r={r} data-c={c}
+                          className={`flex items-center justify-center text-xl sm:text-2xl font-bold rounded-lg transition-all duration-200
+                            ${found ? 'bg-emerald-500 text-white shadow-sm scale-95' : 
+                              selected ? 'bg-brand-600 text-white shadow-lg scale-105 z-10' : 
+                              hinted ? 'bg-amber-100 text-amber-700 border-2 border-amber-400 animate-pulse' : 'text-brand-900 hover:bg-brand-50'}`}
+                        >
+                          {letter}
+                        </div>
+                      );
+                    }))}
+                  </div>
+
+                  <div className="flex flex-col gap-6 w-full lg:max-w-[320px]">
+                    <div className="bg-white p-6 rounded-3xl shadow-xl border border-brand-100">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="font-display text-xl font-bold text-brand-900 flex items-center gap-2">Ayudas</h3>
+                        <span className="text-brand-500 font-bold">{currentLevel.hints - hintsUsed.length} restantes</span>
+                      </div>
+                      <button 
+                        onClick={useHint}
+                        disabled={hintsUsed.length >= currentLevel.hints || gameStatus !== 'playing'}
+                        className={`w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all
+                          ${hintsUsed.length >= currentLevel.hints ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-amber-100 text-amber-700 hover:bg-amber-200 active:scale-95'}`}
+                      >
+                        <Icons.Lightbulb /> Pedir Pista
+                      </button>
+                    </div>
+
+                    <div className="bg-white p-6 rounded-[2rem] shadow-xl border border-brand-100 flex-1">
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="font-display text-2xl font-bold text-brand-900 flex items-center gap-2"><Icons.List /> Palabras</h3>
+                        <span className="bg-brand-100 text-brand-700 px-3 py-1 rounded-full text-sm font-bold">{foundWords.length}/{wordsToFind.length}</span>
+                      </div>
+                      <div className="grid grid-cols-2 lg:grid-cols-1 gap-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                        {wordsToFind.map((w, i) => (
+                          <div key={i} className={`text-base font-semibold py-2 px-3 rounded-xl transition-all duration-300 border ${foundWords.some(fw => fw.word === w.word) ? 'text-emerald-300 line-through bg-emerald-50 border-emerald-100' : 'text-brand-700 bg-white border-brand-50 shadow-sm'}`}>{w.word}</div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {gameStatus === 'won' && (
+                  <div className="fixed inset-0 z-[60] bg-brand-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div className="bg-white rounded-3xl p-10 shadow-2xl max-w-sm w-full text-center anim-scale-in border-4 border-emerald-500">
+                      <div className="text-7xl mb-6">🏆</div>
+                      <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Nivel {currentLevel.id} Superado!</h3>
+                      
+                      <p className="text-emerald-600 font-bold italic mb-6">
+                        {(() => {
+                          const messages = [
+                            "¡Excelente trabajo! Tu agudeza visual está en plena forma.",
+                            "¡Increíble! Has demostrado una gran concentración.",
+                            "¡Bravo! Estás fortaleciendo tu mente con cada palabra.",
+                            "¡Espectacular! Tu rapidez mental es envidiable.",
+                            "¡Muy bien hecho! Tu atención es excepcional.",
+                            "¡Fantástico! Has dominado este nivel por completo."
+                          ];
+                          return messages[Math.floor(Math.random() * messages.length)];
+                        })()}
+                      </p>
+
+                      <div className="bg-brand-50 rounded-2xl p-4 mb-8">
+                        <p className="text-gray-500 text-sm uppercase font-bold tracking-widest mb-1">Tiempo total</p>
+                        <p className="text-4xl font-bold text-brand-900">{timeElapsed}s</p>
+                      </div>
+                      
+                      <div className="flex flex-col gap-3">
+                        <button onClick={nextLevel} className="w-full py-4 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 shadow-lg transition-all btn-pulse">
+                          {levelIdx < WORDSEARCH_LEVELS.length - 1 ? 'Siguiente Nivel' : 'Reiniciar Desafío'}
+                        </button>
+                        <button onClick={() => setGameStarted(false)} className="w-full py-3 bg-brand-100 text-brand-700 rounded-2xl font-bold hover:bg-brand-200 transition-all">Cambiar nivel</button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </section>
@@ -869,7 +974,7 @@
     };
 
     // --- SECTION MATH GAME ---
-    window.SectionMathGame = function SectionMathGame({ isStandalone }) {
+    window.SectionMathGame = function SectionMathGame({ isStandalone, navigateTo }) {
       const { useState, useEffect, useCallback, useRef } = React;
       
       const LEVELS = [
@@ -880,6 +985,7 @@
         { id: 5, name: 'Experto', ops: ['+', '-', '*'], range: 50, count: 10 }
       ];
 
+      const [gameStarted, setGameStarted] = useState(false);
       const [levelIdx, setLevelIdx] = useState(0);
       const [questions, setQuestions] = useState([]);
       const [currentQIdx, setCurrentQIdx] = useState(0);
@@ -890,6 +996,7 @@
       const [totalTime, setTotalTime] = useState(0);
 
       const generateQuestions = useCallback((lvlIdx) => {
+        if (!gameStarted) return;
         const lvl = LEVELS[lvlIdx];
         const newQs = [];
         for (let i = 0; i < lvl.count; i++) {
@@ -920,11 +1027,16 @@
         setFeedback(null);
         setGameStatus('playing');
         setStartTime(Date.now());
-      }, []);
+      }, [gameStarted]);
 
       useEffect(() => {
-        generateQuestions(levelIdx);
-      }, [levelIdx, generateQuestions]);
+        if (gameStarted) generateQuestions(levelIdx);
+      }, [levelIdx, generateQuestions, gameStarted]);
+
+      const startGame = (idx) => {
+        setLevelIdx(idx);
+        setGameStarted(true);
+      };
 
       const handleSubmit = (e) => {
         if (e) e.preventDefault();
@@ -966,81 +1078,124 @@
       return (
         <section className={`py-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-32' : ''}`}>
           <div className="max-w-xl w-full text-center">
-            {isStandalone && (
-              <button onClick={() => window.close()} className="mb-8 inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors">
-                <svg className="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
-                Cerrar juego
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+              <button 
+                onClick={() => navigateTo('cognitive')} 
+                className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-100"
+              >
+                <Icons.ArrowRight className="rotate-180" />
+                Volver
               </button>
-            )}
-            
-            <div className="mb-10">
-              <h2 className="font-display text-4xl font-bold text-brand-900 mb-2">Cálculo Mental</h2>
-              <div className="flex items-center justify-center gap-3">
-                <span className="bg-brand-900 text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-widest">Nivel {levelIdx + 1}</span>
-                <span className="text-brand-600 font-bold uppercase tracking-widest">{LEVELS[levelIdx].name}</span>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-[3rem] shadow-2xl border-8 border-brand-100 p-8 sm:p-12 relative overflow-hidden">
-              {gameStatus === 'playing' ? (
-                <div className="space-y-8">
-                  <div className="flex justify-between items-center px-4 mb-4">
-                    <span className="text-brand-400 font-bold">Pregunta {currentQIdx + 1} de {questions.length}</span>
-                    <div className="w-32 h-2 bg-brand-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-brand-600 transition-all duration-500" style={{ width: `${(currentQIdx / questions.length) * 100}%` }}></div>
-                    </div>
-                  </div>
-
-                  <div className="py-8">
-                    <div className={`text-6xl sm:text-8xl font-display font-bold text-brand-900 transition-all duration-300 ${feedback === 'correct' ? 'text-emerald-500 scale-110' : feedback === 'wrong' ? 'text-red-500 animate-shake' : ''}`}>
-                      {questions[currentQIdx]?.q}
-                    </div>
-                  </div>
-
-                  <form onSubmit={handleSubmit} className="relative max-w-[240px] mx-auto">
-                    <input
-                      type="number"
-                      autoFocus
-                      value={userAnswer}
-                      onChange={(e) => setUserAnswer(e.target.value)}
-                      placeholder="?"
-                      className={`w-full text-center text-5xl font-bold py-4 rounded-2xl border-4 transition-all focus:outline-none
-                        ${feedback === 'correct' ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 
-                          feedback === 'wrong' ? 'border-red-500 bg-red-50 text-red-700' : 
-                          'border-brand-200 focus:border-brand-600 bg-white text-brand-900'}`}
-                    />
-                    <button type="submit" className="hidden">Enviar</button>
-                  </form>
-                  
-                  <p className="text-brand-400 text-sm font-medium">Escribe tu respuesta y pulsa Enter</p>
-                </div>
-              ) : (
-                <div className="text-center py-8 anim-scale-in">
-                  <div className="text-7xl mb-6">🧮✨</div>
-                  <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Nivel Completado!</h3>
-                  <p className="text-emerald-600 font-bold italic mb-8">Tu agilidad mental es asombrosa.</p>
-                  
-                  <div className="bg-brand-50 rounded-[2rem] p-6 mb-10">
-                    <p className="text-gray-500 text-sm uppercase font-bold tracking-widest mb-1">Tiempo total</p>
-                    <p className="text-5xl font-bold text-brand-900">{totalTime}s</p>
-                  </div>
-                  
-                  <div className="flex flex-col gap-3">
-                    <button onClick={nextLevel} className="w-full py-5 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 shadow-xl transition-all btn-pulse">
-                      {levelIdx < LEVELS.length - 1 ? 'Siguiente Nivel' : 'Reiniciar Desafío'}
-                    </button>
-                    <button onClick={() => generateQuestions(levelIdx)} className="w-full py-3 bg-brand-100 text-brand-700 rounded-2xl font-bold hover:bg-brand-200 transition-all">Repetir nivel</button>
-                  </div>
-                </div>
+              {isStandalone && (
+                <button onClick={() => window.close()} className="text-brand-400 text-sm font-bold hover:text-brand-600 transition-colors">
+                  Cerrar App
+                </button>
               )}
             </div>
+            
+            {!gameStarted ? (
+              <div className="max-w-2xl mx-auto text-center">
+                <h2 className="font-display text-4xl font-bold text-brand-900 mb-8">Cálculo Mental</h2>
+                <div className="bg-white rounded-[3rem] border border-brand-100 shadow-2xl p-10 anim-scale-in">
+                  <div className="text-6xl mb-6">🧮</div>
+                  <h3 className="text-2xl font-bold text-brand-900 mb-6">Selecciona la dificultad</h3>
+                  <div className="grid grid-cols-1 gap-3">
+                    {LEVELS.map((level, idx) => (
+                      <button
+                        key={level.id}
+                        onClick={() => startGame(idx)}
+                        className="group p-5 rounded-2xl border-2 border-brand-50 hover:border-brand-500 hover:bg-brand-50 transition-all flex items-center justify-between px-8"
+                      >
+                        <div className="text-left">
+                          <span className="text-brand-900 font-bold text-xl block">{level.name}</span>
+                          <span className="text-brand-500 text-sm font-medium">Operaciones: {level.ops.join(', ')}</span>
+                        </div>
+                        <Icons.ArrowRight className="text-brand-300 group-hover:text-brand-600 group-hover:translate-x-1 transition-all" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="mb-10 relative">
+                  <button 
+                    onClick={() => setGameStarted(false)} 
+                    className="absolute top-0 right-0 text-brand-400 hover:text-brand-600 p-2"
+                    title="Cambiar nivel"
+                  >
+                    <Icons.Refresh />
+                  </button>
+                  <h2 className="font-display text-4xl font-bold text-brand-900 mb-2">Cálculo Mental</h2>
+                  <div className="flex items-center justify-center gap-3">
+                    <span className="bg-brand-900 text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-widest">Nivel {levelIdx + 1}</span>
+                    <span className="text-brand-600 font-bold uppercase tracking-widest">{LEVELS[levelIdx].name}</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-[3rem] shadow-2xl border-8 border-brand-100 p-8 sm:p-12 relative overflow-hidden">
+                  {gameStatus === 'playing' ? (
+                    <div className="space-y-8">
+                      <div className="flex justify-between items-center px-4 mb-4">
+                        <span className="text-brand-400 font-bold">Pregunta {currentQIdx + 1} de {questions.length}</span>
+                        <div className="w-32 h-2 bg-brand-100 rounded-full overflow-hidden">
+                          <div className="h-full bg-brand-600 transition-all duration-500" style={{ width: `${(currentQIdx / questions.length) * 100}%` }}></div>
+                        </div>
+                      </div>
+
+                      <div className="py-8">
+                        <div className={`text-6xl sm:text-8xl font-display font-bold text-brand-900 transition-all duration-300 ${feedback === 'correct' ? 'text-emerald-500 scale-110' : feedback === 'wrong' ? 'text-red-500 animate-shake' : ''}`}>
+                          {questions[currentQIdx]?.q}
+                        </div>
+                      </div>
+
+                      <form onSubmit={handleSubmit} className="relative max-w-[240px] mx-auto">
+                        <input
+                          type="number"
+                          autoFocus
+                          value={userAnswer}
+                          onChange={(e) => setUserAnswer(e.target.value)}
+                          placeholder="?"
+                          className={`w-full text-center text-5xl font-bold py-4 rounded-2xl border-4 transition-all focus:outline-none
+                            ${feedback === 'correct' ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 
+                              feedback === 'wrong' ? 'border-red-500 bg-red-50 text-red-700' : 
+                              'border-brand-200 focus:border-brand-600 bg-white text-brand-900'}`}
+                        />
+                        <button type="submit" className="hidden">Enviar</button>
+                      </form>
+                      
+                      <p className="text-brand-400 text-sm font-medium">Escribe tu respuesta y pulsa Enter</p>
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 anim-scale-in">
+                      <div className="text-7xl mb-6">🧮✨</div>
+                      <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Nivel Completado!</h3>
+                      <p className="text-emerald-600 font-bold italic mb-8">Tu agilidad mental es asombrosa.</p>
+                      
+                      <div className="bg-brand-50 rounded-[2rem] p-6 mb-10">
+                        <p className="text-gray-500 text-sm uppercase font-bold tracking-widest mb-1">Tiempo total</p>
+                        <p className="text-5xl font-bold text-brand-900">{totalTime}s</p>
+                      </div>
+                      
+                      <div className="flex flex-col gap-3">
+                        <button onClick={nextLevel} className="w-full py-5 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 shadow-xl transition-all btn-pulse">
+                          {levelIdx < LEVELS.length - 1 ? 'Siguiente Nivel' : 'Reiniciar Desafío'}
+                        </button>
+                        <button onClick={() => setGameStarted(false)} className="w-full py-3 bg-brand-100 text-brand-700 rounded-2xl font-bold hover:bg-brand-200 transition-all">Cambiar nivel</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </section>
       );
     };
 
     // --- SECTION ORDER GAME ---
-    window.SectionOrderGame = function SectionOrderGame({ isStandalone }) {
+    window.SectionOrderGame = function SectionOrderGame({ isStandalone, navigateTo }) {
+      const [gameStarted, setGameStarted] = React.useState(false);
       const [levelIndex, setLevelIndex] = React.useState(0);
       const [numbers, setNumbers] = React.useState([]);
       const [nextNumber, setNextNumber] = React.useState(1);
@@ -1063,6 +1218,7 @@
       const currentLevel = ORDER_LEVELS[levelIndex];
 
       const initLevel = React.useCallback(() => {
+        if (!gameStarted) return;
         const nums = Array.from({ length: currentLevel.count }, (_, i) => i + 1);
         for (let i = nums.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -1073,7 +1229,12 @@
         setStatus('playing');
         setStartTime(Date.now());
         startHintTimer();
-      }, [currentLevel.count, startHintTimer]);
+      }, [currentLevel.count, startHintTimer, gameStarted]);
+
+      const startGame = (idx) => {
+        setLevelIndex(idx);
+        setGameStarted(true);
+      };
 
       // Cleanup
       React.useEffect(() => {
@@ -1109,61 +1270,103 @@
       return (
         <section className={`py-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-32' : ''}`}>
           <div className="max-w-4xl w-full text-center">
-            {isStandalone && (
-              <button onClick={() => window.close()} className="mb-8 inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors">
-                <svg className="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
-                Cerrar juego
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+              <button 
+                onClick={() => navigateTo('cognitive')} 
+                className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-100"
+              >
+                <Icons.ArrowRight className="rotate-180" />
+                Volver
               </button>
-            )}
-            <h2 className="font-display text-4xl font-bold text-brand-900 mb-2">En Orden</h2>
-            <p className="text-brand-600 font-bold mb-8 uppercase tracking-widest">Nivel {currentLevel.id}: Encuentra del 1 al {currentLevel.count}</p>
+              {isStandalone && (
+                <button onClick={() => window.close()} className="text-brand-400 text-sm font-bold hover:text-brand-600 transition-colors">
+                  Cerrar App
+                </button>
+              )}
+            </div>
 
-            {status === 'won' ? (
-              <div className="bg-white rounded-3xl p-10 shadow-xl anim-scale-in border-2 border-emerald-200">
-                <div className="text-6xl mb-6">🏆</div>
-                <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Nivel Completado!</h3>
-                <p className="text-emerald-600 font-bold italic mb-6">
-                  {(() => {
-                    const messages = [
-                      "¡Fantástico! Tu orden y lógica son impecables.",
-                      "¡Muy bien! Estás entrenando tu mente para el éxito.",
-                      "¡Excelente! Tu capacidad de secuencia es asombrosa.",
-                      "¡Bravo! Has mantenido el enfoque perfectamente.",
-                      "¡Genial! Tu velocidad de procesamiento es excelente."
-                    ];
-                    return messages[Math.floor(Math.random() * messages.length)];
-                  })()}
-                </p>
-                <div className="bg-brand-50 rounded-2xl p-4 mb-8">
-                  <p className="text-gray-500 text-sm uppercase font-bold tracking-widest mb-1">Tiempo total</p>
-                  <p className="text-4xl font-bold text-brand-900">{finalTime}s</p>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <button onClick={initLevel} className="px-8 py-3 bg-brand-100 text-brand-700 font-bold rounded-xl hover:bg-brand-200 transition-all">Repetir Nivel</button>
-                  <button onClick={nextLevel} className="px-8 py-3 bg-brand-600 text-white font-bold rounded-xl hover:bg-brand-700 shadow-lg transition-all btn-pulse">
-                    {levelIndex < ORDER_LEVELS.length - 1 ? 'Siguiente Nivel' : 'Volver al Inicio'}
-                  </button>
+            {!gameStarted ? (
+              <div className="max-w-2xl mx-auto text-center">
+                <h2 className="font-display text-4xl font-bold text-brand-900 mb-8">Juego de Orden</h2>
+                <div className="bg-white rounded-[3rem] border border-brand-100 shadow-2xl p-10 anim-scale-in">
+                  <div className="text-6xl mb-6">🔢</div>
+                  <h3 className="text-2xl font-bold text-brand-900 mb-6">Selecciona la dificultad</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {ORDER_LEVELS.map((level, idx) => (
+                      <button
+                        key={level.id}
+                        onClick={() => startGame(idx)}
+                        className="group p-6 rounded-2xl border-2 border-brand-50 hover:border-brand-500 hover:bg-brand-50 transition-all flex flex-col items-center gap-2"
+                      >
+                        <span className="text-brand-900 font-bold text-xl">Nivel {level.id}</span>
+                        <span className="text-brand-500 text-sm font-medium">Encontrar {level.count} números</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             ) : (
-              <div className={`grid ${currentLevel.cols} gap-3 sm:gap-4 max-w-2xl mx-auto`}>
-                {numbers.map((num) => {
-                  const isPast = num < nextNumber;
-                  const isCurrent = num === nextNumber;
-                  return (
-                    <button
-                      key={num}
-                      onClick={() => handleNumberClick(num)}
-                      className={`aspect-square flex items-center justify-center text-xl sm:text-2xl font-bold rounded-2xl transition-all shadow-sm
-                        ${isPast ? 'bg-emerald-500 text-white shadow-inner opacity-50 scale-95 pointer-events-none' : 
-                          isCurrent ? `bg-white text-brand-900 shadow-lg ${showHint ? 'border-4 border-brand-400 target-number' : 'border-2 border-brand-50'}` : 
-                          'bg-white text-brand-700 hover:border-brand-200 hover:shadow-md border-2 border-brand-50 active:scale-95 active:bg-red-50'}`}
-                    >
-                      {num}
-                    </button>
-                  );
-                })}
-              </div>
+              <>
+                <div className="relative">
+                  <button 
+                    onClick={() => setGameStarted(false)} 
+                    className="absolute top-0 right-0 text-brand-400 hover:text-brand-600 p-2"
+                    title="Cambiar nivel"
+                  >
+                    <Icons.Refresh />
+                  </button>
+                  <h2 className="font-display text-4xl font-bold text-brand-900 mb-2">En Orden</h2>
+                  <p className="text-brand-600 font-bold mb-8 uppercase tracking-widest">Nivel {currentLevel.id}: Encuentra del 1 al {currentLevel.count}</p>
+                </div>
+
+                {status === 'won' ? (
+                  <div className="bg-white rounded-3xl p-10 shadow-xl anim-scale-in border-2 border-emerald-200">
+                    <div className="text-6xl mb-6">🏆</div>
+                    <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Nivel Completado!</h3>
+                    <p className="text-emerald-600 font-bold italic mb-6">
+                      {(() => {
+                        const messages = [
+                          "¡Fantástico! Tu orden y lógica son impecables.",
+                          "¡Muy bien! Estás entrenando tu mente para el éxito.",
+                          "¡Excelente! Tu capacidad de secuencia es asombrosa.",
+                          "¡Bravo! Has mantenido el enfoque perfectamente.",
+                          "¡Genial! Tu velocidad de procesamiento es excelente."
+                        ];
+                        return messages[Math.floor(Math.random() * messages.length)];
+                      })()}
+                    </p>
+                    <div className="bg-brand-50 rounded-2xl p-4 mb-8">
+                      <p className="text-gray-500 text-sm uppercase font-bold tracking-widest mb-1">Tiempo total</p>
+                      <p className="text-4xl font-bold text-brand-900">{finalTime}s</p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                      <button onClick={() => setGameStarted(false)} className="px-8 py-3 bg-brand-100 text-brand-700 font-bold rounded-xl hover:bg-brand-200 transition-all">Cambiar Nivel</button>
+                      <button onClick={nextLevel} className="px-8 py-3 bg-brand-600 text-white font-bold rounded-xl hover:bg-brand-700 shadow-lg transition-all btn-pulse">
+                        {levelIndex < ORDER_LEVELS.length - 1 ? 'Siguiente Nivel' : 'Volver al Inicio'}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={`grid ${currentLevel.cols} gap-3 sm:gap-4 max-w-2xl mx-auto`}>
+                    {numbers.map((num) => {
+                      const isPast = num < nextNumber;
+                      const isCurrent = num === nextNumber;
+                      return (
+                        <button
+                          key={num}
+                          onClick={() => handleNumberClick(num)}
+                          className={`aspect-square flex items-center justify-center text-xl sm:text-2xl font-bold rounded-2xl transition-all shadow-sm
+                            ${isPast ? 'bg-emerald-500 text-white shadow-inner opacity-50 scale-95 pointer-events-none' : 
+                              isCurrent ? `bg-white text-brand-900 shadow-lg ${showHint ? 'border-4 border-brand-400 target-number' : 'border-2 border-brand-50'}` : 
+                              'bg-white text-brand-700 hover:border-brand-200 hover:shadow-md border-2 border-brand-50 active:scale-95 active:bg-red-50'}`}
+                        >
+                          {num}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </>
             )}
           </div>
         </section>
