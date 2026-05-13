@@ -219,6 +219,8 @@
       Flame: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3 1.05.76 3 2.5 3 5.5a4.5 4.5 0 11-9 0c0-1.5.5-3 2-4.5.5 2 1.5 3 2.5 4.5z" /></svg>,
       CheckCircle: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
       WhatsApp: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.484 8.412-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.309 1.656zm6.29-4.139c1.52.907 3.21 1.385 4.94 1.386 5.289 0 9.591-4.301 9.593-9.592 0-2.565-1.001-4.975-2.816-6.793-1.815-1.818-4.225-2.82-6.793-2.821-5.293 0-9.596 4.301-9.598 9.592 0 1.942.585 3.835 1.691 5.433l-1.011 3.691 3.784-.992zm11.702-6.877c-.313-.156-1.854-.914-2.141-1.019-.287-.104-.497-.156-.705.156-.208.312-.806 1.019-.987 1.227-.181.209-.362.235-.675.079-.313-.156-1.32-.486-2.515-1.552-.929-.828-1.556-1.852-1.738-2.165-.181-.313-.019-.482.137-.638.141-.141.313-.365.47-.547.157-.183.209-.313.313-.522.104-.21.053-.392-.026-.548-.078-.156-.705-1.7-.966-2.324-.254-.608-.512-.525-.705-.535-.183-.01-.391-.012-.6-.012s-.547.078-.834.392c-.287.313-1.096 1.071-1.096 2.612 0 1.541 1.121 3.029 1.277 3.238.156.209 2.207 3.371 5.348 4.73.747.323 1.329.516 1.783.661.75.238 1.433.204 1.973.124.602-.089 1.854-.757 2.115-1.487.261-.73.261-1.356.183-1.487-.078-.131-.287-.209-.6-.365z"/></svg>,
+      TrendingUp: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.5 4.5L21.75 7.5M21.75 7.5V12m0-4.5H17.25" /></svg>,
+      AlertCircle: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>,
     };
 
     // --- REUSABLE GAME HEADER ---
@@ -2235,11 +2237,16 @@
 
     // --- SECTION RESOURCES FOR PROFESSIONALS ---
     window.SectionResources = function SectionResources() {
-      const [view, setView] = useState('menu'); // 'menu', 'math', 'pao'
+      const [view, setView] = useState('menu'); // 'menu', 'math', 'pao', 'ramp'
       const [difficulty, setDifficulty] = useState('medium');
       const [isGenerating, setIsGenerating] = useState(false);
       const [searchTerm, setSearchTerm] = useState('');
       const [searchResults, setSearchResults] = useState([]);
+
+      // State for Ramp Calculator
+      const [rampHeight, setRampHeight] = useState(''); // en cm
+      const [rampLength, setRampLength] = useState(''); // en m
+      const [rampSlope, setRampSlope] = useState('');   // en %
 
       const generateMathPDF = async () => {
         setIsGenerating(true);
@@ -2318,6 +2325,80 @@
         setSearchResults(filtered);
       };
 
+      // Ramp Calculation Logic
+      const handleRampChange = (field, value) => {
+        const val = value.replace(',', '.');
+        if (field === 'h') setRampHeight(val);
+        if (field === 'l') setRampLength(val);
+        if (field === 's') setRampSlope(val);
+
+        // React state update is async, so we use the local 'val' for the active field
+        setTimeout(() => {
+          const h = field === 'h' ? parseFloat(val) : parseFloat(rampHeight);
+          const l = field === 'l' ? parseFloat(val) : parseFloat(rampLength);
+          const s = field === 's' ? parseFloat(val) : parseFloat(rampSlope);
+
+          if (field === 'h' || field === 'l') {
+            if (!isNaN(h) && !isNaN(l) && l !== 0) {
+              setRampSlope(((h / l) * 100).toFixed(2));
+            } else if (field === 'h' && !isNaN(h) && !isNaN(s) && s !== 0) {
+              setRampLength(((h / (s / 100))).toFixed(2));
+            }
+          } else if (field === 's') {
+            if (!isNaN(s) && !isNaN(h) && s !== 0) {
+              setRampLength(((h / (s / 100))).toFixed(2));
+            } else if (!isNaN(s) && !isNaN(l)) {
+              setRampHeight(((s / 100) * l).toFixed(2));
+            }
+          }
+        }, 0);
+      };
+
+      const getCTEStatus = () => {
+        const h = parseFloat(rampHeight);
+        const l = parseFloat(rampLength);
+        const s = parseFloat(rampSlope);
+        
+        if (isNaN(h)) return { valid: true, msg: 'Introduce la altura para validar.' };
+        
+        // Calcular el mínimo L permitido para esta H
+        // 1. Probar 10% (L < 300)
+        let minL = h / 0.10;
+        let maxS = 10;
+        
+        if (minL >= 300) {
+          // Probar 8% (L < 600)
+          minL = h / 0.08;
+          maxS = 8;
+        }
+        if (minL >= 600) {
+          // Probar 6% (L >= 600)
+          minL = h / 0.06;
+          maxS = 6;
+        }
+
+        if (isNaN(l) || isNaN(s)) return { valid: true, msg: `Para esta altura, el mínimo permitido es L = ${minL.toFixed(1)} cm (S = ${maxS}%)`, minL, maxS };
+
+        let currentMaxS = 6;
+        if (l < 300) currentMaxS = 10;
+        else if (l < 600) currentMaxS = 8;
+
+        if (s > currentMaxS + 0.01) { // Pequeño margen de precisión
+          return { 
+            valid: false, 
+            msg: `Incumple CTE: Máximo ${currentMaxS}% para esta longitud. Mínimo permitido: L = ${minL.toFixed(1)} cm`,
+            minL,
+            maxS: currentMaxS
+          };
+        }
+        return { 
+          valid: true, 
+          msg: `Cumple normativa CTE (Máx. permitido: ${currentMaxS}%)`,
+          minL,
+          maxS: currentMaxS
+        };
+      };
+
       const tools = [
         {
           id: 'math',
@@ -2325,7 +2406,17 @@
           desc: 'Crea hojas de ejercicios de cálculo personalizadas en PDF para tus sesiones.',
           icon: <Icons.FilePdf />,
           color: 'bg-brand-900 text-white',
-          badge: 'Estimulación'
+          badge: 'Estimulación',
+          image: 'math_generator_thumb_1778710346882.png'
+        },
+        {
+          id: 'ramp',
+          title: 'Calculadora de Rampas',
+          desc: 'Calcula pendientes y longitudes según la normativa de accesibilidad (CTE).',
+          icon: <Icons.TrendingUp />,
+          color: 'bg-emerald-600 text-white',
+          badge: 'Accesibilidad',
+          image: 'ramp_calculator_thumb_1778710368417.png'
         },
         {
           id: 'pao',
@@ -2333,9 +2424,12 @@
           desc: 'Consulta códigos, importes y descripciones de prestaciones ortoprotéticas.',
           icon: <Icons.Search />,
           color: 'bg-blue-900 text-white',
-          badge: 'Gestión'
+          badge: 'Gestión',
+          image: 'pao_finder_thumb_1778710383483.png'
         }
       ];
+
+      const cte = getCTEStatus();
 
       return (
         <section id="resources" className="py-24 px-4 bg-brand-50/50 min-h-screen">
@@ -2387,22 +2481,28 @@
             </div>
 
             {view === 'menu' ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 max-w-4xl mx-auto anim-fade-in">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 anim-fade-in">
                 {tools.map(tool => (
                   <div 
                     key={tool.id}
                     onClick={() => setView(tool.id)}
-                    className="bg-white rounded-[2.5rem] p-10 border border-brand-100 shadow-xl hover:shadow-2xl transition-all cursor-pointer group flex flex-col items-center text-center"
+                    className="bg-white rounded-[2.5rem] overflow-hidden border border-brand-100 shadow-xl hover:shadow-2xl transition-all cursor-pointer group flex flex-col"
                   >
-                    <div className={`w-20 h-20 ${tool.color} rounded-3xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500`}>
-                      {tool.icon}
+                    <div className="h-48 overflow-hidden relative">
+                      <img src={tool.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={tool.title} />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                      <div className={`absolute top-4 right-4 w-12 h-12 ${tool.color} rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-6 transition-transform`}>
+                        {tool.icon}
+                      </div>
                     </div>
-                    <span className="text-brand-400 font-bold uppercase tracking-widest text-xs mb-3">{tool.badge}</span>
-                    <h3 className="font-display text-2xl font-bold text-brand-900 mb-4">{tool.title}</h3>
-                    <p className="text-gray-600 leading-relaxed mb-8 flex-1">{tool.desc}</p>
-                    <div className="inline-flex items-center gap-2 text-brand-600 font-bold group-hover:gap-3 transition-all">
-                      Abrir herramienta
-                      <Icons.ArrowRight />
+                    <div className="p-8 flex flex-col items-center text-center flex-1">
+                      <span className="text-brand-400 font-bold uppercase tracking-widest text-[10px] mb-3">{tool.badge}</span>
+                      <h3 className="font-display text-xl font-bold text-brand-900 mb-4">{tool.title}</h3>
+                      <p className="text-gray-500 text-sm leading-relaxed mb-8 flex-1">{tool.desc}</p>
+                      <div className="inline-flex items-center gap-2 text-brand-600 font-bold group-hover:gap-3 transition-all text-sm">
+                        Abrir herramienta
+                        <Icons.ArrowRight />
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -2495,10 +2595,122 @@
                   </div>
                 </div>
               </div>
+            ) : view === 'ramp' ? (
+              <div className="anim-scale-in max-w-5xl mx-auto">
+                <div className="bg-white rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden">
+                  <div className="p-8 sm:p-12">
+                    <div className="flex items-center gap-4 mb-10">
+                      <div className="w-14 h-14 bg-emerald-600 text-white rounded-2xl flex items-center justify-center shadow-lg">
+                        <Icons.TrendingUp />
+                      </div>
+                      <div>
+                        <h3 className="font-display text-3xl font-bold text-brand-900">Calculadora de Rampas</h3>
+                        <p className="text-emerald-600 font-bold uppercase tracking-widest text-xs">Cumplimiento CTE España</p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                      <div className="space-y-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                          <div className="space-y-2">
+                            <label className="text-sm font-bold text-brand-900 uppercase tracking-wider">Altura (cm)</label>
+                            <input 
+                              type="text" 
+                              value={rampHeight}
+                              onChange={(e) => handleRampChange('h', e.target.value)}
+                              className={`w-full p-4 rounded-2xl border-2 transition-all text-xl font-bold ${!cte.valid ? 'border-red-100 bg-red-50 text-red-600 focus:border-red-500' : 'border-brand-50 focus:border-emerald-500 bg-brand-50/30'}`}
+                              placeholder="Ej: 15"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-bold text-brand-900 uppercase tracking-wider">Longitud (cm)</label>
+                            <input 
+                              type="text" 
+                              value={rampLength}
+                              onChange={(e) => handleRampChange('l', e.target.value)}
+                              className={`w-full p-4 rounded-2xl border-2 transition-all text-xl font-bold ${!cte.valid ? 'border-red-100 bg-red-50 text-red-600 focus:border-red-500' : 'border-brand-50 focus:border-emerald-500 bg-brand-50/30'}`}
+                              placeholder="Ej: 250"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-bold text-brand-900 uppercase tracking-wider">Pendiente (%)</label>
+                            <input 
+                              type="text" 
+                              value={rampSlope}
+                              onChange={(e) => handleRampChange('s', e.target.value)}
+                              className={`w-full p-4 rounded-2xl border-2 transition-all text-xl font-bold ${!cte.valid ? 'border-red-100 bg-red-50 text-red-600 focus:border-red-500' : 'border-brand-50 focus:border-emerald-500 bg-brand-50/30'}`}
+                              placeholder="Ej: 8"
+                            />
+                          </div>
+                        </div>
+
+                        <div className={`p-6 rounded-3xl border-2 transition-all flex items-start gap-4 ${cte.valid ? 'bg-emerald-50 border-emerald-100 text-emerald-800' : 'bg-red-50 border-red-200 text-red-800'}`}>
+                          <div className={`p-2 rounded-xl ${cte.valid ? 'bg-emerald-200 text-emerald-700' : 'bg-red-200 text-red-700'}`}>
+                            {cte.valid ? <Icons.Check /> : <Icons.AlertCircle />}
+                          </div>
+                          <div>
+                            <p className="font-bold text-lg">{cte.valid ? 'Cálculo Correcto' : 'Incumple Normativa'}</p>
+                            <p className="opacity-80">{cte.msg || 'Introduce dos valores para calcular el tercero.'}</p>
+                          </div>
+                        </div>
+
+                        <button 
+                          onClick={() => { setRampHeight(''); setRampLength(''); setRampSlope(''); }}
+                          className="w-full py-4 rounded-2xl border-2 border-gray-100 text-gray-400 font-bold hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
+                        >
+                          <Icons.Refresh /> Limpiar valores
+                        </button>
+                      </div>
+
+                      <div className="bg-brand-50/50 rounded-[2rem] p-8 flex flex-col items-center justify-center min-h-[300px] border border-brand-100">
+                        <svg viewBox="0 0 400 200" className="w-full h-auto drop-shadow-xl">
+                          {/* Suelo */}
+                          <line x1="20" y1="180" x2="380" y2="180" stroke="#1a3052" strokeWidth="4" strokeLinecap="round" />
+                          
+                          {/* Rampa */}
+                          {parseFloat(rampHeight) > 0 && parseFloat(rampLength) > 0 ? (
+                            <>
+                              <path 
+                                d={`M 50 180 L 350 180 L 350 ${180 - Math.min(100, (parseFloat(rampHeight) * 2))} Z`} 
+                                fill={cte.valid ? '#10b981' : '#ef4444'} 
+                                fillOpacity="0.2"
+                                stroke={cte.valid ? '#10b981' : '#ef4444'}
+                                strokeWidth="4"
+                                strokeLinejoin="round"
+                                className="transition-all duration-500"
+                              />
+                              <text x="200" y="195" textAnchor="middle" className="text-[10px] font-bold fill-brand-900">{rampLength}cm</text>
+                              <text x="360" y={180 - Math.min(50, (parseFloat(rampHeight)))} textAnchor="start" className="text-[10px] font-bold fill-brand-900">{rampHeight}cm</text>
+                              <text x="200" y={170 - Math.min(50, (parseFloat(rampHeight)))} textAnchor="middle" className={`text-xs font-black ${cte.valid ? 'fill-emerald-600' : 'fill-red-600'}`}>{rampSlope}%</text>
+                            </>
+                          ) : (
+                            <text x="200" y="100" textAnchor="middle" className="fill-brand-200 font-bold italic">Esperando datos...</text>
+                          )}
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-brand-900 p-8 text-white">
+                    <div className="max-w-3xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
+                          <Icons.Lightbulb className="text-emerald-400" />
+                        </div>
+                        <p className="text-sm font-medium text-brand-100">
+                          <strong>Norma CTE DB-SUA:</strong> Pendiente máx. 10% (L&lt;300cm), 8% (L&lt;600cm), 6% (Resto).
+                        </p>
+                      </div>
+                      <div className="text-xs text-brand-300 font-mono bg-black/20 px-4 py-2 rounded-lg border border-white/5">
+                        Fórmula: (H / L) * 100
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             ) : (
               <div className="anim-scale-in">
-                {/* TOOL 2: CatSalut Code Finder */}
-                <div className="bg-white rounded-[3xl] p-8 sm:p-12 shadow-xl border border-brand-50">
+                {/* TOOL 3: CatSalut Code Finder */}
+                <div className="bg-white rounded-[3rem] p-8 sm:p-12 shadow-xl border border-brand-50">
                   <div className="flex items-center gap-4 mb-8">
                     <div className="w-14 h-14 bg-blue-900 text-white rounded-2xl flex items-center justify-center shadow-lg">
                       <Icons.Search />
@@ -2523,61 +2735,91 @@
                   </div>
 
                   {searchResults.length > 0 ? (
-                    <div className="overflow-x-auto rounded-[2rem] border border-gray-100 max-h-[600px] overflow-y-auto custom-scrollbar shadow-inner bg-gray-50/30">
-                      <table className="w-full text-left border-collapse">
-                        <thead className="sticky top-0 z-10">
-                          <tr className="bg-brand-900 text-white">
-                            <th className="p-5 font-display text-sm uppercase tracking-widest">Código PAO</th>
-                            <th className="p-5 font-display text-sm uppercase tracking-widest">Producto / Descripción</th>
-                            <th className="p-5 font-display text-sm uppercase tracking-widest text-right">Importe</th>
-                            <th className="p-5 font-display text-sm uppercase tracking-widest text-center">Detalles</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-100 bg-white">
-                          {searchResults.map((item, i) => (
-                            <tr key={i} className="hover:bg-blue-50/50 transition-colors group/row">
-                              <td className="p-5 align-top">
-                                <div className="bg-brand-50 border border-brand-100 rounded-2xl p-4 text-center group-hover/row:bg-white transition-colors shadow-sm">
-                                  <span className="font-mono text-xl font-black text-brand-900 tracking-tight block">
-                                    {item.sC} {item.tC}
-                                  </span>
-                                </div>
-                              </td>
-                              <td className="p-5">
-                                <p className="font-bold text-brand-900 text-lg mb-1">{item.tD}</p>
-                                <p className="text-xs text-brand-500 font-medium uppercase tracking-wider">{item.cD}</p>
-                              </td>
-                              <td className="p-5 text-right whitespace-nowrap">
-                                <p className="font-black text-emerald-600 text-xl">{item.p}€</p>
-                                <p className="text-xs text-gray-500 font-bold uppercase tracking-wide">Aportación: {item.u}€</p>
-                              </td>
-                              <td className="p-5 text-center align-middle">
-                                 <div className="group inline-block relative">
-                                   <button className="w-12 h-12 bg-gray-50 border-2 border-gray-100 rounded-2xl flex items-center justify-center text-brand-600 hover:bg-brand-900 hover:text-white transition-all shadow-sm">
-                                     <Icons.Search />
-                                   </button>
-                                   {/* Tooltip de Detalles */}
-                                   <div className="absolute bottom-full right-0 mb-4 w-72 p-6 bg-brand-900 text-white rounded-[2rem] shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all z-20 pointer-events-none border border-white/10">
-                                      <div className="space-y-5">
-                                        <div className="flex justify-between items-center border-b border-white/10 pb-3">
-                                          <span className="text-[10px] text-brand-300 uppercase font-bold tracking-widest">Validación Sanitaria</span>
-                                          <span className="text-sm font-black text-blue-400">
-                                            {item.v === 'S' ? 'Sí' : 'No'}
-                                          </span>
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                          <span className="text-[10px] text-brand-300 uppercase font-bold tracking-widest">Periodicidad</span>
-                                          <span className="text-sm font-black text-blue-400">{item.m} meses</span>
-                                        </div>
-                                      </div>
-                                      <div className="absolute top-full right-6 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-brand-900"></div>
-                                   </div>
-                                 </div>
-                              </td>
+                    <div className="max-h-[600px] overflow-y-auto custom-scrollbar">
+                      {/* Vista Sobremesa: Tabla */}
+                      <div className="hidden md:block overflow-x-auto rounded-[2rem] border border-gray-100 shadow-inner bg-gray-50/30">
+                        <table className="w-full text-left border-collapse">
+                          <thead className="sticky top-0 z-10">
+                            <tr className="bg-brand-900 text-white">
+                              <th className="p-5 font-display text-sm uppercase tracking-widest">Código PAO</th>
+                              <th className="p-5 font-display text-sm uppercase tracking-widest">Producto / Descripción</th>
+                              <th className="p-5 font-display text-sm uppercase tracking-widest text-right">Importe</th>
+                              <th className="p-5 font-display text-sm uppercase tracking-widest text-center">Detalles</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody className="divide-y divide-gray-100 bg-white">
+                            {searchResults.map((item, i) => (
+                              <tr key={i} className="hover:bg-blue-50/50 transition-colors group/row">
+                                <td className="p-5 align-top">
+                                  <div className="bg-brand-50 border border-brand-100 rounded-2xl p-4 text-center group-hover/row:bg-white transition-colors shadow-sm">
+                                    <span className="font-mono text-xl font-black text-brand-900 tracking-tight block">
+                                      {item.sC} {item.tC}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="p-5">
+                                  <p className="font-bold text-brand-900 text-lg mb-1">{item.tD}</p>
+                                  <p className="text-xs text-brand-500 font-medium uppercase tracking-wider">{item.cD}</p>
+                                </td>
+                                <td className="p-5 text-right whitespace-nowrap">
+                                  <p className="font-black text-emerald-600 text-xl">{item.p}€</p>
+                                  <p className="text-xs text-gray-500 font-bold uppercase tracking-wide">Aportación: {item.u}€</p>
+                                </td>
+                                <td className="p-5 text-center align-middle">
+                                   <div className="group inline-block relative">
+                                     <button className="w-12 h-12 bg-gray-50 border-2 border-gray-100 rounded-2xl flex items-center justify-center text-brand-600 hover:bg-brand-900 hover:text-white transition-all shadow-sm">
+                                       <Icons.Search />
+                                     </button>
+                                     <div className="absolute bottom-full right-0 mb-4 w-72 p-6 bg-brand-900 text-white rounded-[2rem] shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all z-20 pointer-events-none border border-white/10">
+                                        <div className="space-y-5">
+                                          <div className="flex justify-between items-center border-b border-white/10 pb-3">
+                                            <span className="text-[10px] text-brand-300 uppercase font-bold tracking-widest">Validación Sanitaria</span>
+                                            <span className="text-sm font-black text-blue-400">{item.v === 'S' ? 'Sí' : 'No'}</span>
+                                          </div>
+                                          <div className="flex justify-between items-center">
+                                            <span className="text-[10px] text-brand-300 uppercase font-bold tracking-widest">Periodicidad</span>
+                                            <span className="text-sm font-black text-blue-400">{item.m} meses</span>
+                                          </div>
+                                        </div>
+                                        <div className="absolute top-full right-6 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-brand-900"></div>
+                                     </div>
+                                   </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      {/* Vista Móvil: Tarjetas */}
+                      <div className="md:hidden space-y-5">
+                        {searchResults.map((item, i) => (
+                          <div key={i} className="bg-white rounded-3xl border border-brand-100 p-7 shadow-md">
+                            <div className="flex justify-between items-start mb-5">
+                              <div className="bg-brand-900 text-white px-5 py-2.5 rounded-xl font-mono font-bold text-xl">
+                                {item.sC} {item.tC}
+                              </div>
+                              <div className="text-right">
+                                <p className="font-black text-emerald-600 text-2xl">{item.p}€</p>
+                                <p className="text-xs text-gray-500 font-bold uppercase">Usuario: {item.u}€</p>
+                              </div>
+                            </div>
+                            <h4 className="font-bold text-brand-900 text-xl mb-2 leading-tight">{item.tD}</h4>
+                            <p className="text-sm text-brand-500 uppercase tracking-wide mb-6 font-medium">{item.cD}</p>
+                            
+                            <div className="grid grid-cols-2 gap-4 pt-5 border-t border-brand-50">
+                              <div className="bg-brand-50 p-4 rounded-2xl">
+                                <span className="block text-[11px] text-brand-400 uppercase font-bold mb-1 tracking-wider">Validación Sanitaria</span>
+                                <span className="font-bold text-brand-800 text-sm">{item.v === 'S' ? 'Necesaria' : 'No requiere'}</span>
+                              </div>
+                              <div className="bg-brand-50 p-4 rounded-2xl">
+                                <span className="block text-[11px] text-brand-400 uppercase font-bold mb-1 tracking-wider">Periodicidad Mín.</span>
+                                <span className="font-bold text-brand-800 text-sm">{item.m} meses</span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ) : searchTerm.length >= 4 ? (
                     <div className="text-center py-20 bg-gray-50 rounded-[2rem] border-2 border-dashed border-gray-200">
@@ -2641,26 +2883,26 @@
       return (
         <header role="banner">
           <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-accent-cream/95 shadow-md backdrop-blur-md' : 'bg-accent-cream/80'}`}>
-            <div className="max-w-6xl mx-auto px-4 sm:px-6">
-              <div className="flex items-center justify-between h-20">
-                <button onClick={() => handle('home')} className="flex items-center rounded-xl p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500">
-                  <img src="assets/iadapta_logo.png" alt="IAdapta" className="h-14 object-contain" />
+            <div className="max-w-[1400px] mx-auto px-4 sm:px-8">
+              <div className={`flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-20' : 'h-24 md:h-28'}`}>
+                <button onClick={() => handle('home')} className="flex items-center rounded-xl p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 transition-transform hover:scale-105 active:scale-95">
+                  <img src="assets/iadapta_logo.png" alt="IAdapta" className={`object-contain transition-all duration-300 ${scrolled ? 'h-14' : 'h-16 md:h-20 lg:h-24'}`} />
                 </button>
 
-                <div className="hidden md:flex items-center gap-4">
+                <div className="hidden xl:flex items-center gap-4">
                   <ul className="flex items-center gap-1 list-none m-0 p-0">
                     {linksMain.map(link => (
                       <li key={link.id}>
-                        <button onClick={() => handle(link.id)} className={`px-4 py-2.5 rounded-xl text-base font-semibold transition-all duration-200 ${currentPage === 'main' && activeSection === link.id ? 'bg-brand-900 text-white shadow-sm' : 'text-brand-900/70 hover:text-brand-900 hover:bg-white/50'
+                        <button onClick={() => handle(link.id)} className={`px-3 py-2.5 rounded-xl text-sm xl:text-base font-bold transition-all duration-200 whitespace-nowrap ${currentPage === 'main' && activeSection === link.id ? 'bg-brand-900 text-white shadow-sm' : 'text-brand-900/70 hover:text-brand-900 hover:bg-white/50'
                           }`}>
                           {link.label}
                         </button>
                       </li>
                     ))}
                     <li>
-                      <button onClick={() => navigateTo('cv')} className={`px-4 py-2.5 rounded-xl text-base font-semibold transition-all duration-200 ${currentPage === 'cv' ? 'bg-accent-coral text-white shadow-md' : 'text-accent-coral hover:bg-white/50 border border-accent-coral/20 ml-2'
+                      <button onClick={() => navigateTo('cv')} className={`px-4 py-2.5 rounded-xl text-sm xl:text-base font-bold transition-all duration-200 whitespace-nowrap ${currentPage === 'cv' ? 'bg-accent-coral text-white shadow-md' : 'text-accent-coral hover:bg-white/50 border-2 border-accent-coral/10 ml-2'
                         }`}>
-                        Curriculum Vitae
+                        Mi CV
                       </button>
                     </li>
                   </ul>
@@ -2671,21 +2913,21 @@
                     href="https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8" 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="px-5 py-2.5 rounded-xl text-base font-bold transition-all duration-200 bg-brand-900 text-white shadow-md hover:bg-brand-800 flex items-center gap-2 group"
+                    className="px-6 py-2.5 rounded-xl text-base font-black transition-all duration-200 bg-brand-900 text-white shadow-lg hover:bg-brand-800 flex items-center gap-2 group whitespace-nowrap"
                   >
                     <Icons.Heart className="group-hover:fill-red-500 group-hover:text-red-500 transition-all duration-300" />
                     Donar
                   </a>
                 </div>
 
-                <button className="md:hidden p-2 rounded-xl text-gray-600" onClick={() => setMenuOpen(o => !o)}>
-                  {menuOpen ? <Icons.Close /> : <Icons.Menu />}
+                <button className="xl:hidden p-3 rounded-2xl bg-white/50 border border-brand-100 text-brand-900 shadow-sm transition-all active:scale-90" onClick={() => setMenuOpen(o => !o)}>
+                  {menuOpen ? <Icons.Close className="w-7 h-7" /> : <Icons.Menu className="w-7 h-7" />}
                 </button>
               </div>
             </div>
 
             {menuOpen && (
-              <div className="md:hidden bg-white border-t border-brand-100 px-4 py-3 space-y-1 shadow-xl">
+              <div className="xl:hidden bg-white border-t border-brand-100 px-4 py-3 space-y-1 shadow-xl">
                 {linksMain.map(link => (
                   <button key={link.id} onClick={() => handle(link.id)} className="w-full text-left px-4 py-3.5 rounded-xl text-lg font-semibold text-gray-700 hover:bg-brand-50">
                     {link.label}
@@ -4614,51 +4856,96 @@
       );
     };
 
-    // --- SECTION COOKIES ---
-    window.SectionCookies = function SectionCookies() {
+    // --- SECTION LEGAL (AVISO LEGAL Y PRIVACIDAD) ---
+    window.SectionLegal = function SectionLegal() {
+      const [activeTab, setActiveTab] = React.useState('privacy');
+
       return (
         <div className="min-h-screen pt-28 pb-20 px-4 bg-gray-50">
-          <div className="max-w-4xl mx-auto bg-white p-8 sm:p-12 rounded-3xl border border-gray-100 shadow-sm">
-            <h1 className="font-display text-4xl sm:text-5xl font-bold text-brand-900 mb-8">Política de Cookies y Privacidad</h1>
-            <div className="space-y-6 text-gray-700 leading-relaxed text-lg">
-              <p>
-                En <strong>IAdapta</strong> utilizamos cookies propias y de terceros para mejorar la experiencia de usuario, analizar el tráfico web, y gestionar los enlaces de afiliación de Amazon. Al continuar navegando, consideramos que aceptas su uso.
-              </p>
+          <div className="max-w-4xl mx-auto bg-white rounded-[3rem] border border-gray-100 shadow-2xl overflow-hidden">
+            {/* Tab Selector */}
+            <div className="flex border-b border-gray-100 bg-brand-50/30">
+              <button 
+                onClick={() => setActiveTab('legal')}
+                className={`flex-1 py-6 font-bold text-lg transition-all ${activeTab === 'legal' ? 'bg-white text-brand-900 border-b-4 border-brand-900' : 'text-gray-400 hover:text-brand-600'}`}
+              >
+                Aviso Legal
+              </button>
+              <button 
+                onClick={() => setActiveTab('privacy')}
+                className={`flex-1 py-6 font-bold text-lg transition-all ${activeTab === 'privacy' ? 'bg-white text-brand-900 border-b-4 border-brand-900' : 'text-gray-400 hover:text-brand-600'}`}
+              >
+                Política de Privacidad
+              </button>
+            </div>
 
-              <h2 className="text-2xl font-bold text-brand-800 mt-8 mb-4">1. ¿Qué son las cookies?</h2>
-              <p>
-                Las cookies son pequeños archivos de texto que los sitios web almacenan en tu dispositivo (ordenador, tablet, smartphone) cuando los visitas. Sirven para recordar tus preferencias, entender cómo interactúas con la web y personalizar el contenido.
-              </p>
+            <div className="p-8 sm:p-16 space-y-10 text-gray-700 leading-relaxed text-lg anim-fade-in">
+              {activeTab === 'legal' ? (
+                <>
+                  <h1 className="font-display text-4xl font-bold text-brand-900 mb-8">Aviso Legal</h1>
+                  <section>
+                    <h2 className="text-2xl font-bold text-brand-800 mb-4">1. Datos del Responsable</h2>
+                    <p>En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y Comercio Electrónico (LSSI), se exponen los siguientes datos identificativos:</p>
+                    <ul className="mt-4 space-y-2 list-disc pl-6">
+                      <li><strong>Titular:</strong> Pablo Narciso Millán (IAdapta)</li>
+                      <li><strong>Actividad:</strong> Terapeuta Ocupacional & Especialista en Accesibilidad</li>
+                      <li><strong>Email:</strong> iadaptato@gmail.com</li>
+                      <li><strong>Sitio Web:</strong> iadapta.es</li>
+                    </ul>
+                  </section>
 
-              <h2 className="text-2xl font-bold text-brand-800 mt-8 mb-4">2. Tipos de cookies que utilizamos</h2>
-              <ul className="list-disc pl-6 space-y-2">
-                <li><strong>Cookies Técnicas (Estrictamente necesarias):</strong> Permiten el funcionamiento básico de la web, como guardar tu preferencia de aceptación de cookies para no volver a preguntarte.</li>
-                <li><strong>Cookies de Afiliación (Amazon Associates):</strong> Utilizamos enlaces de afiliados de Amazon. Cuando haces clic en uno de nuestros enlaces recomendados, Amazon instala una cookie en tu navegador durante 24 horas para atribuirnos una pequeña comisión si realizas una compra. Esto no supone ningún coste extra para ti.</li>
-                <li><strong>Cookies de Funcionalidad y Análisis:</strong> Nos ayudan a comprender cómo interactúas con la web para mejorar continuamente el servicio y la interfaz.</li>
-              </ul>
+                  <section>
+                    <h2 className="text-2xl font-bold text-brand-800 mb-4">2. Finalidad del Sitio Web</h2>
+                    <p>
+                      IAdapta es una plataforma informativa dedicada a la difusión de conocimientos sobre adaptaciones de ortopedia, accesibilidad y recursos para profesionales de la salud. 
+                      El sitio web incluye enlaces de afiliación de Amazon y espacios publicitarios para su sostenibilidad.
+                    </p>
+                  </section>
 
-              <h2 className="text-2xl font-bold text-brand-800 mt-8 mb-4">3. Uso de Inteligencia Artificial (API Gemini)</h2>
-              <p>
-                Nuestra web cuenta con un <strong>Analizador IA de Accesibilidad</strong> impulsado por Gemini Vision. Al utilizar esta herramienta y subir una foto de tu entorno, la imagen se procesa temporalmente a través de una API para ofrecerte el análisis. <strong>No almacenamos tus imágenes en nuestros servidores ni las utilizamos para entrenar modelos de IA.</strong>
-              </p>
+                  <section>
+                    <h2 className="text-2xl font-bold text-brand-800 mb-4">3. Exclusión de Responsabilidad (Descargo Clínico)</h2>
+                    <p className="bg-brand-50 p-6 rounded-2xl border-l-4 border-brand-500 italic">
+                      Todo el contenido, guías, análisis de IA y recursos publicados en este sitio web tienen carácter estrictamente orientativo e informativo. 
+                      En ningún caso esta información sustituye la valoración clínica, el diagnóstico o el tratamiento realizado por un profesional sanitario colegiado en persona. 
+                      IAdapta no se hace responsable de las decisiones tomadas por el usuario basadas únicamente en la información aquí expuesta.
+                    </p>
+                  </section>
 
-              <h2 className="text-2xl font-bold text-brand-800 mt-8 mb-4">4. ¿Cómo puedes gestionar tus cookies?</h2>
-              <p>
-                Puedes permitir, bloquear o eliminar las cookies instaladas en tu equipo mediante la configuración de las opciones de tu navegador web. A continuación te ofrecemos enlaces a las guías de los navegadores más comunes:
-              </p>
-              <ul className="list-disc pl-6 space-y-2 text-brand-600">
-                <li><a href="https://support.google.com/chrome/answer/95647?hl=es" target="_blank" rel="noopener noreferrer" className="hover:underline">Google Chrome</a></li>
-                <li><a href="https://support.mozilla.org/es/kb/habilitar-y-deshabilitar-cookies-sitios-web-rastrear-preferencias" target="_blank" rel="noopener noreferrer" className="hover:underline">Mozilla Firefox</a></li>
-                <li><a href="https://support.apple.com/es-es/guide/safari/sfri11471/mac" target="_blank" rel="noopener noreferrer" className="hover:underline">Safari</a></li>
-                <li><a href="https://support.microsoft.com/es-es/windows/eliminar-y-administrar-cookies-168dab11-0753-043d-7c16-ede5947fc64d" target="_blank" rel="noopener noreferrer" className="hover:underline">Microsoft Edge</a></li>
-              </ul>
+                  <section>
+                    <h2 className="text-2xl font-bold text-brand-800 mb-4">4. Propiedad Intelectual</h2>
+                    <p>Todo el contenido de este sitio web, incluyendo textos, gráficos, interfaces, juegos cognitivos y logotipos, es propiedad de IAdapta o de sus proveedores de contenido y está protegido por las leyes de propiedad intelectual internacionales.</p>
+                  </section>
 
-              <h2 className="text-2xl font-bold text-brand-800 mt-8 mb-4">5. Actualización de la política</h2>
-              <p>
-                Es posible que actualicemos esta Política de Cookies en el futuro para adaptarla a cambios legislativos o nuevos servicios. Te recomendamos revisarla periódicamente.
-              </p>
-
-              <p className="mt-8 text-sm text-gray-500">Última actualización: Mayo 2026</p>
+                  <section>
+                    <h2 className="text-2xl font-bold text-brand-800 mb-4">5. Condiciones de Uso</h2>
+                    <p>El usuario se compromete a hacer un uso adecuado de los contenidos y servicios de la web. Queda prohibida la reproducción total o parcial de los recursos profesionales y juegos con fines comerciales sin autorización expresa del titular.</p>
+                  </section>
+                </>
+              ) : (
+                <>
+                  <h1 className="font-display text-4xl font-bold text-brand-900 mb-8">Política de Privacidad y Cookies</h1>
+                  <section>
+                    <h2 className="text-2xl font-bold text-brand-800 mb-4">1. Protección de Datos (RGPD)</h2>
+                    <p>IAdapta garantiza la protección de los datos de carácter personal que el usuario proporcione a través de los formularios de contacto o correos electrónicos, tratando dicha información con la máxima confidencialidad y únicamente para responder a las solicitudes de servicio.</p>
+                  </section>
+                  <section>
+                    <h2 className="text-2xl font-bold text-brand-800 mb-4">2. Uso de Cookies</h2>
+                    <p>Utilizamos cookies propias y de terceros para mejorar la experiencia de usuario y gestionar los enlaces de afiliación de Amazon:</p>
+                    <ul className="mt-4 space-y-2 list-disc pl-6">
+                      <li><strong>Cookies de Afiliación:</strong> Al clicar en productos recomendados, Amazon instala una cookie (24h) para identificar el origen de la compra.</li>
+                      <li><strong>Cookies Técnicas:</strong> Necesarias para recordar tus preferencias (como la aceptación de este aviso).</li>
+                    </ul>
+                  </section>
+                  <section>
+                    <h2 className="text-2xl font-bold text-brand-800 mb-4">3. Analizador IA (Gemini Vision)</h2>
+                    <p>Cuando utilizas nuestro Analizador IA, las imágenes enviadas se procesan de forma efímera a través de la API de Google Gemini para generar el informe de accesibilidad. <strong>No almacenamos, compartimos ni utilizamos tus imágenes</strong> para ningún otro fin comercial o de entrenamiento de modelos.</p>
+                  </section>
+                </>
+              )}
+              <div className="pt-10 border-t border-gray-100 flex justify-between items-center text-sm text-gray-400">
+                <p>Última actualización: Mayo 2026</p>
+                <p>iadapta.es</p>
+              </div>
             </div>
           </div>
         </div>
@@ -4715,8 +5002,8 @@
                     </a>
                   </li>
                   <li>
-                    <button onClick={() => navigateTo('cookies')} className="text-brand-200 hover:text-white transition-colors text-lg">
-                      Política de Cookies
+                    <button onClick={() => navigateTo('legal')} className="text-brand-200 hover:text-white transition-colors text-lg">
+                      Aviso Legal y Privacidad
                     </button>
                   </li>
                 </ul>
@@ -4758,10 +5045,10 @@
             <p className="text-gray-700 text-sm sm:text-base text-center sm:text-left leading-relaxed">
               Utilizamos cookies para mejorar tu experiencia y gestionar los enlaces de afiliados. Al navegar, aceptas su uso.{' '}
               <button
-                onClick={() => navigateTo('cookies')}
+                onClick={() => navigateTo('legal')}
                 className="text-brand-600 font-bold underline hover:text-brand-800 transition-colors inline-block mt-1 sm:mt-0 cursor-pointer"
               >
-                Política de Cookies
+                Aviso Legal y Privacidad
               </button>
             </p>
             <button
@@ -4903,8 +5190,8 @@
             {currentPage === 'challenge' && (
               <SectionDailyChallenge isStandalone={isStandalone} navigateTo={navigateTo} />
             )}
-            {currentPage === 'cookies' && (
-              <SectionCookies />
+            {currentPage === 'legal' && (
+              <SectionLegal />
             )}
           </main>
           {!isStandalone && <Footer scrollTo={scrollTo} navigateTo={navigateTo} />}
