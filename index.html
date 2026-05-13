@@ -196,6 +196,9 @@
       Check: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>,
       Mail: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>,
       Location: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>,
+      Star: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>,
+      Facebook: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M18.77 7.46H14.5v-1.9c0-.9.6-1.1 1-1.1h3V.5h-4.33C10.24.5 9.5 3.44 9.5 5.32v2.14H7.03v3.91h2.47V23.5h5V11.37h3.36l.91-3.91z"/></svg>,
+      Twitter: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M23.95 4.57a10 10 0 01-2.82.77 4.96 4.96 0 002.16-2.72 9.9 9.9 0 01-3.13 1.2 4.93 4.93 0 00-8.39 4.49A14 14 0 011.64 3.16 4.93 4.93 0 003.16 9.7a4.89 4.89 0 01-2.22-.61v.06a4.93 4.93 0 003.95 4.83 4.9 4.9 0 01-2.22.08 4.93 4.93 0 004.6 3.42A9.9 9.9 0 010 19.54a13.94 13.94 0 007.55 2.21c9.06 0 14-7.5 14-14 0-.21 0-.42-.01-.63a10 10 0 002.41-2.55z"/></svg>,
       Calculator: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><rect x="4" y="2" width="16" height="20" rx="2" /><line x1="8" y1="6" x2="16" y2="6" /><line x1="8" y1="10" x2="8" y2="10" /><line x1="12" y1="10" x2="12" y2="10" /><line x1="16" y1="10" x2="16" y2="10" /><line x1="8" y1="14" x2="8" y2="14" /><line x1="12" y1="14" x2="12" y2="14" /><line x1="16" y1="14" x2="16" y2="14" /><line x1="8" y1="18" x2="8" y2="18" /><line x1="12" y1="18" x2="12" y2="18" /><line x1="16" y1="18" x2="16" y2="18" /></svg>,
       ArrowLeft: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>,
     };
@@ -243,6 +246,43 @@
       );
     };
 
+    window.StarRating = function StarRating({ stars }) {
+      return (
+        <div className="flex gap-1 justify-center my-6">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <Icons.Star key={i} className={`w-10 h-10 ${i <= stars ? 'text-amber-400 fill-amber-400' : 'text-gray-200'}`} />
+          ))}
+        </div>
+      );
+    };
+
+    window.ShareButtons = function ShareButtons({ game, score, time }) {
+      const text = `¡He superado el nivel en ${game}! ${score ? `Puntuación: ${score}. ` : ''}${time ? `Tiempo: ${time}s. ` : ''}Entrena tu mente en iadapta.es 🧠✨`;
+      const url = window.location.href.split('?')[0];
+      
+      const shareTwitter = () => {
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+      };
+      
+      const shareFacebook = () => {
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`, '_blank');
+      };
+      
+      return (
+        <div className="flex flex-col items-center gap-4 mt-8 pt-8 border-t border-brand-100">
+          <p className="text-sm font-bold text-brand-400 uppercase tracking-widest">Compartir resultado</p>
+          <div className="flex gap-4">
+            <button onClick={shareTwitter} className="w-12 h-12 bg-[#1DA1F2] text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+              <Icons.Twitter className="w-6 h-6" />
+            </button>
+            <button onClick={shareFacebook} className="w-12 h-12 bg-[#4267B2] text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+              <Icons.Facebook className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      );
+    };
+
 
     // --- SECTION COGNITIVE (GIMNASIO CEREBRAL) ---
     window.SectionCognitive = function SectionCognitive({ isTeaser, navigateTo, isStandalone }) {
@@ -256,6 +296,9 @@
       const [flipped, setFlipped] = useState([]);
       const [matched, setMatched] = useState([]);
       const [gameFinished, setGameFinished] = useState(false);
+      const [startTime, setStartTime] = useState(0);
+      const [finalTime, setFinalTime] = useState(0);
+      const [stars, setStars] = useState(0);
 
       const icons = ['🧠', '💡', '🌟', '🧩', '🚀', '🌈', '💎', '🎨', '🍎', '⚽', '🎸', '🍦', '🏠'];
 
@@ -277,6 +320,8 @@
         setGameFinished(false);
         setLevel(levelIdx);
         setGameStarted(true);
+        setStartTime(Date.now());
+        setStars(0);
       }, [levelSequence]);
 
       useEffect(() => {
@@ -297,7 +342,22 @@
             setMatched([...matched, cards[first].name]);
             setFlipped([]);
             if (matched.length + 1 === Math.floor(levelSequence[level])) {
-              setTimeout(() => setGameFinished(true), 600);
+              const timeTaken = (Date.now() - startTime) / 1000;
+              setFinalTime(timeTaken.toFixed(1));
+              
+              // Star logic for Memory
+              const pairs = Math.floor(levelSequence[level]);
+              const baseTime = pairs * 4; // 4s per pair average
+              let s = 3;
+              if (timeTaken < baseTime * 0.6) s = 5;
+              else if (timeTaken < baseTime * 0.8) s = 4;
+              else if (timeTaken > baseTime * 1.5) s = 2;
+              setStars(s);
+
+              setTimeout(() => {
+                setGameFinished(true);
+                if (window.confetti) window.confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+              }, 600);
             }
           } else {
             setTimeout(() => setFlipped([]), 1000);
@@ -581,8 +641,12 @@
                     <div className="text-center py-12 anim-scale-in">
                       <div className="text-6xl mb-6">🧠✨</div>
                       <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Increíble memoria!</h3>
-                      <p className="text-xl text-gray-600 mb-8">Has completado el nivel {level + 1} con éxito.</p>
-                      <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                      <StarRating stars={stars} />
+                      <p className="text-xl text-gray-600 mb-4">Has completado el nivel {level + 1} en <span className="font-bold text-brand-700">{finalTime}s</span>.</p>
+                      
+                      <ShareButtons game="Juego de Memoria" time={finalTime} />
+                      
+                      <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
                         <button
                           onClick={() => setGameStarted(false)}
                           className="px-8 py-4 bg-brand-100 text-brand-700 rounded-2xl font-bold text-lg hover:bg-brand-200 transition-all"
@@ -639,6 +703,7 @@
       const [gameStatus, setGameStatus] = useState('playing');
       const [startTime, setStartTime] = useState(null);
       const [timeElapsed, setTimeElapsed] = useState(0);
+      const [stars, setStars] = useState(0);
       const [hintsUsed, setHintsUsed] = useState([]); // indices of words hinted
 
       const currentLevel = WORDSEARCH_LEVELS[levelIdx];
@@ -791,7 +856,20 @@
           }
           if (newFound.length === wordsToFind.length) {
             setGameStatus('won');
-            setTimeElapsed(((Date.now() - startTime) / 1000).toFixed(0));
+            const timeTaken = (Date.now() - startTime) / 1000;
+            setTimeElapsed(timeTaken.toFixed(0));
+            
+            // Star logic for WordSearch
+            const baseTime = wordsToFind.length * 15; // 15s per word average
+            let s = 3;
+            if (timeTaken < baseTime * 0.6) s = 5;
+            else if (timeTaken < baseTime * 0.9) s = 4;
+            else if (timeTaken > baseTime * 1.5) s = 2;
+            
+            // Penalty for hints
+            if (hintsUsed.length > 0) s = Math.max(1, s - hintsUsed.length);
+            setStars(s);
+
             if (window.confetti) {
               setTimeout(() => { window.confetti({ particleCount: 200, spread: 160, origin: { y: 0.6 } }); }, 500);
             }
@@ -938,41 +1016,23 @@
                         {wordsToFind.map((w, i) => (
                           <div key={i} className={`text-base font-semibold py-2 px-3 rounded-xl transition-all duration-300 border ${foundWords.some(fw => fw.word === w.word) ? 'text-emerald-300 line-through bg-emerald-50 border-emerald-100' : 'text-brand-700 bg-white border-brand-50 shadow-sm'}`}>{w.word}</div>
                         ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {gameStatus === 'won' && (
+                    {gameStatus === 'won' && (
                   <div className="fixed inset-0 z-[60] bg-brand-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-                    <div className="bg-white rounded-3xl p-10 shadow-2xl max-w-sm w-full text-center anim-scale-in border-4 border-emerald-500">
-                      <div className="text-7xl mb-6">🏆</div>
-                      <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Nivel {currentLevel.id} Superado!</h3>
+                    <div className="bg-white rounded-3xl p-10 shadow-2xl max-w-sm w-full text-center anim-scale-in border border-brand-100">
+                      <div className="text-7xl mb-6">🔍✨</div>
+                      <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Nivel Completado!</h3>
                       
-                      <p className="text-emerald-600 font-bold italic mb-6">
-                        {(() => {
-                          const messages = [
-                            "¡Excelente trabajo! Tu agudeza visual está en plena forma.",
-                            "¡Increíble! Has demostrado una gran concentración.",
-                            "¡Bravo! Estás fortaleciendo tu mente con cada palabra.",
-                            "¡Espectacular! Tu rapidez mental es envidiable.",
-                            "¡Muy bien hecho! Tu atención es excepcional.",
-                            "¡Fantástico! Has dominado este nivel por completo."
-                          ];
-                          return messages[Math.floor(Math.random() * messages.length)];
-                        })()}
-                      </p>
-
-                      <div className="bg-brand-50 rounded-2xl p-4 mb-8">
-                        <p className="text-gray-500 text-sm uppercase font-bold tracking-widest mb-1">Tiempo total</p>
-                        <p className="text-4xl font-bold text-brand-900">{timeElapsed}s</p>
-                      </div>
+                      <StarRating stars={stars} />
                       
-                      <div className="flex flex-col gap-3">
-                        <button onClick={nextLevel} className="w-full py-4 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 shadow-lg transition-all btn-pulse">
+                      <p className="text-xl text-gray-600 mb-6">Has encontrado todo en <span className="font-bold text-brand-700">{timeElapsed}s</span>.</p>
+                      
+                      <ShareButtons game="Sopa de Letras" time={timeElapsed} />
+                      
+                      <div className="flex flex-col gap-3 mt-8">
+                        <button onClick={() => setGameStarted(false)} className="w-full py-3 bg-brand-100 text-brand-700 rounded-xl font-bold hover:bg-brand-200 transition-all">Cambiar Nivel</button>
+                        <button onClick={nextLevel} className="w-full py-4 bg-brand-900 text-white rounded-xl font-bold text-xl hover:bg-brand-800 shadow-lg transition-all btn-pulse">
                           {levelIdx < WORDSEARCH_LEVELS.length - 1 ? 'Siguiente Nivel' : 'Reiniciar Desafío'}
                         </button>
-                        <button onClick={() => setGameStarted(false)} className="w-full py-3 bg-brand-100 text-brand-700 rounded-2xl font-bold hover:bg-brand-200 transition-all">Cambiar nivel</button>
                       </div>
                     </div>
                   </div>
@@ -1005,6 +1065,7 @@
       const [gameStatus, setGameStatus] = useState('playing'); // 'playing', 'finished'
       const [startTime, setStartTime] = useState(Date.now());
       const [totalTime, setTotalTime] = useState(0);
+      const [stars, setStars] = useState(0);
 
       const generateQuestions = useCallback((lvlIdx) => {
         if (!gameStarted) return;
@@ -1066,7 +1127,17 @@
               setFeedback(null);
             } else {
               setGameStatus('finished');
-              setTotalTime(((Date.now() - startTime) / 1000).toFixed(1));
+              const t = ((Date.now() - startTime) / 1000).toFixed(1);
+              setTotalTime(t);
+              
+              // Star logic for Math
+              const baseTime = LEVELS[levelIdx].count * 3; // 3s per question average
+              let s = 3;
+              if (t < baseTime * 0.6) s = 5;
+              else if (t < baseTime * 0.9) s = 4;
+              else if (t > baseTime * 1.5) s = 2;
+              setStars(s);
+
               if (window.confetti) {
                 window.confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
               }
@@ -1174,18 +1245,18 @@
                     <div className="text-center py-8 anim-scale-in">
                       <div className="text-7xl mb-6">🧮✨</div>
                       <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Nivel Completado!</h3>
-                      <p className="text-emerald-600 font-bold italic mb-8">Tu agilidad mental es asombrosa.</p>
                       
-                      <div className="bg-brand-50 rounded-[2rem] p-6 mb-10">
-                        <p className="text-gray-500 text-sm uppercase font-bold tracking-widest mb-1">Tiempo total</p>
-                        <p className="text-5xl font-bold text-brand-900">{totalTime}s</p>
-                      </div>
+                      <StarRating stars={stars} />
                       
-                      <div className="flex flex-col gap-3">
-                        <button onClick={nextLevel} className="w-full py-5 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 shadow-xl transition-all btn-pulse">
+                      <p className="text-xl text-gray-600 mb-6">Has resuelto todo en <span className="font-bold text-brand-700">{totalTime}s</span>.</p>
+                      
+                      <ShareButtons game="Cálculo Mental" time={totalTime} />
+                      
+                      <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
+                        <button onClick={nextLevel} className="px-10 py-5 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 shadow-xl transition-all btn-pulse">
                           {levelIdx < LEVELS.length - 1 ? 'Siguiente Nivel' : 'Reiniciar Desafío'}
                         </button>
-                        <button onClick={() => setGameStarted(false)} className="w-full py-3 bg-brand-100 text-brand-700 rounded-2xl font-bold hover:bg-brand-200 transition-all">Cambiar nivel</button>
+                        <button onClick={() => setGameStarted(false)} className="px-8 py-4 bg-brand-100 text-brand-700 rounded-2xl font-bold text-lg hover:bg-brand-200 transition-all">Cambiar nivel</button>
                       </div>
                     </div>
                   )}
@@ -1206,6 +1277,7 @@
       const [status, setStatus] = React.useState('playing'); // playing, won
       const [startTime, setStartTime] = React.useState(Date.now());
       const [finalTime, setFinalTime] = React.useState(0);
+      const [stars, setStars] = React.useState(0);
       
       // Hint Logic: Show visual cue only after 15 seconds
       const [showHint, setShowHint] = React.useState(false);
@@ -1254,7 +1326,18 @@
         if (num === nextNumber) {
           if (num === currentLevel.count) {
             setStatus('won');
-            setFinalTime(((Date.now() - startTime) / 1000).toFixed(2));
+            const timeTaken = (Date.now() - startTime) / 1000;
+            setFinalTime(timeTaken.toFixed(2));
+            
+            // Star logic for Order
+            const baseTime = currentLevel.count * 1.5; // 1.5s per number average
+            let s = 3;
+            if (timeTaken < baseTime * 0.5) s = 5;
+            else if (timeTaken < baseTime * 0.7) s = 4;
+            else if (timeTaken > baseTime * 1.5) s = 2;
+            setStars(s);
+
+            if (window.confetti) window.confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             if (hintTimerRef.current) clearTimeout(hintTimerRef.current);
           } else {
             setNextNumber(num + 1);
@@ -1321,29 +1404,20 @@
                 />
 
                 {status === 'won' ? (
-                  <div className="bg-white rounded-3xl p-10 shadow-xl anim-scale-in border-2 border-emerald-200">
-                    <div className="text-6xl mb-6">🏆</div>
+                  <div className="bg-white rounded-3xl p-10 shadow-2xl anim-scale-in border border-brand-100 max-w-2xl mx-auto">
+                    <div className="text-6xl mb-6">🏆✨</div>
                     <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Nivel Completado!</h3>
-                    <p className="text-emerald-600 font-bold italic mb-6">
-                      {(() => {
-                        const messages = [
-                          "¡Fantástico! Tu orden y lógica son impecables.",
-                          "¡Muy bien! Estás entrenando tu mente para el éxito.",
-                          "¡Excelente! Tu capacidad de secuencia es asombrosa.",
-                          "¡Bravo! Has mantenido el enfoque perfectamente.",
-                          "¡Genial! Tu velocidad de procesamiento es excelente."
-                        ];
-                        return messages[Math.floor(Math.random() * messages.length)];
-                      })()}
-                    </p>
-                    <div className="bg-brand-50 rounded-2xl p-4 mb-8">
-                      <p className="text-gray-500 text-sm uppercase font-bold tracking-widest mb-1">Tiempo total</p>
-                      <p className="text-4xl font-bold text-brand-900">{finalTime}s</p>
-                    </div>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    
+                    <StarRating stars={stars} />
+                    
+                    <p className="text-xl text-gray-600 mb-6">Has ordenado todo en <span className="font-bold text-brand-700">{finalTime}s</span>.</p>
+                    
+                    <ShareButtons game="Juego de Orden" time={finalTime} />
+                    
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
                       <button onClick={() => setGameStarted(false)} className="px-8 py-3 bg-brand-100 text-brand-700 font-bold rounded-xl hover:bg-brand-200 transition-all">Cambiar Nivel</button>
-                      <button onClick={nextLevel} className="px-8 py-3 bg-brand-600 text-white font-bold rounded-xl hover:bg-brand-700 shadow-lg transition-all btn-pulse">
-                        {levelIndex < ORDER_LEVELS.length - 1 ? 'Siguiente Nivel' : 'Volver al Inicio'}
+                      <button onClick={nextLevel} className="px-8 py-3 bg-brand-900 text-white font-bold rounded-xl hover:bg-brand-800 shadow-lg transition-all btn-pulse">
+                        {levelIndex < ORDER_LEVELS.length - 1 ? 'Siguiente Nivel' : 'Reiniciar Desafío'}
                       </button>
                     </div>
                   </div>
