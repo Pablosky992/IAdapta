@@ -71,8 +71,23 @@
   <!-- Custom styles -->
   <link rel="stylesheet" href="css/styles.css" />
 
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#1A3052" />
+  <link rel="apple-touch-icon" href="games_icon.png" />
+
   <!-- Confetti for the game completion -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('Service Worker registrado'))
+          .catch(err => console.log('Error registrando SW', err));
+      });
+    }
+  </script>
 </head>
 
 <body class="bg-white text-gray-900 antialiased">
@@ -259,9 +274,14 @@
 
       if (isTeaser) {
         return (
-          <section id="cognitive" className="py-24 px-4 bg-white">
+          <section id="cognitive" className={`py-24 px-4 bg-white ${isStandalone ? 'pt-32' : ''}`}>
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-16">
+                {isStandalone && (
+                  <div className="mb-12 flex justify-center">
+                    <img src="assets/iadapta_logo.png" alt="IAdapta" className="h-16 object-contain" />
+                  </div>
+                )}
                 <span className="inline-block bg-brand-100 text-brand-700 rounded-full px-5 py-2 text-base font-bold uppercase tracking-widest mb-4">Entrena tu Mente</span>
                 <h2 className="font-display text-4xl sm:text-5xl font-bold text-brand-900 mb-6">Estimulación Cognitiva: Entrena tu Mente</h2>
                 <div className="section-divider w-24 mx-auto mb-8"></div>
@@ -386,15 +406,17 @@
                 </div>
 
                 {/* Consejo de la TO */}
-                <div className="bg-emerald-50 border-l-4 border-emerald-500 p-8 rounded-r-3xl shadow-sm text-left max-w-3xl mx-auto">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-3xl">💡</span>
-                    <h4 className="font-display text-xl font-bold text-emerald-800 uppercase tracking-wide">El Consejo del Terapeuta Ocupacional</h4>
+                {!isStandalone && (
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-8 rounded-r-3xl shadow-sm text-left max-w-3xl mx-auto">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="text-3xl">💡</span>
+                      <h4 className="font-display text-xl font-bold text-emerald-800 uppercase tracking-wide">El Consejo del Terapeuta Ocupacional</h4>
+                    </div>
+                    <p className="text-emerald-900 italic text-xl leading-relaxed">
+                      "El cerebro se fortalece con la novedad. No te limites a lo que ya dominas: intenta aprender algo nuevo cada día, por pequeño que sea. El aprendizaje continuo es la mejor herramienta para mantener una mente joven y resiliente."
+                    </p>
                   </div>
-                  <p className="text-emerald-900 italic text-xl leading-relaxed">
-                    "El cerebro se fortalece con la novedad. No te limites a lo que ya dominas: intenta aprender algo nuevo cada día, por pequeño que sea. El aprendizaje continuo es la mejor herramienta para mantener una mente joven y resiliente."
-                  </p>
-                </div>
+                )}
               </div>
             </div>
           </section>
@@ -3278,6 +3300,12 @@
           setCurrentPage('math');
         } else if (pageParam === 'analyzer') {
           setCurrentPage('analyzer');
+        } else if (pageParam === 'games') {
+          setCurrentPage('main'); // We will use main but with a filter if needed, or a new page
+          setTimeout(() => {
+            const el = document.getElementById('cognitive');
+            if (el) el.scrollIntoView({ behavior: 'instant' });
+          }, 0);
         }
 
         if (currentPage !== 'main') return;
@@ -3308,7 +3336,7 @@
 
       const params = new URLSearchParams(window.location.search);
       const pageParam = params.get('page');
-      const isStandalone = pageParam === 'memory' || pageParam === 'order' || pageParam === 'wordsearch' || pageParam === 'analyzer';
+      const isStandalone = pageParam === 'memory' || pageParam === 'order' || pageParam === 'wordsearch' || pageParam === 'analyzer' || pageParam === 'games';
 
       return (
         <>
@@ -3316,17 +3344,19 @@
           <main id="main-content">
             {currentPage === 'main' && (
               <>
-                <SectionHome scrollTo={scrollTo} navigateTo={navigateTo} />
-                <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>
-                <SectionAnalyzer isTeaser={true} isStandalone={false} />
-                <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>
-                <SectionGuides />
-                <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>
-                <SectionCognitive isTeaser={true} navigateTo={navigateTo} />
-                <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>
-                <SectionAbout navigateTo={navigateTo} />
-                <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>
-                <SectionContact />
+                {!isStandalone && <SectionHome scrollTo={scrollTo} navigateTo={navigateTo} />}
+                {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
+                {!isStandalone && <SectionAnalyzer isTeaser={true} isStandalone={false} />}
+                {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
+                {!isStandalone && <SectionGuides />}
+                {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
+                
+                <SectionCognitive isTeaser={true} navigateTo={navigateTo} isStandalone={isStandalone} />
+                
+                {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
+                {!isStandalone && <SectionAbout navigateTo={navigateTo} />}
+                {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
+                {!isStandalone && <SectionContact />}
               </>
             )}
             {currentPage === 'cv' && (
