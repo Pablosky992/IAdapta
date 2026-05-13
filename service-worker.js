@@ -1,16 +1,22 @@
-const CACHE_NAME = 'iadapta-juegos-v1';
+const CACHE_NAME = 'iadapta-v2'; // Changed to trigger update
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/css/styles.css',
-  '/games_icon.png',
-  '/memory_game_thumbnail.png',
-  '/order_game_thumbnail.png',
-  '/word_search_thumbnail.png',
-  '/mental_math_thumbnail.png'
+  './',
+  './index.html',
+  './css/styles.css',
+  './catalogData.js',
+  './games_icon.png',
+  './pro_resources_icon.png',
+  './manifest.json',
+  './manifest_pro.json',
+  './memory_game_thumbnail.png',
+  './order_game_thumbnail.png',
+  './word_search_thumbnail.png',
+  './mental_math_thumbnail.png'
 ];
 
+// Install: Cache essential assets
 self.addEventListener('install', (event) => {
+  self.skipWaiting(); // Force the new SW to take control immediately
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS);
@@ -18,10 +24,42 @@ self.addEventListener('install', (event) => {
   );
 });
 
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
+// Activate: Clean up old caches
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((name) => {
+          if (name !== CACHE_NAME) {
+            return caches.delete(name);
+          }
+        })
+      );
     })
   );
+});
+
+// Fetch: Network-first for HTML/JS (to get updates), Cache-first for images
+self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+  
+  // Strategy: Network-first for HTML and scripts to ensure latest data
+  if (event.request.mode === 'navigate' || url.pathname.endsWith('.js') || url.pathname.endsWith('.json')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          return response;
+        })
+        .catch(() => caches.match(event.request))
+    );
+  } else {
+    // Strategy: Cache-first for images and styles
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        return response || fetch(event.request);
+      })
+    );
+  }
 });

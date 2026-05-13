@@ -71,10 +71,16 @@
   <!-- Custom styles -->
   <link rel="stylesheet" href="css/styles.css" />
 
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="manifest.json" />
+  <!-- PWA Manifest Selection -->
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const pageType = urlParams.get('page');
+    const manifestFile = pageType === 'resources' ? 'manifest_pro.json' : 'manifest.json';
+    document.write(`<link rel="manifest" href="${manifestFile}">`);
+    const iconFile = pageType === 'resources' ? 'pro_resources_icon.png' : 'games_icon.png';
+    document.write(`<link rel="apple-touch-icon" href="${iconFile}">`);
+  </script>
   <meta name="theme-color" content="#1A3052" />
-  <link rel="apple-touch-icon" href="games_icon.png" />
 
   <!-- Confetti for the game completion -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -168,6 +174,7 @@
       FileText: () => <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>,
       Timer: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
       Refresh: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>,
+      Briefcase: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M20.25 14.15v4.25c0 .621-.504 1.125-1.125 1.125H4.875c-.621 0-1.125-.504-1.125-1.125v-4.25m16.5 0a2.25 2.25 0 00-1.883-2.212c-3.13-.51-6.947-.51-10.084 0A2.25 2.25 0 003.75 14.15m16.5 0a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5m16.5 0v-2.625c0-1.104-.896-2-2-2H5.25c-1.104 0-2 .896-2 2v2.625m16.5 0V9a2.25 2.25 0 00-2.25-2.25H16.5m0 0V4.875c0-.621-.504-1.125-1.125-1.125H8.625c-.621 0-1.125.504-1.125 1.125V6.75m8.25 0h-8.25m8.25 0v-1.125c0-.621-.504-1.125-1.125-1.125H8.625c-.621 0-1.125.504-1.125 1.125V6.75m0 0H5.25a2.25 2.25 0 00-2.25 2.25v2.625" /></svg>,
       // Game Icons
       Keys: () => <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3L15.5 7.5z" /></svg>,
       Smartphone: () => <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /><path d="M12 18h.01" /></svg>,
@@ -341,7 +348,7 @@
                 <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-10 mb-16">
                   {/* Game 1 Teaser */}
                   <div 
-                    onClick={() => openStandalone('memory')}
+                    onClick={() => navigateTo('memory')}
                     className="bg-white rounded-[2.5rem] overflow-hidden border border-brand-50 shadow-xl hover:shadow-2xl transition-all group flex flex-col cursor-pointer"
                   >
                     <div className="relative h-56 overflow-hidden">
@@ -368,7 +375,7 @@
 
                   {/* Game 2 Teaser */}
                   <div 
-                    onClick={() => openStandalone('order')}
+                    onClick={() => navigateTo('order')}
                     className="bg-white rounded-[2.5rem] overflow-hidden border border-sky-50 shadow-xl hover:shadow-2xl transition-all group flex flex-col cursor-pointer"
                   >
                     <div className="relative h-56 overflow-hidden">
@@ -395,7 +402,7 @@
 
                   {/* Game 3 Teaser */}
                   <div 
-                    onClick={() => openStandalone('wordsearch')}
+                    onClick={() => navigateTo('wordsearch')}
                     className="bg-white rounded-[2.5rem] overflow-hidden border border-emerald-50 shadow-xl hover:shadow-2xl transition-all group flex flex-col cursor-pointer"
                   >
                     <div className="relative h-56 overflow-hidden">
@@ -422,7 +429,7 @@
 
                   {/* Game 4 Teaser */}
                   <div 
-                    onClick={() => openStandalone('math')}
+                    onClick={() => navigateTo('math')}
                     className="bg-white rounded-[2.5rem] overflow-hidden border border-amber-50 shadow-xl hover:shadow-2xl transition-all group flex flex-col cursor-pointer"
                   >
                     <div className="relative h-56 overflow-hidden">
@@ -1253,7 +1260,33 @@
             <div className="text-center mb-16">
               <span className="inline-block bg-brand-100 text-brand-700 rounded-full px-5 py-2 text-base font-bold uppercase tracking-widest mb-4">Área del Profesional</span>
               <h2 className="font-display text-4xl sm:text-5xl font-bold text-brand-900 mb-6">Recursos para Profesionales</h2>
-              <div className="section-divider w-24 mx-auto"></div>
+              <div className="section-divider w-24 mx-auto mb-8"></div>
+              
+              <div className="mb-12">
+                <button 
+                  onClick={() => {
+                    if (window.deferredPrompt) {
+                      window.deferredPrompt.prompt();
+                      window.deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                          console.log('User accepted the Pro install prompt');
+                        }
+                        window.deferredPrompt = null;
+                      });
+                    } else {
+                      alert("Para instalar la App de Recursos, pulsa en el menú de tu navegador (los tres puntos o compartir) y selecciona 'Instalar aplicación' o 'Añadir a pantalla de inicio'.");
+                    }
+                  }}
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 transition-all shadow-xl shadow-brand-900/20 hover:scale-105 active:scale-95 group"
+                >
+                  <div className="bg-white/10 p-2 rounded-xl">
+                    <Icons.Download />
+                  </div>
+                  <span>Descargar App de Recursos</span>
+                  <Icons.Briefcase className="w-6 h-6" />
+                </button>
+                <p className="mt-4 text-sm text-gray-400">Instala 'IAdapta: Recursos Profesionales' para un acceso directo desde tu móvil</p>
+              </div>
             </div>
 
             {/* TOOL 1: Math PDF Generator */}
@@ -1477,14 +1510,24 @@
       const linksMain = [
         { id: 'home', label: 'Inicio' },
         { id: 'analyzer', label: 'Analizador IA' },
-        { id: 'guides', label: 'Guías' },
+        { id: 'guides', label: 'Guías de adaptación' },
         { id: 'cognitive', label: 'Área Cognitiva' },
-        { id: 'resources', label: 'Recursos' },
+        { id: 'resources', label: 'Recursos para profesionales' },
         { id: 'about', label: 'Sobre Mí' },
         { id: 'contact', label: 'Contacto' },
       ];
 
       const handle = (id) => {
+        if (id === 'home') {
+          navigateTo('main');
+          return;
+        }
+        if (id === 'resources' || id === 'analyzer' || id === 'cognitive' || id === 'guides') {
+          navigateTo(id);
+          setMenuOpen(false);
+          return;
+        }
+        
         if (currentPage !== 'main') {
           navigateTo('main');
           setTimeout(() => scrollTo(id), 100);
@@ -1616,31 +1659,31 @@
           id: 'analyzer', icon: <Icons.Brain />, color: 'bg-sky-100 text-sky-600', badge: 'Inteligencia Artificial',
           title: 'Analizador de Accesibilidad', desc: 'Introduce las características de tu hogar o espacio y evaluaremos las barreras arquitectónicas.', cta: 'Analizar espacio',
           img: 'ai_analyzer_thumbnail.png',
-          action: () => scrollTo('analyzer')
+          action: () => navigateTo('analyzer')
         },
         {
           id: 'guides', icon: <Icons.Book />, color: 'bg-indigo-100 text-indigo-600', badge: 'Recursos',
           title: 'Guías de Adaptación', desc: 'Consejos prácticos para facilitar la vida diaria, prevención de caídas y adaptaciones del hogar.', cta: 'Explorar guías',
           img: 'adaptation_guides_thumbnail.png',
-          action: () => scrollTo('guides')
+          action: () => navigateTo('guides')
         },
         {
           id: 'cognitive', icon: <Icons.Puzzle />, color: 'bg-emerald-100 text-emerald-600', badge: 'Entrenamiento Mental',
           title: 'Ejercicios Mentales', desc: 'Ejercicios prácticos de memoria y atención diseñados para fortalecer tu agilidad mental diaria.', cta: 'Entrenar ahora',
           img: 'mental_exercises_thumbnail.png',
-          action: () => scrollTo('cognitive')
+          action: () => navigateTo('cognitive')
         },
         {
           id: 'resources', icon: <Icons.FilePdf />, color: 'bg-rose-100 text-rose-600', badge: 'Área Profesional',
           title: 'Recursos para Profesionales', desc: 'Herramientas y materiales descargables diseñados para facilitar la práctica clínica diaria.', cta: 'Ver recursos',
           img: 'resources_bg.png',
-          action: () => scrollTo('resources')
+          action: () => navigateTo('resources')
         },
         {
           id: 'cv', icon: <Icons.FileText />, color: 'bg-blue-100 text-blue-600', badge: 'Perfil Profesional',
-          title: 'Mi Trayectoria', desc: 'Conoce mi formación, experiencia clínica en geriatría y ortopedia, y competencias en impresión 3D.', cta: 'Ver CV',
+          title: 'Mi Trayectoria', desc: 'Conoce mi formación, experiencia clínica en geriatría y ortopedia, y competencias en impresión 3D.', cta: 'Saber más',
           img: 'cv_trayectoria_thumbnail_ot.png',
-          action: () => navigateTo('cv')
+          action: () => scrollTo('about')
         },
       ];
 
@@ -3696,17 +3739,6 @@
               <>
                 {!isStandalone && <SectionHome scrollTo={scrollTo} navigateTo={navigateTo} />}
                 {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
-                {!isStandalone && <SectionAnalyzer isTeaser={true} isStandalone={false} />}
-                {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
-                {!isStandalone && <SectionGuides />}
-                {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
-                
-                <SectionCognitive isTeaser={true} navigateTo={navigateTo} isStandalone={isStandalone} />
-                
-                {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
-                {!isStandalone && <SectionResources />}
-                
-                {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
                 {!isStandalone && <SectionAbout navigateTo={navigateTo} />}
                 {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
                 {!isStandalone && <SectionContact />}
@@ -3716,6 +3748,15 @@
               <SectionCV />
             )}
             {currentPage === 'cognitive' && (
+              <SectionCognitive isTeaser={true} navigateTo={navigateTo} isStandalone={isStandalone} />
+            )}
+            {currentPage === 'guides' && (
+              <SectionGuides />
+            )}
+            {currentPage === 'resources' && (
+              <SectionResources />
+            )}
+            {currentPage === 'memory' && (
               <SectionCognitive isTeaser={false} navigateTo={navigateTo} isStandalone={isStandalone} />
             )}
             {currentPage === 'order' && (
