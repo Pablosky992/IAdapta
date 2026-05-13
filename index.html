@@ -3687,7 +3687,7 @@
           setCurrentPage('main');
         } else if (pageParam === 'resources') {
           setCurrentPage('resources');
-        } else if (pageParam === 'cognitive') {
+        } else if (pageParam === 'cognitive' || pageParam === 'games') {
           setCurrentPage('cognitive');
         } else if (pageParam === 'memory') {
           setCurrentPage('memory');
@@ -3702,7 +3702,9 @@
         } else if (pageParam === 'cv') {
           setCurrentPage('cv');
         }
+      }, []); // Solo al montar la app
 
+      useEffect(() => {
         if (currentPage !== 'main') return;
         const sections = ['home', 'analyzer', 'guides', 'cognitive', 'resources', 'about', 'contact'];
         const onScroll = () => {
@@ -3726,7 +3728,7 @@
 
       const navigateTo = useCallback((page) => {
         // If switching between major "App" views, force reload to swap manifest and trigger PWA prompt
-        if (page === 'main' || page === 'resources' || page === 'cognitive') {
+        if (page === 'main' || page === 'resources' || page === 'cognitive' || page === 'games') {
           const baseUrl = window.location.href.split('?')[0];
           window.location.href = `${baseUrl}?page=${page === 'main' ? 'home' : page}`;
           return;
