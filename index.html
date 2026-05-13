@@ -130,7 +130,7 @@
     /* ============================================================
        APP BUNDLE - React Components
        ============================================================ */
-    const { useState, useEffect, useCallback, useRef } = React;
+    const { useState, useEffect, useCallback, useRef, useMemo } = React;
 
     // --- ICONS ---
     window.Icons = {
@@ -1016,7 +1016,12 @@
                         {wordsToFind.map((w, i) => (
                           <div key={i} className={`text-base font-semibold py-2 px-3 rounded-xl transition-all duration-300 border ${foundWords.some(fw => fw.word === w.word) ? 'text-emerald-300 line-through bg-emerald-50 border-emerald-100' : 'text-brand-700 bg-white border-brand-50 shadow-sm'}`}>{w.word}</div>
                         ))}
-                    {gameStatus === 'won' && (
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {gameStatus === 'won' && (
                   <div className="fixed inset-0 z-[60] bg-brand-900/40 backdrop-blur-sm flex items-center justify-center p-4">
                     <div className="bg-white rounded-3xl p-10 shadow-2xl max-w-sm w-full text-center anim-scale-in border border-brand-100">
                       <div className="text-7xl mb-6">🔍✨</div>
