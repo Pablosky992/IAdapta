@@ -8,6 +8,20 @@
     content="IAdapta - Terapia Ocupacional especializada en adaptación del entorno, accesibilidad y autonomía personal para personas mayores y con discapacidad." />
   <title>IAdapta | Terapia Ocupacional y Accesibilidad</title>
 
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://iadapta.es/" />
+  <meta property="og:title" content="IAdapta | Gimnasio Cerebral y Accesibilidad" />
+  <meta property="og:description" content="Entrena tu mente con nuestros juegos cognitivos y mejora tu autonomía con IAdapta." />
+  <meta property="og:image" content="https://iadapta.es/daily_challenge_banner.png" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://iadapta.es/" />
+  <meta property="twitter:title" content="IAdapta | Gimnasio Cerebral" />
+  <meta property="twitter:description" content="Supera retos diarios y mejora tu agudeza mental." />
+  <meta property="twitter:image" content="https://iadapta.es/daily_challenge_banner.png" />
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -201,6 +215,10 @@
       Twitter: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M23.95 4.57a10 10 0 01-2.82.77 4.96 4.96 0 002.16-2.72 9.9 9.9 0 01-3.13 1.2 4.93 4.93 0 00-8.39 4.49A14 14 0 011.64 3.16 4.93 4.93 0 003.16 9.7a4.89 4.89 0 01-2.22-.61v.06a4.93 4.93 0 003.95 4.83 4.9 4.9 0 01-2.22.08 4.93 4.93 0 004.6 3.42A9.9 9.9 0 010 19.54a13.94 13.94 0 007.55 2.21c9.06 0 14-7.5 14-14 0-.21 0-.42-.01-.63a10 10 0 002.41-2.55z"/></svg>,
       Calculator: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><rect x="4" y="2" width="16" height="20" rx="2" /><line x1="8" y1="6" x2="16" y2="6" /><line x1="8" y1="10" x2="8" y2="10" /><line x1="12" y1="10" x2="12" y2="10" /><line x1="16" y1="10" x2="16" y2="10" /><line x1="8" y1="14" x2="8" y2="14" /><line x1="12" y1="14" x2="12" y2="14" /><line x1="16" y1="14" x2="16" y2="14" /><line x1="8" y1="18" x2="8" y2="18" /><line x1="12" y1="18" x2="12" y2="18" /><line x1="16" y1="18" x2="16" y2="18" /></svg>,
       ArrowLeft: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>,
+      Calendar: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>,
+      Flame: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3 1.05.76 3 2.5 3 5.5a4.5 4.5 0 11-9 0c0-1.5.5-3 2-4.5.5 2 1.5 3 2.5 4.5z" /></svg>,
+      CheckCircle: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+      WhatsApp: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.484 8.412-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.309 1.656zm6.29-4.139c1.52.907 3.21 1.385 4.94 1.386 5.289 0 9.591-4.301 9.593-9.592 0-2.565-1.001-4.975-2.816-6.793-1.815-1.818-4.225-2.82-6.793-2.821-5.293 0-9.596 4.301-9.598 9.592 0 1.942.585 3.835 1.691 5.433l-1.011 3.691 3.784-.992zm11.702-6.877c-.313-.156-1.854-.914-2.141-1.019-.287-.104-.497-.156-.705.156-.208.312-.806 1.019-.987 1.227-.181.209-.362.235-.675.079-.313-.156-1.32-.486-2.515-1.552-.929-.828-1.556-1.852-1.738-2.165-.181-.313-.019-.482.137-.638.141-.141.313-.365.47-.547.157-.183.209-.313.313-.522.104-.21.053-.392-.026-.548-.078-.156-.705-1.7-.966-2.324-.254-.608-.512-.525-.705-.535-.183-.01-.391-.012-.6-.012s-.547.078-.834.392c-.287.313-1.096 1.071-1.096 2.612 0 1.541 1.121 3.029 1.277 3.238.156.209 2.207 3.371 5.348 4.73.747.323 1.329.516 1.783.661.75.238 1.433.204 1.973.124.602-.089 1.854-.757 2.115-1.487.261-.73.261-1.356.183-1.487-.078-.131-.287-.209-.6-.365z"/></svg>,
     };
 
     // --- REUSABLE GAME HEADER ---
@@ -257,25 +275,40 @@
     };
 
     window.ShareButtons = function ShareButtons({ game, score, time }) {
-      const text = `¡He superado el nivel en ${game}! ${score ? `Puntuación: ${score}. ` : ''}${time ? `Tiempo: ${time}s. ` : ''}Entrena tu mente en iadapta.es 🧠✨`;
-      const url = window.location.href.split('?')[0];
+      const motivationalText = score && score.includes('racha') ? '🔥 ¡Mi cerebro está que arde!' : '🧠 ¡Entrenando mi agudeza mental!';
+      const text = `🏆 ${motivationalText}\n\nHe superado el ${game}\n✨ ${score || '¡Objetivo conseguido!'}\n⏱️ Tiempo: ${time ? `${time}s` : '---'}\n\nEntrena tú también en:`;
+      
+      // Use production URL as fallback for local testing to avoid Facebook errors
+      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
+      const url = isLocal ? 'https://iadapta.es' : window.location.href.split('?')[0];
       
       const shareTwitter = () => {
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+        const twitterText = `${text} ${url}`;
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(twitterText)}`, '_blank');
       };
       
       const shareFacebook = () => {
+        // Note: Facebook ignores the 'quote' parameter for most URLs now. 
+        // The description and image must be set via <meta> OG tags in the HTML.
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`, '_blank');
+      };
+
+      const shareWhatsApp = () => {
+        const waText = `${text} ${url}`;
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(waText)}`, '_blank');
       };
       
       return (
         <div className="flex flex-col items-center gap-4 mt-8 pt-8 border-t border-brand-100">
           <p className="text-sm font-bold text-brand-400 uppercase tracking-widest">Compartir resultado</p>
           <div className="flex gap-4">
-            <button onClick={shareTwitter} className="w-12 h-12 bg-[#1DA1F2] text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+            <button onClick={shareWhatsApp} title="Compartir en WhatsApp" className="w-12 h-12 bg-[#25D366] text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+              <Icons.WhatsApp className="w-6 h-6" />
+            </button>
+            <button onClick={shareTwitter} title="Compartir en Twitter" className="w-12 h-12 bg-[#1DA1F2] text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
               <Icons.Twitter className="w-6 h-6" />
             </button>
-            <button onClick={shareFacebook} className="w-12 h-12 bg-[#4267B2] text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+            <button onClick={shareFacebook} title="Compartir en Facebook" className="w-12 h-12 bg-[#4267B2] text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
               <Icons.Facebook className="w-6 h-6" />
             </button>
           </div>
@@ -299,6 +332,30 @@
       const [startTime, setStartTime] = useState(0);
       const [finalTime, setFinalTime] = useState(0);
       const [stars, setStars] = useState(0);
+
+      const weekDays = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
+      const weekDates = useMemo(() => {
+        const now = new Date();
+        const day = now.getDay();
+        const diff = now.getDate() - (day === 0 ? 6 : day - 1);
+        const monday = new Date(now.setDate(diff));
+        return Array.from({ length: 7 }, (_, i) => {
+          const d = new Date(monday);
+          d.setDate(monday.getDate() + i);
+          return d.toISOString().split('T')[0];
+        });
+      }, []);
+
+      const [history, setHistory] = useState([]);
+      useEffect(() => {
+        const h = JSON.parse(localStorage.getItem('daily_challenge_history') || '[]');
+        const last = localStorage.getItem('daily_challenge_last_date');
+        if (h.length === 0 && last) {
+          h.push(last);
+          localStorage.setItem('daily_challenge_history', JSON.stringify(h));
+        }
+        setHistory(h);
+      }, []);
 
       const icons = ['🧠', '💡', '🌟', '🧩', '🚀', '🌈', '💎', '🎨', '🍎', '⚽', '🎸', '🍦', '🏠'];
 
@@ -430,7 +487,58 @@
                   </div>
                 )}
 
-                <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-10 mb-16">
+                {/* HORIZONTAL DAILY CHALLENGE CARD */}
+                <div 
+                  onClick={() => navigateTo('challenge')}
+                  className="bg-white rounded-[2.5rem] overflow-hidden shadow-2xl border border-brand-100 flex flex-col md:flex-row mb-16 cursor-pointer group hover:shadow-brand-900/10 transition-all hover:-translate-y-1 duration-500 text-left"
+                >
+                  <div className="md:w-1/3 h-48 md:h-auto relative overflow-hidden">
+                    <img src="daily_challenge_banner.png" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt="Reto Diario" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-white/10"></div>
+                  </div>
+                  <div className="flex-1 p-8 md:p-10 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-3 mb-4">
+                         <div className="w-10 h-10 bg-accent-coral text-white rounded-xl flex items-center justify-center shadow-lg">
+                           <Icons.Flame className="w-6 h-6" />
+                         </div>
+                         <div className="flex flex-col">
+                           <span className="text-brand-400 font-bold uppercase tracking-widest text-[10px] leading-tight">Desafío Diario</span>
+                           <span className="text-accent-coral font-bold text-xs">{history.length > 0 ? `${localStorage.getItem('daily_challenge_streak') || 0} días de racha` : '¡Empieza hoy!'}</span>
+                         </div>
+                      </div>
+                      <h3 className="font-display text-3xl font-bold text-brand-900 mb-3">Reto Diario IAdapta</h3>
+                      <p className="text-gray-600 text-lg mb-8 max-w-xl">Supera 3 juegos rápidos cada día para mantener tu racha y fortalecer tu mente. ¡La dificultad sube cada día!</p>
+                    </div>
+                    
+                    <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6">
+                      <div className="flex gap-2">
+                        {weekDays.map((day, i) => {
+                          const isCompleted = history.includes(weekDates[i]);
+                          const isToday = weekDates[i] === new Date().toISOString().split('T')[0];
+                          return (
+                            <div key={i} className="flex flex-col items-center gap-1">
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs transition-all shadow-sm
+                                ${isCompleted ? 'bg-emerald-500 text-white shadow-emerald-500/20' : isToday ? 'bg-brand-900 text-white ring-4 ring-brand-100' : 'bg-brand-50 text-brand-300'}`}>
+                                {isCompleted ? <Icons.Check className="w-5 h-5" /> : day}
+                              </div>
+                              <span className={`text-[10px] font-bold ${isToday ? 'text-brand-900' : 'text-brand-400'}`}>{day}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="lg:ml-auto">
+                         <button className="px-8 py-3 bg-brand-900 text-white rounded-xl font-bold flex items-center gap-2 group-hover:bg-accent-coral transition-colors shadow-lg">
+                           <span>Empezar Desafío</span>
+                           <Icons.ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                         </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-10 mb-16">
+
                   {/* Game 1 Teaser */}
                   <div 
                     onClick={() => navigateTo('memory')}
@@ -533,6 +641,33 @@
                         Desafía tu agilidad numérica con operaciones rápidas diseñadas para mantener tu mente activa y precisa.
                       </p>
                       <button className="w-full py-4 bg-amber-900 text-white rounded-2xl font-bold text-lg group-hover:bg-amber-800 transition-all flex items-center justify-center gap-3 shadow-lg shadow-amber-900/20">
+                        Jugar ahora
+                        <Icons.ArrowRight />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Game 5 Teaser */}
+                  <div 
+                    onClick={() => navigateTo('visual')}
+                    className="bg-white rounded-[2.5rem] overflow-hidden border border-brand-50 shadow-xl hover:shadow-2xl transition-all group flex flex-col cursor-pointer"
+                  >
+                    <div className="relative h-56 overflow-hidden">
+                      <img src="visual_game_thumbnail.png" alt="Agudeza Visual" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-900/60 to-transparent"></div>
+                      <div className="absolute bottom-4 left-6 flex items-center gap-3">
+                        <div className="w-12 h-12 bg-indigo-600 text-white rounded-xl flex items-center justify-center text-2xl shadow-lg border border-indigo-400/30">
+                          <Icons.Search />
+                        </div>
+                        <span className="text-white font-bold text-lg">Agudeza</span>
+                      </div>
+                    </div>
+                    <div className="p-8 flex flex-col flex-1">
+                      <h3 className="font-display text-2xl font-bold text-brand-900 mb-4">Agudeza Visual</h3>
+                      <p className="text-gray-600 text-lg mb-8 flex-1 leading-relaxed">
+                        Entrena tu velocidad de procesamiento y atención selectiva encontrando el elemento discordante.
+                      </p>
+                      <button className="w-full py-4 bg-indigo-900 text-white rounded-2xl font-bold text-lg group-hover:bg-indigo-800 transition-all flex items-center justify-center gap-3 shadow-lg shadow-indigo-900/20">
                         Jugar ahora
                         <Icons.ArrowRight />
                       </button>
@@ -686,6 +821,15 @@
       { id: 3, name: 'Difícil', rows: 15, cols: 10, wordCount: 14, directions: [0, 1, 2, 3, 4], hints: 1 },
       { id: 4, name: 'Muy Difícil', rows: 18, cols: 12, wordCount: 18, directions: [0, 1, 2, 3, 4, 5, 6, 7], hints: 1 },
       { id: 5, name: '¿Imposible?', rows: 20, cols: 12, wordCount: 22, directions: [0, 1, 2, 3, 4, 5, 6, 7], hints: 2 }
+    ];
+
+    // --- LEVELS CONFIG FOR VISUAL GAME ---
+    const VISUAL_LEVELS = [
+      { id: 1, name: 'Básico', size: 5, target: 'A', base: 'V', rounds: 5 },
+      { id: 2, name: 'Intermedio', size: 7, target: 'Q', base: 'O', rounds: 5 },
+      { id: 3, name: 'Avanzado', size: 9, target: 'F', base: 'E', rounds: 8 },
+      { id: 4, name: 'Experto', size: 11, target: 'M', base: 'N', rounds: 10 },
+      { id: 5, name: 'Maestro', size: 13, target: 'l', base: 'I', rounds: 12 }
     ];
 
     // --- SECTION WORD SEARCH GAME ---
@@ -1453,8 +1597,645 @@
       );
     };
 
+    // --- SECTION DAILY CHALLENGE ---
+    window.SectionDailyChallenge = function SectionDailyChallenge({ isStandalone, navigateTo }) {
+      const { useState, useEffect, useCallback, useMemo, useRef } = React;
+      
+      const [step, setStep] = useState(0); // 0: Start, 1: Game1, 2: Game2, 3: Game3, 4: Finished
+      const [streak, setStreak] = useState(0);
+      const [alreadyDoneToday, setAlreadyDoneToday] = useState(false);
+      const [startTime, setStartTime] = useState(0);
+      const [totalTime, setTotalTime] = useState(0);
+
+      // Difficulty factor: 1 (Mon) to 7 (Sun)
+      const difficultyFactor = useMemo(() => {
+        const d = new Date().getDay();
+        return ((d + 6) % 7) + 1;
+      }, []);
+
+      useEffect(() => {
+        const lastDate = localStorage.getItem('daily_challenge_last_date');
+        const currentStreak = parseInt(localStorage.getItem('daily_challenge_streak') || '0');
+        const todayStr = new Date().toISOString().split('T')[0];
+        
+        setStreak(currentStreak);
+        if (lastDate === todayStr) {
+          setAlreadyDoneToday(true);
+        }
+      }, []);
+
+      const completeChallenge = () => {
+        const todayStr = new Date().toISOString().split('T')[0];
+        const lastDate = localStorage.getItem('daily_challenge_last_date');
+        let newStreak = streak;
+
+        if (lastDate !== todayStr) {
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          const yesterdayStr = yesterday.toISOString().split('T')[0];
+          
+          if (lastDate === yesterdayStr) {
+            newStreak += 1;
+          } else {
+            newStreak = 1;
+          }
+          
+          localStorage.setItem('daily_challenge_last_date', todayStr);
+          localStorage.setItem('daily_challenge_streak', newStreak.toString());
+          
+          // Track history for the week tracker
+          const history = JSON.parse(localStorage.getItem('daily_challenge_history') || '[]');
+          if (!history.includes(todayStr)) {
+            history.push(todayStr);
+            localStorage.setItem('daily_challenge_history', JSON.stringify(history));
+          }
+          
+          setStreak(newStreak);
+          setAlreadyDoneToday(true);
+        }
+        
+        setTotalTime(((Date.now() - startTime) / 1000).toFixed(0));
+        setStep(4);
+        if (window.confetti) {
+          window.confetti({ particleCount: 200, spread: 160, origin: { y: 0.6 } });
+          
+          // Extra celebration for milestones
+          if (newStreak >= 7) {
+            setTimeout(() => {
+              window.confetti({ 
+                particleCount: 300, 
+                spread: 200, 
+                origin: { y: 0.5 }, 
+                colors: ['#E87D55', '#1A3052', '#FFD700'] 
+              });
+            }, 800);
+          }
+          if (newStreak >= 30) {
+            setTimeout(() => {
+              window.confetti({ 
+                particleCount: 500, 
+                spread: 360, 
+                scalar: 2,
+                origin: { y: 0.4 }
+              });
+            }, 1600);
+          }
+        }
+      };
+
+      const startChallenge = () => {
+        setStep(1);
+        setStartTime(Date.now());
+      };
+
+      // Game 1: Mini Math
+      const MathSubGame = ({ onComplete }) => {
+        const [qIdx, setQIdx] = useState(0);
+        const [ans, setAns] = useState('');
+        const [feedback, setFeedback] = useState(null);
+        const count = 5 + Math.floor(difficultyFactor / 2);
+        const range = difficultyFactor * 10;
+        
+        const qData = useMemo(() => {
+          const qs = [];
+          for(let i=0; i<count; i++){
+            const a = Math.floor(Math.random() * range) + 1;
+            const b = Math.floor(Math.random() * range) + 1;
+            qs.push({ q: `${a} + ${b}`, a: a + b });
+          }
+          return qs;
+        }, [count, range]);
+
+        const submit = (e) => {
+          if(e) e.preventDefault();
+          if(parseInt(ans) === qData[qIdx].a) {
+            setFeedback('correct');
+            setTimeout(() => {
+              if(qIdx < count - 1) {
+                setQIdx(qIdx + 1);
+                setAns('');
+                setFeedback(null);
+              } else onComplete();
+            }, 600);
+          } else {
+            setFeedback('wrong');
+            setTimeout(() => setFeedback(null), 800);
+          }
+        };
+
+        return (
+          <div className="bg-white rounded-[3rem] p-10 shadow-2xl border-8 border-brand-100 anim-scale-in max-w-lg mx-auto w-full text-center">
+            <span className="text-brand-400 font-bold uppercase tracking-widest text-sm mb-4 block">Reto: Cálculo</span>
+            <div className="text-6xl font-bold text-brand-900 mb-8 py-4">{qData[qIdx].q}</div>
+            <form onSubmit={submit}>
+              <input type="number" autoFocus value={ans} onChange={e => setAns(e.target.value)} placeholder="?" 
+                className={`w-full text-center text-4xl font-bold py-4 rounded-2xl border-4 transition-all focus:outline-none ${feedback === 'correct' ? 'border-emerald-500 bg-emerald-50' : feedback === 'wrong' ? 'border-red-500 bg-red-50' : 'border-brand-200 focus:border-brand-600'}`} 
+              />
+            </form>
+          </div>
+        );
+      };
+
+      // Game 2: Mini Order
+      const OrderSubGame = ({ onComplete }) => {
+        const count = 6 + difficultyFactor;
+        const [next, setNext] = useState(1);
+        const [nums, setNums] = useState([]);
+        
+        useEffect(() => {
+          const n = Array.from({ length: count }, (_, i) => i + 1).sort(() => Math.random() - 0.5);
+          setNums(n);
+        }, [count]);
+
+        const click = (n) => {
+          if (n === next) {
+            if (n === count) onComplete();
+            else setNext(next + 1);
+          }
+        };
+
+        return (
+          <div className="bg-white rounded-[3rem] p-10 shadow-2xl border-8 border-brand-100 anim-scale-in max-w-lg mx-auto w-full text-center">
+            <span className="text-brand-400 font-bold uppercase tracking-widest text-sm mb-4 block">Reto: Orden Numérico</span>
+            <div className="grid grid-cols-4 gap-3 mb-4">
+              {nums.map(n => (
+                <button key={n} onClick={() => click(n)} 
+                  className={`aspect-square flex items-center justify-center text-xl font-bold rounded-xl transition-all ${n < next ? 'bg-emerald-500 text-white opacity-50 scale-90' : n === next ? 'bg-white border-4 border-brand-400 text-brand-900 shadow-lg' : 'bg-brand-50 text-brand-700 border-2 border-transparent'}`}
+                >
+                  {n}
+                </button>
+              ))}
+            </div>
+            <p className="text-brand-400 text-sm">Pulsa los números en orden del 1 al {count}</p>
+          </div>
+        );
+      };
+
+      // Game 3: Mini Visual
+      const VisualSubGame = ({ onComplete }) => {
+        const size = 6 + Math.floor(difficultyFactor / 2);
+        const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'K', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z'];
+        const [grid, setGrid] = useState([]);
+        const [targetIdx, setTargetIdx] = useState(-1);
+        const [targetChar, setTargetChar] = useState('');
+        const [foundIdx, setFoundIdx] = useState(null);
+
+        useEffect(() => {
+          const total = size * size;
+          const tIdx = Math.floor(Math.random() * total);
+          const t = letters[Math.floor(Math.random() * letters.length)];
+          const base = letters[(letters.indexOf(t) + 1) % letters.length];
+          const g = Array(total).fill(base);
+          g[tIdx] = t;
+          setGrid(g);
+          setTargetIdx(tIdx);
+          setTargetChar(t);
+        }, [size]);
+
+        const handleCorrect = (i) => {
+          if (i === targetIdx) {
+            setFoundIdx(i);
+            setTimeout(onComplete, 500);
+          }
+        };
+
+        return (
+          <div className="bg-white rounded-[3rem] p-10 shadow-2xl border-8 border-brand-100 anim-scale-in max-w-lg mx-auto w-full text-center">
+            <span className="text-brand-400 font-bold uppercase tracking-widest text-sm mb-4 block">Reto: Agudeza Visual</span>
+            <h3 className="text-xl font-bold text-brand-900 mb-6">Busca la letra <span className="text-accent-coral text-3xl mx-2">{targetChar}</span></h3>
+            <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${size}, 1fr)` }}>
+              {grid.map((l, i) => (
+                <button key={i} onClick={() => handleCorrect(i)} 
+                  className={`aspect-square rounded-lg flex items-center justify-center text-xl font-bold transition-all duration-200
+                    ${foundIdx === i ? 'bg-emerald-500 text-white scale-110' : 'bg-brand-50 text-brand-700 hover:bg-brand-100 active:bg-brand-200'}`}
+                >
+                  {l}
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      };
+
+      // Game 4: Mini Memory
+      const MemorySubGame = ({ onComplete }) => {
+        const pairsCount = 3 + Math.floor(difficultyFactor / 2);
+        const [cards, setCards] = useState([]);
+        const [flipped, setFlipped] = useState([]);
+        const [matched, setMatched] = useState([]);
+        const icons = ['🧠', '💡', '🌟', '🧩', '🚀', '🌈', '💎', '🎨', '🍎', '⚽', '🎸', '🍦'];
+
+        useEffect(() => {
+          let gameIcons = icons.slice(0, pairsCount);
+          let gameCards = [...gameIcons, ...gameIcons].map((icon, index) => ({
+            id: index,
+            icon,
+            name: icon
+          })).sort(() => Math.random() - 0.5);
+          setCards(gameCards);
+        }, [pairsCount]);
+
+        const handleFlip = (index) => {
+          if (flipped.length === 2 || matched.includes(cards[index].name) || flipped.includes(index)) return;
+          const newFlipped = [...flipped, index];
+          setFlipped(newFlipped);
+          if (newFlipped.length === 2) {
+            if (cards[newFlipped[0]].name === cards[newFlipped[1]].name) {
+              const newMatched = [...matched, cards[newFlipped[0]].name];
+              setMatched(newMatched);
+              setFlipped([]);
+              if (newMatched.length === pairsCount) setTimeout(onComplete, 600);
+            } else {
+              setTimeout(() => setFlipped([]), 1000);
+            }
+          }
+        };
+
+        return (
+          <div className="bg-white rounded-[3rem] p-8 shadow-2xl border-8 border-brand-100 anim-scale-in max-w-lg mx-auto w-full text-center">
+            <span className="text-brand-400 font-bold uppercase tracking-widest text-sm mb-4 block">Reto: Memoria</span>
+            <div className="grid grid-cols-3 gap-3">
+              {cards.map((card, i) => (
+                <div key={card.id} onClick={() => handleFlip(i)} className={`relative aspect-square cursor-pointer transition-all duration-500 preserve-3d ${flipped.includes(i) || matched.includes(card.name) ? 'rotate-y-180' : ''}`}>
+                  <div className="absolute inset-0 bg-brand-100 rounded-2xl flex items-center justify-center border-2 border-brand-200 backface-hidden text-2xl font-bold text-brand-300">?</div>
+                  <div className="absolute inset-0 bg-white border-4 border-brand-400 rounded-2xl flex items-center justify-center rotate-y-180 backface-hidden text-3xl shadow-md">{card.icon}</div>
+                </div>
+              ))}
+            </div>
+            <p className="text-brand-400 text-sm mt-6">Encuentra las {pairsCount} parejas</p>
+          </div>
+        );
+      };
+
+      // Game 5: Mini WordSearch
+      const WordSearchSubGame = ({ onComplete }) => {
+        const size = 8;
+        const [grid, setGrid] = useState([]);
+        const [words, setWords] = useState([]);
+        const [found, setFound] = useState([]);
+        const pool = ['SOL', 'MAR', 'LUNA', 'CASA', 'MESA', 'ROPA', 'VIDA', 'PAZ', 'LUZ', 'AGUA', 'RADIO', 'RELOJ'];
+
+        useEffect(() => {
+          const selected = pool.sort(() => Math.random() - 0.5).slice(0, 3 + Math.floor(difficultyFactor/4));
+          const newGrid = Array(size).fill(0).map(() => Array(size).fill(''));
+          selected.forEach(word => {
+            let placed = false;
+            let attempts = 0;
+            while (!placed && attempts < 50) {
+              attempts++;
+              const r = Math.floor(Math.random() * size);
+              const c = Math.floor(Math.random() * (size - word.length));
+              let fits = true;
+              for (let i = 0; i < word.length; i++) if (newGrid[r][c + i] !== '') fits = false;
+              if (fits) {
+                for (let i = 0; i < word.length; i++) newGrid[r][c + i] = word[i];
+                placed = true;
+              }
+            }
+          });
+          const letters = 'ABCDE';
+          for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) if (newGrid[r][c] === '') newGrid[r][c] = letters[Math.floor(Math.random() * letters.length)];
+          setGrid(newGrid);
+          setWords(selected);
+        }, [difficultyFactor]);
+
+        const find = (word) => {
+          if (!found.includes(word)) {
+            const newFound = [...found, word];
+            setFound(newFound);
+            if (newFound.length === words.length) setTimeout(onComplete, 600);
+          }
+        };
+
+        return (
+          <div className="bg-white rounded-[3rem] p-8 shadow-2xl border-8 border-brand-100 anim-scale-in max-w-lg mx-auto w-full text-center">
+            <span className="text-brand-400 font-bold uppercase tracking-widest text-sm mb-4 block">Reto: Rastreo</span>
+            <div className="grid grid-cols-8 gap-1 mb-6">
+              {grid.map((row, r) => row.map((char, c) => (
+                <div key={`${r}-${c}`} className="aspect-square flex items-center justify-center text-sm font-bold bg-brand-50 rounded-md">{char}</div>
+              )))}
+            </div>
+            <div className="flex flex-wrap justify-center gap-2">
+              {words.map(w => (
+                <button key={w} onClick={() => find(w)} className={`px-4 py-2 rounded-full font-bold transition-all ${found.includes(w) ? 'bg-emerald-500 text-white scale-90' : 'bg-brand-100 text-brand-700'}`}>{w}</button>
+              ))}
+            </div>
+            <p className="text-xs text-brand-400 mt-4">Encuentra y pulsa las palabras en la cuadrícula</p>
+          </div>
+        );
+      };
+
+      // Random selection logic for the daily challenge
+      const dailyGames = useMemo(() => {
+        const todayStr = new Date().toISOString().split('T')[0];
+        let seed = 0;
+        for (let i = 0; i < todayStr.length; i++) seed += todayStr.charCodeAt(i);
+        
+        const pool = ['math', 'order', 'visual', 'memory', 'wordsearch'];
+        const result = [];
+        const available = [...pool];
+        
+        for (let i = 0; i < 3; i++) {
+          const idx = (seed + i * 13) % available.length;
+          result.push(available[idx]);
+          available.splice(idx, 1);
+        }
+        return result;
+      }, []);
+
+      const renderCurrentGame = (gameId, onComplete) => {
+        switch(gameId) {
+          case 'math': return <MathSubGame onComplete={onComplete} />;
+          case 'order': return <OrderSubGame onComplete={onComplete} />;
+          case 'visual': return <VisualSubGame onComplete={onComplete} />;
+          case 'memory': return <MemorySubGame onComplete={onComplete} />;
+          case 'wordsearch': return <WordSearchSubGame onComplete={onComplete} />;
+          default: return null;
+        }
+      };
+
+      return (
+        <section className={`py-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-32' : ''}`}>
+          <div className="max-w-4xl w-full">
+            <div className="flex justify-between items-center mb-12">
+              <button onClick={() => navigateTo('cognitive')} className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-100 group">
+                <Icons.ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                <span>Volver</span>
+              </button>
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl shadow-sm border border-brand-100">
+                  <Icons.Flame className="text-accent-coral w-6 h-6" />
+                  <span className="font-bold text-brand-900">{streak} días</span>
+                </div>
+                {alreadyDoneToday && (
+                  <div className="flex items-center gap-2 text-emerald-600 font-bold bg-emerald-50 px-4 py-2 rounded-2xl border border-emerald-100">
+                    <Icons.CheckCircle className="w-5 h-5" />
+                    <span>¡Hoy Completado!</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {step === 0 ? (
+              <div className="bg-white rounded-[3rem] p-12 shadow-2xl border border-brand-100 text-center anim-scale-in max-w-2xl mx-auto">
+                <div className="w-24 h-24 bg-brand-100 text-brand-600 rounded-3xl flex items-center justify-center text-5xl mx-auto mb-8 shadow-inner">
+                  <Icons.Calendar />
+                </div>
+                <h2 className="font-display text-4xl font-bold text-brand-900 mb-6 uppercase tracking-tight">Reto Diario IAdapta</h2>
+                <p className="text-xl text-brand-600 mb-10 leading-relaxed">Completa los 3 ejercicios de hoy para mantener tu racha. Hoy es <span className="font-bold text-brand-900 underline decoration-accent-coral decoration-4 underline-offset-4">{new Intl.DateTimeFormat('es-ES', { weekday: 'long' }).format(new Date())}</span>, la dificultad es de <span className="font-bold text-brand-900">{difficultyFactor}/7</span>.</p>
+                
+                <div className="grid grid-cols-3 gap-4 mb-10">
+                  {dailyGames.map((g, i) => (
+                    <div key={i} className="bg-brand-50 p-4 rounded-2xl border border-brand-100">
+                      <p className="text-[10px] text-brand-400 font-bold uppercase mb-1">Juego {i+1}</p>
+                      <p className="text-xs font-bold text-brand-900">{g === 'math' ? 'Cálculo' : g === 'order' ? 'Orden' : g === 'visual' ? 'Agudeza' : g === 'memory' ? 'Memoria' : 'Rastreo'}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <button onClick={startChallenge} className="w-full sm:w-auto px-12 py-5 bg-brand-900 text-white rounded-2xl font-bold text-2xl hover:bg-brand-800 shadow-xl transition-all hover:scale-105 active:scale-95 btn-pulse">
+                  Empezar Desafío
+                </button>
+              </div>
+            ) : step >= 1 && step <= 3 ? (
+              <div className="w-full">
+                <div className="max-w-lg mx-auto mb-6 flex justify-between items-center px-4">
+                  <div className="flex gap-2">
+                    {[1, 2, 3].map(s => (
+                      <div key={s} className={`w-3 h-3 rounded-full ${step >= s ? 'bg-brand-900' : 'bg-brand-200'}`}></div>
+                    ))}
+                  </div>
+                  <span className="text-brand-400 font-bold text-xs uppercase tracking-widest">Paso {step} de 3</span>
+                </div>
+                {renderCurrentGame(dailyGames[step-1], () => {
+                  if (step < 3) setStep(step + 1);
+                  else completeChallenge();
+                })}
+              </div>
+            ) : (
+              <div className="bg-white rounded-[3rem] p-12 shadow-2xl border border-brand-100 text-center anim-scale-in max-w-2xl mx-auto">
+                <div className="text-7xl mb-6">🏆✨</div>
+                <h2 className="font-display text-4xl font-bold text-brand-900 mb-2">¡Reto Completado!</h2>
+                <p className="text-emerald-600 font-bold mb-4 uppercase tracking-widest">Día superado con éxito</p>
+                
+                {streak >= 7 && (
+                  <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-6 mb-8 anim-scale-in">
+                    <p className="text-amber-600 font-bold text-xl mb-1">
+                      {streak >= 30 ? '¡MAESTRO DE LA MENTE! 👑' : streak >= 20 ? '¡HÁBITO DE ACERO! 💪' : '¡SEMANA PERFECTA! ⭐'}
+                    </p>
+                    <p className="text-amber-800 italic">
+                      {streak >= 30 ? 'Has alcanzado los 30 días. ¡Tu agudeza mental está en otro nivel!' : 
+                       streak >= 20 ? 'Casi un mes de constancia. Estás transformando tu cerebro día a día.' : 
+                       'Una semana completa de entrenamiento. ¡Tu constancia es admirable!'}
+                    </p>
+                  </div>
+                )}
+
+                <div className="bg-brand-50 rounded-2xl p-4 mb-8 inline-flex items-center gap-3 border border-brand-100">
+                  <div className="w-12 h-12 bg-accent-coral text-white rounded-xl flex items-center justify-center text-2xl shadow-lg animate-bounce">
+                    <Icons.Flame />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[10px] font-bold text-brand-400 uppercase leading-none mb-1">Tu racha actual</p>
+                    <p className="text-2xl font-bold text-brand-900">{streak} días seguidos</p>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4 mb-10">
+                  <div className="bg-brand-50 p-6 rounded-3xl border border-brand-100">
+                    <p className="text-brand-400 text-xs font-bold uppercase mb-1">Racha Actual</p>
+                    <p className="text-4xl font-bold text-brand-900 flex items-center justify-center gap-2"><Icons.Flame className="text-accent-coral" /> {streak}</p>
+                  </div>
+                  <div className="bg-brand-50 p-6 rounded-3xl border border-brand-100">
+                    <p className="text-brand-400 text-xs font-bold uppercase mb-1">Tiempo Total</p>
+                    <p className="text-4xl font-bold text-brand-900">{totalTime}s</p>
+                  </div>
+                </div>
+
+                <ShareButtons game="Reto Diario IAdapta" score={`${streak} días de racha imparable`} time={totalTime} />
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
+                  <button onClick={() => navigateTo('cognitive')} className="px-10 py-4 bg-brand-100 text-brand-700 rounded-xl font-bold hover:bg-brand-200 transition-all">Volver al Gimnasio</button>
+                  <button onClick={() => window.location.reload()} className="px-10 py-4 bg-brand-900 text-white rounded-xl font-bold hover:bg-brand-800 shadow-lg transition-all">Cerrar</button>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      );
+    };
+
+    // --- SECTION VISUAL GAME ---
+    window.SectionVisualGame = function SectionVisualGame({ isStandalone, navigateTo }) {
+      const { useState, useEffect, useCallback, useMemo } = React;
+      
+      const [gameStarted, setGameStarted] = useState(false);
+      const [levelIdx, setLevelIdx] = useState(0);
+      const [round, setRound] = useState(0);
+      const [grid, setGrid] = useState([]);
+      const [targetIdx, setTargetIdx] = useState(-1);
+      const [correctIdx, setCorrectIdx] = useState(null);
+      const [currentTarget, setCurrentTarget] = useState('');
+      const [gameStatus, setGameStatus] = useState('playing'); // 'playing', 'won'
+      const [startTime, setStartTime] = useState(0);
+      const [finalTime, setFinalTime] = useState(0);
+      const [stars, setStars] = useState(0);
+
+      const currentLevel = VISUAL_LEVELS[levelIdx];
+
+      const initRound = useCallback((forcedIdx) => {
+        const idx = forcedIdx !== undefined ? forcedIdx : levelIdx;
+        const level = VISUAL_LEVELS[idx];
+        const total = level.size * level.size;
+        const tIdx = Math.floor(Math.random() * total);
+        
+        // Dynamic target selection to avoid mismatch and add variety
+        const pairs = [
+          ['A', 'V'], ['Q', 'O'], ['E', 'F'], ['M', 'N'], ['l', 'I'], 
+          ['W', 'M'], ['C', 'G'], ['S', '5'], ['B', '8'], ['Z', '2'],
+          ['D', '0'], ['P', 'R'], ['K', 'X'], ['U', 'V'], ['T', 'Y']
+        ];
+        // Use level default or pick random from pool for variety
+        const pair = idx < pairs.length ? pairs[idx] : pairs[Math.floor(Math.random() * pairs.length)];
+        const [target, base] = pair;
+        
+        const g = Array(total).fill(base);
+        g[tIdx] = target;
+        setGrid(g);
+        setTargetIdx(tIdx);
+        setCorrectIdx(null);
+        setCurrentTarget(target);
+      }, [levelIdx]);
+
+      const startGame = (idx) => {
+        setLevelIdx(idx);
+        setRound(0);
+        setGameStarted(true);
+        setGameStatus('playing');
+        setStartTime(Date.now());
+        initRound(idx);
+      };
+
+      const handleCellClick = (idx) => {
+        if (gameStatus !== 'playing' || correctIdx !== null) return;
+        if (idx === targetIdx) {
+          setCorrectIdx(idx);
+          setTimeout(() => {
+            if (round < currentLevel.rounds - 1) {
+              setRound(prev => prev + 1);
+              initRound();
+            } else {
+              const time = (Date.now() - startTime) / 1000;
+              setFinalTime(time.toFixed(1));
+              setGameStatus('won');
+              
+              // Star logic
+              const baseTime = currentLevel.rounds * 2; 
+              let s = 3;
+              if (time < baseTime * 0.6) s = 5;
+              else if (time < baseTime * 0.9) s = 4;
+              else if (time > baseTime * 1.5) s = 2;
+              setStars(s);
+
+              if (window.confetti) window.confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }
+          }, 400); // 400ms feedback delay
+        }
+      };
+
+      const nextLevel = () => {
+        if (levelIdx < VISUAL_LEVELS.length - 1) {
+          startGame(levelIdx + 1);
+        } else {
+          setGameStarted(false);
+        }
+      };
+
+      return (
+        <section className={`py-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-32' : ''}`}>
+          <div className="max-w-4xl w-full">
+            {!gameStarted ? (
+              <div className="max-w-2xl mx-auto text-center">
+                <div className="flex justify-start mb-8">
+                  <button onClick={() => navigateTo('cognitive')} className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-100 group">
+                    <Icons.ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                    <span>Volver</span>
+                  </button>
+                </div>
+                <h2 className="font-display text-4xl font-bold text-brand-900 mb-8">Agudeza Visual</h2>
+                <div className="bg-white rounded-[3rem] border border-brand-100 shadow-2xl p-10 anim-scale-in">
+                  <div className="text-6xl mb-6">🔍</div>
+                  <h3 className="text-2xl font-bold text-brand-900 mb-6">Selecciona la dificultad</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {VISUAL_LEVELS.map((lvl, idx) => (
+                      <button key={lvl.id} onClick={() => startGame(idx)} className="group p-6 rounded-2xl border-2 border-brand-50 hover:border-brand-500 hover:bg-brand-50 transition-all flex flex-col items-center gap-2">
+                        <span className="text-brand-900 font-bold text-xl">{lvl.name}</span>
+                        <span className="text-brand-500 text-sm font-medium">Cuadrícula {lvl.size}x{lvl.size}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <>
+                <GameHeader 
+                  title="Agudeza Visual"
+                  subtitle={(
+                    <>
+                      <span className="bg-brand-900 text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-widest">Nivel {currentLevel.id}</span>
+                      <span className="text-brand-600 font-bold uppercase tracking-widest">Ronda {round + 1} de {currentLevel.rounds}</span>
+                    </>
+                  )}
+                  onBack={() => navigateTo('cognitive')}
+                  onRestart={() => startGame(levelIdx)}
+                  onLevels={() => setGameStarted(false)}
+                  isStandalone={isStandalone}
+                />
+
+                <div className="flex flex-col items-center gap-8">
+                  {gameStatus === 'playing' ? (
+                    <div className="bg-white p-4 rounded-3xl shadow-2xl border-8 border-brand-100 w-full max-w-[500px]">
+                      <div className="mb-6 text-center">
+                        <p className="text-brand-600 font-bold mb-2 uppercase tracking-widest text-sm">Busca el carácter diferente:</p>
+                        <span className="text-accent-coral text-4xl font-bold">{currentTarget}</span>
+                      </div>
+                      <div className="grid gap-1.5 sm:gap-2" style={{ gridTemplateColumns: `repeat(${currentLevel.size}, 1fr)` }}>
+                        {grid.map((l, i) => (
+                          <button key={i} onClick={() => handleCellClick(i)} 
+                            className={`aspect-square rounded-lg flex items-center justify-center text-lg sm:text-xl font-bold transition-all duration-200
+                              ${correctIdx === i ? 'bg-emerald-500 text-white scale-110 z-10' : 'bg-brand-50 text-brand-700 hover:bg-brand-200 active:scale-90'}`}
+                          >
+                            {l}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-white rounded-[3rem] p-10 shadow-2xl border border-brand-100 text-center anim-scale-in max-w-lg w-full">
+                      <div className="text-7xl mb-6">🔍✨</div>
+                      <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Vista de Lince!</h3>
+                      <StarRating stars={stars} />
+                      <p className="text-xl text-gray-600 mb-6">Has completado el nivel en <span className="font-bold text-brand-700">{finalTime}s</span>.</p>
+                      <ShareButtons game="Agudeza Visual" time={finalTime} />
+                      <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
+                        <button onClick={() => setGameStarted(false)} className="px-8 py-3 bg-brand-100 text-brand-700 font-bold rounded-xl hover:bg-brand-200 transition-all">Cambiar Nivel</button>
+                        <button onClick={nextLevel} className="px-8 py-3 bg-brand-900 text-white font-bold rounded-xl hover:bg-brand-800 shadow-lg transition-all btn-pulse">
+                          {levelIdx < VISUAL_LEVELS.length - 1 ? 'Siguiente Nivel' : 'Volver al Inicio'}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        </section>
+      );
+    };
+
     // --- SECTION RESOURCES FOR PROFESSIONALS ---
     window.SectionResources = function SectionResources() {
+      const [view, setView] = useState('menu'); // 'menu', 'math', 'pao'
       const [difficulty, setDifficulty] = useState('medium');
       const [isGenerating, setIsGenerating] = useState(false);
       const [searchTerm, setSearchTerm] = useState('');
@@ -1537,249 +2318,286 @@
         setSearchResults(filtered);
       };
 
+      const tools = [
+        {
+          id: 'math',
+          title: 'Generador de Fichas',
+          desc: 'Crea hojas de ejercicios de cálculo personalizadas en PDF para tus sesiones.',
+          icon: <Icons.FilePdf />,
+          color: 'bg-brand-900 text-white',
+          badge: 'Estimulación'
+        },
+        {
+          id: 'pao',
+          title: 'Buscador PAO (CatSalut)',
+          desc: 'Consulta códigos, importes y descripciones de prestaciones ortoprotéticas.',
+          icon: <Icons.Search />,
+          color: 'bg-blue-900 text-white',
+          badge: 'Gestión'
+        }
+      ];
+
       return (
-        <section id="resources" className="py-24 px-4 bg-brand-50/50">
+        <section id="resources" className="py-24 px-4 bg-brand-50/50 min-h-screen">
           <div className="max-w-6xl mx-auto">
+            
+            {view !== 'menu' && (
+              <div className="flex justify-start mb-8">
+                <button 
+                  onClick={() => setView('menu')} 
+                  className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-100 group"
+                >
+                  <Icons.ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                  <span>Volver a Recursos</span>
+                </button>
+              </div>
+            )}
+
             <div className="text-center mb-16">
               <span className="inline-block bg-brand-100 text-brand-700 rounded-full px-5 py-2 text-base font-bold uppercase tracking-widest mb-4">Área del Profesional</span>
               <h2 className="font-display text-4xl sm:text-5xl font-bold text-brand-900 mb-6">Recursos para Profesionales</h2>
               <div className="section-divider w-24 mx-auto mb-8"></div>
               
-              <div className="mb-12">
-                <button 
-                  onClick={() => {
-                    if (window.deferredPrompt) {
-                      window.deferredPrompt.prompt();
-                      window.deferredPrompt.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                          console.log('User accepted the Pro install prompt');
-                        }
-                        window.deferredPrompt = null;
-                      });
-                    } else {
-                      alert("Para instalar la App de Recursos, pulsa en el menú de tu navegador (los tres puntos o compartir) y selecciona 'Instalar aplicación' o 'Añadir a pantalla de inicio'.");
-                    }
-                  }}
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 transition-all shadow-xl shadow-brand-900/20 hover:scale-105 active:scale-95 group"
-                >
-                  <div className="bg-white/10 p-2 rounded-xl">
-                    <Icons.Download />
-                  </div>
-                  <span>Descargar App de Recursos</span>
-                  <Icons.Briefcase className="w-6 h-6" />
-                </button>
-                <p className="mt-4 text-sm text-gray-400">Instala 'IAdapta: Recursos Profesionales' para un acceso directo desde tu móvil</p>
-              </div>
-            </div>
-
-            {/* TOOL 1: Math PDF Generator */}
-            <div className="bg-white rounded-[3rem] overflow-hidden shadow-2xl border border-brand-100 flex flex-col lg:flex-row mb-16">
-              <div className="flex-1 p-8 sm:p-12 lg:p-16">
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-14 h-14 bg-brand-900 text-white rounded-2xl flex items-center justify-center shadow-lg">
-                    <Icons.FilePdf />
-                  </div>
-                  <div>
-                    <h3 className="font-display text-3xl font-bold text-brand-900">Generador de Fichas</h3>
-                    <p className="text-brand-500 font-bold uppercase tracking-widest text-xs">Cálculo Matemático</p>
-                  </div>
-                </div>
-
-                <p className="text-gray-600 text-lg mb-10 leading-relaxed">
-                  Crea al instante una hoja de ejercicios de cálculo personalizada en PDF para tus sesiones de estimulación.
-                </p>
-
-                <div className="space-y-6 mb-12">
-                  <p className="font-bold text-brand-900 text-sm uppercase tracking-wider">Nivel de dificultad</p>
-                  <div className="grid grid-cols-3 gap-3">
-                    {[
-                      { id: 'easy', label: 'Básica' },
-                      { id: 'medium', label: 'Media' },
-                      { id: 'hard', label: 'Alta' }
-                    ].map(level => (
-                      <button
-                        key={level.id}
-                        onClick={() => setDifficulty(level.id)}
-                        className={`py-4 rounded-2xl font-bold transition-all border-2 ${difficulty === level.id 
-                          ? 'bg-brand-900 text-white border-brand-900 shadow-lg scale-105' 
-                          : 'bg-white text-gray-400 border-gray-100 hover:border-brand-200 hover:text-brand-600'}`}
-                      >
-                        {level.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <button
-                  onClick={generateMathPDF}
-                  disabled={isGenerating}
-                  className="w-full py-5 bg-accent-coral text-white rounded-2xl font-bold text-xl hover:bg-opacity-90 transition-all flex items-center justify-center gap-3 shadow-xl shadow-coral-900/20 disabled:opacity-50 group"
-                >
-                  {isGenerating ? (
-                    <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  ) : (
-                    <>
+              {view === 'menu' && (
+                <div className="mb-12">
+                  <button 
+                    onClick={() => {
+                      if (window.deferredPrompt) {
+                        window.deferredPrompt.prompt();
+                        window.deferredPrompt.userChoice.then((choiceResult) => {
+                          if (choiceResult.outcome === 'accepted') {
+                            console.log('User accepted the Pro install prompt');
+                          }
+                          window.deferredPrompt = null;
+                        });
+                      } else {
+                        alert("Para instalar la App de Recursos, pulsa en el menú de tu navegador (los tres puntos o compartir) y selecciona 'Instalar aplicación' o 'Añadir a pantalla de inicio'.");
+                      }
+                    }}
+                    className="inline-flex items-center gap-3 px-8 py-4 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 transition-all shadow-xl shadow-brand-900/20 hover:scale-105 active:scale-95 group"
+                  >
+                    <div className="bg-white/10 p-2 rounded-xl">
                       <Icons.Download />
-                      Generar Ficha PDF
-                    </>
-                  )}
-                </button>
-              </div>
-
-              <div className="lg:w-[45%] bg-brand-900 relative min-h-[400px] flex flex-col justify-end p-8 sm:p-12 lg:p-16 overflow-hidden">
-                <img src="resources_bg.png" className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay" alt="" />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-900 via-brand-900/40 to-transparent"></div>
-                <div className="relative z-10">
-                  <h4 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
-                    <Icons.Lightbulb />
-                    Ventajas Clínicas
-                  </h4>
-                  <ul className="space-y-4 mb-10">
-                    {[
-                      'Material ilimitado y aleatorio.',
-                      'Ahorro crítico de tiempo administrativo.',
-                      'Imagen profesional para tu consulta.',
-                      'Adaptación al deterioro cognitivo.'
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-center gap-3 text-brand-100 font-medium">
-                        <div className="w-6 h-6 bg-accent-coral/20 text-accent-coral rounded-full flex items-center justify-center shrink-0">
-                          <Icons.Check />
-                        </div>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm">
-                    <p className="text-brand-200 italic text-lg leading-relaxed">
-                      "Automatizar el material de apoyo nos permite centrar toda nuestra energía en el paciente."
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* TOOL 2: CatSalut Code Finder */}
-            <div className="bg-white rounded-[3xl] p-8 sm:p-12 shadow-xl border border-brand-50">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 bg-blue-900 text-white rounded-2xl flex items-center justify-center shadow-lg">
-                  <Icons.Search />
-                </div>
-                <div>
-                  <h3 className="font-display text-3xl font-bold text-brand-900">Buscador PAO (CatSalut)</h3>
-                  <p className="text-blue-500 font-bold uppercase tracking-widest text-xs">Prestacions Ortoprotètiques</p>
-                </div>
-              </div>
-              
-              <div className="relative mb-12">
-                <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none text-blue-500">
-                  <Icons.Search />
-                </div>
-                <input 
-                  type="text" 
-                  placeholder="Ej: silla de ruedas, andador, EPL 050..."
-                  className="w-full pl-16 pr-8 py-6 bg-white border-2 border-brand-100 rounded-[2rem] focus:ring-8 focus:ring-blue-500/10 focus:border-blue-500 transition-all text-xl shadow-sm placeholder:text-gray-400"
-                  value={searchTerm}
-                  onChange={(e) => handleSearch(e.target.value)}
-                />
-              </div>
-
-              {searchResults.length > 0 ? (
-                <div className="overflow-x-auto rounded-[2rem] border border-gray-100 max-h-[600px] overflow-y-auto custom-scrollbar shadow-inner bg-gray-50/30">
-                  <table className="w-full text-left border-collapse">
-                    <thead className="sticky top-0 z-10">
-                      <tr className="bg-brand-900 text-white">
-                        <th className="p-5 font-display text-sm uppercase tracking-widest">Código PAO</th>
-                        <th className="p-5 font-display text-sm uppercase tracking-widest">Producto / Descripción</th>
-                        <th className="p-5 font-display text-sm uppercase tracking-widest text-right">Importe</th>
-                        <th className="p-5 font-display text-sm uppercase tracking-widest text-center">Detalles</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100 bg-white">
-                      {searchResults.map((item, i) => (
-                        <tr key={i} className="hover:bg-blue-50/50 transition-colors group/row">
-                          <td className="p-5 align-top">
-                            <div className="bg-brand-50 border border-brand-100 rounded-2xl p-4 text-center group-hover/row:bg-white transition-colors shadow-sm">
-                              <span className="font-mono text-xl font-black text-brand-900 tracking-tight block">
-                                {item.sC} {item.tC}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="p-5">
-                            <p className="font-bold text-brand-900 text-lg mb-1">{item.tD}</p>
-                            <p className="text-xs text-brand-500 font-medium uppercase tracking-wider">{item.cD}</p>
-                          </td>
-                          <td className="p-5 text-right whitespace-nowrap">
-                            <p className="font-black text-emerald-600 text-xl">{item.p}€</p>
-                            <p className="text-xs text-gray-500 font-bold uppercase tracking-wide">Aportación: {item.u}€</p>
-                          </td>
-                          <td className="p-5 text-center align-middle">
-                             <div className="group inline-block relative">
-                               <button className="w-12 h-12 bg-gray-50 border-2 border-gray-100 rounded-2xl flex items-center justify-center text-brand-600 hover:bg-brand-900 hover:text-white transition-all shadow-sm">
-                                 <Icons.Search />
-                               </button>
-                               {/* Tooltip */}
-                               <div className="absolute bottom-full right-0 mb-4 w-72 p-6 bg-brand-900 text-white rounded-[2rem] shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20 pointer-events-none border border-white/10">
-                                  <div className="space-y-5">
-                                    <div className="flex justify-between items-center border-b border-white/10 pb-3">
-                                      <span className="text-[10px] text-brand-300 uppercase font-bold tracking-widest">Validación Sanitaria</span>
-                                      <span className="text-sm font-black text-blue-400">
-                                        {item.v === 'S' ? 'Sí' : 'No'}
-                                      </span>
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                      <span className="text-[10px] text-brand-300 uppercase font-bold tracking-widest">Periodicidad</span>
-                                      <span className="text-sm font-black text-blue-400">{item.m} meses</span>
-                                    </div>
-                                  </div>
-                                  <div className="absolute top-full right-6 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-brand-900"></div>
-                               </div>
-                             </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : searchTerm.trim().length >= 2 ? (
-                <div className="text-center py-20 bg-gray-50 rounded-[3rem] border-2 border-dashed border-gray-200">
-                  <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm">
-                    <Icons.Search />
-                  </div>
-                  <p className="text-gray-400 text-xl font-medium">No se han encontrado resultados para "{searchTerm}"</p>
-                  <p className="text-gray-300 text-sm mt-2">Prueba con términos más generales o el código abreviado.</p>
-                </div>
-              ) : (
-                <div className="relative overflow-hidden bg-gradient-to-br from-brand-900 to-brand-800 rounded-[3rem] p-12 text-center text-white shadow-xl">
-                  <div className="absolute top-0 right-0 p-8 opacity-10">
-                    <Icons.Search />
-                  </div>
-                  <div className="relative z-10">
-                    <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-md">
-                      <Icons.Lightbulb />
                     </div>
-                    <h4 className="text-2xl font-bold mb-4">¿Qué estás buscando hoy?</h4>
-                    <p className="text-brand-100 text-lg max-w-md mx-auto leading-relaxed">
-                      Escribe al menos <span className="text-white font-bold underline decoration-accent-coral underline-offset-4">4 caracteres</span> para explorar el catálogo oficial de prestaciones ortoprotéticas 2025.
-                    </p>
-                  </div>
+                    <span>Descargar App de Recursos</span>
+                    <Icons.Briefcase className="w-6 h-6" />
+                  </button>
                 </div>
               )}
-
-              <div className="mt-8 pt-8 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em]">
-                  Catálogo Oficial PAO | Servei Català de la Salut (CatSalut)
-                </p>
-                <p className="text-[10px] text-brand-500 font-black uppercase tracking-widest bg-brand-50 px-3 py-1 rounded-full">
-                  Última actualización: Noviembre 2025
-                </p>
-              </div>
             </div>
+
+            {view === 'menu' ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 max-w-4xl mx-auto anim-fade-in">
+                {tools.map(tool => (
+                  <div 
+                    key={tool.id}
+                    onClick={() => setView(tool.id)}
+                    className="bg-white rounded-[2.5rem] p-10 border border-brand-100 shadow-xl hover:shadow-2xl transition-all cursor-pointer group flex flex-col items-center text-center"
+                  >
+                    <div className={`w-20 h-20 ${tool.color} rounded-3xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500`}>
+                      {tool.icon}
+                    </div>
+                    <span className="text-brand-400 font-bold uppercase tracking-widest text-xs mb-3">{tool.badge}</span>
+                    <h3 className="font-display text-2xl font-bold text-brand-900 mb-4">{tool.title}</h3>
+                    <p className="text-gray-600 leading-relaxed mb-8 flex-1">{tool.desc}</p>
+                    <div className="inline-flex items-center gap-2 text-brand-600 font-bold group-hover:gap-3 transition-all">
+                      Abrir herramienta
+                      <Icons.ArrowRight />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : view === 'math' ? (
+              <div className="anim-scale-in">
+                {/* TOOL 1: Math PDF Generator */}
+                <div className="bg-white rounded-[3rem] overflow-hidden shadow-2xl border border-brand-100 flex flex-col lg:flex-row mb-16">
+                  <div className="flex-1 p-8 sm:p-12 lg:p-16">
+                    <div className="flex items-center gap-4 mb-8">
+                      <div className="w-14 h-14 bg-brand-900 text-white rounded-2xl flex items-center justify-center shadow-lg">
+                        <Icons.FilePdf />
+                      </div>
+                      <div>
+                        <h3 className="font-display text-3xl font-bold text-brand-900">Generador de Fichas</h3>
+                        <p className="text-brand-500 font-bold uppercase tracking-widest text-xs">Cálculo Matemático</p>
+                      </div>
+                    </div>
+
+                    <p className="text-gray-600 text-lg mb-10 leading-relaxed">
+                      Crea al instante una hoja de ejercicios de cálculo personalizada en PDF para tus sesiones de estimulación.
+                    </p>
+
+                    <div className="space-y-6 mb-12">
+                      <p className="font-bold text-brand-900 text-sm uppercase tracking-wider">Nivel de dificultad</p>
+                      <div className="grid grid-cols-3 gap-3">
+                        {[
+                          { id: 'easy', label: 'Básica' },
+                          { id: 'medium', label: 'Media' },
+                          { id: 'hard', label: 'Alta' }
+                        ].map(level => (
+                          <button
+                            key={level.id}
+                            onClick={() => setDifficulty(level.id)}
+                            className={`py-4 rounded-2xl font-bold transition-all border-2 ${difficulty === level.id 
+                              ? 'bg-brand-900 text-white border-brand-900 shadow-lg scale-105' 
+                              : 'bg-white text-gray-400 border-gray-100 hover:border-brand-200 hover:text-brand-600'}`}
+                          >
+                            {level.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={generateMathPDF}
+                      disabled={isGenerating}
+                      className="w-full py-5 bg-accent-coral text-white rounded-2xl font-bold text-xl hover:bg-opacity-90 transition-all flex items-center justify-center gap-3 shadow-xl shadow-coral-900/20 disabled:opacity-50 group"
+                    >
+                      {isGenerating ? (
+                        <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      ) : (
+                        <>
+                          <Icons.Download />
+                          Generar Ficha PDF
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  <div className="lg:w-[45%] bg-brand-900 relative min-h-[400px] flex flex-col justify-end p-8 sm:p-12 lg:p-16 overflow-hidden">
+                    <img src="resources_bg.png" className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay" alt="" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-brand-900 via-brand-900/40 to-transparent"></div>
+                    <div className="relative z-10">
+                      <h4 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+                        <Icons.Lightbulb />
+                        Ventajas Clínicas
+                      </h4>
+                      <ul className="space-y-4 mb-10">
+                        {[
+                          'Material ilimitado y aleatorio.',
+                          'Ahorro crítico de tiempo administrativo.',
+                          'Imagen profesional para tu consulta.',
+                          'Adaptación al deterioro cognitivo.'
+                        ].map((item, i) => (
+                          <li key={i} className="flex items-center gap-3 text-brand-100 font-medium">
+                            <div className="w-6 h-6 bg-accent-coral/20 text-accent-coral rounded-full flex items-center justify-center shrink-0">
+                              <Icons.Check />
+                            </div>
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm">
+                        <p className="text-brand-200 italic text-lg leading-relaxed">
+                          "Automatizar el material de apoyo nos permite centrar toda nuestra energía en el paciente."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="anim-scale-in">
+                {/* TOOL 2: CatSalut Code Finder */}
+                <div className="bg-white rounded-[3xl] p-8 sm:p-12 shadow-xl border border-brand-50">
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="w-14 h-14 bg-blue-900 text-white rounded-2xl flex items-center justify-center shadow-lg">
+                      <Icons.Search />
+                    </div>
+                    <div>
+                      <h3 className="font-display text-3xl font-bold text-brand-900">Buscador PAO (CatSalut)</h3>
+                      <p className="text-blue-500 font-bold uppercase tracking-widest text-xs">Prestacions Ortoprotètiques</p>
+                    </div>
+                  </div>
+                  
+                  <div className="relative mb-12">
+                    <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none text-blue-500">
+                      <Icons.Search />
+                    </div>
+                    <input 
+                      type="text" 
+                      placeholder="Ej: silla de ruedas, andador, EPL 050..."
+                      className="w-full pl-16 pr-8 py-6 bg-white border-2 border-brand-100 rounded-[2rem] focus:ring-8 focus:ring-blue-500/10 focus:border-blue-500 transition-all text-xl shadow-sm placeholder:text-gray-400"
+                      value={searchTerm}
+                      onChange={(e) => handleSearch(e.target.value)}
+                    />
+                  </div>
+
+                  {searchResults.length > 0 ? (
+                    <div className="overflow-x-auto rounded-[2rem] border border-gray-100 max-h-[600px] overflow-y-auto custom-scrollbar shadow-inner bg-gray-50/30">
+                      <table className="w-full text-left border-collapse">
+                        <thead className="sticky top-0 z-10">
+                          <tr className="bg-brand-900 text-white">
+                            <th className="p-5 font-display text-sm uppercase tracking-widest">Código PAO</th>
+                            <th className="p-5 font-display text-sm uppercase tracking-widest">Producto / Descripción</th>
+                            <th className="p-5 font-display text-sm uppercase tracking-widest text-right">Importe</th>
+                            <th className="p-5 font-display text-sm uppercase tracking-widest text-center">Detalles</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100 bg-white">
+                          {searchResults.map((item, i) => (
+                            <tr key={i} className="hover:bg-blue-50/50 transition-colors group/row">
+                              <td className="p-5 align-top">
+                                <div className="bg-brand-50 border border-brand-100 rounded-2xl p-4 text-center group-hover/row:bg-white transition-colors shadow-sm">
+                                  <span className="font-mono text-xl font-black text-brand-900 tracking-tight block">
+                                    {item.sC} {item.tC}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="p-5">
+                                <p className="font-bold text-brand-900 text-lg mb-1">{item.tD}</p>
+                                <p className="text-xs text-brand-500 font-medium uppercase tracking-wider">{item.cD}</p>
+                              </td>
+                              <td className="p-5 text-right whitespace-nowrap">
+                                <p className="font-black text-emerald-600 text-xl">{item.p}€</p>
+                                <p className="text-xs text-gray-500 font-bold uppercase tracking-wide">Aportación: {item.u}€</p>
+                              </td>
+                              <td className="p-5 text-center align-middle">
+                                 <div className="group inline-block relative">
+                                   <button className="w-12 h-12 bg-gray-50 border-2 border-gray-100 rounded-2xl flex items-center justify-center text-brand-600 hover:bg-brand-900 hover:text-white transition-all shadow-sm">
+                                     <Icons.Search />
+                                   </button>
+                                   {/* Tooltip de Detalles */}
+                                   <div className="absolute bottom-full right-0 mb-4 w-72 p-6 bg-brand-900 text-white rounded-[2rem] shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all z-20 pointer-events-none border border-white/10">
+                                      <div className="space-y-5">
+                                        <div className="flex justify-between items-center border-b border-white/10 pb-3">
+                                          <span className="text-[10px] text-brand-300 uppercase font-bold tracking-widest">Validación Sanitaria</span>
+                                          <span className="text-sm font-black text-blue-400">
+                                            {item.v === 'S' ? 'Sí' : 'No'}
+                                          </span>
+                                        </div>
+                                        <div className="flex justify-between items-center">
+                                          <span className="text-[10px] text-brand-300 uppercase font-bold tracking-widest">Periodicidad</span>
+                                          <span className="text-sm font-black text-blue-400">{item.m} meses</span>
+                                        </div>
+                                      </div>
+                                      <div className="absolute top-full right-6 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-brand-900"></div>
+                                   </div>
+                                 </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : searchTerm.length >= 4 ? (
+                    <div className="text-center py-20 bg-gray-50 rounded-[2rem] border-2 border-dashed border-gray-200">
+                      <div className="text-5xl mb-4">🔍</div>
+                      <p className="text-xl text-gray-500">No se han encontrado resultados para "{searchTerm}"</p>
+                    </div>
+                  ) : (
+                    <div className="text-center py-20 bg-blue-50/30 rounded-[2rem] border border-blue-100">
+                      <div className="text-5xl mb-4 text-blue-200">⌨️</div>
+                      <p className="text-xl text-blue-900/60 font-medium">Escribe al menos 4 caracteres para buscar</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </section>
       );
     };
 
-    // --- NAVBAR ---
     window.Navbar = function Navbar({ activeSection, scrollTo, currentPage, navigateTo }) {
       const [menuOpen, setMenuOpen] = useState(false);
       const [scrolled, setScrolled] = useState(false);
@@ -3984,6 +4802,10 @@
           setCurrentPage('analyzer');
         } else if (pageParam === 'cv') {
           setCurrentPage('cv');
+        } else if (pageParam === 'challenge') {
+          setCurrentPage('challenge');
+        } else if (pageParam === 'visual') {
+          setCurrentPage('visual');
         }
       }, []); // Solo al montar la app
 
@@ -4015,7 +4837,7 @@
           // Optimization: If already in Juegos context, don't reload
           const params = new URLSearchParams(window.location.search);
           const currentP = params.get('page');
-          const isJuegos = currentP === 'cognitive' || currentP === 'games' || ['memory', 'order', 'wordsearch', 'math'].includes(currentP);
+          const isJuegos = currentP === 'cognitive' || currentP === 'games' || ['memory', 'order', 'wordsearch', 'math', 'challenge', 'visual'].includes(currentP);
           
           if ((page === 'cognitive' || page === 'games') && isJuegos) {
             setCurrentPage('cognitive');
@@ -4072,8 +4894,14 @@
             {currentPage === 'math' && (
               <SectionMathGame isStandalone={isStandalone} navigateTo={navigateTo} />
             )}
+            {currentPage === 'visual' && (
+              <SectionVisualGame isStandalone={isStandalone} navigateTo={navigateTo} />
+            )}
             {currentPage === 'analyzer' && (
               <SectionAnalyzer isTeaser={false} isStandalone={isStandalone} />
+            )}
+            {currentPage === 'challenge' && (
+              <SectionDailyChallenge isStandalone={isStandalone} navigateTo={navigateTo} />
             )}
             {currentPage === 'cookies' && (
               <SectionCookies />
