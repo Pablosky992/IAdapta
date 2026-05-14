@@ -3433,7 +3433,7 @@
         {
           id: 'cv', icon: <Icons.FileText />, color: 'bg-blue-100 text-blue-600', badge: 'Perfil Profesional',
           title: 'Mi Trayectoria', desc: 'Conoce mi formación, experiencia clínica en geriatría y ortopedia, y competencias en impresión 3D.', cta: 'Saber más',
-          img: 'cv_trayectoria_thumbnail_ot.png',
+          img: 'cv_trayectoria_thumbnail_ot_v2.png',
           action: () => scrollTo('about')
         },
       ];
@@ -3613,12 +3613,36 @@
       );
     };
 
-    const getAmazonLink = (searchQuery) => {
+    const getAmazonLink = (query, directUrl) => {
       const affiliateId = window.AppConfig.AMAZON_AFFILIATE_ID;
+      const cleanQuery = query || "ortopedia";
+      
       if (affiliateId && affiliateId.trim() !== "") {
-        return `https://www.amazon.es/s?k=${encodeURIComponent(searchQuery)}&tag=${affiliateId}`;
+        // Priorizar búsqueda con afiliado para asegurar rastreo
+        return `https://www.amazon.es/s?k=${encodeURIComponent(cleanQuery)}&tag=${affiliateId}`;
       }
-      return `https://www.amazon.es/s?k=${encodeURIComponent(searchQuery)}`;
+      // Fallback a URL directa o búsqueda genérica
+      return directUrl || `https://www.amazon.es/s?k=${encodeURIComponent(cleanQuery)}`;
+    };
+
+    const PRODUCT_CATALOG = {
+      '1': { name: 'Tabla para bañera', url: 'https://amzn.to/4uLnkU5', img: 'tabla_banera.png', query: 'tabla bañera ortopedia' },
+      '2': { name: 'Asiento para ducha', url: 'https://amzn.to/4dfjkUJ', img: 'asiento_ducha.png', query: 'asiento ducha banqueta ortopedia' },
+      '3': { name: 'Barras de apoyo', url: 'https://amzn.to/4u4JBw3', img: 'barras_apoyo.png', query: 'asidero barra apoyo baño' },
+      '4': { name: 'Alza de WC', url: 'https://amzn.to/42hlsWU', img: 'alza_wc.png', query: 'elevador inodoro con reposabrazos' },
+      '5': { name: 'Asiento bañera giratorio', url: 'https://amzn.to/4d3bjlv', img: 'asiento_banera.png', query: 'asiento bañera giratorio ortopedia' },
+      '6': { name: 'Barandilla cama', url: 'https://amzn.to/42hT9Yu', img: 'barandilla_cama.png', query: 'barandilla cama adultos' },
+      '7': { name: 'Trapecio de cama', url: 'https://amzn.to/3PqiHj4', img: 'trapecio_cama.png', query: 'trapecio cama ortopedia incorporación' },
+      '8': { name: 'Tacos elevadores cama', url: 'https://amzn.to/4tXN3Zo', img: 'tacos_cama.png', query: 'tacos elevadores muebles cama' },
+      '9': { name: 'Cubiertos adaptados', url: 'https://amzn.to/4wi1BVq', img: 'cubiertos_adaptados.png', query: 'cubiertos adaptados mango grueso' },
+      '10': { name: 'Cuchillo Nelson', url: 'https://amzn.to/3QPzqgd', img: 'cuchillo_nelson.png', query: 'cuchillo nelson una mano' },
+      '11': { name: 'Tabla de corte 1 mano', url: 'https://amzn.to/42CtdHf', img: 'tabla_cortar.png', query: 'tabla de corte para una mano ortopedia' },
+      '12': { name: 'Plato con reborde', url: 'https://amzn.to/4d2KwXN', img: 'plato_reborde.png', query: 'plato reborde alto ventosa adultos' },
+      '13': { name: 'Vaso con escotadura', url: 'https://amzn.to/3R1tYXJ', img: 'vaso_escotadura.png', query: 'vaso escotadura nasal disfagia' },
+      '14': { name: 'Andador interior', url: 'https://amzn.to/49eGadM', img: 'andador_interior.png', query: 'andador interior estrecho' },
+      '15': { name: 'Andador Rollator (exterior)', url: 'https://amzn.to/4nioy6O', img: 'andador_exterior.png', query: 'andador rollator exterior ligero' },
+      '16': { name: 'Conteras antideslizantes', url: 'https://amzn.to/4uw9fth', img: 'conteras.png', query: 'conteras andador antideslizantes 22mm' },
+      '17': { name: 'Muletas Ergonómicas (Par)', url: 'https://amzn.to/4dE2H6n', img: 'muletas_ergonomicas.png', query: 'muletas ergonomicas apoyo antebrazo' }
     };
 
     // --- SECTION ANALYZER ---
@@ -3641,26 +3665,6 @@
 
       const resultRef = useRef(null);
       const topRef = useRef(null);
-
-      const PRODUCT_CATALOG = {
-        '1': { name: 'Tabla para bañera', url: 'https://amzn.to/4uLnkU5', img: 'tabla_banera.png', query: 'tabla bañera ortopedia' },
-        '2': { name: 'Asiento para ducha', url: 'https://amzn.to/4dfjkUJ', img: 'asiento_ducha.png', query: 'asiento ducha banqueta ortopedia' },
-        '3': { name: 'Barras de apoyo', url: 'https://amzn.to/4u4JBw3', img: 'barras_apoyo.png', query: 'asidero barra apoyo baño' },
-        '4': { name: 'Alza de WC', url: 'https://amzn.to/42hlsWU', img: 'alza_wc.png', query: 'elevador inodoro con reposabrazos' },
-        '5': { name: 'Asiento bañera giratorio', url: 'https://amzn.to/4d3bjlv', img: 'asiento_banera.png', query: 'asiento bañera giratorio ortopedia' },
-        '6': { name: 'Barandilla cama', url: 'https://amzn.to/42hT9Yu', img: 'barandilla_cama.png', query: 'barandilla cama adultos' },
-        '7': { name: 'Trapecio de cama', url: 'https://amzn.to/3PqiHj4', img: 'trapecio_cama.png', query: 'trapecio cama ortopedia incorporación' },
-        '8': { name: 'Tacos elevadores cama', url: 'https://amzn.to/4tXN3Zo', img: 'tacos_cama.png', query: 'tacos elevadores muebles cama' },
-        '9': { name: 'Cubiertos adaptados', url: 'https://amzn.to/4wi1BVq', img: 'cubiertos_adaptados.png', query: 'cubiertos adaptados mango grueso' },
-        '10': { name: 'Cuchillo Nelson', url: 'https://amzn.to/3QPzqgd', img: 'cuchillo_nelson.png', query: 'cuchillo nelson una mano' },
-        '11': { name: 'Tabla de corte 1 mano', url: 'https://amzn.to/42CtdHf', img: 'tabla_cortar.png', query: 'tabla de corte para una mano ortopedia' },
-        '12': { name: 'Plato con reborde', url: 'https://amzn.to/4d2KwXN', img: 'plato_reborde.png', query: 'plato reborde alto ventosa adultos' },
-        '13': { name: 'Vaso con escotadura', url: 'https://amzn.to/3R1tYXJ', img: 'vaso_escotadura.png', query: 'vaso escotadura nasal disfagia' },
-        '14': { name: 'Andador interior', url: 'https://amzn.to/49eGadM', img: 'andador_interior.png', query: 'andador interior estrecho' },
-        '15': { name: 'Andador Rollator (exterior)', url: 'https://amzn.to/4nioy6O', img: 'andador_exterior.png', query: 'andador rollator exterior ligero' },
-        '16': { name: 'Conteras antideslizantes', url: 'https://amzn.to/4uw9fth', img: 'conteras.png', query: 'conteras andador antideslizantes 22mm' },
-        '17': { name: 'Muletas Ergonómicas (Par)', url: 'https://amzn.to/4dE2H6n', img: 'muletas_ergonomicas.png', query: 'muletas ergonomicas apoyo antebrazo' }
-      };
 
       useEffect(() => {
         if (step === 'results' && resultRef.current) {
@@ -3815,20 +3819,21 @@
         if (form.caidas === 'si') {
           const fear = parseInt(form.percepcionSeguridad) || 5;
           let mobilityAdvice = '';
-          let link = { text: 'Ver ayudas a la marcha', url: PRODUCT_CATALOG['15'].url };
+          let link = { text: 'Ver ayudas a la marcha', id: '15' };
           
           if (fear <= 3) {
             mobilityAdvice = ' Dada la frecuencia de caídas y tu baja seguridad, es fundamental valorar el uso de un andador (rollator) que proporcione una base de apoyo estable.';
-            link = { text: 'Ver andadores recomendados', url: PRODUCT_CATALOG['15'].url };
+            link = { text: 'Ver andadores recomendados', id: '15' };
           } else {
             mobilityAdvice = ' Debido a los tropiezos recientes, el uso de unas muletas ergonómicas con apoyo de antebrazo te proporcionará el apoyo extra necesario sin sobrecargar tus muñecas.';
-            link = { text: 'Ver muletas ergonómicas', url: PRODUCT_CATALOG['17'].url };
+            link = { text: 'Ver muletas ergonómicas', id: '17' };
           }
 
+          const prod = PRODUCT_CATALOG[link.id];
           all.push({
             cond: true, icon: '🚨', prio: 'Alta',
             text: `ALERTA DE SEGURIDAD: Al haber sufrido caídas recientemente, el riesgo de recidiva es muy alto. Es URGENTE eliminar alfombras y mejorar la iluminación.${mobilityAdvice}`,
-            linkText: link.text, linkUrl: link.url
+            linkText: link.text, linkUrl: getAmazonLink(prod.query, prod.url)
           });
         }
 
@@ -3862,16 +3867,18 @@
 
         // Lógica de Baño
         if (form.tipoBanyo === 'banera') {
+          const prod = PRODUCT_CATALOG['1'];
           all.push({
             cond: true, icon: '🚿', prio: 'Alta',
             text: 'Al disponer de bañera, el riesgo de caída al intentar salvar el borde es elevado. Te recomendamos el uso de una Tabla de Bañera. Este dispositivo permite realizar la entrada y salida sentado, eliminando la necesidad de mantener el equilibrio a una sola pierna mientras se supera el obstáculo.',
-            linkText: 'Ver tabla de bañera recomendada', linkUrl: PRODUCT_CATALOG['1'].url
+            linkText: 'Ver tabla de bañera recomendada', linkUrl: getAmazonLink(prod.query, prod.url)
           });
         } else if (form.tipoBanyo === 'ducha') {
+          const prod = PRODUCT_CATALOG['2'];
           all.push({
             cond: true, icon: '🚿', prio: 'Media',
             text: 'Contar con ducha es un gran paso, pero para una higiene segura y sin fatiga, es fundamental realizarla en sedestación. Un asiento o banqueta de ducha te proporcionará la estabilidad necesaria y evitará resbalones por cansancio durante el aseo.',
-            linkText: 'Ver asiento de ducha', linkUrl: PRODUCT_CATALOG['2'].url
+            linkText: 'Ver asiento de ducha', linkUrl: getAmazonLink(prod.query, prod.url)
           });
         }
 
@@ -3884,18 +3891,20 @@
         }
 
         if (form.movilidad === 'baston' || form.movilidad === 'andador') {
+          const prod = PRODUCT_CATALOG['16'];
           all.push({
             cond: true, icon: '🦯', prio: 'Alta',
             text: 'Seguridad en la Marcha: Es vital retirar todas las alfombras y obstáculos. Verifica que las conteras de tu ayuda técnica no estén gastadas; sustituirlas por modelos antideslizantes de base ancha mejorará drásticamente tu estabilidad.',
-            linkText: 'Ver conteras antideslizantes', linkUrl: PRODUCT_CATALOG['16'].url
+            linkText: 'Ver conteras antideslizantes', linkUrl: getAmazonLink(prod.query, prod.url)
           });
         }
 
         if (form.destrezaManos === 'fina' || form.destrezaManos === 'fuerza' || form.destrezaManos === 'temblor') {
+          const prod = PRODUCT_CATALOG['9'];
           all.push({
             cond: true, icon: '🍴', prio: 'Media',
             text: 'AUTONOMÍA EN ALIMENTACIÓN: Al detectar dificultades en la destreza manual, el uso de cubiertos con mango engrosado y platos con reborde facilitará tu independencia durante las comidas, reduciendo el esfuerzo y la frustración.',
-            linkText: 'Ver cubiertos adaptados', linkUrl: PRODUCT_CATALOG['9'].url
+            linkText: 'Ver cubiertos adaptados', linkUrl: getAmazonLink(prod.query, prod.url)
           });
         }
 
@@ -4439,7 +4448,7 @@
                                             <h4 className="font-bold text-brand-900 text-lg">{p.name}</h4>
                                             <p className="text-sm text-brand-500 mb-2">Producto técnico recomendado profesionalmente.</p>
                                             <a 
-                                              href={p.url || getAmazonLink(p.query)} 
+                                              href={getAmazonLink(p.query, p.url)} 
                                               target="_blank" 
                                               rel="noopener noreferrer" 
                                               className="inline-block bg-accent-coral text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-opacity-90 transition-all"
@@ -4585,7 +4594,7 @@
               {article.materials.map((mat, i) => (
                 <li key={i} className="group/card bg-white rounded-xl border border-gray-200 shadow-sm hover:border-brand-300 hover:shadow-md transition-all overflow-hidden cursor-pointer">
                   <a
-                    href={mat.link || getAmazonLink(mat.query)}
+                    href={getAmazonLink(mat.query, mat.link)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex gap-4 p-4 items-start w-full h-full outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
