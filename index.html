@@ -515,8 +515,9 @@
                           if (isGamesContext) {
                             alert("Para instalar IAdapta Juegos: \n1. Pulsa el botón de 'Compartir' (en iOS) o el menú de tres puntos (en Android). \n2. Selecciona 'Añadir a pantalla de inicio' o 'Instalar aplicación'.");
                           } else {
+                            sessionStorage.setItem('pendingAutoInstall', 'true');
                             const baseUrl = window.location.href.split('?')[0];
-                            window.location.href = `${baseUrl}?page=games&autoInstall=true`;
+                            window.location.href = `${baseUrl}?page=games`;
                           }
                         }
                       }}
@@ -2826,9 +2827,10 @@
                         if (isProContext) {
                           alert("Para instalar IAdapta Recursos: \n1. Pulsa el botón de 'Compartir' (en iOS) o el menú de tres puntos (en Android). \n2. Selecciona 'Añadir a pantalla de inicio' o 'Instalar aplicación'.");
                         } else {
-                          // Navigate and tell the app to auto-trigger install prompt once ready
+                          // Save intent and navigate
+                          sessionStorage.setItem('pendingAutoInstall', 'true');
                           const baseUrl = window.location.href.split('?')[0];
-                          window.location.href = `${baseUrl}?page=resources&autoInstall=true`;
+                          window.location.href = `${baseUrl}?page=resources`;
                         }
                       }
                     }}
@@ -5473,13 +5475,18 @@
           checkPWA();
           
           const handleAutoInstall = () => {
+            const isPending = sessionStorage.getItem('pendingAutoInstall') === 'true';
             const params = new URLSearchParams(window.location.search);
-            if (params.get('autoInstall') === 'true' && window.deferredPrompt) {
+            const isUrlFlag = params.get('autoInstall') === 'true';
+
+            if ((isPending || isUrlFlag) && window.deferredPrompt) {
               window.deferredPrompt.prompt();
-              // Remove the flag so it doesn't prompt on every reload
-              const url = new URL(window.location.href);
-              url.searchParams.delete('autoInstall');
-              window.history.replaceState({}, '', url.toString());
+              sessionStorage.removeItem('pendingAutoInstall');
+              if (isUrlFlag) {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('autoInstall');
+                window.history.replaceState({}, '', url.toString());
+              }
             }
           };
 
