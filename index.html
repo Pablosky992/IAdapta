@@ -357,7 +357,7 @@
 
 
     // --- SECTION COGNITIVE (GIMNASIO CEREBRAL) ---
-    const SectionCognitive = function SectionCognitive({ isTeaser, navigateTo, isStandalone, isPWA }) {
+    const SectionCognitive = function SectionCognitive({ isTeaser, navigateTo, isStandalone, isPWA, setShowInstaller }) {
       const { useState, useEffect, useCallback, useMemo } = React;
 
       // Card sequence for levels (pairs)
@@ -512,13 +512,12 @@
                           });
                         } else {
                           const isGamesContext = new URLSearchParams(window.location.search).get('page') === 'games';
-                          if (isGamesContext) {
-                            sessionStorage.setItem('pendingAutoInstall', 'true');
-                            alert("Preparando instalador de juegos... En un momento aparecerá la ventana de confirmación.");
-                          } else {
-                            sessionStorage.setItem('pendingAutoInstall', 'true');
+                          sessionStorage.setItem('pendingAutoInstall', 'true');
+                          if (!isGamesContext) {
                             const baseUrl = window.location.href.split('?')[0];
                             window.location.href = `${baseUrl}?page=games`;
+                          } else {
+                            setShowInstaller(true);
                           }
                         }
                       }}
@@ -2431,7 +2430,7 @@
     };
 
     // --- SECTION RESOURCES FOR PROFESSIONALS ---
-    const SectionResources = function SectionResources({ navigateTo, isPWA }) {
+    const SectionResources = function SectionResources({ navigateTo, isPWA, setShowInstaller }) {
       const { useState, useEffect } = React;
       const [view, setView] = useState('menu'); // 'menu', 'math', 'pao', 'ramp'
       const [difficulty, setDifficulty] = useState('medium');
@@ -2825,14 +2824,13 @@
                         });
                       } else {
                         const isProContext = new URLSearchParams(window.location.search).get('page') === 'resources';
-                        if (isProContext) {
-                          sessionStorage.setItem('pendingAutoInstall', 'true');
-                          alert("Preparando instalador de recursos... En un momento aparecerá la ventana de confirmación.");
-                        } else {
-                          // Save intent and navigate
-                          sessionStorage.setItem('pendingAutoInstall', 'true');
+                        sessionStorage.setItem('pendingAutoInstall', 'true');
+                        if (!isProContext) {
                           const baseUrl = window.location.href.split('?')[0];
                           window.location.href = `${baseUrl}?page=resources`;
+                        } else {
+                          // Already in context, just trigger overlay state
+                          setShowInstaller(true);
                         }
                       }
                     }}
@@ -5480,7 +5478,7 @@
           
           const handleAutoInstall = () => {
             const isPending = sessionStorage.getItem('pendingAutoInstall') === 'true';
-            if (isPending && window.deferredPrompt) {
+            if (isPending) {
               setShowInstaller(true);
             }
           };
@@ -5628,11 +5626,23 @@
                         window.deferredPrompt.prompt();
                         sessionStorage.removeItem('pendingAutoInstall');
                         setShowInstaller(false);
+                      } else {
+                        alert("El instalador automático aún no está listo. Por favor, usa las 'Instrucciones manuales' o espera unos segundos y vuelve a intentarlo.");
                       }
                     }}
                     className="w-full py-4 bg-brand-900 text-white rounded-2xl font-bold text-lg hover:bg-brand-800 transition-all shadow-lg active:scale-95"
                   >
                     Instalar Ahora
+                  </button>
+                  <button 
+                    onClick={() => {
+                      alert("Para instalar manualmente: \n\nEn Android: Pulsa los 3 puntos (⋮) y 'Instalar aplicación'. \n\nEn iOS (iPhone): Pulsa 'Compartir' (↑) y 'Añadir a pantalla de inicio'.");
+                      sessionStorage.removeItem('pendingAutoInstall');
+                      setShowInstaller(false);
+                    }}
+                    className="w-full py-3 text-brand-600 font-bold hover:bg-brand-50 rounded-xl transition-all"
+                  >
+                    Instrucciones manuales
                   </button>
                   <button 
                     onClick={() => {
@@ -5662,13 +5672,13 @@
               <SectionCV />
             )}
             {currentPage === 'cognitive' && (
-              <SectionCognitive isTeaser={true} navigateTo={navigateTo} isStandalone={isStandalone} isPWA={isPWA} />
+              <SectionCognitive isTeaser={true} navigateTo={navigateTo} isStandalone={isStandalone} isPWA={isPWA} setShowInstaller={setShowInstaller} />
             )}
             {currentPage === 'guides' && (
               <SectionGuides />
             )}
             {currentPage === 'resources' && (
-              <SectionResources navigateTo={navigateTo} isPWA={isPWA} />
+              <SectionResources navigateTo={navigateTo} isPWA={isPWA} setShowInstaller={setShowInstaller} />
             )}
             {currentPage === 'memory' && (
               <SectionCognitive isTeaser={false} navigateTo={navigateTo} isStandalone={isStandalone} />
