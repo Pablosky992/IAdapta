@@ -5,23 +5,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description"
-    content="IAdapta - Terapia Ocupacional y Accesibilidad. Guías de adaptación, recursos para profesionales y herramientas de estimulación cognitiva." />
+    content="IAdapta: Expertos en Terapia Ocupacional, Accesibilidad y Estimulación Cognitiva. Guías para la adaptación del hogar, recursos para profesionales y retos mentales diarios." />
+  <meta name="keywords" content="terapia ocupacional, accesibilidad, estimulacion cognitiva, adaptacion hogar, recursos para profesionales, juegos de memoria, autonomia personal, salud mental, productos de apoyo" />
+  <link rel="canonical" href="https://iadapta.es/" />
   <meta name="google-adsense-account" content="ca-pub-9370167145239765">
   <link rel="icon" type="image/png" href="assets/iadapta_logo.png" />
-  <title>IAdapta | Terapia Ocupacional y Accesibilidad</title>
+  <title>IAdapta | Terapia Ocupacional, Accesibilidad y Estimulación Cognitiva</title>
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalBusiness",
+    "name": "IAdapta",
+    "alternateName": "IAdapta Terapia Ocupacional",
+    "description": "Plataforma de Terapia Ocupacional especializada en accesibilidad y estimulación cognitiva.",
+    "url": "https://iadapta.es",
+    "logo": "https://iadapta.es/assets/iadapta_logo.png",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "España"
+    },
+    "medicalSpecialty": ["OccupationalTherapy", "PhysicalTherapy", "Geriatrics"],
+    "offers": {
+      "@type": "Offer",
+      "name": "Recursos para Profesionales y Juegos Cognitivos"
+    }
+  }
+  </script>
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://iadapta.es/" />
-  <meta property="og:title" content="IAdapta | Gimnasio Cerebral y Accesibilidad" />
-  <meta property="og:description" content="Entrena tu mente con nuestros juegos cognitivos y mejora tu autonomía con IAdapta." />
+  <meta property="og:title" content="IAdapta | Autonomía Personal y Agudeza Mental" />
+  <meta property="og:description" content="Entrena tu mente y mejora la accesibilidad de tu entorno con IAdapta." />
   <meta property="og:image" content="https://iadapta.es/daily_challenge_banner.png" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content="https://iadapta.es/" />
   <meta property="twitter:title" content="IAdapta | Gimnasio Cerebral" />
-  <meta property="twitter:description" content="Supera retos diarios y mejora tu agudeza mental." />
+  <meta property="twitter:description" content="Supera retos diarios y mejora tu agudeza mental con Terapia Ocupacional." />
   <meta property="twitter:image" content="https://iadapta.es/daily_challenge_banner.png" />
 
   <!-- Tailwind CSS CDN -->
@@ -3232,8 +3256,7 @@
         }
         
         if (currentPage !== 'main') {
-          navigateTo('main');
-          setTimeout(() => scrollTo(id), 100);
+          navigateTo('main', id);
         } else {
           scrollTo(id);
         }
@@ -3253,8 +3276,14 @@
                   <ul className="flex items-center gap-1 list-none m-0 p-0">
                     {linksMain.map(link => (
                       <li key={link.id}>
-                        <button onClick={() => handle(link.id)} className={`px-3 py-2.5 rounded-xl text-sm xl:text-base font-bold transition-all duration-200 whitespace-nowrap ${currentPage === 'main' && activeSection === link.id ? 'bg-brand-900 text-white shadow-sm' : 'text-brand-900/70 hover:text-brand-900 hover:bg-white/50'
-                          }`}>
+                        <button 
+                          onClick={() => handle(link.id)} 
+                          className={`px-3 py-2.5 rounded-xl text-sm xl:text-base font-bold transition-all duration-200 whitespace-nowrap ${
+                            (currentPage === 'main' && activeSection === link.id) || (currentPage === link.id) || (link.id === 'home' && currentPage === 'main' && activeSection === 'home')
+                            ? 'bg-brand-900 text-white shadow-sm' 
+                            : 'text-brand-900/70 hover:text-brand-900 hover:bg-white/50'
+                          }`}
+                        >
                           {link.label}
                         </button>
                       </li>
@@ -5473,30 +5502,38 @@
       const syncPageFromUrl = useCallback(() => {
         const params = new URLSearchParams(window.location.search);
         const pageParam = params.get('page');
+        let newPage = 'main';
         
-        if (!pageParam || pageParam === 'home') {
-          setCurrentPage('main');
-        } else if (pageParam === 'resources') {
-          setCurrentPage('resources');
-        } else if (pageParam === 'cognitive' || pageParam === 'games') {
-          setCurrentPage('cognitive');
-        } else if (pageParam === 'memory') {
-          setCurrentPage('memory');
-        } else if (pageParam === 'order') {
-          setCurrentPage('order');
-        } else if (pageParam === 'wordsearch') {
-          setCurrentPage('wordsearch');
-        } else if (pageParam === 'math') {
-          setCurrentPage('math');
-        } else if (pageParam === 'analyzer') {
-          setCurrentPage('analyzer');
-        } else if (pageParam === 'cv') {
-          setCurrentPage('cv');
-        } else if (pageParam === 'challenge') {
-          setCurrentPage('challenge');
-        } else if (pageParam === 'visual') {
-          setCurrentPage('visual');
-        }
+        if (pageParam === 'resources') newPage = 'resources';
+        else if (pageParam === 'cognitive' || pageParam === 'games') newPage = 'cognitive';
+        else if (pageParam === 'memory') newPage = 'memory';
+        else if (pageParam === 'order') newPage = 'order';
+        else if (pageParam === 'wordsearch') newPage = 'wordsearch';
+        else if (pageParam === 'math') newPage = 'math';
+        else if (pageParam === 'analyzer') newPage = 'analyzer';
+        else if (pageParam === 'cv') newPage = 'cv';
+        else if (pageParam === 'challenge') newPage = 'challenge';
+        else if (pageParam === 'visual') newPage = 'visual';
+        else if (pageParam === 'legal') newPage = 'legal';
+
+        setCurrentPage(newPage);
+        
+        // Dynamic Title Update
+        const titles = {
+          main: "IAdapta | Terapia Ocupacional y Accesibilidad",
+          resources: "Recursos Profesionales | IAdapta Terapia Ocupacional",
+          cognitive: "Área Cognitiva y Juegos | IAdapta",
+          cv: "Pablo Narciso Millán | Currículum Vitae",
+          memory: "Juego de Memoria | Estimulación Cognitiva",
+          order: "Juego de Orden Numérico | IAdapta",
+          wordsearch: "Sopa de Letras Online | Reto Mental",
+          math: "Cálculo Mental | Estimulación Cognitiva",
+          visual: "Agudeza Visual | Entrenamiento Mental",
+          analyzer: "Analizador de Accesibilidad IA | IAdapta",
+          challenge: "Reto Diario | Gimnasio Cerebral",
+          legal: "Aviso Legal | IAdapta"
+        };
+        document.title = titles[newPage] || titles.main;
       }, []);
 
       useEffect(() => {
@@ -5527,7 +5564,7 @@
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, []);
 
-      const navigateTo = useCallback((page) => {
+      const navigateTo = useCallback((page, section = null) => {
         const urlPage = page === 'main' ? 'home' : page;
         const currentUrlParam = new URLSearchParams(window.location.search).get('page') || 'home';
 
@@ -5536,8 +5573,11 @@
         const isCurrentContextChange = (currentUrlParam === 'home' || currentUrlParam === 'resources' || currentUrlParam === 'cognitive' || currentUrlParam === 'games');
         
         if (isTargetContextChange && isCurrentContextChange && page !== (currentUrlParam === 'home' ? 'main' : currentUrlParam)) {
+          if (section) sessionStorage.setItem('pendingScroll', section);
           const baseUrl = window.location.href.split('?')[0];
-          window.location.href = `${baseUrl}?page=${urlPage}`;
+          let targetUrl = `${baseUrl}?page=${urlPage}`;
+          if (section) targetUrl += `&section=${section}`;
+          window.location.href = targetUrl;
           return;
         }
 
@@ -5546,12 +5586,16 @@
           window.history.pushState({ page }, '', `?page=${urlPage}`);
         }
         setCurrentPage(page);
-        window.scrollTo({ top: 0, behavior: 'instant' });
-      }, []);
+        if (!section) window.scrollTo({ top: 0, behavior: 'instant' });
+        
+        if (section) {
+          sessionStorage.setItem('pendingScroll', section);
+        }
+      }, [scrollTo]);
 
       const params = new URLSearchParams(window.location.search);
       const pageParam = params.get('page');
-      const isStandalone = pageParam === 'memory' || pageParam === 'order' || pageParam === 'wordsearch' || pageParam === 'analyzer' || (pageParam === 'games' && (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone));
+      const isStandalone = pageParam === 'memory' || pageParam === 'order' || pageParam === 'wordsearch' || (pageParam === 'games' && (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone));
 
       return (
         <>
