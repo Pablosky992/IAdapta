@@ -1,6 +1,6 @@
 {
-  "name": "IAdapta | Recursos",
-  "short_name": "IAdapta Recursos",
+  "name": "Recursos | IAdapta",
+  "short_name": "Recursos IAdapta",
   "description": "Herramientas y catálogos para profesionales de la Terapia Ocupacional.",
   "start_url": "./index.html?page=resources",
   "id": "iadapta_recursos_app",
