@@ -876,7 +876,7 @@
       { id: 2, name: 'Intermedio', size: 7, target: 'Q', base: 'O', rounds: 5 },
       { id: 3, name: 'Avanzado', size: 9, target: 'F', base: 'E', rounds: 8 },
       { id: 4, name: 'Experto', size: 11, target: 'M', base: 'N', rounds: 10 },
-      { id: 5, name: 'Maestro', size: 13, target: 'l', base: 'I', rounds: 12 }
+      { id: 5, name: 'Maestro', size: 13, target: 'O', base: 'D', rounds: 12 }
     ];
 
     // --- SECTION WORD SEARCH GAME ---
@@ -1663,8 +1663,8 @@
       const [step, setStep] = useState(0); // 0: Start, 1: Game1, 2: Game2, 3: Game3, 4: Finished
       const [streak, setStreak] = useState(0);
       const [alreadyDoneToday, setAlreadyDoneToday] = useState(false);
-      const [startTime, setStartTime] = useState(0);
       const [totalTime, setTotalTime] = useState(0);
+      const [stars, setStars] = useState(0);
 
       // Difficulty factor: 1 (Mon) to 7 (Sun)
       const difficultyFactor = useMemo(() => {
@@ -1713,7 +1713,17 @@
           setAlreadyDoneToday(true);
         }
         
-        setTotalTime(((Date.now() - startTime) / 1000).toFixed(0));
+        const finalT = (Date.now() - startTime) / 1000;
+        setTotalTime(finalT.toFixed(0));
+
+        // Star calculation for the whole challenge
+        const baseThreshold = 50 + (difficultyFactor * 5);
+        let s = 3;
+        if (finalT < baseThreshold * 0.7) s = 5;
+        else if (finalT < baseThreshold) s = 4;
+        else if (finalT > baseThreshold * 1.5) s = 2;
+        setStars(s);
+
         setStep(4);
         if (window.confetti) {
           window.confetti({ particleCount: 200, spread: 160, origin: { y: 0.6 } });
@@ -2175,8 +2185,9 @@
 
             {step === 0 ? (
               <div className="bg-white rounded-[3rem] p-12 shadow-2xl border border-brand-100 text-center anim-scale-in max-w-2xl mx-auto">
-                <div className="w-24 h-24 bg-brand-100 text-brand-600 rounded-3xl flex items-center justify-center text-5xl mx-auto mb-8 shadow-inner">
-                  <Icons.Calendar />
+                <div className="relative h-48 sm:h-64 rounded-[2.5rem] overflow-hidden mb-8 shadow-xl border-4 border-white anim-float">
+                  <img src="daily_challenge_hero.png" className="w-full h-full object-cover" alt="Reto Diario" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-900/40 to-transparent"></div>
                 </div>
                 <h2 className="font-display text-4xl font-bold text-brand-900 mb-6 uppercase tracking-tight">Reto Diario IAdapta</h2>
                 <p className="text-xl text-brand-600 mb-10 leading-relaxed">Completa los 3 ejercicios de hoy para mantener tu racha. Hoy es <span className="font-bold text-brand-900 underline decoration-accent-coral decoration-4 underline-offset-4">{new Intl.DateTimeFormat('es-ES', { weekday: 'long' }).format(new Date())}</span>, la dificultad es de <span className="font-bold text-brand-900">{difficultyFactor}/7</span>.</p>
@@ -2214,6 +2225,7 @@
                 <div className="text-7xl mb-6">🏆✨</div>
                 <h2 className="font-display text-4xl font-bold text-brand-900 mb-2">¡Reto Completado!</h2>
                 <p className="text-emerald-600 font-bold mb-4 uppercase tracking-widest">Día superado con éxito</p>
+                <StarRating stars={stars} />
                 
                 {streak >= 7 && (
                   <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-6 mb-8 anim-scale-in">
@@ -2288,7 +2300,7 @@
         
         // Dynamic target selection to avoid mismatch and add variety
         const pairs = [
-          ['A', 'V'], ['Q', 'O'], ['E', 'F'], ['M', 'N'], ['l', 'I'], 
+          ['A', 'V'], ['Q', 'O'], ['E', 'F'], ['M', 'N'], ['O', 'D'], 
           ['W', 'M'], ['C', 'G'], ['S', '5'], ['B', '8'], ['Z', '2'],
           ['D', '0'], ['P', 'R'], ['K', 'X'], ['U', 'V'], ['T', 'Y']
         ];
@@ -2327,7 +2339,7 @@
               setGameStatus('won');
               
               // Star logic
-              const baseTime = currentLevel.rounds * 2; 
+              const baseTime = currentLevel.rounds * 3.5; 
               let s = 3;
               if (time < baseTime * 0.6) s = 5;
               else if (time < baseTime * 0.9) s = 4;
@@ -2391,15 +2403,16 @@
 
                 <div className="flex flex-col items-center gap-8">
                   {gameStatus === 'playing' ? (
-                    <div className="bg-white p-4 rounded-3xl shadow-2xl border-8 border-brand-100 w-full max-w-[500px]">
-                      <div className="mb-6 text-center">
-                        <p className="text-brand-600 font-bold mb-2 uppercase tracking-widest text-sm">Busca el carácter diferente:</p>
-                        <span className="text-accent-coral text-4xl font-bold">{currentTarget}</span>
+                    <div className="bg-white p-2 sm:p-4 rounded-3xl shadow-2xl border-4 sm:border-8 border-brand-100 w-full max-w-[500px]">
+                      <div className="mb-4 sm:mb-6 text-center">
+                        <p className="text-brand-600 font-bold mb-1 sm:mb-2 uppercase tracking-widest text-xs sm:text-sm">Busca el carácter diferente:</p>
+                        <span className="text-accent-coral text-3xl sm:text-4xl font-bold">{currentTarget}</span>
                       </div>
-                      <div className="grid gap-1.5 sm:gap-2" style={{ gridTemplateColumns: `repeat(${currentLevel.size}, 1fr)` }}>
+                      <div className={`grid ${currentLevel.size > 10 ? 'gap-0.5 sm:gap-1' : 'gap-1.5 sm:gap-2'}`} style={{ gridTemplateColumns: `repeat(${currentLevel.size}, 1fr)` }}>
                         {grid.map((l, i) => (
                           <button key={i} onClick={() => handleCellClick(i)} 
-                            className={`aspect-square rounded-lg flex items-center justify-center text-lg sm:text-xl font-bold transition-all duration-200
+                            className={`aspect-square rounded-md sm:rounded-lg flex items-center justify-center font-bold transition-all duration-200
+                              ${currentLevel.size > 10 ? 'text-[10px] sm:text-sm' : currentLevel.size > 8 ? 'text-xs sm:text-base' : 'text-lg sm:text-xl'}
                               ${correctIdx === i ? 'bg-emerald-500 text-white scale-110 z-10' : 'bg-brand-50 text-brand-700 hover:bg-brand-200 active:scale-90'}`}
                           >
                             {l}
@@ -3502,6 +3515,7 @@
             <div className="text-center mb-16">
               <span className="inline-block bg-brand-100 text-brand-700 rounded-full px-5 py-2 text-base font-bold uppercase tracking-widest mb-4">Perfil Profesional</span>
               <h1 className="font-display text-4xl sm:text-5xl font-bold text-brand-900 mb-4">Curriculum Vitae</h1>
+              <p className="text-2xl font-bold text-brand-600 mb-2">Pablo Narciso Millán</p>
               <div className="section-divider w-24 mx-auto mb-8"></div>
 
               <div className="max-w-3xl mx-auto space-y-4 text-lg sm:text-xl text-gray-700 leading-relaxed text-left bg-white p-8 sm:p-10 rounded-3xl border border-gray-100 shadow-sm">
@@ -3603,7 +3617,7 @@
       const [step, setStep] = useState('form');
       const [score, setScore] = useState(0);
       const [ringOffset, setRingOffset] = useState(283);
-      const [form, setForm] = useState({ tipo: '', ascensor: '', anchoAscensor: '', largoAscensor: '', tipoBanyo: '', barras: '', alzaWC: '', iluminacion: '', puertas: '', movilidad: '', nivelMovilidad: '', capacidadesMotoras: '', notas: '' });
+      const [form, setForm] = useState({ nombre: '', edad: '', tipo: '', ascensor: '', anchoAscensor: '', largoAscensor: '', tipoBanyo: '', barras: '', alzaWC: '', iluminacion: '', puertas: '', movilidad: '', nivelMovilidad: '', destrezaManos: '', caidas: '', percepcionSeguridad: '', convivencia: '', limitaciones: [], notas: '' });
 
       // New States for AI Image Analysis
       const [file, setFile] = useState(null);
@@ -3666,6 +3680,18 @@
       };
 
       const handleChange = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+
+      const toggleLimitacion = (val) => {
+        setForm(f => {
+          const current = f.limitaciones || [];
+          if (current.includes(val)) {
+            return { ...f, limitaciones: current.filter(v => v !== val) };
+          } else {
+            if (current.length >= 3) return f;
+            return { ...f, limitaciones: [...current, val] };
+          }
+        });
+      };
 
       const handleDragOver = (e) => { e.preventDefault(); setIsDragging(true); };
       const handleDragLeave = (e) => { e.preventDefault(); setIsDragging(false); };
@@ -3779,7 +3805,7 @@
           });
         }
 
-        if (form.limitacionPrincipal === 'fatiga') {
+        if (form.limitaciones && form.limitaciones.includes('fatiga')) {
           all.push({
             cond: true, icon: '🫁', prio: 'Media',
             text: 'GESTIÓN DE LA ENERGÍA: Al identificar la fatiga como limitación principal, es vital aplicar técnicas de simplificación de tareas. Realiza las actividades sentado (higiene, cocina) y planifica periodos de descanso breves pero frecuentes para evitar el agotamiento que aumenta el riesgo de caídas.',
@@ -3845,8 +3871,10 @@
       };
 
       const isQuestionnaireComplete = () => {
-        const requiredFields = ['nombre', 'edad', 'tipo', 'ascensor', 'tipoBanyo', 'iluminacion', 'puertas', 'movilidad', 'nivelMovilidad', 'destrezaManos', 'caidas', 'percepcionSeguridad', 'convivencia', 'limitacionPrincipal'];
-        return requiredFields.every(field => form[field] !== '');
+        const requiredFields = ['nombre', 'edad', 'tipo', 'ascensor', 'tipoBanyo', 'iluminacion', 'puertas', 'movilidad', 'nivelMovilidad', 'destrezaManos', 'caidas', 'percepcionSeguridad', 'convivencia'];
+        const basicComplete = requiredFields.every(field => form[field] !== '');
+        const limitationsComplete = form.limitaciones && form.limitaciones.length > 0;
+        return basicComplete && limitationsComplete;
       };
 
       const prioBadge = { Alta: 'bg-red-100 text-red-700', Media: 'bg-amber-100 text-amber-700', Info: 'bg-brand-100 text-brand-700' };
@@ -3927,7 +3955,7 @@
 
       const reset = () => {
         setStep('form'); setScore(0); setRingOffset(283);
-        const emptyForm = { nombre: '', edad: '', tipo: '', ascensor: '', anchoAscensor: '', largoAscensor: '', tipoBanyo: '', iluminacion: '', puertas: '', movilidad: '', nivelMovilidad: '', destrezaManos: '', caidas: '', percepcionSeguridad: '', convivencia: '', limitacionPrincipal: '', notas: '' };
+        const emptyForm = { nombre: '', edad: '', tipo: '', ascensor: '', anchoAscensor: '', largoAscensor: '', tipoBanyo: '', iluminacion: '', puertas: '', movilidad: '', nivelMovilidad: '', destrezaManos: '', caidas: '', percepcionSeguridad: '', convivencia: '', limitaciones: [], notas: '' };
         setForm(emptyForm);
         localStorage.removeItem('iadapta_draft');
         setFile(null); setPreview(null); setBase64(null); setAiResponse(''); setAiError('');
@@ -4222,18 +4250,32 @@
                       <option value="ayuda">Cuento con ayuda profesional diaria</option>
                     </select>
                   </div>
-                  <div>
-                    <label className={labelClass}>Principal limitación actual</label>
-                    <select name="limitacionPrincipal" value={form.limitacionPrincipal} onChange={handleChange} className={fieldClass} required>
-                      <option value="">— Selecciona —</option>
-                      <option value="dolor">Dolor articular / Reuma</option>
-                      <option value="equilibrio">Falta de equilibrio</option>
-                      <option value="debilidad">Debilidad en un lado (Hemiparesia)</option>
-                      <option value="fatiga">Fatiga / Cansancio rápido</option>
-                      <option value="vision">Problemas de visión</option>
-                      <option value="temblor">Temblores / Parkinson</option>
-                      <option value="otra">Otra limitación</option>
-                    </select>
+                  <div className="md:col-span-2 bg-brand-50/50 p-6 rounded-2xl border border-brand-100">
+                    <label className={labelClass}>Principales limitaciones (máximo 3)</label>
+                    <p className="text-sm text-brand-600 mb-4 font-medium italic">Selecciona las opciones que mejor describan tu situación actual:</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {[
+                        { val: 'dolor', label: 'Dolor articular / Reuma' },
+                        { val: 'equilibrio', label: 'Falta de equilibrio' },
+                        { val: 'debilidad', label: 'Debilidad en un lado' },
+                        { val: 'fatiga', label: 'Fatiga / Cansancio' },
+                        { val: 'vision', label: 'Problemas de visión' },
+                        { val: 'temblor', label: 'Temblores / Parkinson' },
+                        { val: 'otra', label: 'Otra limitación' }
+                      ].map(opt => (
+                        <button
+                          key={opt.val}
+                          type="button"
+                          onClick={() => toggleLimitacion(opt.val)}
+                          className={`flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all text-left ${form.limitaciones?.includes(opt.val) ? 'border-brand-500 bg-white text-brand-900 shadow-md scale-[1.02]' : 'border-white bg-white/50 text-gray-600 hover:border-brand-200 shadow-sm'}`}
+                        >
+                          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ${form.limitaciones?.includes(opt.val) ? 'border-brand-500 bg-brand-500 text-white' : 'border-gray-300'}`}>
+                            {form.limitaciones?.includes(opt.val) && <Icons.Check className="w-4 h-4" />}
+                          </div>
+                          <span className="font-bold text-sm leading-tight">{opt.label}</span>
+                        </button>
+                      ))}
+                    </div>
                   </div>
                   <div>
                     <label className={labelClass}>Nivel de movilidad</label>
@@ -5556,6 +5598,19 @@
         window.addEventListener('popstate', syncPageFromUrl);
         return () => window.removeEventListener('popstate', syncPageFromUrl);
       }, [syncPageFromUrl]);
+
+      useEffect(() => {
+        if (currentPage === 'main') {
+          const pending = sessionStorage.getItem('pendingScroll');
+          if (pending) {
+            sessionStorage.removeItem('pendingScroll');
+            setTimeout(() => {
+              const el = document.getElementById(pending);
+              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300); // Give it time to render
+          }
+        }
+      }, [currentPage]);
 
       useEffect(() => {
         if (currentPage !== 'main') return;
