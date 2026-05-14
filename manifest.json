@@ -9,9 +9,17 @@
   "icons": [
     {
       "src": "games_icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "games_icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "orientation": "any",
+  "prefer_related_applications": false
 }

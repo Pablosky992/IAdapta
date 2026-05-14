@@ -460,7 +460,7 @@
                   </p>
                 </div>
 
-                {!isStandalone && (
+                {!isPWA && (
                   <div className="mb-16">
                     <button 
                       onClick={() => {
@@ -471,6 +471,7 @@
                               console.log('User accepted the install prompt');
                             }
                             window.deferredPrompt = null;
+                            window.dispatchEvent(new CustomEvent('pwa-installed'));
                           });
                         } else {
                           // Check context
@@ -489,7 +490,7 @@
                       <div className="bg-white/10 p-2 rounded-xl">
                         <Icons.Download />
                       </div>
-                      <span>Descargar App de Juegos</span>
+                      <span>{window.deferredPrompt ? 'Instalar App de Juegos' : 'Descargar App de Juegos'}</span>
                       <Icons.Smartphone />
                     </button>
                     <p className="mt-4 text-sm text-gray-400">Instala IAdapta Juegos en tu móvil para jugar sin conexión</p>
@@ -1788,7 +1789,7 @@
             <div className="grid grid-cols-4 gap-3 mb-4">
               {nums.map(n => (
                 <button key={n} onClick={() => click(n)} 
-                  className={`aspect-square flex items-center justify-center text-xl font-bold rounded-xl transition-all ${n < next ? 'bg-emerald-500 text-white opacity-50 scale-90' : n === next ? 'bg-white border-4 border-brand-400 text-brand-900 shadow-lg' : 'bg-brand-50 text-brand-700 border-2 border-transparent'}`}
+                  className={`aspect-square flex items-center justify-center text-xl font-bold rounded-xl transition-all ${n < next ? 'bg-emerald-500 text-white opacity-50 scale-90' : 'bg-white border-2 border-brand-100 text-brand-900 shadow-sm'}`}
                 >
                   {n}
                 </button>
@@ -2577,7 +2578,7 @@
               <h2 className="font-display text-4xl sm:text-5xl font-bold text-brand-900 mb-6">Recursos para Profesionales</h2>
               <div className="section-divider w-24 mx-auto mb-8"></div>
               
-              {view === 'menu' && (
+              {view === 'menu' && !isPWA && (
                 <div className="mb-12">
                   <button 
                     onClick={() => {
@@ -2588,6 +2589,7 @@
                             console.log('User accepted the Pro install prompt');
                           }
                           window.deferredPrompt = null;
+                          window.dispatchEvent(new CustomEvent('pwa-installed'));
                         });
                       } else {
                         // Check context
@@ -2606,7 +2608,7 @@
                     <div className="bg-white/10 p-2 rounded-xl">
                       <Icons.Download />
                     </div>
-                    <span>Descargar App de Recursos</span>
+                    <span>{window.deferredPrompt ? 'Instalar App de Recursos' : 'Descargar App de Recursos'}</span>
                     <Icons.Briefcase className="w-6 h-6" />
                   </button>
                 </div>
@@ -5199,8 +5201,23 @@
     function App() {
       const [currentPage, setCurrentPage] = useState('main'); // 'main', 'cv', 'cookies', 'memory', 'order'
       const [activeSection, setActiveSection] = useState('home');
+      const [isPWA, setIsPWA] = useState(false);
+      const [installable, setInstallable] = useState(false);
 
       useEffect(() => {
+        // Detect if running as PWA
+        const checkPWA = () => {
+          setIsPWA(window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone);
+        };
+        checkPWA();
+        
+        // Listen for installability
+        const handleInstallable = () => setInstallable(true);
+        const handleInstalled = () => { setInstallable(false); checkPWA(); };
+        window.addEventListener('pwa-installable', handleInstallable);
+        window.addEventListener('pwa-installed', handleInstalled);
+        if (window.deferredPrompt) setInstallable(true);
+
         const params = new URLSearchParams(window.location.search);
         const pageParam = params.get('page');
         
@@ -5242,7 +5259,11 @@
           setActiveSection(current);
         };
         window.addEventListener('scroll', onScroll, { passive: true });
-        return () => window.removeEventListener('scroll', onScroll);
+        return () => {
+          window.removeEventListener('scroll', onScroll);
+          window.removeEventListener('pwa-installable', handleInstallable);
+          window.removeEventListener('pwa-installed', handleInstalled);
+        };
       }, [currentPage]);
 
       const scrollTo = useCallback((id) => {
@@ -5294,7 +5315,7 @@
               <SectionCV />
             )}
             {currentPage === 'cognitive' && (
-              <SectionCognitive isTeaser={true} navigateTo={navigateTo} isStandalone={isStandalone} />
+              <SectionCognitive isTeaser={true} navigateTo={navigateTo} isStandalone={isStandalone} isPWA={isPWA} />
             )}
             {currentPage === 'guides' && (
               <SectionGuides />
