@@ -2411,6 +2411,10 @@
       const [searchTerm, setSearchTerm] = useState('');
       const [searchResults, setSearchResults] = useState([]);
 
+      useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }, [view]);
+
       // State for Ramp Calculator
       const [rampHeight, setRampHeight] = useState(''); // en cm
       const [rampLength, setRampLength] = useState(''); // en m
@@ -2795,7 +2799,9 @@
                         if (isProContext) {
                           alert("Para instalar IAdapta Recursos: \n1. Pulsa el botón de 'Compartir' (en iOS) o el menú de tres puntos (en Android). \n2. Selecciona 'Añadir a pantalla de inicio' o 'Instalar aplicación'.");
                         } else {
-                          navigateTo('resources');
+                          // Navigate and tell the app to auto-trigger install prompt once ready
+                          const baseUrl = window.location.href.split('?')[0];
+                          window.location.href = `${baseUrl}?page=resources&autoInstall=true`;
                         }
                       }
                     }}
@@ -5433,9 +5439,28 @@
 
         useEffect(() => {
           checkPWA();
-          window.addEventListener('pwa-installable', handleInstallable);
+          
+          const handleAutoInstall = () => {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('autoInstall') === 'true' && window.deferredPrompt) {
+              window.deferredPrompt.prompt();
+              // Remove the flag so it doesn't prompt on every reload
+              const url = new URL(window.location.href);
+              url.searchParams.delete('autoInstall');
+              window.history.replaceState({}, '', url.toString());
+            }
+          };
+
+          window.addEventListener('pwa-installable', () => {
+            handleInstallable();
+            handleAutoInstall();
+          });
           window.addEventListener('pwa-installed', handleInstalled);
-          if (window.deferredPrompt) setInstallable(true);
+          
+          if (window.deferredPrompt) {
+            setInstallable(true);
+            handleAutoInstall();
+          }
 
           return () => {
             window.removeEventListener('pwa-installable', handleInstallable);
@@ -5443,11 +5468,11 @@
           };
         }, []);
 
-        useEffect(() => {
-          const params = new URLSearchParams(window.location.search);
+      const syncPageFromUrl = useCallback(() => {
+        const params = new URLSearchParams(window.location.search);
         const pageParam = params.get('page');
         
-        if (pageParam === 'home') {
+        if (!pageParam || pageParam === 'home') {
           setCurrentPage('main');
         } else if (pageParam === 'resources') {
           setCurrentPage('resources');
@@ -5470,7 +5495,13 @@
         } else if (pageParam === 'visual') {
           setCurrentPage('visual');
         }
-      }, []); // Solo al montar la app
+      }, []);
+
+      useEffect(() => {
+        syncPageFromUrl();
+        window.addEventListener('popstate', syncPageFromUrl);
+        return () => window.removeEventListener('popstate', syncPageFromUrl);
+      }, [syncPageFromUrl]);
 
       useEffect(() => {
         if (currentPage !== 'main') return;
@@ -5495,22 +5526,22 @@
       }, []);
 
       const navigateTo = useCallback((page) => {
-        // If switching between major "App" views, force reload to swap manifest and trigger PWA prompt
-        if (page === 'main' || page === 'resources' || page === 'cognitive' || page === 'games') {
-          // Optimization: If already in Juegos context, don't reload
-          const params = new URLSearchParams(window.location.search);
-          const currentP = params.get('page');
-          const isJuegos = currentP === 'cognitive' || currentP === 'games' || ['memory', 'order', 'wordsearch', 'math', 'challenge', 'visual'].includes(currentP);
-          
-          if ((page === 'cognitive' || page === 'games') && isJuegos) {
-            setCurrentPage('cognitive');
-            window.scrollTo({ top: 0, behavior: 'instant' });
-            return;
-          }
+        const urlPage = page === 'main' ? 'home' : page;
+        const currentUrlParam = new URLSearchParams(window.location.search).get('page') || 'home';
 
+        // 1. PWA Context Swapping (Requires reload to change manifest in <head>)
+        const isTargetContextChange = (page === 'main' || page === 'resources' || page === 'cognitive' || page === 'games');
+        const isCurrentContextChange = (currentUrlParam === 'home' || currentUrlParam === 'resources' || currentUrlParam === 'cognitive' || currentUrlParam === 'games');
+        
+        if (isTargetContextChange && isCurrentContextChange && page !== (currentUrlParam === 'home' ? 'main' : currentUrlParam)) {
           const baseUrl = window.location.href.split('?')[0];
-          window.location.href = `${baseUrl}?page=${page === 'main' ? 'home' : page}`;
+          window.location.href = `${baseUrl}?page=${urlPage}`;
           return;
+        }
+
+        // 2. Internal SPA Navigation (Use History API)
+        if (currentUrlParam !== urlPage) {
+          window.history.pushState({ page }, '', `?page=${urlPage}`);
         }
         setCurrentPage(page);
         window.scrollTo({ top: 0, behavior: 'instant' });
