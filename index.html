@@ -147,7 +147,7 @@
     const { useState, useEffect, useCallback, useRef, useMemo } = React;
 
     // --- ICONS ---
-    window.Icons = {
+    const Icons = {
       Menu: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>,
       Close: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>,
       User: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>,
@@ -224,7 +224,7 @@
     };
 
     // --- REUSABLE GAME HEADER ---
-    window.GameHeader = function GameHeader({ title, subtitle, onBack, onRestart, onLevels, isStandalone }) {
+    const GameHeader = function GameHeader({ title, subtitle, onBack, onRestart, onLevels, isStandalone }) {
       return (
         <div className="flex flex-col mb-8 relative">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 w-full">
@@ -266,7 +266,7 @@
       );
     };
 
-    window.StarRating = function StarRating({ stars }) {
+    const StarRating = function StarRating({ stars }) {
       return (
         <div className="flex gap-1 justify-center my-6">
           {[1, 2, 3, 4, 5].map((i) => (
@@ -276,7 +276,7 @@
       );
     };
 
-    window.ShareButtons = function ShareButtons({ game, score, time }) {
+    const ShareButtons = function ShareButtons({ game, score, time }) {
       const motivationalText = score && score.includes('racha') ? '🔥 ¡Mi cerebro está que arde!' : '🧠 ¡Entrenando mi agudeza mental!';
       const text = `🏆 ${motivationalText}\n\nHe superado el ${game}\n✨ ${score || '¡Objetivo conseguido!'}\n⏱️ Tiempo: ${time ? `${time}s` : '---'}\n\nEntrena tú también en:`;
       
@@ -320,7 +320,7 @@
 
 
     // --- SECTION COGNITIVE (GIMNASIO CEREBRAL) ---
-    window.SectionCognitive = function SectionCognitive({ isTeaser, navigateTo, isStandalone }) {
+    const SectionCognitive = function SectionCognitive({ isTeaser, navigateTo, isStandalone, isPWA }) {
       const { useState, useEffect, useCallback, useMemo } = React;
 
       // Card sequence for levels (pairs)
@@ -474,14 +474,11 @@
                             window.dispatchEvent(new CustomEvent('pwa-installed'));
                           });
                         } else {
-                          // Check context
-                          const params = new URLSearchParams(window.location.search);
-                          const isGamesContext = params.get('page') !== 'resources';
-                          
-                          if (!isGamesContext) {
-                            navigateTo('games');
+                          const isGamesContext = new URLSearchParams(window.location.search).get('page') !== 'resources';
+                          if (isGamesContext) {
+                            alert("Para instalar IAdapta Juegos: \n1. Pulsa el botón de 'Compartir' (en iOS) o el menú de tres puntos (en Android). \n2. Selecciona 'Añadir a pantalla de inicio' o 'Instalar aplicación'.");
                           } else {
-                            alert("Para instalar la App de Juegos: \n1. Pulsa el botón de 'Compartir' o el menú de tres puntos de tu navegador. \n2. Selecciona 'Añadir a pantalla de inicio' o 'Instalar aplicación'.");
+                            navigateTo('games');
                           }
                         }
                       }}
@@ -843,7 +840,7 @@
     ];
 
     // --- SECTION WORD SEARCH GAME ---
-    window.SectionWordSearch = function SectionWordSearch({ isStandalone, navigateTo }) {
+    const SectionWordSearch = function SectionWordSearch({ isStandalone, navigateTo }) {
       const { useState, useEffect, useCallback, useRef } = React;
       
       const WORD_LIST = ['DUCHA', 'COMER', 'CAMINADOR', 'SILLA', 'MOVIL', 'TELEFONO', 'DORMIR', 'JUGAR', 'ASEO', 'VESTIR', 'COCINAR', 'PASEAR', 'LLAVES', 'GAFAS', 'RELOJ', 'PASTILLA', 'SOPA', 'AGUA', 'RADIO', 'LIBRO', 'CUIDADO', 'AYUDA', 'VASO', 'PLATO', 'CAMA', 'SOFA', 'MESA', 'ROPA', 'ZAPATOS', 'BAÑO', 'COCINA', 'PASILLO', 'ESPEJO', 'RELOJ', 'TIEMPO', 'LUZ', 'MANO', 'PIE', 'SALUD'];
@@ -1204,7 +1201,7 @@
     };
 
     // --- SECTION MATH GAME ---
-    window.SectionMathGame = function SectionMathGame({ isStandalone, navigateTo }) {
+    const SectionMathGame = function SectionMathGame({ isStandalone, navigateTo }) {
       const { useState, useEffect, useCallback, useRef } = React;
       
       const LEVELS = [
@@ -1406,7 +1403,7 @@
                         <button type="submit" className="hidden">Enviar</button>
                       </form>
                       
-                      <p className="text-brand-400 text-sm font-medium">Escribe tu respuesta y pulsa Enter</p>
+                      <p className="text-brand-400 text-sm font-medium">La respuesta se validará automáticamente</p>
                     </div>
                   ) : (
                     <div className="text-center py-8 anim-scale-in">
@@ -1436,7 +1433,7 @@
     };
 
     // --- SECTION ORDER GAME ---
-    window.SectionOrderGame = function SectionOrderGame({ isStandalone, navigateTo }) {
+    const SectionOrderGame = function SectionOrderGame({ isStandalone, navigateTo }) {
       const [gameStarted, setGameStarted] = React.useState(false);
       const [levelIndex, setLevelIndex] = React.useState(0);
       const [numbers, setNumbers] = React.useState([]);
@@ -1597,10 +1594,10 @@
                         <button
                           key={num}
                           onClick={() => handleNumberClick(num)}
-                          className={`aspect-square flex items-center justify-center text-xl sm:text-2xl font-bold rounded-2xl transition-all shadow-sm
+                          className={`aspect-square flex items-center justify-center text-xl sm:text-2xl font-bold rounded-2xl transition-all
                             ${isPast ? 'bg-emerald-500 text-white shadow-inner opacity-50 scale-95 pointer-events-none' : 
-                              isCurrent ? `bg-white text-brand-900 shadow-lg ${showHint ? 'border-4 border-brand-400 target-number' : 'border-2 border-brand-50'}` : 
-                              'bg-white text-brand-700 hover:border-brand-200 hover:shadow-md border-2 border-brand-50 active:scale-95 active:bg-red-50'}`}
+                              isCurrent && showHint ? 'bg-white text-brand-900 shadow-lg border-4 border-brand-400 target-number' : 
+                              'bg-white text-brand-700 hover:border-brand-200 border-2 border-brand-50 hover:shadow-md active:scale-95 active:bg-red-50'}`}
                         >
                           {num}
                         </button>
@@ -1616,7 +1613,7 @@
     };
 
     // --- SECTION DAILY CHALLENGE ---
-    window.SectionDailyChallenge = function SectionDailyChallenge({ isStandalone, navigateTo }) {
+    const SectionDailyChallenge = function SectionDailyChallenge({ isStandalone, navigateTo }) {
       const { useState, useEffect, useCallback, useMemo, useRef } = React;
       
       const [step, setStep] = useState(0); // 0: Start, 1: Game1, 2: Game2, 3: Game3, 4: Finished
@@ -1965,7 +1962,18 @@
 
         const handleStart = (e) => {
           const cell = getCellFromEvent(e);
-          if (cell) setSelection({ start: cell, end: cell, isDragging: true });
+          if (!cell) return;
+          if (selection && selection.isFirstClick) {
+            const dr = Math.abs(cell.r - selection.start.r);
+            const dc = Math.abs(cell.c - selection.start.c);
+            if (dr === 0 || dc === 0 || dr === dc) {
+              validateSelection(selection.start, cell);
+            } else {
+              setSelection(null);
+            }
+          } else {
+            setSelection({ start: cell, end: cell, isDragging: true });
+          }
         };
 
         const handleMove = (e) => {
@@ -1982,8 +1990,14 @@
 
         const handleEnd = () => {
           if (!selection) return;
-          validateSelection(selection.start, selection.end);
-          setSelection(null);
+          if (selection.isDragging) {
+            if (selection.start.r === selection.end.r && selection.start.c === selection.end.c) {
+              setSelection({ ...selection, isDragging: false, isFirstClick: true });
+            } else {
+              validateSelection(selection.start, selection.end);
+              setSelection(null);
+            }
+          }
         };
 
         const validateSelection = (start, end) => {
@@ -2001,10 +2015,13 @@
           if (match) {
             const newFound = [...foundWords, match];
             setFoundWords(newFound);
+            setSelection(null); // Clear after match
             if (newFound.length === wordsToFind.length) {
               if (window.confetti) window.confetti({ particleCount: 30, spread: 50, origin: { y: 0.8 } });
               setTimeout(onComplete, 800);
             }
+          } else {
+            setSelection(null); // Clear if no match
           }
         };
 
@@ -2194,7 +2211,7 @@
     };
 
     // --- SECTION VISUAL GAME ---
-    window.SectionVisualGame = function SectionVisualGame({ isStandalone, navigateTo }) {
+    const SectionVisualGame = function SectionVisualGame({ isStandalone, navigateTo }) {
       const { useState, useEffect, useCallback, useMemo } = React;
       
       const [gameStarted, setGameStarted] = useState(false);
@@ -2362,7 +2379,7 @@
     };
 
     // --- SECTION RESOURCES FOR PROFESSIONALS ---
-    window.SectionResources = function SectionResources({ navigateTo, isPWA }) {
+    const SectionResources = function SectionResources({ navigateTo, isPWA }) {
       const { useState, useEffect } = React;
       const [view, setView] = useState('menu'); // 'menu', 'math', 'pao', 'ramp'
       const [difficulty, setDifficulty] = useState('medium');
@@ -2593,14 +2610,11 @@
                           window.dispatchEvent(new CustomEvent('pwa-installed'));
                         });
                       } else {
-                        // Check context
-                        const params = new URLSearchParams(window.location.search);
-                        const isProContext = params.get('page') === 'resources';
-                        
-                        if (!isProContext) {
-                          navigateTo('resources');
+                        const isProContext = new URLSearchParams(window.location.search).get('page') === 'resources';
+                        if (isProContext) {
+                          alert("Para instalar IAdapta Recursos: \n1. Pulsa el botón de 'Compartir' (en iOS) o el menú de tres puntos (en Android). \n2. Selecciona 'Añadir a pantalla de inicio' o 'Instalar aplicación'.");
                         } else {
-                          alert("Para instalar la App de Recursos: \n1. Pulsa el botón de 'Compartir' o el menú de tres puntos de tu navegador. \n2. Selecciona 'Añadir a pantalla de inicio' o 'Instalar aplicación'.");
+                          navigateTo('resources');
                         }
                       }
                     }}
@@ -2976,7 +2990,7 @@
       );
     };
 
-    window.Navbar = function Navbar({ activeSection, scrollTo, currentPage, navigateTo }) {
+    const Navbar = function Navbar({ activeSection, scrollTo, currentPage, navigateTo }) {
       const [menuOpen, setMenuOpen] = useState(false);
       const [scrolled, setScrolled] = useState(false);
 
@@ -3089,7 +3103,7 @@
     };
 
     // --- SECTION ABOUT ---
-    window.SectionAbout = function SectionAbout({ navigateTo }) {
+    const SectionAbout = function SectionAbout({ navigateTo }) {
       return (
         <section id="about" className="py-24 px-4 bg-white relative">
           <div className="max-w-6xl mx-auto">
@@ -3132,7 +3146,7 @@
     };
 
     // --- SECTION HOME ---
-    window.SectionHome = function SectionHome({ scrollTo, navigateTo }) {
+    const SectionHome = function SectionHome({ scrollTo, navigateTo }) {
       const cards = [
         {
           id: 'analyzer', icon: <Icons.Brain />, color: 'bg-sky-100 text-sky-600', badge: 'Inteligencia Artificial',
@@ -3213,7 +3227,7 @@
     };
 
     // --- SECTION CURRICULUM VITAE ---
-    window.SectionCV = function SectionCV() {
+    const SectionCV = function SectionCV() {
       const experience = [
         { period: '09/2021 – Actualidad', role: 'Técnico y Terapeuta Ocupacional', place: 'Instituto Técnico Ortopédico, Barcelona', desc: 'Evaluación y diagnóstico de necesidades funcionales. Control de stock y gestión de proveedores. Elaboración de presupuestos personalizados. Responsable de tienda y atención al cliente.' },
         { period: '02/2016 – 09/2021', role: 'Terapeuta Ocupacional', place: 'Residencia asistida Sant Víctor, Artés', desc: 'Gestión de productos ortopédicos. Diseño de actividades de estimulación funcional y cognitiva. Promoción de la autonomía mediante intervención centrada en la persona.' },
@@ -3341,7 +3355,7 @@
     };
 
     // --- SECTION ANALYZER ---
-    window.SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone, navigateTo }) {
+    const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone, navigateTo }) {
       const { useState, useEffect, useRef } = React;
       const [step, setStep] = useState('form');
       const [score, setScore] = useState(0);
@@ -4194,7 +4208,7 @@
     };
 
     // --- SECTION GUIDES ---
-    window.ArticleBlock = function ArticleBlock({ article, getAmazonLink, onCategoryChange }) {
+    const ArticleBlock = function ArticleBlock({ article, getAmazonLink, onCategoryChange }) {
       const [isExpanded, setIsExpanded] = React.useState(false);
 
       return (
@@ -4262,7 +4276,7 @@
       );
     }
 
-    window.SectionGuides = function SectionGuides() {
+    const SectionGuides = function SectionGuides() {
       const [openCategory, setOpenCategory] = React.useState(null);
 
       const getAmazonLink = (searchQuery) => {
@@ -4914,7 +4928,7 @@
     };
 
     // --- SECTION CONTACT ---
-    window.SectionContact = function SectionContact() {
+    const SectionContact = function SectionContact() {
       const { useState } = React;
       const [form, setForm] = useState({ nombre: '', email: '', telefono: '', motivo: '', mensaje: '' });
       const [sent, setSent] = useState(false);
@@ -4993,7 +5007,7 @@
     };
 
     // --- SECTION LEGAL (AVISO LEGAL Y PRIVACIDAD) ---
-    window.SectionLegal = function SectionLegal() {
+    const SectionLegal = function SectionLegal() {
       const [activeTab, setActiveTab] = React.useState('privacy');
 
       return (
@@ -5089,7 +5103,7 @@
     };
 
     // --- FOOTER ---
-    window.Footer = function Footer({ scrollTo, navigateTo }) {
+    const Footer = function Footer({ scrollTo, navigateTo }) {
       const year = new Date().getFullYear();
       return (
         <footer className="bg-brand-900 text-white pt-16 pb-8 px-4">
@@ -5158,7 +5172,7 @@
     };
 
     // --- COOKIE BANNER ---
-    window.CookieBanner = function CookieBanner({ navigateTo }) {
+    const CookieBanner = function CookieBanner({ navigateTo }) {
       const [isVisible, setIsVisible] = React.useState(false);
 
       React.useEffect(() => {
@@ -5206,21 +5220,29 @@
       const [isPWA, setIsPWA] = useState(false);
       const [installable, setInstallable] = useState(false);
 
-      useEffect(() => {
-        // Detect if running as PWA
-        const checkPWA = () => {
-          setIsPWA(window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone);
-        };
-        checkPWA();
-        
-        // Listen for installability
+      // Detect if running as PWA
+      const checkPWA = useCallback(() => {
+        setIsPWA(window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone);
+      }, []);
+
+      // Handlers for installability
         const handleInstallable = () => setInstallable(true);
         const handleInstalled = () => { setInstallable(false); checkPWA(); };
-        window.addEventListener('pwa-installable', handleInstallable);
-        window.addEventListener('pwa-installed', handleInstalled);
-        if (window.deferredPrompt) setInstallable(true);
 
-        const params = new URLSearchParams(window.location.search);
+        useEffect(() => {
+          checkPWA();
+          window.addEventListener('pwa-installable', handleInstallable);
+          window.addEventListener('pwa-installed', handleInstalled);
+          if (window.deferredPrompt) setInstallable(true);
+
+          return () => {
+            window.removeEventListener('pwa-installable', handleInstallable);
+            window.removeEventListener('pwa-installed', handleInstalled);
+          };
+        }, []);
+
+        useEffect(() => {
+          const params = new URLSearchParams(window.location.search);
         const pageParam = params.get('page');
         
         if (pageParam === 'home') {
@@ -5261,11 +5283,7 @@
           setActiveSection(current);
         };
         window.addEventListener('scroll', onScroll, { passive: true });
-        return () => {
-          window.removeEventListener('scroll', onScroll);
-          window.removeEventListener('pwa-installable', handleInstallable);
-          window.removeEventListener('pwa-installed', handleInstalled);
-        };
+        return () => window.removeEventListener('scroll', onScroll);
       }, [currentPage]);
 
       const scrollTo = useCallback((id) => {
@@ -5307,10 +5325,6 @@
             {currentPage === 'main' && (
               <>
                 {!isStandalone && <SectionHome scrollTo={scrollTo} navigateTo={navigateTo} />}
-                {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
-                {!isStandalone && <SectionCognitive isTeaser={true} navigateTo={navigateTo} isStandalone={isStandalone} isPWA={isPWA} />}
-                {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
-                {!isStandalone && <SectionResources navigateTo={navigateTo} isPWA={isPWA} />}
                 {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
                 {!isStandalone && <SectionAbout navigateTo={navigateTo} />}
                 {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
