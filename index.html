@@ -2457,7 +2457,43 @@
 
       useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'instant' });
-      }, [view]);
+        
+        // Sincronizar vista con URL si existe parámetro 'tool'
+        const params = new URLSearchParams(window.location.search);
+        const tool = params.get('tool');
+        if (tool && ['math', 'pao', 'ramp'].includes(tool)) {
+          setView(tool);
+        } else {
+          setView('menu');
+        }
+      }, []);
+
+      // Escuchar cambios de navegación externa/atrás
+      useEffect(() => {
+        const handleToolSync = () => {
+          const params = new URLSearchParams(window.location.search);
+          const tool = params.get('tool');
+          if (tool && ['math', 'pao', 'ramp'].includes(tool)) {
+            setView(tool);
+          } else {
+            setView('menu');
+          }
+        };
+        window.addEventListener('popstate', handleToolSync);
+        return () => window.removeEventListener('popstate', handleToolSync);
+      }, []);
+
+      const updateView = (newView) => {
+        setView(newView);
+        const params = new URLSearchParams(window.location.search);
+        if (newView === 'menu') {
+          params.delete('tool');
+        } else {
+          params.set('tool', newView);
+        }
+        window.history.pushState({ view: newView }, '', `?${params.toString()}`);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
 
       // State for Ramp Calculator
       const [rampHeight, setRampHeight] = useState(''); // en cm
@@ -2811,7 +2847,7 @@
             {view !== 'menu' && (
               <div className="flex justify-start mb-8">
                 <button 
-                  onClick={() => setView('menu')} 
+                  onClick={() => updateView('menu')} 
                   className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-100 group"
                 >
                   <Icons.ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
@@ -2867,7 +2903,7 @@
                 {tools.map(tool => (
                   <div 
                     key={tool.id}
-                    onClick={() => setView(tool.id)}
+                    onClick={() => updateView(tool.id)}
                     className="bg-white rounded-[2.5rem] overflow-hidden border border-brand-100 shadow-xl hover:shadow-2xl transition-all cursor-pointer group flex flex-col"
                   >
                     <div className="h-48 overflow-hidden relative">
