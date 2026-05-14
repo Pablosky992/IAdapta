@@ -143,8 +143,14 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js')
-          .then(reg => console.log('Service Worker registrado'))
+        const params = new URLSearchParams(window.location.search);
+        const page = params.get('page');
+        const swFile = (page === 'resources' || page === 'cv' || page === 'analyzer') 
+          ? 'service-worker-pro.js' 
+          : 'service-worker.js';
+        
+        navigator.serviceWorker.register(swFile)
+          .then(reg => console.log('Service Worker registrado:', swFile))
           .catch(err => console.log('Error registrando SW', err));
       });
     }
