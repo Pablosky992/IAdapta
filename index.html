@@ -71,11 +71,22 @@
             accent: {
               coral: '#E87D55', // Coral from Logo
               cream: '#F2F0E9', // Cream from Logo
-            }
+            },
           },
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
             display: ['"Playfair Display"', 'serif'],
+          },
+          keyframes: {
+            shake: {
+              '0%, 100%': { transform: 'translateX(0)' },
+              '25%': { transform: 'translateX(-10px)' },
+              '50%': { transform: 'translateX(10px)' },
+              '75%': { transform: 'translateX(-10px)' },
+            }
+          },
+          animation: {
+            shake: 'shake 0.5s ease-in-out',
           }
         }
       }
@@ -1268,7 +1279,9 @@
 
       const checkAnswer = (val) => {
         if (gameStatus !== 'playing' || feedback) return false;
-        const correct = parseInt(val) === questions[currentQIdx].ans;
+        const target = questions[currentQIdx].ans;
+        const correct = parseInt(val) === target;
+        
         if (correct) {
           setFeedback('correct');
           if (window.confetti) {
@@ -1285,29 +1298,31 @@
               setTotalTime(t);
               
               // Star logic for Math
-              const baseTime = LEVELS[levelIdx].count * 3; // 3s per question average
+              const baseTime = LEVELS[levelIdx].count * 3;
               let s = 3;
               if (t < baseTime * 0.6) s = 5;
               else if (t < baseTime * 0.9) s = 4;
               else if (t > baseTime * 1.5) s = 2;
               setStars(s);
 
-              if (window.confetti) {
-                window.confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
-              }
+              if (window.confetti) window.confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
             }
-          }, 800);
+          }, 600);
           return true;
+        } else if (val.length >= String(target).length) {
+          // Wrong answer reached max length
+          setFeedback('wrong');
+          setTimeout(() => {
+            setUserAnswer('');
+            setFeedback(null);
+          }, 600);
+          return false;
         }
         return false;
       };
 
       const handleSubmit = (e) => {
         if (e) e.preventDefault();
-        if (!checkAnswer(userAnswer)) {
-          setFeedback('wrong');
-          setTimeout(() => setFeedback(null), 1000);
-        }
       };
 
       const nextLevel = () => {
@@ -1722,7 +1737,9 @@
         }, [count, range]);
 
         const checkAnswer = (val) => {
-          if(parseInt(val) === qData[qIdx].a) {
+          if (feedback) return false;
+          const target = qData[qIdx].a;
+          if(parseInt(val) === target) {
             setFeedback('correct');
             setTimeout(() => {
               if(qIdx < count - 1) {
@@ -1732,6 +1749,12 @@
               } else onComplete();
             }, 600);
             return true;
+          } else if (val.length >= String(target).length) {
+            setFeedback('wrong');
+            setTimeout(() => {
+              setAns('');
+              setFeedback(null);
+            }, 600);
           }
           return false;
         };
