@@ -513,7 +513,8 @@
                         } else {
                           const isGamesContext = new URLSearchParams(window.location.search).get('page') === 'games';
                           if (isGamesContext) {
-                            alert("Para instalar IAdapta Juegos: \n1. Pulsa el botón de 'Compartir' (en iOS) o el menú de tres puntos (en Android). \n2. Selecciona 'Añadir a pantalla de inicio' o 'Instalar aplicación'.");
+                            sessionStorage.setItem('pendingAutoInstall', 'true');
+                            alert("Preparando instalador de juegos... En un momento aparecerá la ventana de confirmación.");
                           } else {
                             sessionStorage.setItem('pendingAutoInstall', 'true');
                             const baseUrl = window.location.href.split('?')[0];
@@ -2825,7 +2826,8 @@
                       } else {
                         const isProContext = new URLSearchParams(window.location.search).get('page') === 'resources';
                         if (isProContext) {
-                          alert("Para instalar IAdapta Recursos: \n1. Pulsa el botón de 'Compartir' (en iOS) o el menú de tres puntos (en Android). \n2. Selecciona 'Añadir a pantalla de inicio' o 'Instalar aplicación'.");
+                          sessionStorage.setItem('pendingAutoInstall', 'true');
+                          alert("Preparando instalador de recursos... En un momento aparecerá la ventana de confirmación.");
                         } else {
                           // Save intent and navigate
                           sessionStorage.setItem('pendingAutoInstall', 'true');
