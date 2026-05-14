@@ -2406,6 +2406,7 @@
       const { useState, useEffect } = React;
       const [view, setView] = useState('menu'); // 'menu', 'math', 'pao', 'ramp'
       const [difficulty, setDifficulty] = useState('medium');
+      const [sheetType, setSheetType] = useState('math'); // 'math', 'wordsearch', 'visual'
       const [isGenerating, setIsGenerating] = useState(false);
       const [searchTerm, setSearchTerm] = useState('');
       const [searchResults, setSearchResults] = useState([]);
@@ -2472,6 +2473,163 @@
         doc.text("Recurso gratuito generado en iadapta.es", 105, 285, { align: "center" });
         doc.save(`Ficha_Matematicas_${difficulty.toUpperCase()}_IAdapta.pdf`);
         setIsGenerating(false);
+      };
+
+      const generateWordSearchPDF = async () => {
+        setIsGenerating(true);
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        const size = difficulty === 'easy' ? 8 : difficulty === 'medium' ? 10 : 14;
+        const fontSize = difficulty === 'easy' ? 24 : difficulty === 'medium' ? 20 : 16;
+        const lineSpacing = difficulty === 'easy' ? 15 : difficulty === 'medium' ? 12 : 10;
+        
+        const words = ['MESA', 'SILLA', 'VASO', 'PLATO', 'CAMA', 'CASA', 'ROPA', 'LIBRO', 'AGUA', 'PAN', 'LUZ', 'RADIO', 'RELOJ', 'TIEMPO', 'LUZ', 'MANO', 'PIE', 'OJOS', 'PELO', 'CARA', 'COMER', 'DORMIR', 'PASILLO', 'BAÑO', 'COCINA']
+          .sort(() => Math.random() - 0.5)
+          .slice(0, difficulty === 'easy' ? 6 : difficulty === 'medium' ? 10 : 18);
+        
+        const grid = Array(size).fill(0).map(() => Array(size).fill(''));
+        words.forEach(word => {
+          let placed = false;
+          let attempts = 0;
+          while (!placed && attempts < 150) {
+            attempts++;
+            const isVert = Math.random() > 0.5;
+            const r = Math.floor(Math.random() * (isVert ? size - word.length + 1 : size));
+            const c = Math.floor(Math.random() * (isVert ? size : size - word.length + 1));
+            let fits = true;
+            for(let i=0; i<word.length; i++){
+              const rr = isVert ? r+i : r; const cc = isVert ? c : c+i;
+              if(grid[rr][cc] !== '' && grid[rr][cc] !== word[i]) { fits = false; break; }
+            }
+            if(fits) {
+              for(let i=0; i<word.length; i++){
+                const rr = isVert ? r+i : r; const cc = isVert ? c : c+i;
+                grid[rr][cc] = word[i];
+              }
+              placed = true;
+            }
+          }
+        });
+        const letters = 'ABCDE';
+        for(let r=0; r<size; r++) for(let c=0; c<size; c++) if(grid[r][c] === '') grid[r][c] = letters[Math.floor(Math.random() * letters.length)];
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(22);
+        doc.setTextColor(26, 48, 82);
+        doc.text("Ficha: Sopa de Letras", 105, 25, { align: "center" });
+        doc.setFontSize(12); doc.setTextColor(100, 100, 100);
+        doc.text(`Nivel: ${difficulty.toUpperCase()} | IAdapta Estimulación`, 105, 32, { align: "center" });
+        
+        // Grid drawing
+        doc.setFont("courier", "bold");
+        doc.setFontSize(fontSize);
+        doc.setTextColor(33, 33, 33);
+        let currentY = 60;
+        grid.forEach(row => {
+          doc.text(row.join('  '), 105, currentY, { align: "center" });
+          currentY += lineSpacing;
+        });
+
+        // Words list
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(14);
+        doc.text("Encuentra las siguientes palabras:", 20, currentY + 20);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(12);
+        const wordListStr = words.join('   -   ');
+        doc.text(wordListStr, 20, currentY + 30, { maxWidth: 170 });
+
+        // Footer
+        doc.setFontSize(10);
+        doc.setTextColor(150, 150, 150);
+        doc.text("Recurso gratuito generado en iadapta.es | Terapia Ocupacional & Accesibilidad", 105, 285, { align: "center" });
+
+        doc.save(`Sopa_Letras_${difficulty}_IAdapta.pdf`);
+        setIsGenerating(false);
+      };
+
+      const generateVisualPDF = async () => {
+        setIsGenerating(true);
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        const fontSize = difficulty === 'easy' ? 28 : difficulty === 'medium' ? 22 : 18;
+        const rowCount = difficulty === 'easy' ? 8 : difficulty === 'medium' ? 12 : 16;
+        // Adjust charsPerRow to fit within margins (A4 is ~210mm, margins at 20mm leave ~170mm)
+        const charsPerRow = difficulty === 'easy' ? 10 : difficulty === 'medium' ? 15 : 20;
+        const spaceBetween = difficulty === 'easy' ? '  ' : ' '; // Less space if more chars
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(24);
+        doc.setTextColor(26, 48, 82);
+        doc.text("Ficha: Agudeza Visual - Pág 1", 105, 25, { align: "center" });
+        doc.setFontSize(12); doc.setTextColor(100, 100, 100);
+        doc.text(`Nivel: ${difficulty.toUpperCase()} | Estimulación Cognitiva`, 105, 32, { align: "center" });
+        
+        const tasks = [
+          { q: "1. Busca la letra diferente en cada fila:", base: "E", target: "F" },
+          { q: "2. Localiza el número intruso:", base: "8", target: "3" },
+          { q: "3. Busca la letra minúscula entre mayúsculas:", base: "M", target: "m" }
+        ];
+
+        // Task 1
+        let currentY = 55;
+        doc.setFont("helvetica", "bold"); doc.setFontSize(18); doc.setTextColor(26, 48, 82);
+        doc.text(tasks[0].q, 20, currentY);
+        currentY += 15;
+        doc.setFont("courier", "bold"); doc.setFontSize(fontSize); doc.setTextColor(50, 50, 50);
+        for(let i=0; i<rowCount; i++){
+          if (currentY > 275) break;
+          const line = Array(charsPerRow).fill(tasks[0].base);
+          const tIdx = Math.floor(Math.random() * charsPerRow);
+          line[tIdx] = tasks[0].target;
+          doc.text(line.join(spaceBetween), 105, currentY, { align: "center" });
+          currentY += fontSize * 0.45 + 5;
+        }
+
+        // Footer P1
+        doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(150, 150, 150);
+        doc.text("Recurso gratuito generado en iadapta.es | Terapia Ocupacional & Accesibilidad", 105, 285, { align: "center" });
+
+        // Page 2 for Task 2 and 3
+        doc.addPage();
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(24);
+        doc.setTextColor(26, 48, 82);
+        doc.text("Ficha: Agudeza Visual - Pág 2", 105, 25, { align: "center" });
+        
+        currentY = 55;
+        for (let j = 1; j < tasks.length; j++) {
+          doc.setFont("helvetica", "bold"); doc.setFontSize(18); doc.setTextColor(26, 48, 82);
+          doc.text(tasks[j].q, 20, currentY);
+          currentY += 15;
+          doc.setFont("courier", "bold"); doc.setFontSize(fontSize); doc.setTextColor(50, 50, 50);
+          
+          const subRowCount = Math.floor(rowCount / 1.5);
+          for(let i=0; i<subRowCount; i++){
+            if (currentY > 275) break;
+            const line = Array(charsPerRow).fill(tasks[j].base);
+            const tIdx = Math.floor(Math.random() * charsPerRow);
+            line[tIdx] = tasks[j].target;
+            doc.text(line.join(spaceBetween), 105, currentY, { align: "center" });
+            currentY += fontSize * 0.45 + 5;
+          }
+          currentY += 20;
+        }
+
+        // Footer P2
+        doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(150, 150, 150);
+        doc.text("Recurso gratuito generado en iadapta.es | Terapia Ocupacional & Accesibilidad", 105, 285, { align: "center" });
+
+        doc.save(`Agudeza_Visual_PRO_${difficulty}_IAdapta.pdf`);
+        setIsGenerating(false);
+      };
+
+      const handleMainAction = () => {
+        if (sheetType === 'math') generateMathPDF();
+        else if (sheetType === 'wordsearch') generateWordSearchPDF();
+        else generateVisualPDF();
       };
 
       const handleSearch = (val) => {
@@ -2570,11 +2728,11 @@
         {
           id: 'math',
           title: 'Generador de Fichas',
-          desc: 'Crea hojas de ejercicios de cálculo personalizadas en PDF para tus sesiones.',
+          desc: 'Crea hojas de estimulación cognitiva (cálculo, sopas, agudeza) en PDF personalizadas.',
           icon: <Icons.FilePdf />,
           color: 'bg-brand-900 text-white',
           badge: 'Estimulación',
-          image: 'math_generator_thumb_1778710346882.png'
+          image: 'worksheets_generic_bg_1778740651125.png'
         },
         {
           id: 'ramp',
@@ -2696,8 +2854,30 @@
                     </div>
 
                     <p className="text-gray-600 text-lg mb-10 leading-relaxed">
-                      Crea al instante una hoja de ejercicios de cálculo personalizada en PDF para tus sesiones de estimulación.
+                      Selecciona el tipo de actividad y la dificultad para generar un PDF personalizado listo para imprimir.
                     </p>
+
+                    <div className="space-y-6 mb-10">
+                      <p className="font-bold text-brand-900 text-sm uppercase tracking-wider">Tipo de ficha</p>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        {[
+                          { id: 'math', label: 'Cálculo', icon: <Icons.Calculator className="w-4 h-4" /> },
+                          { id: 'wordsearch', label: 'Sopa Letras', icon: <Icons.Search className="w-4 h-4" /> },
+                          { id: 'visual', label: 'Agudeza', icon: <Icons.Brain className="w-4 h-4" /> }
+                        ].map(type => (
+                          <button
+                            key={type.id}
+                            onClick={() => setSheetType(type.id)}
+                            className={`py-3 px-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 border-2 ${sheetType === type.id 
+                              ? 'bg-brand-50 border-brand-900 text-brand-900' 
+                              : 'bg-white border-gray-100 text-gray-400 hover:border-brand-200'}`}
+                          >
+                            {type.icon}
+                            {type.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
 
                     <div className="space-y-6 mb-12">
                       <p className="font-bold text-brand-900 text-sm uppercase tracking-wider">Nivel de dificultad</p>
@@ -2721,16 +2901,16 @@
                     </div>
 
                     <button
-                      onClick={generateMathPDF}
+                      onClick={handleMainAction}
                       disabled={isGenerating}
-                      className="w-full py-5 bg-accent-coral text-white rounded-2xl font-bold text-xl hover:bg-opacity-90 transition-all flex items-center justify-center gap-3 shadow-xl shadow-coral-900/20 disabled:opacity-50 group"
+                      className="w-full py-5 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-opacity-90 transition-all flex items-center justify-center gap-3 shadow-xl shadow-brand-900/20 disabled:opacity-50 group"
                     >
                       {isGenerating ? (
                         <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
                       ) : (
                         <>
                           <Icons.Download />
-                          Generar Ficha PDF
+                          Descargar Ficha PDF
                         </>
                       )}
                     </button>
@@ -2748,7 +2928,6 @@
                         {[
                           'Material ilimitado y aleatorio.',
                           'Ahorro crítico de tiempo administrativo.',
-                          'Imagen profesional para tu consulta.',
                           'Adaptación al deterioro cognitivo.'
                         ].map((item, i) => (
                           <li key={i} className="flex items-center gap-3 text-brand-100 font-medium">
