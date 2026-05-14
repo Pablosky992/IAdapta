@@ -511,11 +511,12 @@
                             window.dispatchEvent(new CustomEvent('pwa-installed'));
                           });
                         } else {
-                          const isGamesContext = new URLSearchParams(window.location.search).get('page') !== 'resources';
+                          const isGamesContext = new URLSearchParams(window.location.search).get('page') === 'games';
                           if (isGamesContext) {
                             alert("Para instalar IAdapta Juegos: \n1. Pulsa el botón de 'Compartir' (en iOS) o el menú de tres puntos (en Android). \n2. Selecciona 'Añadir a pantalla de inicio' o 'Instalar aplicación'.");
                           } else {
-                            navigateTo('games');
+                            const baseUrl = window.location.href.split('?')[0];
+                            window.location.href = `${baseUrl}?page=games&autoInstall=true`;
                           }
                         }
                       }}
