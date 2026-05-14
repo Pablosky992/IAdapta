@@ -3,7 +3,7 @@
   "short_name": "IAdapta Recursos",
   "description": "Herramientas y catálogos para profesionales de la Terapia Ocupacional.",
   "start_url": "./index.html?page=resources",
-  "id": "/recursos",
+  "id": "iadapta-recursos",
   "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
