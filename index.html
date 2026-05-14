@@ -3613,6 +3613,14 @@
       );
     };
 
+    const getAmazonLink = (searchQuery) => {
+      const affiliateId = window.AppConfig.AMAZON_AFFILIATE_ID;
+      if (affiliateId && affiliateId.trim() !== "") {
+        return `https://www.amazon.es/s?k=${encodeURIComponent(searchQuery)}&tag=${affiliateId}`;
+      }
+      return `https://www.amazon.es/s?k=${encodeURIComponent(searchQuery)}`;
+    };
+
     // --- SECTION ANALYZER ---
     const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone, navigateTo }) {
       const { useState, useEffect, useRef } = React;
@@ -3632,25 +3640,26 @@
       const [limitacionesOpen, setLimitacionesOpen] = useState(false);
 
       const resultRef = useRef(null);
+      const topRef = useRef(null);
 
       const PRODUCT_CATALOG = {
-        '1': { name: 'Tabla para bañera', url: 'https://amzn.to/4uLnkU5', img: 'tabla_banera.png' },
-        '2': { name: 'Asiento para ducha', url: 'https://amzn.to/4dfjkUJ', img: 'asiento_ducha.png' },
-        '3': { name: 'Barras de apoyo', url: 'https://amzn.to/4u4JBw3', img: 'barras_apoyo.png' },
-        '4': { name: 'Alza de WC', url: 'https://amzn.to/42hlsWU', img: 'alza_wc.png' },
-        '5': { name: 'Asiento bañera giratorio', url: 'https://amzn.to/4d3bjlv', img: 'asiento_banera.png' },
-        '6': { name: 'Barandilla cama', url: 'https://amzn.to/42hT9Yu', img: 'barandilla_cama.png' },
-        '7': { name: 'Trapecio de cama', url: 'https://amzn.to/3PqiHj4', img: 'trapecio_cama.png' },
-        '8': { name: 'Tacos elevadores cama', url: 'https://amzn.to/4tXN3Zo', img: 'tacos_cama.png' },
-        '9': { name: 'Cubiertos adaptados', url: 'https://amzn.to/4wi1BVq', img: 'cubiertos_adaptados.png' },
-        '10': { name: 'Cuchillo Nelson', url: 'https://amzn.to/3QPzqgd', img: 'cuchillo_nelson.png' },
-        '11': { name: 'Tabla de corte 1 mano', url: 'https://amzn.to/42CtdHf', img: 'tabla_cortar.png' },
-        '12': { name: 'Plato con reborde', url: 'https://amzn.to/4d2KwXN', img: 'plato_reborde.png' },
-        '13': { name: 'Vaso con escotadura', url: 'https://amzn.to/3R1tYXJ', img: 'vaso_escotadura.png' },
-        '14': { name: 'Andador interior', url: 'https://amzn.to/49eGadM', img: 'andador_interior.png' },
-        '15': { name: 'Andador Rollator (exterior)', url: 'https://amzn.to/4nioy6O', img: 'andador_exterior.png' },
-        '16': { name: 'Conteras antideslizantes', url: 'https://amzn.to/4uw9fth', img: 'conteras.png' },
-        '17': { name: 'Muletas Ergonómicas (Par)', url: 'https://amzn.to/4dE2H6n', img: 'muletas_ergonomicas.png' }
+        '1': { name: 'Tabla para bañera', url: 'https://amzn.to/4uLnkU5', img: 'tabla_banera.png', query: 'tabla bañera ortopedia' },
+        '2': { name: 'Asiento para ducha', url: 'https://amzn.to/4dfjkUJ', img: 'asiento_ducha.png', query: 'asiento ducha banqueta ortopedia' },
+        '3': { name: 'Barras de apoyo', url: 'https://amzn.to/4u4JBw3', img: 'barras_apoyo.png', query: 'asidero barra apoyo baño' },
+        '4': { name: 'Alza de WC', url: 'https://amzn.to/42hlsWU', img: 'alza_wc.png', query: 'elevador inodoro con reposabrazos' },
+        '5': { name: 'Asiento bañera giratorio', url: 'https://amzn.to/4d3bjlv', img: 'asiento_banera.png', query: 'asiento bañera giratorio ortopedia' },
+        '6': { name: 'Barandilla cama', url: 'https://amzn.to/42hT9Yu', img: 'barandilla_cama.png', query: 'barandilla cama adultos' },
+        '7': { name: 'Trapecio de cama', url: 'https://amzn.to/3PqiHj4', img: 'trapecio_cama.png', query: 'trapecio cama ortopedia incorporación' },
+        '8': { name: 'Tacos elevadores cama', url: 'https://amzn.to/4tXN3Zo', img: 'tacos_cama.png', query: 'tacos elevadores muebles cama' },
+        '9': { name: 'Cubiertos adaptados', url: 'https://amzn.to/4wi1BVq', img: 'cubiertos_adaptados.png', query: 'cubiertos adaptados mango grueso' },
+        '10': { name: 'Cuchillo Nelson', url: 'https://amzn.to/3QPzqgd', img: 'cuchillo_nelson.png', query: 'cuchillo nelson una mano' },
+        '11': { name: 'Tabla de corte 1 mano', url: 'https://amzn.to/42CtdHf', img: 'tabla_cortar.png', query: 'tabla de corte para una mano ortopedia' },
+        '12': { name: 'Plato con reborde', url: 'https://amzn.to/4d2KwXN', img: 'plato_reborde.png', query: 'plato reborde alto ventosa adultos' },
+        '13': { name: 'Vaso con escotadura', url: 'https://amzn.to/3R1tYXJ', img: 'vaso_escotadura.png', query: 'vaso escotadura nasal disfagia' },
+        '14': { name: 'Andador interior', url: 'https://amzn.to/49eGadM', img: 'andador_interior.png', query: 'andador interior estrecho' },
+        '15': { name: 'Andador Rollator (exterior)', url: 'https://amzn.to/4nioy6O', img: 'andador_exterior.png', query: 'andador rollator exterior ligero' },
+        '16': { name: 'Conteras antideslizantes', url: 'https://amzn.to/4uw9fth', img: 'conteras.png', query: 'conteras andador antideslizantes 22mm' },
+        '17': { name: 'Muletas Ergonómicas (Par)', url: 'https://amzn.to/4dE2H6n', img: 'muletas_ergonomicas.png', query: 'muletas ergonomicas apoyo antebrazo' }
       };
 
       useEffect(() => {
@@ -3806,7 +3815,7 @@
         if (form.caidas === 'si') {
           const fear = parseInt(form.percepcionSeguridad) || 5;
           let mobilityAdvice = '';
-          let link = { text: 'Ver ayudas a la marcha', url: 'https://amzn.to/4nioy6O' };
+          let link = { text: 'Ver ayudas a la marcha', url: PRODUCT_CATALOG['15'].url };
           
           if (fear <= 3) {
             mobilityAdvice = ' Dada la frecuencia de caídas y tu baja seguridad, es fundamental valorar el uso de un andador (rollator) que proporcione una base de apoyo estable.';
@@ -3878,7 +3887,7 @@
           all.push({
             cond: true, icon: '🦯', prio: 'Alta',
             text: 'Seguridad en la Marcha: Es vital retirar todas las alfombras y obstáculos. Verifica que las conteras de tu ayuda técnica no estén gastadas; sustituirlas por modelos antideslizantes de base ancha mejorará drásticamente tu estabilidad.',
-            linkText: 'Ver conteras antideslizantes', linkUrl: 'https://amzn.to/4uw9fth'
+            linkText: 'Ver conteras antideslizantes', linkUrl: PRODUCT_CATALOG['16'].url
           });
         }
 
@@ -3920,6 +3929,7 @@
         }
 
         setStep('loading');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         setAiError('');
         setAiResponse('');
 
@@ -4043,7 +4053,7 @@
       }
 
       return (
-        <section id="analyzer-full" className={`py-24 px-4 ${isStandalone ? 'pt-32' : ''} bg-gradient-to-b from-sky-50 to-white min-h-screen`}>
+        <section id="analyzer-full" ref={topRef} className={`py-24 px-4 ${isStandalone ? 'pt-32' : ''} bg-gradient-to-b from-sky-50 to-white min-h-screen`}>
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-14">
               {isStandalone && (
@@ -4428,7 +4438,14 @@
                                           <div className="flex-1">
                                             <h4 className="font-bold text-brand-900 text-lg">{p.name}</h4>
                                             <p className="text-sm text-brand-500 mb-2">Producto técnico recomendado profesionalmente.</p>
-                                            <a href={p.url} target="_blank" rel="noopener" className="inline-block bg-accent-coral text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-opacity-90 transition-all">Ver en Amazon</a>
+                                            <a 
+                                              href={p.url || getAmazonLink(p.query)} 
+                                              target="_blank" 
+                                              rel="noopener noreferrer" 
+                                              className="inline-block bg-accent-coral text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-opacity-90 transition-all"
+                                            >
+                                              Ver en Amazon
+                                            </a>
                                           </div>
                                         </div>
                                       );
@@ -4600,13 +4617,7 @@
     const SectionGuides = function SectionGuides() {
       const [openCategory, setOpenCategory] = React.useState(null);
 
-      const getAmazonLink = (searchQuery) => {
-        const affiliateId = window.AppConfig.AMAZON_AFFILIATE_ID;
-        if (affiliateId && affiliateId.trim() !== "") {
-          return `https://www.amazon.es/s?k=${encodeURIComponent(searchQuery)}&tag=${affiliateId}`;
-        }
-        return `https://www.amazon.es/s?k=${encodeURIComponent(searchQuery)}`;
-      };
+
 
       const categories = [
         {
