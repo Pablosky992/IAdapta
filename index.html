@@ -37,16 +37,16 @@
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://iadapta.es/" />
-  <meta property="og:title" content="IAdapta | Autonomía Personal y Agudeza Mental" />
+  <meta property="og:title" content="IAdapta | Autonomía y Mente Activa" />
   <meta property="og:description" content="Entrena tu mente y mejora la accesibilidad de tu entorno con IAdapta." />
-  <meta property="og:image" content="https://iadapta.es/daily_challenge_banner.png" />
+  <meta property="og:image" content="https://iadapta.es/assets/iadapta_logo.png" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content="https://iadapta.es/" />
-  <meta property="twitter:title" content="IAdapta | Gimnasio Cerebral" />
+  <meta property="twitter:title" content="IAdapta | Autonomía y Mente Activa" />
   <meta property="twitter:description" content="Supera retos diarios y mejora tu agudeza mental con Terapia Ocupacional." />
-  <meta property="twitter:image" content="https://iadapta.es/daily_challenge_banner.png" />
+  <meta property="twitter:image" content="https://iadapta.es/assets/iadapta_logo.png" />
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -3633,6 +3633,35 @@
 
       const resultRef = useRef(null);
 
+      const PRODUCT_CATALOG = {
+        '1': { name: 'Tabla para bañera', url: 'https://amzn.to/4uLnkU5', img: 'tabla_banera.png' },
+        '2': { name: 'Asiento para ducha', url: 'https://amzn.to/4dfjkUJ', img: 'asiento_ducha.png' },
+        '3': { name: 'Barras de apoyo', url: 'https://amzn.to/4u4JBw3', img: 'barras_apoyo.png' },
+        '4': { name: 'Alza de WC', url: 'https://amzn.to/42hlsWU', img: 'alza_wc.png' },
+        '5': { name: 'Asiento bañera giratorio', url: 'https://amzn.to/4d3bjlv', img: 'asiento_banera.png' },
+        '6': { name: 'Barandilla cama', url: 'https://amzn.to/42hT9Yu', img: 'barandilla_cama.png' },
+        '7': { name: 'Trapecio de cama', url: 'https://amzn.to/3PqiHj4', img: 'trapecio_cama.png' },
+        '8': { name: 'Tacos elevadores cama', url: 'https://amzn.to/4tXN3Zo', img: 'tacos_cama.png' },
+        '9': { name: 'Cubiertos adaptados', url: 'https://amzn.to/4wi1BVq', img: 'cubiertos_adaptados.png' },
+        '10': { name: 'Cuchillo Nelson', url: 'https://amzn.to/3QPzqgd', img: 'cuchillo_nelson.png' },
+        '11': { name: 'Tabla de corte 1 mano', url: 'https://amzn.to/42CtdHf', img: 'tabla_cortar.png' },
+        '12': { name: 'Plato con reborde', url: 'https://amzn.to/4d2KwXN', img: 'plato_reborde.png' },
+        '13': { name: 'Vaso con escotadura', url: 'https://amzn.to/3R1tYXJ', img: 'vaso_escotadura.png' },
+        '14': { name: 'Andador interior', url: 'https://amzn.to/49eGadM', img: 'andador_interior.png' },
+        '15': { name: 'Andador Rollator (exterior)', url: 'https://amzn.to/4nioy6O', img: 'andador_exterior.png' },
+        '16': { name: 'Conteras antideslizantes', url: 'https://amzn.to/4uw9fth', img: 'conteras.png' },
+        '17': { name: 'Muletas Ergonómicas (Par)', url: 'https://amzn.to/4dE2H6n', img: 'muletas_ergonomicas.png' }
+      };
+
+      useEffect(() => {
+        if (step === 'results' && resultRef.current) {
+          // Pequeno delay para permitir que el DOM se renderice antes de hacer scroll
+          setTimeout(() => {
+            resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 100);
+        }
+      }, [step]);
+
       // Cargar historial al inicio
       useEffect(() => {
         const localData = localStorage.getItem('iadapta_reports');
@@ -3781,10 +3810,10 @@
           
           if (fear <= 3) {
             mobilityAdvice = ' Dada la frecuencia de caídas y tu baja seguridad, es fundamental valorar el uso de un andador (rollator) que proporcione una base de apoyo estable.';
-            link = { text: 'Ver andadores recomendados', url: 'https://amzn.to/4nioy6O' };
+            link = { text: 'Ver andadores recomendados', url: PRODUCT_CATALOG['15'].url };
           } else {
             mobilityAdvice = ' Debido a los tropiezos recientes, el uso de unas muletas ergonómicas con apoyo de antebrazo te proporcionará el apoyo extra necesario sin sobrecargar tus muñecas.';
-            link = { text: 'Ver muletas ergonómicas', url: 'https://amzn.to/4dE2H6n' };
+            link = { text: 'Ver muletas ergonómicas', url: PRODUCT_CATALOG['17'].url };
           }
 
           all.push({
@@ -3827,13 +3856,13 @@
           all.push({
             cond: true, icon: '🚿', prio: 'Alta',
             text: 'Al disponer de bañera, el riesgo de caída al intentar salvar el borde es elevado. Te recomendamos el uso de una Tabla de Bañera. Este dispositivo permite realizar la entrada y salida sentado, eliminando la necesidad de mantener el equilibrio a una sola pierna mientras se supera el obstáculo.',
-            linkText: 'Ver tabla de bañera recomendada', linkUrl: 'https://amzn.to/4uLnkU5'
+            linkText: 'Ver tabla de bañera recomendada', linkUrl: PRODUCT_CATALOG['1'].url
           });
         } else if (form.tipoBanyo === 'ducha') {
           all.push({
             cond: true, icon: '🚿', prio: 'Media',
             text: 'Contar con ducha es un gran paso, pero para una higiene segura y sin fatiga, es fundamental realizarla en sedestación. Un asiento o banqueta de ducha te proporcionará la estabilidad necesaria y evitará resbalones por cansancio durante el aseo.',
-            linkText: 'Ver asiento de ducha', linkUrl: 'https://amzn.to/4dfjkUJ'
+            linkText: 'Ver asiento de ducha', linkUrl: PRODUCT_CATALOG['2'].url
           });
         }
 
@@ -3857,7 +3886,7 @@
           all.push({
             cond: true, icon: '🍴', prio: 'Media',
             text: 'AUTONOMÍA EN ALIMENTACIÓN: Al detectar dificultades en la destreza manual, el uso de cubiertos con mango engrosado y platos con reborde facilitará tu independencia durante las comidas, reduciendo el esfuerzo y la frustración.',
-            linkText: 'Ver cubiertos adaptados', linkUrl: 'https://amzn.to/4wi1BVq'
+            linkText: 'Ver cubiertos adaptados', linkUrl: PRODUCT_CATALOG['9'].url
           });
         }
 
@@ -4391,26 +4420,7 @@
                                 {productIds.length > 0 && (
                                   <div className="flex flex-col gap-4 mt-6 no-print">
                                     {productIds.map(id => {
-                                      const products = {
-                                        '1': { name: 'Tabla para bañera', url: 'https://amzn.to/3Wv4Cun', img: 'tabla_banera.png' },
-                                        '2': { name: 'Asiento para ducha', url: 'https://amzn.to/3C6M8mH', img: 'asiento_ducha.png' },
-                                        '3': { name: 'Barras de apoyo', url: 'https://amzn.to/3C8YQv0', img: 'barras_apoyo.png' },
-                                        '4': { name: 'Alza de WC', url: 'https://amzn.to/4f8Hw3D', img: 'alza_wc.png' },
-                                        '5': { name: 'Asiento bañera giratorio', url: 'https://amzn.to/42uR2Yj', img: 'asiento_banera.png' },
-                                        '6': { name: 'Barandilla cama', url: 'https://amzn.to/42A4N8z', img: 'barandilla_cama.png' },
-                                        '7': { name: 'Trapecio de cama', url: 'https://amzn.to/4hB9pnt', img: 'trapecio_cama_png.png' },
-                                        '8': { name: 'Tacos elevadores cama', url: 'https://amzn.to/406o6H7', img: 'tacos_cama_png.png' },
-                                        '9': { name: 'Cubiertos adaptados', url: 'https://amzn.to/4wi1BVq', img: 'cubiertos_adaptados.png' },
-                                        '10': { name: 'Cuchillo Nelson', url: 'https://amzn.to/42xOfK7', img: 'cuchillo_nelson.png' },
-                                        '11': { name: 'Tabla de corte 1 mano', url: 'https://amzn.to/42C4uV9', img: 'tabla_cortar.png' },
-                                        '12': { name: 'Plato con reborde', url: 'https://amzn.to/4hAd51Q', img: 'plato_reborde.png' },
-                                        '13': { name: 'Vaso con escotadura', url: 'https://amzn.to/3E9hN5B', img: 'vaso_escotadura.png' },
-                                        '14': { name: 'Andador interior', url: 'https://amzn.to/49eGadM', img: 'andador_interior.png' },
-                                        '15': { name: 'Andador Rollator (exterior)', url: 'https://amzn.to/4nioy6O', img: 'andador_exterior.png' },
-                                        '16': { name: 'Conteras antideslizantes', url: 'https://amzn.to/4uw9fth', img: 'conteras.png' },
-                                        '17': { name: 'Muletas Ergonómicas (Par)', url: 'https://amzn.to/4dE2H6n', img: 'muletas_ergonomicas.png' }
-                                      };
-                                      const p = products[id];
+                                      const p = PRODUCT_CATALOG[id];
                                       if (!p) return null;
                                       return (
                                         <div key={id} className="bg-white border border-brand-100 rounded-2xl p-4 shadow-sm flex items-center gap-4 anim-scale-in">
