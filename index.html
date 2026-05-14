@@ -523,7 +523,8 @@
                             const baseUrl = window.location.href.split('?')[0];
                             window.location.href = `${baseUrl}?page=games`;
                           } else {
-                            setShowInstaller(true);
+                            // Force a hard reload to ensure browser re-evaluates the PWA manifest
+                            window.location.reload();
                           }
                         }
                       }}
@@ -2835,8 +2836,8 @@
                           const baseUrl = window.location.href.split('?')[0];
                           window.location.href = `${baseUrl}?page=resources`;
                         } else {
-                          // Already in context, just trigger overlay state
-                          setShowInstaller(true);
+                          // Force a hard reload to ensure browser re-evaluates the PWA manifest
+                          window.location.reload();
                         }
                       }
                     }}
