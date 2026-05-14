@@ -5473,21 +5473,24 @@
         const handleInstallable = () => setInstallable(true);
         const handleInstalled = () => { setInstallable(false); checkPWA(); };
 
+        const [showInstaller, setShowInstaller] = useState(false);
+
         useEffect(() => {
           checkPWA();
           
           const handleAutoInstall = () => {
             const isPending = sessionStorage.getItem('pendingAutoInstall') === 'true';
             if (isPending && window.deferredPrompt) {
-              // We'll show a persistent UI hint if we're waiting for a gesture
-              window.dispatchEvent(new CustomEvent('pwa-show-installer'));
+              setShowInstaller(true);
             }
           };
 
-          window.addEventListener('pwa-installable', () => {
+          const onInstallable = () => {
             handleInstallable();
             handleAutoInstall();
-          });
+          };
+
+          window.addEventListener('pwa-installable', onInstallable);
           window.addEventListener('pwa-installed', handleInstalled);
           
           if (window.deferredPrompt) {
@@ -5495,18 +5498,20 @@
             handleAutoInstall();
           }
 
-          return () => {
-            window.removeEventListener('pwa-installable', handleInstallable);
-            window.removeEventListener('pwa-installed', handleInstalled);
-          };
-        }, []);
+          // Safety timeout: if after 10s it's still pending but not shown, clear it
+          const timer = setTimeout(() => {
+            if (sessionStorage.getItem('pendingAutoInstall') === 'true' && !showInstaller) {
+              sessionStorage.removeItem('pendingAutoInstall');
+              console.log('Install prompt timeout');
+            }
+          }, 10000);
 
-        const [showInstaller, setShowInstaller] = useState(false);
-        useEffect(() => {
-          const handler = () => setShowInstaller(true);
-          window.addEventListener('pwa-show-installer', handler);
-          return () => window.removeEventListener('pwa-show-installer', handler);
-        }, []);
+          return () => {
+            window.removeEventListener('pwa-installable', onInstallable);
+            window.removeEventListener('pwa-installed', handleInstalled);
+            clearTimeout(timer);
+          };
+        }, [showInstaller]);
 
       const syncPageFromUrl = useCallback(() => {
         const params = new URLSearchParams(window.location.search);
