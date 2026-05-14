@@ -2,7 +2,7 @@
   "name": "IAdapta: Juegos",
   "short_name": "Juegos",
   "description": "Ejercicios de estimulación cognitiva para la autonomía personal.",
-  "start_url": "/index.html?page=games",
+  "start_url": "index.html?page=games",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1A3052",

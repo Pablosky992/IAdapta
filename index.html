@@ -473,8 +473,15 @@
                             window.deferredPrompt = null;
                           });
                         } else {
-                          // Fallback: Open the games page which has the manifest
-                          navigateTo('games');
+                          // Check context
+                          const params = new URLSearchParams(window.location.search);
+                          const isGamesContext = params.get('page') !== 'resources';
+                          
+                          if (!isGamesContext) {
+                            navigateTo('games');
+                          } else {
+                            alert("Para instalar la App de Juegos: \n1. Pulsa el botón de 'Compartir' o el menú de tres puntos de tu navegador. \n2. Selecciona 'Añadir a pantalla de inicio' o 'Instalar aplicación'.");
+                          }
                         }
                       }}
                       className="inline-flex items-center gap-3 px-8 py-4 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 transition-all shadow-xl shadow-brand-900/20 hover:scale-105 active:scale-95 group"
@@ -1261,11 +1268,9 @@
         setGameStarted(true);
       };
 
-      const handleSubmit = (e) => {
-        if (e) e.preventDefault();
-        if (gameStatus !== 'playing' || feedback) return;
-
-        const correct = parseInt(userAnswer) === questions[currentQIdx].ans;
+      const checkAnswer = (val) => {
+        if (gameStatus !== 'playing' || feedback) return false;
+        const correct = parseInt(val) === questions[currentQIdx].ans;
         if (correct) {
           setFeedback('correct');
           if (window.confetti) {
@@ -1294,7 +1299,14 @@
               }
             }
           }, 800);
-        } else {
+          return true;
+        }
+        return false;
+      };
+
+      const handleSubmit = (e) => {
+        if (e) e.preventDefault();
+        if (!checkAnswer(userAnswer)) {
           setFeedback('wrong');
           setTimeout(() => setFeedback(null), 1000);
         }
@@ -1380,7 +1392,10 @@
                           type="number"
                           autoFocus
                           value={userAnswer}
-                          onChange={(e) => setUserAnswer(e.target.value)}
+                          onChange={(e) => {
+                            setUserAnswer(e.target.value);
+                            checkAnswer(e.target.value);
+                          }}
                           placeholder="?"
                           className={`w-full text-center text-5xl font-bold py-4 rounded-2xl border-4 transition-all focus:outline-none
                             ${feedback === 'correct' ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 
@@ -1708,9 +1723,8 @@
           return qs;
         }, [count, range]);
 
-        const submit = (e) => {
-          if(e) e.preventDefault();
-          if(parseInt(ans) === qData[qIdx].a) {
+        const checkAnswer = (val) => {
+          if(parseInt(val) === qData[qIdx].a) {
             setFeedback('correct');
             setTimeout(() => {
               if(qIdx < count - 1) {
@@ -1719,7 +1733,14 @@
                 setFeedback(null);
               } else onComplete();
             }, 600);
-          } else {
+            return true;
+          }
+          return false;
+        };
+
+        const submit = (e) => {
+          if(e) e.preventDefault();
+          if(!checkAnswer(ans)) {
             setFeedback('wrong');
             setTimeout(() => setFeedback(null), 800);
           }
@@ -1730,7 +1751,12 @@
             <span className="text-brand-400 font-bold uppercase tracking-widest text-sm mb-4 block">Reto: Cálculo</span>
             <div className="text-6xl font-bold text-brand-900 mb-8 py-4">{qData[qIdx].q}</div>
             <form onSubmit={submit}>
-              <input type="number" autoFocus value={ans} onChange={e => setAns(e.target.value)} placeholder="?" 
+              <input type="number" autoFocus value={ans} 
+                onChange={e => {
+                  setAns(e.target.value);
+                  checkAnswer(e.target.value);
+                }} 
+                placeholder="?" 
                 className={`w-full text-center text-4xl font-bold py-4 rounded-2xl border-4 transition-all focus:outline-none ${feedback === 'correct' ? 'border-emerald-500 bg-emerald-50' : feedback === 'wrong' ? 'border-red-500 bg-red-50' : 'border-brand-200 focus:border-brand-600'}`} 
               />
             </form>
@@ -1873,56 +1899,155 @@
       const WordSearchSubGame = ({ onComplete }) => {
         const size = 8;
         const [grid, setGrid] = useState([]);
-        const [words, setWords] = useState([]);
-        const [found, setFound] = useState([]);
-        const pool = ['SOL', 'MAR', 'LUNA', 'CASA', 'MESA', 'ROPA', 'VIDA', 'PAZ', 'LUZ', 'AGUA', 'RADIO', 'RELOJ'];
+        const [wordsToFind, setWordsToFind] = useState([]);
+        const [foundWords, setFoundWords] = useState([]);
+        const [selection, setSelection] = useState(null);
+        const pool = ['SOL', 'MAR', 'LUNA', 'CASA', 'MESA', 'ROPA', 'VIDA', 'PAZ', 'LUZ', 'AGUA', 'RADIO', 'RELOJ', 'PAN', 'SAL', 'FUEGO', 'AIRE', 'FLOR', 'TIEMPO', 'LUZ', 'MANO'];
 
         useEffect(() => {
-          const selected = pool.sort(() => Math.random() - 0.5).slice(0, 3 + Math.floor(difficultyFactor/4));
+          const selected = pool.sort(() => Math.random() - 0.5).slice(0, 3 + Math.floor(difficultyFactor/3));
           const newGrid = Array(size).fill(0).map(() => Array(size).fill(''));
+          const placed = [];
+
           selected.forEach(word => {
-            let placed = false;
+            let success = false;
             let attempts = 0;
-            while (!placed && attempts < 50) {
+            while (!success && attempts < 50) {
               attempts++;
-              const r = Math.floor(Math.random() * size);
-              const c = Math.floor(Math.random() * (size - word.length));
+              const isVert = Math.random() > 0.5;
+              const r = Math.floor(Math.random() * (isVert ? size - word.length + 1 : size));
+              const c = Math.floor(Math.random() * (isVert ? size : size - word.length + 1));
+              
               let fits = true;
-              for (let i = 0; i < word.length; i++) if (newGrid[r][c + i] !== '') fits = false;
-              if (fits) {
-                for (let i = 0; i < word.length; i++) newGrid[r][c + i] = word[i];
-                placed = true;
+              for(let i=0; i<word.length; i++) {
+                const rr = isVert ? r+i : r;
+                const cc = isVert ? c : c+i;
+                if(newGrid[rr][cc] !== '' && newGrid[rr][cc] !== word[i]) {
+                  fits = false;
+                  break;
+                }
+              }
+              
+              if(fits) {
+                const cells = [];
+                for(let i=0; i<word.length; i++) {
+                  const rr = isVert ? r+i : r;
+                  const cc = isVert ? c : c+i;
+                  newGrid[rr][cc] = word[i];
+                  cells.push({r: rr, c: cc});
+                }
+                placed.push({word, cells});
+                success = true;
               }
             }
           });
+          
           const letters = 'ABCDE';
-          for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) if (newGrid[r][c] === '') newGrid[r][c] = letters[Math.floor(Math.random() * letters.length)];
+          for(let r=0; r<size; r++) {
+            for(let c=0; c<size; c++) {
+              if(newGrid[r][c] === '') newGrid[r][c] = letters[Math.floor(Math.random() * letters.length)];
+            }
+          }
           setGrid(newGrid);
-          setWords(selected);
+          setWordsToFind(placed);
+          setFoundWords([]);
         }, [difficultyFactor]);
 
-        const find = (word) => {
-          if (!found.includes(word)) {
-            const newFound = [...found, word];
-            setFound(newFound);
-            if (newFound.length === words.length) setTimeout(onComplete, 600);
+        const getCellFromEvent = (e) => {
+          const touch = e.touches ? e.touches[0] : e;
+          const target = document.elementFromPoint(touch.clientX, touch.clientY);
+          if (target && target.dataset.r !== undefined) {
+            return { r: parseInt(target.dataset.r), c: parseInt(target.dataset.c) };
+          }
+          return null;
+        };
+
+        const handleStart = (e) => {
+          const cell = getCellFromEvent(e);
+          if (cell) setSelection({ start: cell, end: cell, isDragging: true });
+        };
+
+        const handleMove = (e) => {
+          if (!selection || !selection.isDragging) return;
+          const cell = getCellFromEvent(e);
+          if (cell) {
+            const dr = Math.abs(cell.r - selection.start.r);
+            const dc = Math.abs(cell.c - selection.start.c);
+            if (dr === 0 || dc === 0 || dr === dc) {
+              setSelection(prev => ({ ...prev, end: cell }));
+            }
           }
         };
 
+        const handleEnd = () => {
+          if (!selection) return;
+          validateSelection(selection.start, selection.end);
+          setSelection(null);
+        };
+
+        const validateSelection = (start, end) => {
+          const dr = Math.sign(end.r - start.r);
+          const dc = Math.sign(end.c - start.c);
+          const len = Math.max(Math.abs(end.r - start.r), Math.abs(end.c - start.c)) + 1;
+          let wordStr = '';
+          for (let i = 0; i < len; i++) {
+            const r = start.r + i * dr;
+            const c = start.c + i * dc;
+            wordStr += grid[r][c];
+          }
+
+          const match = wordsToFind.find(w => w.word === wordStr && !foundWords.some(fw => fw.word === w.word));
+          if (match) {
+            const newFound = [...foundWords, match];
+            setFoundWords(newFound);
+            if (newFound.length === wordsToFind.length) {
+              if (window.confetti) window.confetti({ particleCount: 30, spread: 50, origin: { y: 0.8 } });
+              setTimeout(onComplete, 800);
+            }
+          }
+        };
+
+        const isCellSelected = (r, c) => {
+          if (!selection) return false;
+          const { start, end } = selection;
+          const dr = Math.sign(end.r - start.r);
+          const dc = Math.sign(end.c - start.c);
+          const len = Math.max(Math.abs(end.r - start.r), Math.abs(end.c - start.c)) + 1;
+          for (let i = 0; i < len; i++) {
+            if (start.r + i * dr === r && start.c + i * dc === c) return true;
+          }
+          return false;
+        };
+
+        const isCellFound = (r, c) => foundWords.some(fw => fw.cells.some(cell => cell.r === r && cell.c === c));
+
         return (
-          <div className="bg-white rounded-[3rem] p-8 shadow-2xl border-8 border-brand-100 anim-scale-in max-w-lg mx-auto w-full text-center">
+          <div className="bg-white rounded-[3rem] p-6 sm:p-8 shadow-2xl border-8 border-brand-100 anim-scale-in max-w-lg mx-auto w-full text-center select-none touch-none">
             <span className="text-brand-400 font-bold uppercase tracking-widest text-sm mb-4 block">Reto: Rastreo</span>
-            <div className="grid grid-cols-8 gap-1 mb-6">
-              {grid.map((row, r) => row.map((char, c) => (
-                <div key={`${r}-${c}`} className="aspect-square flex items-center justify-center text-sm font-bold bg-brand-50 rounded-md">{char}</div>
-              )))}
+            <div 
+              className="grid grid-cols-8 gap-1 mb-6 bg-brand-50 p-2 rounded-2xl border border-brand-100 cursor-pointer"
+              onMouseDown={handleStart} onMouseMove={handleMove} onMouseUp={handleEnd} onMouseLeave={handleEnd}
+              onTouchStart={handleStart} onTouchMove={handleMove} onTouchEnd={handleEnd}
+            >
+              {grid.map((row, r) => row.map((char, c) => {
+                const selected = isCellSelected(r, c);
+                const found = isCellFound(r, c);
+                return (
+                  <div key={`${r}-${c}`} data-r={r} data-c={c}
+                    className={`aspect-square flex items-center justify-center text-sm sm:text-base font-bold rounded-md transition-all duration-150
+                      ${found ? 'bg-emerald-500 text-white shadow-sm' : selected ? 'bg-brand-600 text-white shadow-md scale-105 z-10' : 'text-brand-900 bg-white shadow-sm hover:bg-brand-50'}`}
+                  >
+                    {char}
+                  </div>
+                );
+              }))}
             </div>
             <div className="flex flex-wrap justify-center gap-2">
-              {words.map(w => (
-                <button key={w} onClick={() => find(w)} className={`px-4 py-2 rounded-full font-bold transition-all ${found.includes(w) ? 'bg-emerald-500 text-white scale-90' : 'bg-brand-100 text-brand-700'}`}>{w}</button>
+              {wordsToFind.map(w => (
+                <div key={w.word} className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${foundWords.some(fw => fw.word === w.word) ? 'bg-emerald-100 text-emerald-700 line-through' : 'bg-brand-100 text-brand-700'}`}>{w.word}</div>
               ))}
             </div>
-            <p className="text-xs text-brand-400 mt-4">Encuentra y pulsa las palabras en la cuadrícula</p>
+            <p className="text-[10px] text-brand-400 mt-6 font-bold">Desliza sobre las letras para marcar las palabras</p>
           </div>
         );
       };
@@ -2465,7 +2590,15 @@
                           window.deferredPrompt = null;
                         });
                       } else {
-                        alert("Para instalar la App de Recursos, pulsa en el menú de tu navegador (los tres puntos o compartir) y selecciona 'Instalar aplicación' o 'Añadir a pantalla de inicio'.");
+                        // Check context
+                        const params = new URLSearchParams(window.location.search);
+                        const isProContext = params.get('page') === 'resources';
+                        
+                        if (!isProContext) {
+                          navigateTo('resources');
+                        } else {
+                          alert("Para instalar la App de Recursos: \n1. Pulsa el botón de 'Compartir' o el menú de tres puntos de tu navegador. \n2. Selecciona 'Añadir a pantalla de inicio' o 'Instalar aplicación'.");
+                        }
                       }
                     }}
                     className="inline-flex items-center gap-3 px-8 py-4 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 transition-all shadow-xl shadow-brand-900/20 hover:scale-105 active:scale-95 group"
@@ -5142,7 +5275,7 @@
 
       const params = new URLSearchParams(window.location.search);
       const pageParam = params.get('page');
-      const isStandalone = pageParam === 'memory' || pageParam === 'order' || pageParam === 'wordsearch' || pageParam === 'analyzer' || pageParam === 'games';
+      const isStandalone = pageParam === 'memory' || pageParam === 'order' || pageParam === 'wordsearch' || pageParam === 'analyzer' || (pageParam === 'games' && (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone));
 
       return (
         <>
