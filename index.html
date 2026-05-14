@@ -5494,8 +5494,10 @@
           
           if (window.deferredPrompt) {
             setInstallable(true);
-            handleAutoInstall();
           }
+          
+          // Always check for pending install on mount
+          handleAutoInstall();
 
           // Safety timeout: if after 10s it's still pending but not shown, clear it
           const timer = setTimeout(() => {
