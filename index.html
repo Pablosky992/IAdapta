@@ -5476,17 +5476,9 @@
           
           const handleAutoInstall = () => {
             const isPending = sessionStorage.getItem('pendingAutoInstall') === 'true';
-            const params = new URLSearchParams(window.location.search);
-            const isUrlFlag = params.get('autoInstall') === 'true';
-
-            if ((isPending || isUrlFlag) && window.deferredPrompt) {
-              window.deferredPrompt.prompt();
-              sessionStorage.removeItem('pendingAutoInstall');
-              if (isUrlFlag) {
-                const url = new URL(window.location.href);
-                url.searchParams.delete('autoInstall');
-                window.history.replaceState({}, '', url.toString());
-              }
+            if (isPending && window.deferredPrompt) {
+              // We'll show a persistent UI hint if we're waiting for a gesture
+              window.dispatchEvent(new CustomEvent('pwa-show-installer'));
             }
           };
 
@@ -5505,6 +5497,13 @@
             window.removeEventListener('pwa-installable', handleInstallable);
             window.removeEventListener('pwa-installed', handleInstalled);
           };
+        }, []);
+
+        const [showInstaller, setShowInstaller] = useState(false);
+        useEffect(() => {
+          const handler = () => setShowInstaller(true);
+          window.addEventListener('pwa-show-installer', handler);
+          return () => window.removeEventListener('pwa-show-installer', handler);
         }, []);
 
       const syncPageFromUrl = useCallback(() => {
@@ -5607,6 +5606,40 @@
 
       return (
         <>
+          {showInstaller && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-brand-900/40 backdrop-blur-sm anim-fade-in">
+              <div className="bg-white rounded-[2.5rem] p-8 max-w-sm w-full shadow-2xl border-4 border-brand-900 anim-scale-in text-center">
+                <div className="w-20 h-20 bg-brand-100 text-brand-900 rounded-2xl flex items-center justify-center mx-auto mb-6 text-4xl shadow-inner">
+                  <Icons.Download />
+                </div>
+                <h3 className="font-display text-2xl font-bold text-brand-900 mb-4">¿Instalar IAdapta?</h3>
+                <p className="text-gray-600 mb-8 font-medium">Haz clic abajo para añadir la aplicación a tu pantalla de inicio y jugar sin conexión.</p>
+                <div className="flex flex-col gap-3">
+                  <button 
+                    onClick={() => {
+                      if (window.deferredPrompt) {
+                        window.deferredPrompt.prompt();
+                        sessionStorage.removeItem('pendingAutoInstall');
+                        setShowInstaller(false);
+                      }
+                    }}
+                    className="w-full py-4 bg-brand-900 text-white rounded-2xl font-bold text-lg hover:bg-brand-800 transition-all shadow-lg active:scale-95"
+                  >
+                    Instalar Ahora
+                  </button>
+                  <button 
+                    onClick={() => {
+                      sessionStorage.removeItem('pendingAutoInstall');
+                      setShowInstaller(false);
+                    }}
+                    className="w-full py-3 text-gray-400 font-bold hover:text-gray-600 transition-all"
+                  >
+                    Más tarde
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           {!isStandalone && <Navbar activeSection={activeSection} scrollTo={scrollTo} currentPage={currentPage} navigateTo={navigateTo} />}
           <main id="main-content">
             {currentPage === 'main' && (
