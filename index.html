@@ -2362,7 +2362,7 @@
     };
 
     // --- SECTION RESOURCES FOR PROFESSIONALS ---
-    window.SectionResources = function SectionResources({ navigateTo }) {
+    window.SectionResources = function SectionResources({ navigateTo, isPWA }) {
       const { useState, useEffect } = React;
       const [view, setView] = useState('menu'); // 'menu', 'math', 'pao', 'ramp'
       const [difficulty, setDifficulty] = useState('medium');
@@ -5200,6 +5200,7 @@
 
     // --- APP ---
     function App() {
+      const { useState, useEffect, useCallback, useMemo } = React;
       const [currentPage, setCurrentPage] = useState('main'); // 'main', 'cv', 'cookies', 'memory', 'order'
       const [activeSection, setActiveSection] = useState('home');
       const [isPWA, setIsPWA] = useState(false);
@@ -5309,7 +5310,7 @@
                 {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
                 {!isStandalone && <SectionCognitive isTeaser={true} navigateTo={navigateTo} isStandalone={isStandalone} isPWA={isPWA} />}
                 {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
-                {!isStandalone && <SectionResources navigateTo={navigateTo} />}
+                {!isStandalone && <SectionResources navigateTo={navigateTo} isPWA={isPWA} />}
                 {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
                 {!isStandalone && <SectionAbout navigateTo={navigateTo} />}
                 {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
@@ -5326,7 +5327,7 @@
               <SectionGuides />
             )}
             {currentPage === 'resources' && (
-              <SectionResources navigateTo={navigateTo} />
+              <SectionResources navigateTo={navigateTo} isPWA={isPWA} />
             )}
             {currentPage === 'memory' && (
               <SectionCognitive isTeaser={false} navigateTo={navigateTo} isStandalone={isStandalone} />
