@@ -2362,7 +2362,8 @@
     };
 
     // --- SECTION RESOURCES FOR PROFESSIONALS ---
-    window.SectionResources = function SectionResources() {
+    window.SectionResources = function SectionResources({ navigateTo }) {
+      const { useState, useEffect } = React;
       const [view, setView] = useState('menu'); // 'menu', 'math', 'pao', 'ramp'
       const [difficulty, setDifficulty] = useState('medium');
       const [isGenerating, setIsGenerating] = useState(false);
@@ -3340,8 +3341,8 @@
     };
 
     // --- SECTION ANALYZER ---
-    window.SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
-      const { useState, useRef } = React;
+    window.SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone, navigateTo }) {
+      const { useState, useEffect, useRef } = React;
       const [step, setStep] = useState('form');
       const [score, setScore] = useState(0);
       const [ringOffset, setRingOffset] = useState(283);
@@ -5108,9 +5109,9 @@
                   {[
                     { id: 'home', label: 'Inicio', isPage: false },
                     { id: 'cv', label: 'Curriculum Vitae', isPage: true },
-                    { id: 'analyzer', label: 'Analizador IA', isPage: false },
-                    { id: 'guides', label: 'Guías', isPage: false },
-                    { id: 'cognitive', label: 'Área Cognitiva', isPage: false },
+                    { id: 'analyzer', label: 'Analizador IA', isPage: true },
+                    { id: 'guides', label: 'Guías', isPage: true },
+                    { id: 'cognitive', label: 'Área Cognitiva', isPage: true },
                     { id: 'contact', label: 'Contacto', isPage: false },
                   ].map(l => (
                     <li key={l.id}>
@@ -5306,6 +5307,10 @@
               <>
                 {!isStandalone && <SectionHome scrollTo={scrollTo} navigateTo={navigateTo} />}
                 {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
+                {!isStandalone && <SectionCognitive isTeaser={true} navigateTo={navigateTo} isStandalone={isStandalone} isPWA={isPWA} />}
+                {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
+                {!isStandalone && <SectionResources navigateTo={navigateTo} />}
+                {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
                 {!isStandalone && <SectionAbout navigateTo={navigateTo} />}
                 {!isStandalone && <div className="max-w-4xl mx-auto px-4"><div className="section-divider my-0"></div></div>}
                 {!isStandalone && <SectionContact />}
@@ -5321,7 +5326,7 @@
               <SectionGuides />
             )}
             {currentPage === 'resources' && (
-              <SectionResources />
+              <SectionResources navigateTo={navigateTo} />
             )}
             {currentPage === 'memory' && (
               <SectionCognitive isTeaser={false} navigateTo={navigateTo} isStandalone={isStandalone} />
@@ -5339,7 +5344,7 @@
               <SectionVisualGame isStandalone={isStandalone} navigateTo={navigateTo} />
             )}
             {currentPage === 'analyzer' && (
-              <SectionAnalyzer isTeaser={false} isStandalone={isStandalone} />
+              <SectionAnalyzer isTeaser={false} isStandalone={isStandalone} navigateTo={navigateTo} />
             )}
             {currentPage === 'challenge' && (
               <SectionDailyChallenge isStandalone={isStandalone} navigateTo={navigateTo} />
