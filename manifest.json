@@ -1,6 +1,6 @@
 {
-  "name": "IAdapta: Juegos",
-  "short_name": "Juegos",
+  "name": "IAdapta | Juegos",
+  "short_name": "IAdapta Juegos",
   "description": "Ejercicios de estimulación cognitiva para la autonomía personal.",
   "start_url": "index.html?page=games",
   "display": "standalone",
