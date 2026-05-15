@@ -1,4 +1,4 @@
-const CACHE_NAME = 'iadapta-v2'; // Changed to trigger update
+const CACHE_NAME = 'iadapta-v3'; // Bumped to force SW update
 const ASSETS = [
   './',
   './index.html',
@@ -45,7 +45,10 @@ self.addEventListener('activate', (event) => {
 // Fetch: Network-first for HTML/JS (to get updates), Cache-first for images
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
-  
+
+  // Don't intercept cross-origin requests (let them open in the system browser)
+  if (url.origin !== self.location.origin) return;
+
   // Strategy: Network-first for HTML and scripts to ensure latest data
   if (event.request.mode === 'navigate' || url.pathname.endsWith('.js') || url.pathname.endsWith('.json')) {
     event.respondWith(
