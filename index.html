@@ -589,7 +589,15 @@
                   <div className="mt-20 pt-10 border-t border-brand-100 text-center">
                     <p className="text-gray-400 text-sm mb-4 font-medium uppercase tracking-widest">¿Quieres ver más recursos?</p>
                     <button 
-                      onClick={() => { window.open('https://iadapta.vercel.app/', '_blank', 'noopener,noreferrer'); }}
+                      onClick={() => {
+                        const url = 'https://iadapta.es';
+                        if (/Android/i.test(navigator.userAgent)) {
+                          // Intent URL forces Android to open a FULL Chrome browser window, not a Custom Tab
+                          window.location.href = 'intent://iadapta.es#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=https%3A%2F%2Fiadapta.es;end';
+                        } else {
+                          window.open(url, '_blank', 'noopener,noreferrer');
+                        }
+                      }}
                       className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-900 transition-all bg-white px-8 py-4 rounded-2xl shadow-sm border border-brand-100 hover:shadow-md active:scale-95 group"
                     >
                       <Icons.Brain className="w-5 h-5" />
