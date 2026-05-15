@@ -4,8 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description"
-    content="IAdapta: Expertos en Terapia Ocupacional, Accesibilidad y Estimulación Cognitiva. Guías para la adaptación del hogar, recursos para profesionales y retos mentales diarios." />
+  <meta name="description" content="IAdapta: Expertos en Terapia Ocupacional, Accesibilidad y Estimulación Cognitiva. Guías para la adaptación del hogar, recursos para profesionales y retos mentales diarios." />
   <meta name="keywords" content="terapia ocupacional, accesibilidad, estimulacion cognitiva, adaptacion hogar, recursos para profesionales, juegos de memoria, autonomia personal, salud mental, productos de apoyo" />
   <link rel="canonical" href="https://iadapta.es/" />
   <meta name="google-adsense-account" content="ca-pub-9370167145239765">
@@ -478,7 +477,7 @@
 
       if (isTeaser) {
         return (
-          <section id="cognitive" className={`py-24 px-4 bg-white ${isStandalone ? 'pt-32' : ''}`}>
+          <section id="cognitive" className={`pt-36 pb-24 px-4 bg-white ${isStandalone ? 'pt-36' : ''}`}>
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-16">
                 {isStandalone && (
@@ -585,6 +584,23 @@
                     </div>
                   </div>
                 </div>
+
+                {isStandalone && (
+                  <div className="mt-20 pt-10 border-t border-brand-100 text-center">
+                    <p className="text-gray-400 text-sm mb-4 font-medium uppercase tracking-widest">¿Quieres ver más recursos?</p>
+                    <a 
+                      href="https://iadapta.es" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-900 transition-all bg-white px-8 py-4 rounded-2xl shadow-sm border border-brand-100 hover:shadow-md active:scale-95 group"
+                    >
+                      <Icons.Brain className="w-5 h-5" />
+                      <span>Ir a la web de IAdapta</span>
+                      <Icons.ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                    <p className="mt-3 text-[10px] text-gray-300">La web se abrirá en una nueva ventana del navegador</p>
+                  </div>
+                )}
 
                 <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-10 mb-16">
 
@@ -696,7 +712,7 @@
                     </div>
                   </div>
 
-                  {/* Game 5 Teaser */}
+                  {/* Game 5: Agudeza Visual */}
                   <div 
                     onClick={() => navigateTo('visual')}
                     className="bg-white rounded-[2.5rem] overflow-hidden border border-brand-50 shadow-xl hover:shadow-2xl transition-all group flex flex-col cursor-pointer"
@@ -722,6 +738,34 @@
                       </button>
                     </div>
                   </div>
+
+                  {/* Game 6: El Intruso */}
+                  <div 
+                    onClick={() => navigateTo('intruder')}
+                    className="bg-white rounded-[2.5rem] overflow-hidden border border-rose-50 shadow-xl hover:shadow-2xl transition-all group flex flex-col cursor-pointer"
+                  >
+                    <div className="relative h-56 overflow-hidden">
+                      <img src="intruder_game_thumbnail.png" alt="El Intruso" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-rose-900/60 to-transparent"></div>
+                      <div className="absolute bottom-4 left-6 flex items-center gap-3">
+                        <div className="w-12 h-12 bg-rose-600 text-white rounded-xl flex items-center justify-center text-2xl shadow-lg border border-rose-400/30">
+                          <Icons.Search />
+                        </div>
+                        <span className="text-white font-bold text-lg">Categorización</span>
+                      </div>
+                    </div>
+                    <div className="p-8 flex flex-col flex-1">
+                      <h3 className="font-display text-2xl font-bold text-brand-900 mb-4">El Intruso</h3>
+                      <p className="text-gray-600 text-lg mb-8 flex-1 leading-relaxed">
+                        Entrena el razonamiento lógico y la categorización semántica identificando el objeto que no encaja en el grupo.
+                      </p>
+                      <button className="w-full py-4 bg-rose-900 text-white rounded-2xl font-bold text-lg group-hover:bg-rose-800 transition-all flex items-center justify-center gap-3 shadow-lg shadow-rose-900/20">
+                        Jugar ahora
+                        <Icons.ArrowRight />
+                      </button>
+                    </div>
+                  </div>
+
                 </div>
 
                 {/* Consejo de la TO */}
@@ -745,7 +789,7 @@
       const gridCols = level === 0 ? 'grid-cols-2' : level === 1 ? 'grid-cols-2 sm:grid-cols-4' : level === 2 ? 'grid-cols-3 sm:grid-cols-4' : level === 3 ? 'grid-cols-4' : 'grid-cols-5';
 
       return (
-        <section className={`py-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-32' : ''}`}>
+        <section className={`pt-36 pb-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-36' : ''}`}>
           <div className="max-w-4xl w-full">
             <div className="flex justify-start mb-8">
               <button 
@@ -872,13 +916,33 @@
       { id: 5, name: '¿Imposible?', rows: 20, cols: 12, wordCount: 22, directions: [0, 1, 2, 3, 4, 5, 6, 7], hints: 2 }
     ];
 
-    // --- LEVELS CONFIG FOR VISUAL GAME ---
     const VISUAL_LEVELS = [
-      { id: 1, name: 'Básico', size: 5, target: 'A', base: 'V', rounds: 5 },
-      { id: 2, name: 'Intermedio', size: 7, target: 'Q', base: 'O', rounds: 5 },
-      { id: 3, name: 'Avanzado', size: 9, target: 'F', base: 'E', rounds: 8 },
-      { id: 4, name: 'Experto', size: 11, target: 'M', base: 'N', rounds: 10 },
-      { id: 5, name: 'Maestro', size: 13, target: 'O', base: 'D', rounds: 12 }
+      { id: 1, name: 'Básico', size: 5, rounds: 5 },
+      { id: 2, name: 'Intermedio', size: 8, rounds: 5 },
+      { id: 3, name: 'Avanzado', size: 10, rounds: 5 },
+      { id: 4, name: 'Experto', size: 12, rounds: 5 },
+      { id: 5, name: 'Lince', size: 15, rounds: 5 }
+    ];
+
+    const INTRUDER_CATEGORIES = [
+      { name: 'Cocina', items: ['🍽️', '🍴', '🥄', '🔪', '☕', '🍳', '🍯'], intruders: ['🔨', '✂️', '👟', '☂️', '🚲'] },
+      { name: 'Ropa', items: ['👕', '👖', '👗', '👢', '👚', '👔', '🎩'], intruders: ['🍎', '🍄', '🚗', '🎸', '📱'] },
+      { name: 'Herramientas', items: ['🔧', '🔨', '⚙️', '✂️', '⛏️', '🔩', '📏'], intruders: ['☂️', '🍦', '🍕', '🎀', '🎈'] },
+      { name: 'Frutas', items: ['🍎', '🍐', '🍌', '🍇', '🍊', '🍓', '🍍'], intruders: ['🚪', '🚗', '👞', '📻', '💻'] },
+      { name: 'Deportes', items: ['⚽', '🏀', '🎾', '🏐', '🎱', '🏓', '🏸'], intruders: ['🎸', '🍔', '🛋️', '🛀', '📖'] },
+      { name: 'Música', items: ['🎸', '🎹', '🎺', '🎻', '🔔', '🎷', '🎤'], intruders: ['🍕', '✂️', '🚲', '☂️', '📦'] },
+      { name: 'Baño', items: ['🚿', '🛀', '🚽', '💧', '🚰', '🗑️', '🛁'], intruders: ['🚲', '🍔', '🚁', '🎸', '⚽'] },
+      { name: 'Transporte', items: ['🚗', '🚲', '🚌', '🚆', '✈️', '⛵', '🏍️'], intruders: ['🍦', '🛏️', '🎈', '🍄', '📚'] },
+      { name: 'Animales', items: ['🐶', '🐱', '🐭', '🐹', '🐰', '🐸', '🐻'], intruders: ['📱', '🍕', '👟', '🔨', '🏠'] },
+      { name: 'Electrónica', items: ['💻', '📱', '⌨️', '🖱️', '🎧', '📺', '⌚'], intruders: ['🍄', '🥕', '👞', '📦', '🖼️'] }
+    ];
+
+    const INTRUDER_LEVELS = [
+      { id: 1, name: 'Básico', count: 4, rounds: 5 },
+      { id: 2, name: 'Intermedio', count: 6, rounds: 5 },
+      { id: 3, name: 'Avanzado', count: 8, rounds: 6 },
+      { id: 4, name: 'Experto', count: 10, rounds: 8 },
+      { id: 5, name: 'Maestro', count: 12, rounds: 10 }
     ];
 
     // --- SECTION WORD SEARCH GAME ---
@@ -1667,6 +1731,7 @@
       const [alreadyDoneToday, setAlreadyDoneToday] = useState(false);
       const [totalTime, setTotalTime] = useState(0);
       const [stars, setStars] = useState(0);
+      const [startTime, setStartTime] = useState(0);
 
       // Difficulty factor: 1 (Mon) to 7 (Sun)
       const difficultyFactor = useMemo(() => {
@@ -2134,13 +2199,61 @@
         );
       };
 
+      // Game 6: Mini Intruder
+      const IntruderSubGame = ({ onComplete }) => {
+        const count = 4 + Math.floor(difficultyFactor / 2);
+        const [items, setItems] = useState([]);
+        const [targetIdx, setTargetIdx] = useState(-1);
+        const [correctIdx, setCorrectIdx] = useState(null);
+
+        const generateChallenge = useCallback(() => {
+          const cat = INTRUDER_CATEGORIES[Math.floor(Math.random() * INTRUDER_CATEGORIES.length)];
+          const pool = [...cat.items].sort(() => Math.random() - 0.5).slice(0, count - 1);
+          const intruder = cat.intruders[Math.floor(Math.random() * cat.intruders.length)];
+          
+          const finalItems = [...pool, intruder].sort(() => Math.random() - 0.5);
+          setItems(finalItems);
+          setTargetIdx(finalItems.indexOf(intruder));
+          setCorrectIdx(null);
+        }, [count]);
+
+        useEffect(() => {
+          generateChallenge();
+        }, [generateChallenge]);
+
+        const handleSelect = (idx) => {
+          if (correctIdx !== null) return;
+          if (idx === targetIdx) {
+            setCorrectIdx(idx);
+            setTimeout(onComplete, 800);
+          }
+        };
+
+        return (
+          <div className="bg-white rounded-[3rem] p-8 shadow-2xl border-8 border-brand-100 anim-scale-in max-w-lg mx-auto w-full text-center">
+            <span className="text-brand-400 font-bold uppercase tracking-widest text-sm mb-4 block">Reto: Razonamiento</span>
+            <h3 className="text-xl font-bold text-brand-900 mb-6">¿Cuál NO pertenece al grupo?</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {items.map((item, i) => (
+                <button key={i} onClick={() => handleSelect(i)} 
+                  className={`aspect-square flex items-center justify-center text-5xl rounded-2xl transition-all duration-300
+                    ${correctIdx === i ? 'bg-emerald-500 text-white scale-110 shadow-lg' : 'bg-brand-50 hover:bg-brand-100 border-2 border-brand-100 hover:border-brand-300'}`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      };
+
       // Random selection logic for the daily challenge
       const dailyGames = useMemo(() => {
         const todayStr = new Date().toISOString().split('T')[0];
         let seed = 0;
         for (let i = 0; i < todayStr.length; i++) seed += todayStr.charCodeAt(i);
         
-        const pool = ['math', 'order', 'visual', 'memory', 'wordsearch'];
+        const pool = ['math', 'order', 'visual', 'memory', 'wordsearch', 'intruder'];
         const result = [];
         const available = [...pool];
         
@@ -2159,12 +2272,13 @@
           case 'visual': return <VisualSubGame onComplete={onComplete} />;
           case 'memory': return <MemorySubGame onComplete={onComplete} />;
           case 'wordsearch': return <WordSearchSubGame onComplete={onComplete} />;
+          case 'intruder': return <IntruderSubGame onComplete={onComplete} />;
           default: return null;
         }
       };
 
       return (
-        <section className={`py-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-32' : ''}`}>
+        <section className={`pt-36 pb-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-36' : ''}`}>
           <div className="max-w-4xl w-full">
             <div className="flex justify-between items-center mb-12">
               <button onClick={() => navigateTo('cognitive')} className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-100 group">
@@ -2198,7 +2312,7 @@
                   {dailyGames.map((g, i) => (
                     <div key={i} className="bg-brand-50 p-4 rounded-2xl border border-brand-100">
                       <p className="text-[10px] text-brand-400 font-bold uppercase mb-1">Juego {i+1}</p>
-                      <p className="text-xs font-bold text-brand-900">{g === 'math' ? 'Cálculo' : g === 'order' ? 'Orden' : g === 'visual' ? 'Agudeza' : g === 'memory' ? 'Memoria' : 'Rastreo'}</p>
+                      <p className="text-xs font-bold text-brand-900">{g === 'math' ? 'Cálculo' : g === 'order' ? 'Orden' : g === 'visual' ? 'Agudeza' : g === 'memory' ? 'Memoria' : g === 'wordsearch' ? 'Rastreo' : g === 'intruder' ? 'Intruso' : 'Juego'}</p>
                     </div>
                   ))}
                 </div>
@@ -2363,7 +2477,7 @@
       };
 
       return (
-        <section className={`py-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-32' : ''}`}>
+        <section className={`pt-36 pb-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-36' : ''}`}>
           <div className="max-w-4xl w-full">
             {!gameStarted ? (
               <div className="max-w-2xl mx-auto text-center">
@@ -2433,6 +2547,173 @@
                         <button onClick={() => setGameStarted(false)} className="px-8 py-3 bg-brand-100 text-brand-700 font-bold rounded-xl hover:bg-brand-200 transition-all">Cambiar Nivel</button>
                         <button onClick={nextLevel} className="px-8 py-3 bg-brand-900 text-white font-bold rounded-xl hover:bg-brand-800 shadow-lg transition-all btn-pulse">
                           {levelIdx < VISUAL_LEVELS.length - 1 ? 'Siguiente Nivel' : 'Volver al Inicio'}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        </section>
+      );
+    };
+
+    // --- SECTION INTRUDER GAME ---
+    const SectionIntruderGame = function SectionIntruderGame({ isStandalone, navigateTo }) {
+      const { useState, useEffect, useCallback, useMemo } = React;
+      
+      const [gameStarted, setGameStarted] = useState(false);
+      const [levelIdx, setLevelIdx] = useState(0);
+      const [round, setRound] = useState(0);
+      const [items, setItems] = useState([]);
+      const [targetIdx, setTargetIdx] = useState(-1);
+      const [correctIdx, setCorrectIdx] = useState(null);
+      const [gameStatus, setGameStatus] = useState('playing'); // 'playing', 'won'
+      const [startTime, setStartTime] = useState(0);
+      const [finalTime, setFinalTime] = useState(0);
+      const [stars, setStars] = useState(0);
+
+      const currentLevel = INTRUDER_LEVELS[levelIdx];
+
+      const initRound = useCallback(() => {
+        const cat = INTRUDER_CATEGORIES[Math.floor(Math.random() * INTRUDER_CATEGORIES.length)];
+        const pool = [...cat.items].sort(() => Math.random() - 0.5).slice(0, currentLevel.count - 1);
+        const intruder = cat.intruders[Math.floor(Math.random() * cat.intruders.length)];
+        
+        const finalItems = [...pool, intruder].sort(() => Math.random() - 0.5);
+        setItems(finalItems);
+        setTargetIdx(finalItems.indexOf(intruder));
+        setCorrectIdx(null);
+      }, [levelIdx, currentLevel]);
+
+      const startGame = (idx) => {
+        setLevelIdx(idx);
+        setRound(0);
+        setGameStarted(true);
+        setGameStatus('playing');
+        setStartTime(Date.now());
+      };
+
+      useEffect(() => {
+        if (gameStarted && round === 0) initRound();
+      }, [gameStarted, levelIdx, initRound]);
+
+      const handleSelect = (idx) => {
+        if (gameStatus !== 'playing' || correctIdx !== null) return;
+        if (idx === targetIdx) {
+          setCorrectIdx(idx);
+          setTimeout(() => {
+            if (round < currentLevel.rounds - 1) {
+              setRound(prev => prev + 1);
+              initRound();
+            } else {
+              const time = (Date.now() - startTime) / 1000;
+              setFinalTime(time.toFixed(1));
+              setGameStatus('won');
+              
+              const baseTime = currentLevel.rounds * 3; 
+              let s = 3;
+              if (time < baseTime * 0.7) s = 5;
+              else if (time < baseTime * 1.0) s = 4;
+              else if (time > baseTime * 1.6) s = 2;
+              setStars(s);
+
+              if (window.confetti) window.confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }
+          }, 600);
+        }
+      };
+
+      const nextLevel = () => {
+        if (levelIdx < INTRUDER_LEVELS.length - 1) {
+          startGame(levelIdx + 1);
+        } else {
+          setGameStarted(false);
+        }
+      };
+
+      return (
+        <section className={`pt-36 pb-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-36' : ''}`}>
+          <div className="max-w-4xl w-full">
+            {!gameStarted ? (
+              <div className="max-w-2xl mx-auto text-center">
+                <div className="flex justify-start mb-8">
+                  <button onClick={() => navigateTo('cognitive')} className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-100 group">
+                    <Icons.ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                    <span>Volver</span>
+                  </button>
+                </div>
+                <h2 className="font-display text-4xl font-bold text-brand-900 mb-8">El Intruso</h2>
+                <div className="bg-white rounded-[3rem] border border-brand-100 shadow-2xl p-10 anim-scale-in">
+                  <div className="text-6xl mb-6">🕵️‍♂️</div>
+                  <h3 className="text-2xl font-bold text-brand-900 mb-6">Selecciona la dificultad</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {INTRUDER_LEVELS.map((lvl, idx) => (
+                      <button key={lvl.id} onClick={() => startGame(idx)} className="group p-6 rounded-2xl border-2 border-brand-50 hover:border-brand-500 hover:bg-brand-50 transition-all flex flex-col items-center gap-2">
+                        <span className="text-brand-900 font-bold text-xl">{lvl.name}</span>
+                        <span className="text-brand-500 text-sm font-medium">{lvl.count} elementos - {lvl.rounds} rondas</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <>
+                <GameHeader 
+                  title="El Intruso"
+                  subtitle={(
+                    <>
+                      <span className="bg-rose-600 text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-widest">Nivel {currentLevel.id}</span>
+                      <span className="text-brand-600 font-bold uppercase tracking-widest">Ronda {round + 1} de {currentLevel.rounds}</span>
+                    </>
+                  )}
+                  onBack={() => navigateTo('cognitive')}
+                  onRestart={() => startGame(levelIdx)}
+                  onLevels={() => setGameStarted(false)}
+                  isStandalone={isStandalone}
+                />
+
+                <div className="flex flex-col items-center gap-8">
+                  {gameStatus === 'playing' ? (
+                    <div className="bg-white rounded-[3rem] p-10 shadow-2xl border-8 border-brand-100 anim-scale-in max-w-2xl w-full text-center">
+                      <h3 className="text-2xl font-bold text-brand-900 mb-8">¿Cuál es el intruso?</h3>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+                        {items.map((item, i) => (
+                          <button key={i} onClick={() => handleSelect(i)} 
+                            className={`aspect-square flex items-center justify-center text-6xl rounded-[2rem] transition-all duration-300
+                              ${correctIdx === i ? 'bg-emerald-500 text-white scale-110 shadow-xl rotate-6' : 'bg-brand-50 hover:bg-brand-100 border-4 border-brand-100 hover:border-brand-300 hover:-translate-y-1'}`}
+                          >
+                            {item}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-white rounded-[3rem] p-12 shadow-2xl border border-brand-100 text-center anim-scale-in max-w-xl w-full">
+                      <div className="text-7xl mb-6">🎖️</div>
+                      <h3 className="text-4xl font-bold text-brand-900 mb-2">¡Nivel Completado!</h3>
+                      <p className="text-brand-500 font-bold uppercase tracking-widest mb-8">{currentLevel.name}</p>
+                      
+                      <div className="flex justify-center gap-4 mb-8">
+                        {[1, 2, 3, 4, 5].map(s => (
+                          <Icons.Star key={s} className={`w-10 h-10 ${s <= stars ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200'}`} />
+                        ))}
+                      </div>
+
+                      <div className="bg-brand-50 p-8 rounded-3xl mb-8">
+                        <p className="text-brand-400 text-sm font-bold uppercase mb-2">Tiempo Total</p>
+                        <p className="text-5xl font-bold text-brand-900">{finalTime}s</p>
+                      </div>
+
+                      <ShareButtons game="El Intruso" time={finalTime} />
+
+                      <div className="flex flex-col gap-3 mt-8">
+                        <button onClick={nextLevel} className="w-full py-5 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 transition-all shadow-xl shadow-brand-900/20">
+                          {levelIdx < INTRUDER_LEVELS.length - 1 ? 'Siguiente Nivel' : 'Finalizar'}
+                        </button>
+                        <button onClick={() => setGameStarted(false)} className="w-full py-4 text-brand-600 font-bold hover:bg-brand-50 rounded-xl transition-all">
+                          Cambiar Dificultad
                         </button>
                       </div>
                     </div>
@@ -2835,13 +3116,22 @@
           color: 'bg-blue-900 text-white',
           badge: 'Gestión',
           image: 'pao_finder_thumb_1778710383483.png'
+        },
+        {
+          id: '3dprint',
+          title: 'Impresión 3D',
+          desc: 'Descubre y descarga modelos 3D de productos de apoyo gratuitos de la comunidad.',
+          icon: <Icons.Lightbulb />,
+          color: 'bg-orange-500 text-white',
+          badge: 'Tecnología',
+          image: '3d_printing_thumb.png'
         }
       ];
 
       const cte = getCTEStatus();
 
       return (
-        <section id="resources" className="py-24 px-4 bg-brand-50/50 min-h-screen">
+        <section id="resources" className="pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen">
           <div className="max-w-6xl mx-auto">
             
             {view !== 'menu' && (
@@ -2861,41 +3151,7 @@
               <h2 className="font-display text-4xl sm:text-5xl font-bold text-brand-900 mb-6">Recursos para Profesionales</h2>
               <div className="section-divider w-24 mx-auto mb-8"></div>
               
-              {view === 'menu' && !isPWA && (
-                <div className="mb-12">
-                  <button 
-                    onClick={() => {
-                      if (window.deferredPrompt) {
-                        window.deferredPrompt.prompt();
-                        window.deferredPrompt.userChoice.then((choiceResult) => {
-                          if (choiceResult.outcome === 'accepted') {
-                            console.log('User accepted the Pro install prompt');
-                          }
-                          window.deferredPrompt = null;
-                          window.dispatchEvent(new CustomEvent('pwa-installed'));
-                        });
-                      } else {
-                        const isProContext = new URLSearchParams(window.location.search).get('page') === 'resources';
-                        sessionStorage.setItem('pendingAutoInstall', 'true');
-                        if (!isProContext) {
-                          const baseUrl = window.location.href.split('?')[0];
-                          window.location.href = `${baseUrl}?page=resources`;
-                        } else {
-                          // Force a hard reload to ensure browser re-evaluates the PWA manifest
-                          window.location.reload();
-                        }
-                      }
-                    }}
-                    className="inline-flex items-center gap-3 px-8 py-4 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 transition-all shadow-xl shadow-brand-900/20 hover:scale-105 active:scale-95 group"
-                  >
-                    <div className="bg-white/10 p-2 rounded-xl">
-                      <Icons.Download />
-                    </div>
-                    <span>{window.deferredPrompt ? 'Instalar App de Recursos' : 'Descargar App de Recursos'}</span>
-                    <Icons.Briefcase className="w-6 h-6" />
-                  </button>
-                </div>
-              )}
+              {/* App download button removed as requested */}
             </div>
 
             {view === 'menu' ? (
@@ -3146,7 +3402,7 @@
                   </div>
                 </div>
               </div>
-            ) : (
+            ) : view === 'pao' ? (
               <div className="anim-scale-in">
                 {/* TOOL 3: CatSalut Code Finder */}
                 <div className="bg-white rounded-[3rem] p-8 sm:p-12 shadow-xl border border-brand-50">
@@ -3273,7 +3529,136 @@
                   )}
                 </div>
               </div>
-            )}
+            ) : view === '3dprint' ? (
+              <div className="anim-scale-in">
+                <div className="bg-white rounded-[3rem] p-8 sm:p-12 shadow-xl border border-brand-50 mb-16">
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="w-14 h-14 bg-orange-500 text-white rounded-2xl flex items-center justify-center shadow-lg">
+                      <Icons.Lightbulb />
+                    </div>
+                    <div>
+                      <h3 className="font-display text-3xl font-bold text-brand-900">Impresión 3D</h3>
+                      <p className="text-orange-500 font-bold uppercase tracking-widest text-xs">Productos de Apoyo</p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-6 text-xl text-gray-700 leading-relaxed mb-12 max-w-4xl">
+                    <p>
+                      La impresión 3D permite que soluciones muy útiles lleguen a cualquier casa de forma sencilla. Hay muchísima gente compartiendo sus ideas generosamente por internet, lo que hace que hoy sea más fácil que nunca encontrar herramientas que nos ayuden con las tareas del día a día.
+                    </p>
+                    <p>
+                      Pequeñas piezas, como adaptadores de llaves o mangos para cubiertos, suponen un gran cambio en la autonomía. Al estar listos para descargar e imprimir, son opciones rápidas y económicas para mejorar el entorno personal sin necesidad de realizar grandes inversiones.
+                    </p>
+                    <p>
+                      Aquí tienes un recopilatorio de modelos interesantes seleccionados de plataformas como Thingiverse. Son recursos creados por otros usuarios para ayudar a los demás; te invitamos a explorar estas ideas y descubrir todo lo que se puede conseguir con esta tecnología.
+                    </p>
+                  </div>
+
+                  <a href="https://www.thingiverse.com/Pablosky92/collections/44071207/things" target="_blank" rel="noopener noreferrer" className="block group mb-16">
+                    <div className="bg-orange-50 rounded-[2rem] overflow-hidden border border-orange-100 shadow-md group-hover:shadow-xl group-hover:border-orange-200 transition-all flex flex-col md:flex-row">
+                      <div className="md:w-1/3 h-64 md:h-auto overflow-hidden relative">
+                        <img src="3d_printed_objects.png" alt="Objetos impresos en 3D" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/30"></div>
+                      </div>
+                      <div className="p-8 md:p-12 flex-1 flex flex-col justify-center bg-white relative">
+                        <div className="absolute top-0 right-0 p-6 opacity-10">
+                          <Icons.Search className="w-24 h-24" />
+                        </div>
+                        <h4 className="font-display text-2xl font-bold text-brand-900 mb-3 relative z-10 group-hover:text-orange-600 transition-colors">Colección Thingiverse</h4>
+                        <p className="text-gray-500 mb-6 relative z-10">Explora la carpeta con decenas de archivos STL listos para imprimir: adaptadores de baño, cubiertos, llaves y más soluciones prácticas.</p>
+                        <div className="inline-flex items-center gap-2 text-orange-600 font-bold group-hover:gap-3 transition-all relative z-10">
+                          Abrir colección en Thingiverse
+                          <Icons.ArrowRight />
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+
+                  <div className="pt-12 border-t border-brand-100 relative">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-6">
+                      <span className="text-brand-400 font-bold uppercase tracking-widest text-xs flex items-center gap-2">
+                        <Icons.Star className="w-4 h-4 text-amber-400" /> Material Recomendado
+                      </span>
+                    </div>
+
+                    <div className="space-y-6 mt-8">
+                      {/* PLA */}
+                      <a href="https://amzn.to/4uxnC1f" target="_blank" rel="noopener noreferrer" className="block group">
+                        <div className="bg-white rounded-[2.5rem] p-4 sm:p-6 border-2 border-brand-50 shadow-xl group-hover:border-brand-300 group-hover:shadow-2xl transition-all flex flex-col sm:flex-row items-center gap-8">
+                          <div className="w-full sm:w-48 h-48 rounded-2xl overflow-hidden shrink-0 bg-gray-50 relative">
+                            <img src="pla_filament_product.png" alt="Filamento PLA" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                            <div className="absolute top-2 left-2 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-brand-900 shadow-sm border border-brand-100">PLA</div>
+                          </div>
+                          <div className="flex-1 text-center sm:text-left pb-4 sm:pb-0">
+                            <h4 className="font-display text-2xl font-bold text-brand-900 mb-2 group-hover:text-brand-600 transition-colors">Filamento PLA de alta calidad</h4>
+                            <p className="text-gray-600 mb-6">El material ideal para imprimir productos de apoyo: fácil de usar, resistente y versátil para todas tus creaciones diarias.</p>
+                            <span className="inline-flex items-center justify-center gap-2 bg-brand-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-800 transition-all shadow-md group-hover:shadow-lg w-full sm:w-auto">
+                              Ver producto en Amazon
+                              <Icons.ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            </span>
+                          </div>
+                        </div>
+                      </a>
+
+                      {/* PETG */}
+                      <a href="https://amzn.to/3RHR3yM" target="_blank" rel="noopener noreferrer" className="block group">
+                        <div className="bg-white rounded-[2.5rem] p-4 sm:p-6 border-2 border-brand-50 shadow-xl group-hover:border-brand-300 group-hover:shadow-2xl transition-all flex flex-col sm:flex-row items-center gap-8">
+                          <div className="w-full sm:w-48 h-48 rounded-2xl overflow-hidden shrink-0 bg-gray-50 relative">
+                            <img src="petg_filament_product.png" alt="Filamento PETG" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                            <div className="absolute top-2 left-2 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-brand-900 shadow-sm border border-brand-100">PETG</div>
+                          </div>
+                          <div className="flex-1 text-center sm:text-left pb-4 sm:pb-0">
+                            <h4 className="font-display text-2xl font-bold text-brand-900 mb-2 group-hover:text-brand-600 transition-colors">Filamento PETG muy resistente</h4>
+                            <p className="text-gray-600 mb-6">Perfecto para adaptaciones que requieran mayor resistencia a impactos o estén expuestas a cambios de temperatura.</p>
+                            <span className="inline-flex items-center justify-center gap-2 bg-brand-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-800 transition-all shadow-md group-hover:shadow-lg w-full sm:w-auto">
+                              Ver producto en Amazon
+                              <Icons.ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            </span>
+                          </div>
+                        </div>
+                      </a>
+
+                      {/* ABS */}
+                      <a href="https://amzn.to/4wyJLNI" target="_blank" rel="noopener noreferrer" className="block group">
+                        <div className="bg-white rounded-[2.5rem] p-4 sm:p-6 border-2 border-brand-50 shadow-xl group-hover:border-brand-300 group-hover:shadow-2xl transition-all flex flex-col sm:flex-row items-center gap-8">
+                          <div className="w-full sm:w-48 h-48 rounded-2xl overflow-hidden shrink-0 bg-gray-50 relative">
+                            <img src="abs_filament_product.png" alt="Filamento ABS" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                            <div className="absolute top-2 left-2 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-brand-900 shadow-sm border border-brand-100">ABS</div>
+                          </div>
+                          <div className="flex-1 text-center sm:text-left pb-4 sm:pb-0">
+                            <h4 className="font-display text-2xl font-bold text-brand-900 mb-2 group-hover:text-brand-600 transition-colors">Filamento ABS para mecánicas</h4>
+                            <p className="text-gray-600 mb-6">Excelente durabilidad y resistencia al desgaste, ideal para engranajes y piezas que sufran mucha fricción continua.</p>
+                            <span className="inline-flex items-center justify-center gap-2 bg-brand-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-800 transition-all shadow-md group-hover:shadow-lg w-full sm:w-auto">
+                              Ver producto en Amazon
+                              <Icons.ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            </span>
+                          </div>
+                        </div>
+                      </a>
+
+                      {/* TPU */}
+                      <a href="https://amzn.to/4eLxH5z" target="_blank" rel="noopener noreferrer" className="block group">
+                        <div className="bg-white rounded-[2.5rem] p-4 sm:p-6 border-2 border-brand-50 shadow-xl group-hover:border-brand-300 group-hover:shadow-2xl transition-all flex flex-col sm:flex-row items-center gap-8">
+                          <div className="w-full sm:w-48 h-48 rounded-2xl overflow-hidden shrink-0 bg-gray-50 relative">
+                            <img src="tpu_filament_product.png" alt="Filamento TPU" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                            <div className="absolute top-2 left-2 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-brand-900 shadow-sm border border-brand-100">TPU</div>
+                          </div>
+                          <div className="flex-1 text-center sm:text-left pb-4 sm:pb-0">
+                            <h4 className="font-display text-2xl font-bold text-brand-900 mb-2 group-hover:text-brand-600 transition-colors">Filamento TPU flexible</h4>
+                            <p className="text-gray-600 mb-6">Material elástico tipo goma, fantástico para crear fundas, protectores antideslizantes o agarraderas ergonómicas.</p>
+                            <span className="inline-flex items-center justify-center gap-2 bg-brand-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-800 transition-all shadow-md group-hover:shadow-lg w-full sm:w-auto">
+                              Ver producto en Amazon
+                              <Icons.ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            </span>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            ) : null}
           </div>
         </section>
       );
@@ -3399,7 +3784,7 @@
     // --- SECTION ABOUT ---
     const SectionAbout = function SectionAbout({ navigateTo }) {
       return (
-        <section id="about" className="py-24 px-4 bg-white relative">
+        <section id="about" className="pt-36 pb-24 px-4 bg-white relative">
           <div className="max-w-6xl mx-auto">
             <div className="bg-gradient-to-br from-brand-50 to-sky-50 rounded-3xl border border-brand-100 shadow-lg p-8 md:p-12 flex flex-col md:flex-row gap-10 items-center">
               <div className="shrink-0 relative">
@@ -3548,7 +3933,7 @@
       ];
 
       return (
-        <div className="min-h-screen pt-28 pb-20 px-4 bg-gray-50">
+        <div className="min-h-screen pt-36 pb-20 px-4 bg-gray-50">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
               <span className="inline-block bg-brand-100 text-brand-700 rounded-full px-5 py-2 text-base font-bold uppercase tracking-widest mb-4">Perfil Profesional</span>
@@ -3978,8 +4363,6 @@
         setAiError('');
         setAiResponse('');
 
-// Se ha eliminado la función redundante resizeImage aquí porque ahora se hace en handleFile
-
         if (base64) {
           try {
             const response = await fetch('/api/analyze?t=' + Date.now(), {
@@ -4056,7 +4439,7 @@
 
       if (isTeaser) {
         return (
-          <section id="analyzer" className="py-24 px-4 bg-gradient-to-b from-sky-50 to-white">
+          <section id="analyzer" className="pt-36 pb-24 px-4 bg-gradient-to-b from-sky-50 to-white">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-14">
                 <span className="inline-block bg-sky-100 text-sky-700 rounded-full px-5 py-2 text-base font-bold uppercase tracking-widest mb-4">Inteligencia Artificial</span>
@@ -4098,7 +4481,7 @@
       }
 
       return (
-        <section id="analyzer-full" ref={topRef} className={`py-24 px-4 ${isStandalone ? 'pt-32' : ''} bg-gradient-to-b from-sky-50 to-white min-h-screen`}>
+        <section id="analyzer-full" ref={topRef} className={`pt-36 pb-24 px-4 ${isStandalone ? 'pt-36' : ''} bg-gradient-to-b from-sky-50 to-white min-h-screen`}>
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-14">
               {isStandalone && (
@@ -4656,8 +5039,8 @@
             </div>
           </div>
         </div>
-      );
-    }
+        );
+      }
 
     const SectionGuides = function SectionGuides() {
       const [openCategory, setOpenCategory] = React.useState(null);
@@ -5163,11 +5546,11 @@
                   query: 'cubiertos adaptados mango grueso'
                 },
                 {
-                  name: 'Plato con reborde alto',
-                  desc: 'Facilita la carga de alimentos en la cuchara usando una sola mano.',
-                  image: 'assets/plato_reborde.jpg',
-                  link: 'https://amzn.to/4d2KwXN',
-                  query: 'plato reborde alto ventosa adultos'
+                  name: 'Cuchillo Nelson',
+                  desc: 'Permite cortar con una sola mano gracias a su diseño de hoja curva oscilante.',
+                  image: 'assets/cuchillo_nelson.jpg',
+                  link: 'https://amzn.to/3QPzqgd',
+                  query: 'cuchillo nelson adaptado'
                 },
                 {
                   name: 'Vaso con escotadura nasal',
@@ -5254,8 +5637,8 @@
       ];
 
       return (
-        <section id="guides" className="py-24 px-4 bg-gray-50">
-          <div className="max-w-7xl mx-auto">
+        <section id="guides" className="pt-36 pb-24 px-4 bg-gray-50">
+          <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <span className="inline-block bg-brand-100 text-brand-700 rounded-full px-5 py-2 text-base font-bold uppercase tracking-widest mb-4">Consejos Profesionales</span>
               <h2 className="font-display text-4xl sm:text-5xl font-bold text-brand-900 mb-4">Adaptación por Áreas</h2>
@@ -5340,7 +5723,7 @@
       ];
 
       return (
-        <section id="contact" className="py-24 px-4 bg-gradient-to-b from-brand-50 to-white">
+        <section id="contact" className="pt-36 pb-24 px-4 bg-gradient-to-b from-brand-50 to-white">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-14">
               <span className="inline-block bg-brand-100 text-brand-700 rounded-full px-5 py-2 text-base font-bold uppercase tracking-widest mb-4">Contacto</span>
@@ -5388,7 +5771,7 @@
       const [activeTab, setActiveTab] = React.useState('privacy');
 
       return (
-        <div className="min-h-screen pt-28 pb-20 px-4 bg-gray-50">
+        <div className="min-h-screen pt-36 pb-20 px-4 bg-gray-50">
           <div className="max-w-4xl mx-auto bg-white rounded-[3rem] border border-gray-100 shadow-2xl overflow-hidden">
             {/* Tab Selector */}
             <div className="flex border-b border-gray-100 bg-brand-50/30">
@@ -5598,9 +5981,13 @@
       const [installable, setInstallable] = useState(false);
 
       // Detect if running as PWA
-      const checkPWA = useCallback(() => {
-        setIsPWA(window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone);
+      const isInApp = useMemo(() => {
+        return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
       }, []);
+
+      const checkPWA = useCallback(() => {
+        setIsPWA(isInApp);
+      }, [isInApp]);
 
       // Handlers for installability
         const handleInstallable = () => setInstallable(true);
@@ -5663,6 +6050,7 @@
         else if (pageParam === 'cv') newPage = 'cv';
         else if (pageParam === 'challenge') newPage = 'challenge';
         else if (pageParam === 'visual') newPage = 'visual';
+        else if (pageParam === 'intruder') newPage = 'intruder';
         else if (pageParam === 'legal') newPage = 'legal';
 
         setCurrentPage(newPage);
@@ -5678,6 +6066,7 @@
           wordsearch: "Sopa de Letras Online | Reto Mental",
           math: "Cálculo Mental | Estimulación Cognitiva",
           visual: "Agudeza Visual | Entrenamiento Mental",
+          intruder: "El Intruso | Razonamiento Lógico",
           analyzer: "Analizador de Accesibilidad IA | IAdapta",
           challenge: "Reto Diario | Gimnasio Cerebral",
           legal: "Aviso Legal | IAdapta"
@@ -5757,7 +6146,17 @@
 
       const params = new URLSearchParams(window.location.search);
       const pageParam = params.get('page');
-      const isStandalone = pageParam === 'memory' || pageParam === 'order' || pageParam === 'wordsearch' || (pageParam === 'games' && (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone));
+      // isStandalone now means we are in the "App view" (no navbar/footer)
+      // We are in standalone mode if the browser says so OR if we are in a game page
+      const isStandalone = isInApp || pageParam === 'memory' || pageParam === 'order' || pageParam === 'wordsearch' || pageParam === 'math' || pageParam === 'visual' || pageParam === 'intruder' || pageParam === 'challenge';
+
+      // Force games page if in app and trying to see main site
+      useEffect(() => {
+        if (isInApp && (currentPage === 'main' || currentPage === 'resources' || currentPage === 'cv' || currentPage === 'guides')) {
+          setCurrentPage('cognitive');
+          window.history.replaceState({ page: 'cognitive' }, '', '?page=games');
+        }
+      }, [isInApp, currentPage]);
 
       return (
         <>
@@ -5844,6 +6243,9 @@
             )}
             {currentPage === 'visual' && (
               <SectionVisualGame isStandalone={isStandalone} navigateTo={navigateTo} />
+            )}
+            {currentPage === 'intruder' && (
+              <SectionIntruderGame isStandalone={isStandalone} navigateTo={navigateTo} />
             )}
             {currentPage === 'analyzer' && (
               <SectionAnalyzer isTeaser={false} isStandalone={isStandalone} navigateTo={navigateTo} />
