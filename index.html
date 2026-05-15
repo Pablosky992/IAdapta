@@ -588,31 +588,17 @@
                 {isStandalone && (
                   <div className="mt-20 pt-10 border-t border-brand-100 text-center">
                     <p className="text-gray-400 text-sm mb-4 font-medium uppercase tracking-widest">¿Quieres ver más recursos?</p>
-                    <button 
-                      onClick={async () => {
-                        const url = 'https://iadapta.es';
-                        if (navigator.share) {
-                          // Android: opens the native share sheet → user selects "Chrome" to open as full browser
-                          try {
-                            await navigator.share({ title: 'IAdapta – Terapia Ocupacional', url });
-                          } catch(e) { /* user cancelled */ }
-                        } else {
-                          // Desktop/iOS fallback: copy URL to clipboard
-                          try {
-                            await navigator.clipboard.writeText(url);
-                            alert('Enlace copiado: ' + url);
-                          } catch(e) {
-                            window.open(url, '_blank', 'noopener,noreferrer');
-                          }
-                        }
-                      }}
+                    <a 
+                      href="https://iadapta.es"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-900 transition-all bg-white px-8 py-4 rounded-2xl shadow-sm border border-brand-100 hover:shadow-md active:scale-95 group"
                     >
                       <Icons.Brain className="w-5 h-5" />
                       <span>Ir a la web de IAdapta</span>
                       <Icons.ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </button>
-                    <p className="mt-3 text-[10px] text-gray-300">Se abrirá el menú de compartir → elige "Chrome" para abrirla en el navegador</p>
+                    </a>
+                    <p className="mt-3 text-[10px] text-gray-300">La web se abrirá en una nueva ventana del navegador</p>
                   </div>
                 )}
 
