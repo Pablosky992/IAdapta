@@ -588,16 +588,14 @@
                 {isStandalone && (
                   <div className="mt-20 pt-10 border-t border-brand-100 text-center">
                     <p className="text-gray-400 text-sm mb-4 font-medium uppercase tracking-widest">¿Quieres ver más recursos?</p>
-                    <a 
-                      href="https://www.iadapta.es" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
+                    <button 
+                      onClick={() => { window.open('https://iadapta.es', '_blank', 'noopener,noreferrer'); }}
                       className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-900 transition-all bg-white px-8 py-4 rounded-2xl shadow-sm border border-brand-100 hover:shadow-md active:scale-95 group"
                     >
                       <Icons.Brain className="w-5 h-5" />
                       <span>Ir a la web de IAdapta</span>
                       <Icons.ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </a>
+                    </button>
                     <p className="mt-3 text-[10px] text-gray-300">La web se abrirá en una nueva ventana del navegador</p>
                   </div>
                 )}
