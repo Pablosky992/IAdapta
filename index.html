@@ -558,8 +558,8 @@
                       onClick={() => {
                         const url = 'https://iadapta.es';
                         if (/Android/i.test(navigator.userAgent)) {
-                          // Force Android to open in an external browser instead of inside the TWA
-                          window.location.href = 'intent://iadapta.es#Intent;scheme=https;action=android.intent.action.VIEW;end';
+                          // Bypass TWA domain interception by using the vercel domain and forcing Chrome
+                          window.location.href = 'intent://iadapta.vercel.app#Intent;scheme=https;package=com.android.chrome;end';
                         } else {
                           window.open(url, '_blank', 'noopener,noreferrer');
                         }
