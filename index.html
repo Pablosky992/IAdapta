@@ -920,16 +920,16 @@
     ];
 
     const INTRUDER_CATEGORIES = [
-      { name: 'Cocina', items: ['🍽️', '🍴', '🥄', '🔪', '☕', '🍳', '🍯'], intruders: ['🔨', '✂️', '👟', '☂️', '🚲'] },
-      { name: 'Ropa', items: ['👕', '👖', '👗', '👢', '👚', '👔', '🎩'], intruders: ['🍎', '🍄', '🚗', '🎸', '📱'] },
-      { name: 'Herramientas', items: ['🔧', '🔨', '⚙️', '✂️', '⛏️', '🔩', '📏'], intruders: ['☂️', '🍦', '🍕', '🎀', '🎈'] },
-      { name: 'Frutas', items: ['🍎', '🍐', '🍌', '🍇', '🍊', '🍓', '🍍'], intruders: ['🚪', '🚗', '👞', '📻', '💻'] },
-      { name: 'Deportes', items: ['⚽', '🏀', '🎾', '🏐', '🎱', '🏓', '🏸'], intruders: ['🎸', '🍔', '🛋️', '🛀', '📖'] },
-      { name: 'Música', items: ['🎸', '🎹', '🎺', '🎻', '🔔', '🎷', '🎤'], intruders: ['🍕', '✂️', '🚲', '☂️', '📦'] },
-      { name: 'Baño', items: ['🚿', '🛀', '🚽', '💧', '🚰', '🗑️', '🛁'], intruders: ['🚲', '🍔', '🚁', '🎸', '⚽'] },
-      { name: 'Transporte', items: ['🚗', '🚲', '🚌', '🚆', '✈️', '⛵', '🏍️'], intruders: ['🍦', '🛏️', '🎈', '🍄', '📚'] },
-      { name: 'Animales', items: ['🐶', '🐱', '🐭', '🐹', '🐰', '🐸', '🐻'], intruders: ['📱', '🍕', '👟', '🔨', '🏠'] },
-      { name: 'Electrónica', items: ['💻', '📱', '⌨️', '🖱️', '🎧', '📺', '⌚'], intruders: ['🍄', '🥕', '👞', '📦', '🖼️'] }
+      { name: 'Cocina', items: ['🍽️', '🍴', '🥄', '🔪', '☕', '🍳', '🍯', '🥣', '🥤', '🧂', '🍞', '🥗', '🥘', '🍲'], intruders: ['🔨', '✂️', '👟', '☂️', '🚲'] },
+      { name: 'Ropa', items: ['👕', '👖', '👗', '👢', '👚', '👔', '🎩', '🧣', '🧤', '🧥', '🧦', '🎒', '👠', '👒'], intruders: ['🍎', '🍄', '🚗', '🎸', '📱'] },
+      { name: 'Herramientas', items: ['🔧', '🔨', '⚙️', '✂️', '⛏️', '🔩', '📏', '⚒️', '🛠️', '🖌️', '🔦', '🖇️', '📐', '🔨'], intruders: ['☂️', '🍦', '🍕', '🎀', '🎈'] },
+      { name: 'Frutas', items: ['🍎', '🍐', '🍌', '🍇', '🍊', '🍓', '🍍', '🍉', '🍒', '🍑', '🥝', '🥑', '🥥', '🍋'], intruders: ['🚪', '🚗', '👞', '📻', '💻'] },
+      { name: 'Deportes', items: ['⚽', '🏀', '🎾', '🏐', '🎱', '🏓', '🏸', '⚾', '⛳', '🏈', '🛹', '⛸️', '🏹', '🎣'], intruders: ['🎸', '🍔', '🛋️', '🛀', '📖'] },
+      { name: 'Música', items: ['🎸', '🎹', '🎺', '🎻', '🔔', '🎷', '🎤', '🥁', '🪕', '🪗', '📻', '🎧', '🎼', '🎻'], intruders: ['🍕', '✂️', '🚲', '☂️', '📦'] },
+      { name: 'Baño', items: ['🚿', '🛀', '🚽', '💧', '🚰', '🗑️', '🛁', '🧼', '🧻', '🧴', '🧖', '🦷', '🪥', '🧺'], intruders: ['🚲', '🍔', '🚁', '🎸', '⚽'] },
+      { name: 'Transporte', items: ['🚗', '🚲', '🚌', '🚆', '✈️', '⛵', '🏍️', '🚁', '🚜', '🚒', '🚑', '🚕', '🚂', '🚀'], intruders: ['🍦', '🛏️', '🎈', '🍄', '📚'] },
+      { name: 'Animales', items: ['🐶', '🐱', '🐭', '🐹', '🐰', '🐸', '🐻', '🦁', '🐯', '🐼', '🐷', '🐨', '🐘', '🦒'], intruders: ['📱', '🍕', '👟', '🔨', '🏠'] },
+      { name: 'Electrónica', items: ['💻', '📱', '⌨️', '🖱️', '🎧', '📺', '⌚', '📷', '🕹️', '🔌', '🔋', '📟', '🔦', '📻'], intruders: ['🍄', '🥕', '👞', '📦', '🖼️'] }
     ];
 
     const INTRUDER_LEVELS = [
@@ -1264,7 +1264,7 @@
                         <h3 className="font-display text-2xl font-bold text-brand-900 flex items-center gap-2"><Icons.List /> Palabras</h3>
                         <span className="bg-brand-100 text-brand-700 px-3 py-1 rounded-full text-sm font-bold">{foundWords.length}/{wordsToFind.length}</span>
                       </div>
-                      <div className="grid grid-cols-2 lg:grid-cols-1 gap-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                      <div className="grid grid-cols-2 lg:grid-cols-1 gap-2 max-h-[550px] overflow-y-auto pr-2 pb-8 custom-scrollbar">
                         {wordsToFind.map((w, i) => (
                           <div key={i} className={`text-base font-semibold py-2 px-3 rounded-xl transition-all duration-300 border ${foundWords.some(fw => fw.word === w.word) ? 'text-emerald-300 line-through bg-emerald-50 border-emerald-100' : 'text-brand-700 bg-white border-brand-50 shadow-sm'}`}>{w.word}</div>
                         ))}
@@ -1629,10 +1629,10 @@
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
               <button 
                 onClick={() => navigateTo('cognitive')} 
-                className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-100"
+                className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-100 group"
               >
-                <Icons.ArrowRight className="rotate-180" />
-                Volver
+                <Icons.ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                <span>Volver</span>
               </button>
               {isStandalone && (
                 <button onClick={() => window.close()} className="text-brand-400 text-sm font-bold hover:text-brand-600 transition-colors">
