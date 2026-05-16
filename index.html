@@ -552,18 +552,17 @@
                 </div>
                 {isStandalone && (
                   <div className="mt-10 mb-16 pt-10 border-t border-brand-100 text-center flex flex-col items-center gap-4">
-                    <p className="text-gray-400 text-sm mb-2 font-medium uppercase tracking-widest">¿Buscas algo más que juegos?</p>
-                    <button 
-                      onClick={() => {
-                        sessionStorage.setItem('allowWebInApp', 'true');
-                        navigateTo('main');
-                        window.scrollTo({ top: 0, behavior: 'instant' });
-                      }}
+                    <p className="text-gray-400 text-sm mb-2 font-medium uppercase tracking-widest">¿Quieres ver más recursos?</p>
+                    <a 
+                      href="https://www.iadapta.es/"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-900 transition-all bg-white px-8 py-4 rounded-2xl shadow-sm border border-brand-100 hover:shadow-md active:scale-95 group"
                     >
                       <Icons.Brain className="w-5 h-5" />
-                      <span>Descubrir todos los recursos en IAdapta</span>
-                    </button>
+                      <span>Ir a la web de IAdapta</span>
+                      <Icons.ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </a>
                   </div>
                 )}
 
