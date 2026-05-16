@@ -550,35 +550,20 @@
                     </div>
                   </div>
                 </div>
-
-                {!isPWA && (
-                  <div className="mt-12 mb-16 text-center flex flex-col items-center gap-4 bg-brand-50 p-8 rounded-[2.5rem] border border-brand-100 shadow-inner">
-                    <p className="text-brand-600 text-sm font-bold uppercase tracking-widest mb-1">¿Juegas a menudo?</p>
-                    <button 
-                      onClick={() => setShowInstaller(true)}
-                      className="inline-flex items-center gap-2 text-white font-bold bg-brand-900 px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl active:scale-95 group transition-all"
-                    >
-                      <Icons.Download className="w-6 h-6 group-hover:-translate-y-1 transition-transform" />
-                      <span className="text-lg">Instalar App de Juegos</span>
-                    </button>
-                    <p className="text-sm text-brand-700 max-w-sm mt-2 opacity-80">Instala la aplicación en tu móvil o PC para jugar sin conexión y acceder rápidamente a tu racha diaria.</p>
-                  </div>
-                )}
-
                 {isStandalone && (
                   <div className="mt-10 mb-16 pt-10 border-t border-brand-100 text-center flex flex-col items-center gap-4">
-                    <p className="text-gray-400 text-sm mb-2 font-medium uppercase tracking-widest">¿Quieres ver más recursos?</p>
-                    <a 
-                      href={/Android/i.test(navigator.userAgent) ? 'intent://juegos-link.vercel.app/#Intent;scheme=https;package=com.android.chrome;end' : 'https://juegos-link.vercel.app/'}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <p className="text-gray-400 text-sm mb-2 font-medium uppercase tracking-widest">¿Buscas algo más que juegos?</p>
+                    <button 
+                      onClick={() => {
+                        sessionStorage.setItem('allowWebInApp', 'true');
+                        navigateTo('main');
+                        window.scrollTo({ top: 0, behavior: 'instant' });
+                      }}
                       className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-900 transition-all bg-white px-8 py-4 rounded-2xl shadow-sm border border-brand-100 hover:shadow-md active:scale-95 group"
                     >
                       <Icons.Brain className="w-5 h-5" />
-                      <span>Ir a la web de IAdapta</span>
-                      <Icons.ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </a>
-                    <p className="mt-2 text-[10px] text-gray-300">La web se abrirá en una nueva ventana del navegador</p>
+                      <span>Descubrir todos los recursos en IAdapta</span>
+                    </button>
                   </div>
                 )}
 
@@ -6130,10 +6115,11 @@
       const pageParam = params.get('page');
       // isStandalone now means we are in the "App view" (no navbar/footer)
       // We are in standalone mode if the browser says so OR if we are in a game page
-      const isStandalone = isInApp || pageParam === 'memory' || pageParam === 'order' || pageParam === 'wordsearch' || pageParam === 'math' || pageParam === 'visual' || pageParam === 'intruder' || pageParam === 'challenge';
+      const isStandalone = (isInApp && sessionStorage.getItem('allowWebInApp') !== 'true') || pageParam === 'memory' || pageParam === 'order' || pageParam === 'wordsearch' || pageParam === 'math' || pageParam === 'visual' || pageParam === 'intruder' || pageParam === 'challenge';
 
       // Force games page if in app and trying to see main site
       useEffect(() => {
+        if (sessionStorage.getItem('allowWebInApp') === 'true') return;
         if (isInApp && (currentPage === 'main' || currentPage === 'resources' || currentPage === 'cv' || currentPage === 'guides')) {
           setCurrentPage('cognitive');
           window.history.replaceState({ page: 'cognitive' }, '', '?page=games');
