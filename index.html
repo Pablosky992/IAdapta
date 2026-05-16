@@ -11,7 +11,7 @@
   <link rel="icon" type="image/png" href="assets/iadapta_logo.png" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9370167145239765"
      crossorigin="anonymous"></script>
-  <title>IAdapta | Terapia Ocupacional, Accesibilidad y Estimulación Cognitiva</title>
+  <title>IAdapta | Terapia Ocupacional y Accesibilidad</title>
 
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
@@ -6138,23 +6138,8 @@
 
         setCurrentPage(newPage);
         
-        // Dynamic Title Update
-        const titles = {
-          main: "IAdapta | Terapia Ocupacional y Accesibilidad",
-          resources: "Recursos Profesionales | IAdapta Terapia Ocupacional",
-          cognitive: "Área Cognitiva y Juegos | IAdapta",
-          cv: "Pablo Narciso Millán | Currículum Vitae",
-          memory: "Juego de Memoria | Estimulación Cognitiva",
-          order: "Juego de Orden Numérico | IAdapta",
-          wordsearch: "Sopa de Letras Online | Reto Mental",
-          math: "Cálculo Mental | Estimulación Cognitiva",
-          visual: "Agudeza Visual | Entrenamiento Mental",
-          intruder: "El Intruso | Razonamiento Lógico",
-          analyzer: "Analizador de Accesibilidad IA | IAdapta",
-          challenge: "Reto Diario | Gimnasio Cerebral",
-          legal: "Aviso Legal | IAdapta"
-        };
-        document.title = titles[newPage] || titles.main;
+        // Mantener título fijo por petición del usuario
+        document.title = "IAdapta | Terapia Ocupacional y Accesibilidad";
       }, []);
 
       useEffect(() => {
