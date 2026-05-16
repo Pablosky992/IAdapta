@@ -552,10 +552,24 @@
                 </div>
 
                 {isStandalone && (
-                  <div className="mt-20 pt-10 border-t border-brand-100 text-center">
-                    <p className="text-gray-400 text-sm mb-4 font-medium uppercase tracking-widest">¿Quieres ver más recursos?</p>
+                  <div className="mt-20 pt-10 border-t border-brand-100 text-center flex flex-col items-center gap-4">
+                    
+                    {!isPWA && (
+                      <>
+                        <p className="text-gray-400 text-sm font-medium uppercase tracking-widest mb-1">¿Juegas a menudo?</p>
+                        <button 
+                          onClick={() => setShowInstaller(true)}
+                          className="inline-flex items-center gap-2 text-white font-bold bg-brand-900 px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl active:scale-95 group transition-all"
+                        >
+                          <Icons.Download className="w-5 h-5" />
+                          <span>Instalar App de Juegos</span>
+                        </button>
+                      </>
+                    )}
+
+                    <p className="text-gray-400 text-sm mt-6 mb-2 font-medium uppercase tracking-widest">¿Quieres ver más recursos?</p>
                     <a 
-                      href={/Android/i.test(navigator.userAgent) ? 'intent://www.iadapta.es/?browser=true#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=https%3A%2F%2Fwww.iadapta.es%2F%3Fbrowser%3Dtrue;end' : 'https://www.iadapta.es/?browser=true'}
+                      href="https://iadapta.es/?browser=true"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-900 transition-all bg-white px-8 py-4 rounded-2xl shadow-sm border border-brand-100 hover:shadow-md active:scale-95 group"
@@ -564,7 +578,7 @@
                       <span>Ir a la web de IAdapta</span>
                       <Icons.ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </a>
-                    <p className="mt-3 text-[10px] text-gray-300">La web se abrirá en una nueva ventana del navegador</p>
+                    <p className="mt-2 text-[10px] text-gray-300">La web se abrirá en una nueva ventana del navegador</p>
                   </div>
                 )}
 
