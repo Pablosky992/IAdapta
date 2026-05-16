@@ -555,7 +555,7 @@
                   <div className="mt-20 pt-10 border-t border-brand-100 text-center">
                     <p className="text-gray-400 text-sm mb-4 font-medium uppercase tracking-widest">¿Quieres ver más recursos?</p>
                     <a 
-                      href={/Android/i.test(navigator.userAgent) ? 'intent://iadapta.vercel.app#Intent;scheme=https;package=com.android.chrome;end' : 'https://iadapta.es'}
+                      href={/Android/i.test(navigator.userAgent) ? 'intent://www.iadapta.es/?browser=true#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=https%3A%2F%2Fwww.iadapta.es%2F%3Fbrowser%3Dtrue;end' : 'https://www.iadapta.es/?browser=true'}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-900 transition-all bg-white px-8 py-4 rounded-2xl shadow-sm border border-brand-100 hover:shadow-md active:scale-95 group"
@@ -5948,6 +5948,8 @@
 
       // Detect if running as PWA
       const isInApp = useMemo(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('browser') === 'true') return false;
         return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
       }, []);
 
