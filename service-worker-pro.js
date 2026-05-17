@@ -2,6 +2,9 @@ const CACHE_NAME = 'iadapta-pro-v1';
 const ASSETS = [
   './',
   './index.html',
+  './estimulacion-cognitiva.html',
+  './recursos.html',
+  './guias.html',
   './css/styles.css',
   './catalogData.js',
   './pro_resources_icon.png',
