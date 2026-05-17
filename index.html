@@ -83,6 +83,17 @@
   <!-- Babel Standalone (JSX in browser) -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+  <!-- Marked.js for Markdown parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    marked.setOptions({
+      breaks: true,
+      gfm: true,
+      headerIds: false,
+      mangle: false
+    });
+  </script>
+
   <!-- Tailwind config -->
   <script>
     tailwind.config = {
@@ -130,7 +141,7 @@
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js";
 
     const firebaseConfig = {
-      apiKey: "AIza" + "SyBg5jJCBnsyfLewtrpu7fSKf1BaKHhotvU",
+      apiKey: "AIza" + "SyA3teph1wXtdLCnW7ao132Z2atCSxQTEq0",
       authDomain: "iadapta-1a0fb.firebaseapp.com",
       projectId: "iadapta-1a0fb",
       storageBucket: "iadapta-1a0fb.firebasestorage.app",
