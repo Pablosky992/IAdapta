@@ -140,15 +140,16 @@
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js";
 
-    const firebaseConfig = {
-      apiKey: "AIza" + "SyA3teph1wXtdLCnW7ao132Z2atCSxQTEq0",
-      authDomain: "iadapta-1a0fb.firebaseapp.com",
-      projectId: "iadapta-1a0fb",
-      storageBucket: "iadapta-1a0fb.firebasestorage.app",
-      messagingSenderId: "997653142459",
-      appId: "1:997653142459:web:2017ed637e4d5e773b829e",
-      measurementId: "G-CBD6Q1S96V"
-    };
+     const firebaseConfig = {
+       apiKey: "AIza" + "SyA3teph1wXtdLCnW7ao132Z2atCSxQTEq0",
+       authDomain: "iadapta-1a0fb.firebaseapp.com",
+       databaseURL: "https://iadapta-1a0fb-default-rtdb.firebaseio.com",
+       projectId: "iadapta-1a0fb",
+       storageBucket: "iadapta-1a0fb.firebasestorage.app",
+       messagingSenderId: "997653142459",
+       appId: "1:997653142459:web:2017ed637e4d5e773b829e",
+       measurementId: "G-CBD6Q1S96V"
+     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
