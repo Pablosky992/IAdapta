@@ -545,7 +545,7 @@
       const [step, setStep] = useState('form');
       const [score, setScore] = useState(0);
       const [ringOffset, setRingOffset] = useState(283);
-      const [form, setForm] = useState({ nombre: '', email: '', edad: '', tipo: '', ascensor: '', anchoAscensor: '', largoAscensor: '', tipoBanyo: '', barras: '', alzaWC: '', iluminacion: '', puertas: '', movilidad: '', nivelMovilidad: '', destrezaManos: '', caidas: '', percepcionSeguridad: '', convivencia: '', limitaciones: [], notas: '' });
+      const [form, setForm] = useState({ nombre: '', email: '', edad: '', tipo: '', ascensor: '', anchoAscensor: '', largoAscensor: '', tipoBanyo: '', barras: '', alzaWC: '', iluminacion: '', puertas: '', movilidad: '', nivelMovilidad: '', destrezaManos: '', caidas: '', percepcionSeguridad: 5, convivencia: '', limitaciones: [], notas: '' });
 
       // New States for AI Image Analysis
       const [file, setFile] = useState(null);
@@ -841,37 +841,38 @@
 
         const sc = calcScore();
 
-        // Guardar automáticamente todas las respuestas y el email en Firebase Firestore
-        try {
-          if (window.firebaseDB && window.firebaseAddDoc && window.firebaseCollection) {
-            await window.firebaseAddDoc(window.firebaseCollection(window.firebaseDB, "respuestas_cuestionarios"), {
-              email: form.email,
-              nombre: form.nombre,
-              edad: parseInt(form.edad) || null,
-              tipo: form.tipo,
-              ascensor: form.ascensor,
-              anchoAscensor: form.anchoAscensor || null,
-              largoAscensor: form.largoAscensor || null,
-              tipoBanyo: form.tipoBanyo,
-              iluminacion: form.iluminacion || null,
-              puertas: form.puertas || null,
-              movilidad: form.movilidad || null,
-              nivelMovilidad: form.nivelMovilidad || null,
-              destrezaManos: form.destrezaManos || null,
-              caidas: form.caidas,
-              percepcionSeguridad: parseInt(form.percepcionSeguridad) || 5,
-              convivencia: form.convivencia,
-              limitaciones: form.limitaciones || [],
-              notas: form.notas || '',
-              score: sc,
-              fecha: new Date().toISOString()
-            });
+        // Guardar automáticamente todas las respuestas y el email en Firebase Firestore (de forma no bloqueante)
+        if (window.firebaseDB && window.firebaseAddDoc && window.firebaseCollection) {
+          window.firebaseAddDoc(window.firebaseCollection(window.firebaseDB, "respuestas_cuestionarios"), {
+            email: form.email,
+            nombre: form.nombre,
+            edad: parseInt(form.edad) || null,
+            tipo: form.tipo,
+            ascensor: form.ascensor,
+            anchoAscensor: form.anchoAscensor || null,
+            largoAscensor: form.largoAscensor || null,
+            tipoBanyo: form.tipoBanyo,
+            iluminacion: form.iluminacion || null,
+            puertas: form.puertas || null,
+            movilidad: form.movilidad || null,
+            nivelMovilidad: form.nivelMovilidad || null,
+            destrezaManos: form.destrezaManos || null,
+            caidas: form.caidas,
+            percepcionSeguridad: parseInt(form.percepcionSeguridad) || 5,
+            convivencia: form.convivencia,
+            limitaciones: form.limitaciones || [],
+            notas: form.notas || '',
+            score: sc,
+            fecha: new Date().toISOString()
+          })
+          .then(() => {
             console.log("Respuestas del cuestionario guardadas con éxito en Firebase Firestore.");
-          } else {
-            console.warn("Firebase no está totalmente inicializado o expuesto en window.");
-          }
-        } catch (dbErr) {
-          console.error("Error al guardar en Firebase Firestore:", dbErr);
+          })
+          .catch((dbErr) => {
+            console.error("Error al guardar en Firebase Firestore:", dbErr);
+          });
+        } else {
+          console.warn("Firebase no está totalmente inicializado o expuesto en window.");
         }
 
         if (base64) {
@@ -935,7 +936,7 @@
 
       const reset = () => {
         setStep('form'); setScore(0); setRingOffset(283);
-        const emptyForm = { nombre: '', email: '', edad: '', tipo: '', ascensor: '', anchoAscensor: '', largoAscensor: '', tipoBanyo: '', iluminacion: '', puertas: '', movilidad: '', nivelMovilidad: '', destrezaManos: '', caidas: '', percepcionSeguridad: '', convivencia: '', limitaciones: [], notas: '' };
+        const emptyForm = { nombre: '', email: '', edad: '', tipo: '', ascensor: '', anchoAscensor: '', largoAscensor: '', tipoBanyo: '', iluminacion: '', puertas: '', movilidad: '', nivelMovilidad: '', destrezaManos: '', caidas: '', percepcionSeguridad: 5, convivencia: '', limitaciones: [], notas: '' };
         setForm(emptyForm);
         localStorage.removeItem('iadapta_draft');
         setFile(null); setPreview(null); setBase64(null); setAiResponse(''); setAiError('');
