@@ -15,8 +15,14 @@ const cleaned = data.map(item => {
             .replace(/¡/g, 'í')
             .replace(/…/g, 'à')
             .replace(/·/g, 'À')
-            .replace(/£/g, 'ú') // Fix for ú
-            .replace(/ú/g, 'ú') // Just in case
+            .replace(/£/g, '·')  // £ represents the Catalan middle dot · (geminate L l·l)
+            .replace(/Š/g, 'è')  // Š represents è (e.g. elŠctrica -> elèctrica)
+            .replace(/•/g, 'ò')  // • represents ò (e.g. Pr•tesis -> Pròtesis, t•rax -> tòrax)
+            .replace(/‚/g, 'é')  // ‚ represents é (e.g. m‚s -> més)
+            .replace(/ÿ/g, '')   // ÿ is a garbage character to be removed
+            .replace(/®/g, '«')  // ® represents «
+            .replace(/¯/g, '»')  // ¯ represents »
+            .replace(/\?/g, "'") // ? represents an apostrophe '
             .replace(/\ufffd/g, '?');
     };
 
