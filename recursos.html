@@ -118,6 +118,28 @@
 
     const { useState, useEffect, useCallback, useRef, useMemo } = React;
 
+    // --- ADBLOCK COMPONENT ---
+    const AdBlock = () => {
+      useEffect(() => {
+        try {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+          console.error("AdSense error: ", e);
+        }
+      }, []);
+
+      return (
+        <div className="mt-12 bg-white rounded-[2.5rem] p-6 border border-brand-100/50 shadow-md overflow-hidden flex justify-center items-center">
+          <ins className="adsbygoogle"
+               style={{ display: 'block', width: '100%' }}
+               data-ad-client="ca-pub-9370167145239765"
+               data-ad-slot="5026466122"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+        </div>
+      );
+    };
+
     // --- ICONS ---
     // --- ICONS ---
     const Icons = {
@@ -766,6 +788,8 @@
                     </div>
                   </div>
                 </div>
+                
+                <AdBlock />
               </div>
             ) : view === 'ramp' ? (
               <div className="anim-scale-in max-w-5xl mx-auto">
@@ -878,6 +902,8 @@
                     </div>
                   </div>
                 </div>
+                
+                <AdBlock />
               </div>
             ) : view === 'pao' ? (
               <div className="anim-scale-in">
@@ -994,6 +1020,8 @@
                     </div>
                   )}
                 </div>
+                
+                <AdBlock />
               </div>
             ) : view === '3dprint' ? (
               <div className="anim-scale-in">
@@ -1121,7 +1149,8 @@
                       </a>
                     </div>
                   </div>
-
+                  
+                  <AdBlock />
                 </div>
               </div>
             ) : null}
