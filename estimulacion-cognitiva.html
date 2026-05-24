@@ -310,6 +310,19 @@
       return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     };
 
+    function urlBase64ToUint8Array(base64String) {
+      const padding = '='.repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/');
+      const rawData = window.atob(base64);
+      const outputArray = new Uint8Array(rawData.length);
+      for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+      }
+      return outputArray;
+    }
+
     const { useState, useEffect, useCallback, useRef, useMemo } = React;
 
     // --- ICONS ---
@@ -2335,6 +2348,7 @@
       const [startTime, setStartTime] = useState(0);
       const [isCalendarOpen, setIsCalendarOpen] = useState(false);
       const [linkedEmail, setLinkedEmail] = useState('');
+      const [hasPromptedNotif, setHasPromptedNotif] = useState(localStorage.getItem('daily_challenge_notif_prompted') === 'true');
       const challengeHistory = useMemo(() => {
         return JSON.parse(localStorage.getItem('daily_challenge_history') || '[]');
       }, [alreadyDoneToday]);
@@ -2443,6 +2457,60 @@
       const startChallenge = () => {
         setStep(1);
         setStartTime(Date.now());
+      };
+
+      const enableNotifications = async () => {
+        localStorage.setItem('daily_challenge_notif_prompted', 'true');
+        setHasPromptedNotif(true);
+        if (!('Notification' in window)) {
+          alert("Este navegador no soporta notificaciones.");
+          return;
+        }
+
+        try {
+          const permission = await Notification.requestPermission();
+          if (permission === 'granted') {
+            let pushSubscriptionStr = '';
+
+            if ('serviceWorker' in navigator) {
+              try {
+                const registration = await navigator.serviceWorker.ready;
+                const subscription = await registration.pushManager.subscribe({
+                  userVisibleOnly: true,
+                  applicationServerKey: urlBase64ToUint8Array('MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEYXidaU0m9W5k6YfSwuvQdA0i-QelQ2LAjRXRyMrUR5y4GcDPTbvNu9moPFvxMmVLTuiclFIMDNwF5JXbyzIPoQ')
+                });
+                pushSubscriptionStr = JSON.stringify(subscription);
+              } catch (subErr) {
+                console.log("No se pudo registrar la suscripción push nativa (se requiere VAPID), pero el permiso está concedido.", subErr);
+              }
+            }
+
+            localStorage.setItem('daily_challenge_notifications_enabled', 'true');
+
+            // Guardar estado en Firestore
+            const deviceId = localStorage.getItem('daily_challenge_device_id') || initDeviceId();
+            if (window.firebaseDB && window.firebaseDoc && window.firebaseSetDoc) {
+              const docRef = window.firebaseDoc(window.firebaseDB, "daily_challenge_streaks", deviceId);
+              await window.firebaseSetDoc(docRef, {
+                notifications_enabled: true,
+                push_subscription: pushSubscriptionStr,
+                updated_at: new Date().toISOString()
+              }, { merge: true });
+            }
+
+            alert("¡Recordatorios activados con éxito! Te avisaremos si olvidas completar tu reto.");
+          } else {
+            alert("No se concedieron los permisos de notificación.");
+          }
+        } catch (err) {
+          console.error("Error al activar notificaciones:", err);
+          alert("Hubo un problema al activar las notificaciones.");
+        }
+      };
+
+      const declineNotifications = () => {
+        localStorage.setItem('daily_challenge_notif_prompted', 'true');
+        setHasPromptedNotif(true);
       };
 
       // Game 1: Mini Math
@@ -3028,6 +3096,34 @@
                     <p className="text-2xl font-bold text-brand-900">{streak} días seguidos</p>
                   </div>
                 </div>
+
+                {streak >= 3 && !hasPromptedNotif && !localStorage.getItem('daily_challenge_notifications_enabled') && (
+                  <div className="bg-brand-50 border border-brand-100 rounded-3xl p-6 mb-8 text-left anim-scale-in max-w-xl mx-auto">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-white border border-brand-100 rounded-2xl flex items-center justify-center text-brand-900 text-2xl flex-shrink-0 shadow-sm animate-pulse">
+                        🔔
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-display font-bold text-lg text-brand-900 mb-1">¡Mantén tu racha de {streak} días! 🏆</h4>
+                        <p className="text-xs text-brand-600 mb-4 leading-relaxed">Llevas una constancia estupenda. ¿Quieres recibir un aviso discreto en este dispositivo si se te olvida entrenar algún día?</p>
+                        <div className="flex gap-3">
+                          <button 
+                            onClick={enableNotifications} 
+                            className="px-4 py-2 bg-brand-900 text-white rounded-xl font-bold text-xs hover:bg-brand-800 transition-all cursor-pointer"
+                          >
+                            Sí, avisarme
+                          </button>
+                          <button 
+                            onClick={declineNotifications} 
+                            className="px-4 py-2 bg-white border border-brand-200 text-brand-700 rounded-xl font-bold text-xs hover:bg-brand-50 transition-all cursor-pointer"
+                          >
+                            No, gracias
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 
                 <div className="grid grid-cols-2 gap-4 mb-10">
                   <div 

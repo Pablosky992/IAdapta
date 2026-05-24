@@ -72,3 +72,38 @@ self.addEventListener('fetch', (event) => {
     );
   }
 });
+
+// Push event listener: handle incoming push notifications from Firebase or Web Push server
+self.addEventListener('push', (event) => {
+  let data = { title: 'IAdapta', body: '¡Es hora de hacer tu Reto Diario! 🧠' };
+  if (event.data) {
+    try {
+      data = event.data.json();
+    } catch (e) {
+      data = { title: 'IAdapta', body: event.data.text() };
+    }
+  }
+  
+  const options = {
+    body: data.body,
+    icon: './games_icon.png',
+    badge: './games_icon.png',
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: '1'
+    }
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(data.title, options)
+  );
+});
+
+// Notification click listener: open the website when clicked
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow('https://iadapta.es/estimulacion-cognitiva.html')
+  );
+});
