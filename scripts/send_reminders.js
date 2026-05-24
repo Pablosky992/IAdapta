@@ -1,6 +1,6 @@
-const { initializeApp } = require('firebase/app');
-const { getFirestore, collection, getDocs } = require('firebase/firestore');
-const webpush = require('web-push');
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import webpush from 'web-push';
 
 // Firebase Configuration (matches client)
 const firebaseConfig = {
