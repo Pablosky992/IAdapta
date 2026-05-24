@@ -1,0 +1,27 @@
+name: Send Daily Reminders
+
+on:
+  schedule:
+    # Se ejecuta todos los días a las 18:00 UTC (20:00 hora de España)
+    - cron: '0 18 * * *'
+  workflow_dispatch: # Permite probarlo manualmente desde el panel de GitHub
+
+jobs:
+  send-reminders:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          npm install firebase web-push
+
+      - name: Run reminder script
+        run: node scripts/send_reminders.js
