@@ -2477,7 +2477,7 @@
                 const registration = await navigator.serviceWorker.ready;
                 const subscription = await registration.pushManager.subscribe({
                   userVisibleOnly: true,
-                  applicationServerKey: urlBase64ToUint8Array('MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEYXidaU0m9W5k6YfSwuvQdA0i-QelQ2LAjRXRyMrUR5y4GcDPTbvNu9moPFvxMmVLTuiclFIMDNwF5JXbyzIPoQ')
+                  applicationServerKey: urlBase64ToUint8Array('BMYMyTsyO73fZSOP6B5HJP0Ii2YNFx4aFg4kIMaB830gpOv7vYhNF0xi7g9HhK50CZAPsezb9sDHcKVQxEBMS-k')
                 });
                 pushSubscriptionStr = JSON.stringify(subscription);
               } catch (subErr) {

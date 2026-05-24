@@ -20,8 +20,8 @@ const db = getFirestore(app);
 // Configure VAPID keys for Web Push
 webpush.setVapidDetails(
   'mailto:iadaptato@gmail.com',
-  'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEYXidaU0m9W5k6YfSwuvQdA0i-QelQ2LAjRXRyMrUR5y4GcDPTbvNu9moPFvxMmVLTuiclFIMDNwF5JXbyzIPoQ', // Public Key
-  'MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgpZF263_R_65F8yUcFGpvrdWB_xmKzX1EbtCjAq_YqTWhRANCAARheJ1pTSb1bmTph9LC69B0DSL5B6VDYsCNFdHIytRHnLgZwM9Nu8272ag8W_EyZUtO6JyUUgwM3AXkldvLMg-h' // Private Key
+  'BMYMyTsyO73fZSOP6B5HJP0Ii2YNFx4aFg4kIMaB830gpOv7vYhNF0xi7g9HhK50CZAPsezb9sDHcKVQxEBMS-k', // Public Key
+  'POVdO0SFh200XwLUj1yXQncRsgfaCj5n5ISPzbawcKY' // Private Key
 );
 
 async function sendReminders() {
