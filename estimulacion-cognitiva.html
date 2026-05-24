@@ -2969,24 +2969,24 @@
       return (
         <section className={`pt-36 pb-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-36' : ''}`}>
           <div className="max-w-4xl w-full">
-            <div className="flex justify-between items-center mb-12">
-              <button onClick={() => navigateTo('cognitive')} className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-100 group">
-                <Icons.ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+            <div className="flex flex-wrap sm:flex-nowrap justify-between items-center gap-3 mb-8 sm:mb-12">
+              <button onClick={() => navigateTo('cognitive')} className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl shadow-sm border border-brand-100 group text-sm sm:text-base">
+                <Icons.ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 group-hover:-translate-x-1 transition-transform" />
                 <span>Volver</span>
               </button>
-              <div className="flex items-center gap-6">
+              <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-6">
                 <div 
                   onClick={() => setIsCalendarOpen(true)}
-                  className="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl shadow-sm border border-brand-100 cursor-pointer hover:opacity-85 transition-opacity"
+                  className="flex items-center gap-1.5 sm:gap-2 bg-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-2xl shadow-sm border border-brand-100 cursor-pointer hover:opacity-85 transition-opacity"
                   title="Ver calendario de racha"
                 >
-                  <Icons.Flame className="text-accent-coral w-6 h-6" />
-                  <span className="font-bold text-brand-900">{streak} días</span>
+                  <Icons.Flame className="text-accent-coral w-5 h-5 sm:w-6 sm:h-6" />
+                  <span className="font-bold text-brand-900 text-sm sm:text-base">{streak} días</span>
                 </div>
                 {alreadyDoneToday && (
-                  <div className="flex items-center gap-2 text-emerald-600 font-bold bg-emerald-50 px-4 py-2 rounded-2xl border border-emerald-100">
-                    <Icons.CheckCircle className="w-5 h-5" />
-                    <span>¡Hoy Completado!</span>
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-emerald-600 font-bold bg-emerald-50 px-3 sm:px-4 py-1.5 sm:py-2 rounded-2xl border border-emerald-100 text-xs sm:text-base">
+                    <Icons.CheckCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="whitespace-nowrap">¡Hoy Completado!</span>
                   </div>
                 )}
               </div>
