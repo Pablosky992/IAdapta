@@ -390,8 +390,9 @@
       WhatsApp: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.484 8.412-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.309 1.656zm6.29-4.139c1.52.907 3.21 1.385 4.94 1.386 5.289 0 9.591-4.301 9.593-9.592 0-2.565-1.001-4.975-2.816-6.793-1.815-1.818-4.225-2.82-6.793-2.821-5.293 0-9.596 4.301-9.598 9.592 0 1.942.585 3.835 1.691 5.433l-1.011 3.691 3.784-.992zm11.702-6.877c-.313-.156-1.854-.914-2.141-1.019-.287-.104-.497-.156-.705.156-.208.312-.806 1.019-.987 1.227-.181.209-.362.235-.675.079-.313-.156-1.32-.486-2.515-1.552-.929-.828-1.556-1.852-1.738-2.165-.181-.313-.019-.482.137-.638.141-.141.313-.365.47-.547.157-.183.209-.313.313-.522.104-.21.053-.392-.026-.548-.078-.156-.705-1.7-.966-2.324-.254-.608-.512-.525-.705-.535-.183-.01-.391-.012-.6-.012s-.547.078-.834.392c-.287.313-1.096 1.071-1.096 2.612 0 1.541 1.121 3.029 1.277 3.238.156.209 2.207 3.371 5.348 4.73.747.323 1.329.516 1.783.661.75.238 1.433.204 1.973.124.602-.089 1.854-.757 2.115-1.487.261-.73.261-1.356.183-1.487-.078-.131-.287-.209-.6-.365z"/></svg>,
       TrendingUp: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.5 4.5L21.75 7.5M21.75 7.5V12m0-4.5H17.25" /></svg>,
       AlertCircle: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>,
-ChevronLeft: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>,
+      ChevronLeft: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>,
       ChevronRight: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>,
+      Cloud: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15z" /></svg>,
     };
 
     // --- REUSABLE COMPONENTS ---
@@ -574,9 +575,24 @@ ChevronLeft: ({ className }) => <svg className={className} xmlns="http://www.w3.
         }
       };
 
-      const handleUnlink = () => {
+      const handleUnlink = async () => {
         const confirmUnlink = window.confirm("¿Seguro que quieres desvincular tu correo? Los nuevos progresos se guardarán de forma local anónima en este dispositivo y ya no se actualizarán en tu correo.");
         if (confirmUnlink) {
+          try {
+            if (window.firebaseDB && window.firebaseDoc && window.firebaseSetDoc) {
+              const emailHash = await getEmailHash(linkedEmail);
+              const docRef = window.firebaseDoc(window.firebaseDB, "daily_challenge_streaks", emailHash);
+              
+              // Wiping the email field from the database to guarantee GDPR compliance
+              await window.firebaseSetDoc(docRef, {
+                email: "",
+                updated_at: new Date().toISOString()
+              }, { merge: true });
+            }
+          } catch (e) {
+            console.error("Error al desvincular correo en la nube:", e);
+          }
+
           localStorage.removeItem('daily_challenge_email');
           const randomId = 'anon_' + Math.random().toString(36).substr(2, 9) + Math.random().toString(36).substr(2, 9);
           localStorage.setItem('daily_challenge_device_id', randomId);
@@ -969,6 +985,11 @@ ChevronLeft: ({ className }) => <svg className={className} xmlns="http://www.w3.
 
       const [history, setHistory] = useState([]);
       const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+      const [linkedEmail, setLinkedEmail] = useState('');
+
+      useEffect(() => {
+        setLinkedEmail(localStorage.getItem('daily_challenge_email') || '');
+      }, [isCalendarOpen]);
       useEffect(() => {
         initDeviceId();
         const h = JSON.parse(localStorage.getItem('daily_challenge_history') || '[]');
@@ -1120,21 +1141,43 @@ ChevronLeft: ({ className }) => <svg className={className} xmlns="http://www.w3.
                   </div>
                   <div className="flex-1 p-8 md:p-10 flex flex-col justify-between">
                     <div>
-                      <div 
-                        onClick={(e) => { e.stopPropagation(); setIsCalendarOpen(true); }}
-                        className="flex items-center gap-3 mb-4 cursor-pointer hover:opacity-85 transition-opacity"
-                        title="Ver calendario de racha"
-                      >
-                         <div className="w-10 h-10 bg-accent-coral text-white rounded-xl flex items-center justify-center shadow-lg">
-                           <Icons.Flame className="w-6 h-6" />
-                         </div>
-                         <div className="flex flex-col">
-                           <span className="text-brand-400 font-bold uppercase tracking-widest text-[10px] leading-tight">Desafío Diario</span>
-                           <span className="text-accent-coral font-bold text-xs flex items-center gap-1">
-                             {history.length > 0 ? `${localStorage.getItem('daily_challenge_streak') || 0} días de racha` : '¡Empieza hoy!'}
-                             <Icons.Calendar className="w-3.5 h-3.5 inline text-accent-coral/75" />
-                           </span>
-                         </div>
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div 
+                          onClick={(e) => { e.stopPropagation(); setIsCalendarOpen(true); }}
+                          className="flex items-center gap-3 cursor-pointer hover:opacity-85 transition-opacity"
+                          title="Ver calendario de racha"
+                        >
+                           <div className="w-10 h-10 bg-accent-coral text-white rounded-xl flex items-center justify-center shadow-lg">
+                             <Icons.Flame className="w-6 h-6" />
+                           </div>
+                           <div className="flex flex-col">
+                             <span className="text-brand-400 font-bold uppercase tracking-widest text-[10px] leading-tight">Desafío Diario</span>
+                             <span className="text-accent-coral font-bold text-xs flex items-center gap-1">
+                               {history.length > 0 ? `${localStorage.getItem('daily_challenge_streak') || 0} días de racha` : '¡Empieza hoy!'}
+                               <Icons.Calendar className="w-3.5 h-3.5 inline text-accent-coral/75" />
+                             </span>
+                           </div>
+                        </div>
+
+                        {!linkedEmail ? (
+                          <div 
+                            onClick={(e) => { e.stopPropagation(); setIsCalendarOpen(true); }}
+                            className="inline-flex items-center gap-2 bg-brand-50 hover:bg-brand-100 border border-brand-100 px-3.5 py-1.5 rounded-xl text-xs font-bold text-brand-900 cursor-pointer transition-all hover:scale-102 active:scale-98 self-start sm:self-auto"
+                            title="Vincular cuenta en la nube (Recomendado)"
+                          >
+                            <Icons.Cloud className="w-4 h-4 text-brand-500" />
+                            <span>Vincular Correo (Copia)</span>
+                          </div>
+                        ) : (
+                          <div 
+                            onClick={(e) => { e.stopPropagation(); setIsCalendarOpen(true); }}
+                            className="inline-flex items-center gap-2 bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 px-3.5 py-1.5 rounded-xl text-xs font-bold text-emerald-800 cursor-pointer transition-all hover:scale-102 active:scale-98 animate-fade-in self-start sm:self-auto"
+                            title="Gestionar copia de seguridad en la nube"
+                          >
+                            <Icons.Cloud className="w-4 h-4 text-emerald-600 animate-pulse" />
+                            <span>Copia Activa: {linkedEmail.length > 22 ? linkedEmail.substring(0, 19) + '...' : linkedEmail}</span>
+                          </div>
+                        )}
                       </div>
                       <h3 className="font-display text-3xl font-bold text-brand-900 mb-3">Reto Diario IAdapta</h3>
                       <p className="text-gray-600 text-lg mb-8 max-w-xl">Supera 3 juegos rápidos cada día para mantener tu racha y fortalecer tu mente. ¡La dificultad sube cada día!</p>
@@ -2291,6 +2334,7 @@ ChevronLeft: ({ className }) => <svg className={className} xmlns="http://www.w3.
       const [stars, setStars] = useState(0);
       const [startTime, setStartTime] = useState(0);
       const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+      const [linkedEmail, setLinkedEmail] = useState('');
       const challengeHistory = useMemo(() => {
         return JSON.parse(localStorage.getItem('daily_challenge_history') || '[]');
       }, [alreadyDoneToday]);
@@ -2310,7 +2354,8 @@ ChevronLeft: ({ className }) => <svg className={className} xmlns="http://www.w3.
         if (lastDate === todayStr) {
           setAlreadyDoneToday(true);
         }
-      }, []);
+        setLinkedEmail(localStorage.getItem('daily_challenge_email') || '');
+      }, [isCalendarOpen]);
 
       const completeChallenge = () => {
         const todayStr = new Date().toISOString().split('T')[0];
@@ -2897,6 +2942,37 @@ ChevronLeft: ({ className }) => <svg className={className} xmlns="http://www.w3.
                   ))}
                 </div>
 
+                {!linkedEmail ? (
+                  <div className="mb-8 p-4 bg-brand-50 rounded-2xl border border-brand-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-left max-w-md mx-auto anim-scale-in">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 bg-brand-100 rounded-xl text-brand-600">
+                        <Icons.Cloud className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-brand-900 font-display">¿Racha sin guardar en la nube?</p>
+                        <p className="text-[11px] text-brand-500 leading-snug">Vincula tu correo para no perder tu racha si cambias de dispositivo.</p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => setIsCalendarOpen(true)}
+                      className="px-4 py-2 bg-brand-900 hover:bg-brand-800 text-white rounded-xl font-bold text-xs shadow transition-all hover:scale-102 active:scale-98 whitespace-nowrap"
+                    >
+                      Vincular correo
+                    </button>
+                  </div>
+                ) : (
+                  <div className="mb-8 p-3 bg-emerald-50 rounded-2xl border border-emerald-100 inline-flex items-center gap-2 max-w-md mx-auto anim-scale-in">
+                    <Icons.Cloud className="w-4 h-4 text-emerald-600 animate-pulse" />
+                    <span className="text-[11px] font-bold text-emerald-800">Copia de seguridad activa: {linkedEmail}</span>
+                    <button 
+                      onClick={() => setIsCalendarOpen(true)}
+                      className="ml-2 text-[10px] font-bold text-brand-600 hover:underline cursor-pointer"
+                    >
+                      Gestionar
+                    </button>
+                  </div>
+                )}
+
                 <button onClick={startChallenge} className="w-full sm:w-auto px-12 py-5 bg-brand-900 text-white rounded-2xl font-bold text-2xl hover:bg-brand-800 shadow-xl transition-all hover:scale-105 active:scale-95 btn-pulse">
                   Empezar Desafío
                 </button>
@@ -2978,14 +3054,14 @@ ChevronLeft: ({ className }) => <svg className={className} xmlns="http://www.w3.
                   <button onClick={() => window.location.reload()} className="px-10 py-4 bg-brand-900 text-white rounded-xl font-bold hover:bg-brand-800 shadow-lg transition-all">Cerrar</button>
                 </div>
 
-                {/* Streak Calendar Modal */}
-                <StreakCalendarModal 
-                  isOpen={isCalendarOpen} 
-                  onClose={() => setIsCalendarOpen(false)} 
-                  history={challengeHistory} 
-                />
               </div>
             )}
+            {/* Streak Calendar Modal */}
+            <StreakCalendarModal 
+              isOpen={isCalendarOpen} 
+              onClose={() => setIsCalendarOpen(false)} 
+              history={challengeHistory} 
+            />
           </div>
         </section>
       );
