@@ -519,7 +519,7 @@ ChevronLeft: ({ className }) => <svg className={className} xmlns="http://www.w3.
           }
         } catch (e) {
           console.error(e);
-          alert("Hubo un error al guardar en la nube.");
+          alert("Hubo un error al guardar en la nube: " + e.message);
         } finally {
           setIsLinking(false);
         }
@@ -568,7 +568,7 @@ ChevronLeft: ({ className }) => <svg className={className} xmlns="http://www.w3.
           }
         } catch (e) {
           console.error(e);
-          alert("Hubo un error al recuperar los datos.");
+          alert("Hubo un error al recuperar los datos: " + e.message);
         } finally {
           setIsRestoring(false);
         }
