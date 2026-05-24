@@ -2,9 +2,9 @@ name: Send Daily Reminders
 
 on:
   schedule:
-    # Se ejecuta todos los días a las 18:00 UTC (20:00 hora de España)
+    # Runs at 18:00 UTC every day (which is 20:00 CET in Spain winter / 21:00 CEST summer)
     - cron: '0 18 * * *'
-  workflow_dispatch: # Permite probarlo manualmente desde el panel de GitHub
+  workflow_dispatch: # Allows manual triggering from the Actions tab in GitHub
 
 jobs:
   send-reminders:
@@ -12,10 +12,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
