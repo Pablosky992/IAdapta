@@ -495,6 +495,25 @@
     };
 
     // --- REUSABLE COMPONENTS ---
+    const AdSenseBlock = function AdSenseBlock({ slot, minHeight = '90px' }) {
+      const { useEffect } = React;
+      useEffect(() => {
+        try {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+          console.error("AdSense push failed", e);
+        }
+      }, []);
+
+      return (
+        <ins className="adsbygoogle"
+             style={{ display: 'block', minHeight }}
+             data-ad-client="ca-pub-9370167145239765"
+             data-ad-slot={slot}
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      );
+    };
     
     // --- STREAK CALENDAR MODAL ---
     const StreakCalendarModal = function StreakCalendarModal({ isOpen, onClose, history }) {
@@ -1107,12 +1126,6 @@
         }, 1000);
       }, []);
 
-      // Inicializar anuncios de AdSense
-      useEffect(() => {
-        try {
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (e) {}
-      }, []);
 
       const icons = ['🧠', '💡', '🌟', '🧩', '🚀', '🌈', '💎', '🎨', '🍎', '⚽', '🎸', '🍦', '🏠'];
 
@@ -1305,12 +1318,7 @@
                 {/* Bloque de anuncios - Entre Reto Diario y Juegos */}
                 <div className="mb-16 overflow-hidden rounded-xl bg-gray-50/50 min-h-[100px] flex flex-col items-center justify-center">
                   <span className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Publicidad</span>
-                  <ins className="adsbygoogle"
-                       style={{ display: 'block', minWidth: '250px', minHeight: '90px' }}
-                       data-ad-client="ca-pub-9370167145239765"
-                       data-ad-slot="9272607554"
-                       data-ad-format="auto"
-                       data-full-width-responsive="true"></ins>
+                  <AdSenseBlock slot="9272607554" />
                 </div>
                 {isStandalone && (
                   <div className="mt-10 mb-16 pt-10 border-t border-brand-100 text-center flex flex-col items-center gap-4">
@@ -1535,25 +1543,34 @@
             </div>
 
             {!gameStarted ? (
-              <div className="bg-white rounded-[3rem] border border-brand-100 shadow-2xl p-10 max-w-2xl mx-auto anim-scale-in">
-                <div className="text-6xl mb-6">🧠</div>
-                <h3 className="text-2xl font-bold text-brand-900 mb-6">Selecciona la dificultad</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {levelSequence.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => initGame(idx)}
-                      className="group p-6 rounded-2xl border-2 border-brand-50 hover:border-brand-500 hover:bg-brand-50 transition-all flex flex-col items-center gap-2"
-                    >
-                      <span className="text-brand-900 font-bold text-xl">Nivel {idx + 1}</span>
-                      <span className="text-brand-500 text-sm font-medium">
-                        {idx === 0 ? 'Muy Fácil (2 parejas)' : 
-                         idx === 1 ? 'Fácil (4 parejas)' : 
-                         idx === 2 ? 'Medio (6 parejas)' : 
-                         idx === 3 ? 'Difícil (8 parejas)' : 'Experto (12 parejas)'}
-                      </span>
-                    </button>
-                  ))}
+              <div className="max-w-2xl mx-auto">
+                <h2 className="font-display text-4xl font-bold text-brand-900 mb-8 text-center">Memoriza las Parejas</h2>
+                <div className="bg-white rounded-[3rem] border border-brand-100 shadow-2xl p-10 anim-scale-in text-center">
+                  <div className="text-6xl mb-6">🧠</div>
+                  <h3 className="text-2xl font-bold text-brand-900 mb-6">Selecciona la dificultad</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {levelSequence.map((_, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => initGame(idx)}
+                        className="group p-6 rounded-2xl border-2 border-brand-50 hover:border-brand-500 hover:bg-brand-50 transition-all flex flex-col items-center gap-2"
+                      >
+                        <span className="text-brand-900 font-bold text-xl">Nivel {idx + 1}</span>
+                        <span className="text-brand-500 text-sm font-medium">
+                          {idx === 0 ? 'Muy Fácil (2 parejas)' : 
+                           idx === 1 ? 'Fácil (4 parejas)' : 
+                           idx === 2 ? 'Medio (6 parejas)' : 
+                           idx === 3 ? 'Difícil (8 parejas)' : 'Experto (12 parejas)'}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Bloque de anuncios - Dificultad */}
+                <div className="mt-8 overflow-hidden rounded-xl bg-gray-50/50 min-h-[100px] flex flex-col items-center justify-center">
+                  <span className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Publicidad</span>
+                  <AdSenseBlock slot="1157680328" />
                 </div>
               </div>
             ) : (
@@ -1894,6 +1911,12 @@
                     ))}
                   </div>
                 </div>
+
+                {/* Bloque de anuncios - Dificultad */}
+                <div className="mt-8 overflow-hidden rounded-xl bg-gray-50/50 min-h-[100px] flex flex-col items-center justify-center">
+                  <span className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Publicidad</span>
+                  <AdSenseBlock slot="1157680328" />
+                </div>
               </div>
             ) : (
               <>
@@ -2150,6 +2173,12 @@
                     ))}
                   </div>
                 </div>
+
+                {/* Bloque de anuncios - Dificultad */}
+                <div className="mt-8 overflow-hidden rounded-xl bg-gray-50/50 min-h-[100px] flex flex-col items-center justify-center">
+                  <span className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Publicidad</span>
+                  <AdSenseBlock slot="1157680328" />
+                </div>
               </div>
             ) : (
               <>
@@ -2353,6 +2382,12 @@
                       </button>
                     ))}
                   </div>
+                </div>
+
+                {/* Bloque de anuncios - Dificultad */}
+                <div className="mt-8 overflow-hidden rounded-xl bg-gray-50/50 min-h-[100px] flex flex-col items-center justify-center">
+                  <span className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Publicidad</span>
+                  <AdSenseBlock slot="1157680328" />
                 </div>
               </div>
             ) : (
@@ -3360,6 +3395,12 @@
                     ))}
                   </div>
                 </div>
+
+                {/* Bloque de anuncios - Dificultad */}
+                <div className="mt-8 overflow-hidden rounded-xl bg-gray-50/50 min-h-[100px] flex flex-col items-center justify-center">
+                  <span className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Publicidad</span>
+                  <AdSenseBlock slot="1157680328" />
+                </div>
               </div>
             ) : (
               <>
@@ -3517,6 +3558,12 @@
                       </button>
                     ))}
                   </div>
+                </div>
+
+                {/* Bloque de anuncios - Dificultad */}
+                <div className="mt-8 overflow-hidden rounded-xl bg-gray-50/50 min-h-[100px] flex flex-col items-center justify-center">
+                  <span className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Publicidad</span>
+                  <AdSenseBlock slot="1157680328" />
                 </div>
               </div>
             ) : (
