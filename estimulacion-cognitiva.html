@@ -310,6 +310,92 @@
       return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     };
 
+    const syncCloudProgress = async (onSyncSuccess) => {
+      if (window.firebaseDB && window.firebaseDoc && window.firebaseGetDoc && window.firebaseSetDoc) {
+        const deviceId = localStorage.getItem('daily_challenge_device_id');
+        const linked = localStorage.getItem('daily_challenge_email') || '';
+        if (!linked || !deviceId) return;
+
+        try {
+          const docRef = window.firebaseDoc(window.firebaseDB, "daily_challenge_streaks", deviceId);
+          const docSnap = await window.firebaseGetDoc(docRef);
+          
+          if (docSnap.exists()) {
+            const dbData = docSnap.data();
+            const dbHistory = dbData.history || [];
+            const localHistory = JSON.parse(localStorage.getItem('daily_challenge_history') || '[]');
+            
+            // Merge unique history dates
+            const mergedHistory = Array.from(new Set([...localHistory, ...dbHistory])).sort();
+            
+            // Recalculate streak
+            const calculateStreak = (historyList) => {
+              if (!historyList || historyList.length === 0) return 0;
+              const uniqueDates = [...new Set(historyList)].sort((a, b) => new Date(b) - new Date(a));
+              const todayStr = new Date().toISOString().split('T')[0];
+              const yesterday = new Date();
+              yesterday.setDate(yesterday.getDate() - 1);
+              const yesterdayStr = yesterday.toISOString().split('T')[0];
+              
+              if (uniqueDates[0] !== todayStr && uniqueDates[0] !== yesterdayStr) {
+                return 0;
+              }
+              
+              let currentStreak = 0;
+              let checkDate = new Date(uniqueDates[0]);
+              for (let i = 0; i < 365; i++) {
+                const checkStr = checkDate.toISOString().split('T')[0];
+                if (uniqueDates.includes(checkStr)) {
+                  currentStreak++;
+                  checkDate.setDate(checkDate.getDate() - 1);
+                } else {
+                  break;
+                }
+              }
+              return currentStreak;
+            };
+
+            const newStreak = calculateStreak(mergedHistory);
+            const lastDate = mergedHistory[mergedHistory.length - 1] || '';
+
+            // Update localStorage
+            localStorage.setItem('daily_challenge_history', JSON.stringify(mergedHistory));
+            localStorage.setItem('daily_challenge_streak', newStreak.toString());
+            if (lastDate) {
+              localStorage.setItem('daily_challenge_last_date', lastDate);
+            }
+
+            if (onSyncSuccess) {
+              onSyncSuccess(mergedHistory, newStreak);
+            }
+
+            // Write back merged state to Firestore
+            await window.firebaseSetDoc(docRef, {
+              email: linked,
+              streak: newStreak,
+              last_date: lastDate,
+              history: mergedHistory,
+              updated_at: new Date().toISOString()
+            }, { merge: true });
+          } else {
+            // Write local progress if Firestore doc doesn't exist yet
+            const currentStreak = parseInt(localStorage.getItem('daily_challenge_streak') || '0');
+            const last = localStorage.getItem('daily_challenge_last_date') || '';
+            const h = JSON.parse(localStorage.getItem('daily_challenge_history') || '[]');
+            await window.firebaseSetDoc(docRef, {
+              email: linked,
+              streak: currentStreak,
+              last_date: last,
+              history: h,
+              updated_at: new Date().toISOString()
+            }, { merge: true });
+          }
+        } catch (err) {
+          console.error("Cloud sync failed", err);
+        }
+      }
+    };
+
     function urlBase64ToUint8Array(base64String) {
       const padding = '='.repeat((4 - base64String.length % 4) % 4);
       const base64 = (base64String + padding)
@@ -715,9 +801,9 @@
                   </span>
                 </div>
                 <div className="bg-brand-50/50 p-3.5 rounded-2xl text-center border border-brand-50">
-                  <span className="text-[10px] text-brand-400 font-bold uppercase tracking-wider block mb-1">Días Perdidos</span>
+                  <span className="text-[10px] text-brand-400 font-bold uppercase tracking-wider block mb-1">Racha Actual</span>
                   <span className="text-xl font-bold text-brand-900 flex items-center justify-center gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-red-400"></div> {calendarDays.filter(x => x && !history.includes(x.dateStr) && x.dateStr < todayStr).length}
+                    <Icons.Flame className="w-5 h-5 text-accent-coral" /> {localStorage.getItem('daily_challenge_streak') || 0}
                   </span>
                 </div>
               </div>
@@ -1015,19 +1101,9 @@
 
         // Silent cloud sync after 1 second
         setTimeout(() => {
-          if (window.firebaseDB && window.firebaseDoc && window.firebaseSetDoc) {
-            const deviceId = localStorage.getItem('daily_challenge_device_id');
-            const currentStreak = parseInt(localStorage.getItem('daily_challenge_streak') || '0');
-            const linked = localStorage.getItem('daily_challenge_email') || '';
-            const docRef = window.firebaseDoc(window.firebaseDB, "daily_challenge_streaks", deviceId);
-            window.firebaseSetDoc(docRef, {
-              email: linked,
-              streak: currentStreak,
-              last_date: last || '',
-              history: h,
-              updated_at: new Date().toISOString()
-            }).catch(err => console.error("Initial cloud sync failed", err));
-          }
+          syncCloudProgress((mergedHistory) => {
+            setHistory(mergedHistory);
+          });
         }, 1000);
       }, []);
 
@@ -2349,9 +2425,10 @@
       const [isCalendarOpen, setIsCalendarOpen] = useState(false);
       const [linkedEmail, setLinkedEmail] = useState('');
       const [hasPromptedNotif, setHasPromptedNotif] = useState(localStorage.getItem('daily_challenge_notif_prompted') === 'true');
+      const [historyVersion, setHistoryVersion] = useState(0);
       const challengeHistory = useMemo(() => {
         return JSON.parse(localStorage.getItem('daily_challenge_history') || '[]');
-      }, [alreadyDoneToday]);
+      }, [alreadyDoneToday, historyVersion]);
 
       // Difficulty factor: 1 (Mon) to 7 (Sun)
       const difficultyFactor = useMemo(() => {
@@ -2370,6 +2447,15 @@
         }
         setLinkedEmail(localStorage.getItem('daily_challenge_email') || '');
       }, [isCalendarOpen]);
+
+      useEffect(() => {
+        setTimeout(() => {
+          syncCloudProgress((mergedHistory, newStreak) => {
+            setStreak(newStreak);
+            setHistoryVersion(v => v + 1);
+          });
+        }, 1000);
+      }, []);
 
       const completeChallenge = () => {
         const todayStr = new Date().toISOString().split('T')[0];
