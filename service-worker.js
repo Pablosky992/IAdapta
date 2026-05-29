@@ -1,4 +1,4 @@
-const CACHE_NAME = 'iadapta-v3'; // Bumped to force SW update
+const CACHE_NAME = 'iadapta-v4'; // Bumped to force SW update
 const ASSETS = [
   './',
   './index.html',
@@ -14,7 +14,10 @@ const ASSETS = [
   './memory_game_thumbnail.png',
   './order_game_thumbnail.png',
   './word_search_thumbnail.png',
-  './mental_math_thumbnail.png'
+  './mental_math_thumbnail.png',
+  './visual_game_thumbnail.png',
+  './intruder_game_thumbnail.png',
+  './sudoku_game_thumbnail.png'
 ];
 
 // Install: Cache essential assets

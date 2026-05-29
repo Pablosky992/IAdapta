@@ -241,6 +241,24 @@
             </p>
             <a href="estimulacion-cognitiva.html?page=visual" class="text-brand-600 font-bold hover:underline">Jugar a Agudeza &rarr;</a>
           </article>
+
+          <!-- El Intruso -->
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8">
+            <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">El Intruso</h3>
+            <p class="text-gray-600 mb-6">
+              Entrena el razonamiento lógico y la categorización semántica identificando el objeto que no encaja en el grupo.
+            </p>
+            <a href="estimulacion-cognitiva.html?page=intruder" class="text-brand-600 font-bold hover:underline">Jugar a El Intruso &rarr;</a>
+          </article>
+
+          <!-- Sudoku -->
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8">
+            <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">Sudoku</h3>
+            <p class="text-gray-600 mb-6">
+              Ejercita el razonamiento lógico y la concentración rellenando la cuadrícula con números del 1 al 9.
+            </p>
+            <a href="estimulacion-cognitiva.html?page=sudoku" class="text-brand-600 font-bold hover:underline">Jugar a Sudoku &rarr;</a>
+          </article>
         </div>
       </section>
     </main>
@@ -1494,6 +1512,33 @@
                         Entrena el razonamiento lógico y la categorización semántica identificando el objeto que no encaja en el grupo.
                       </p>
                       <button className="w-full py-4 bg-rose-900 text-white rounded-2xl font-bold text-lg group-hover:bg-rose-800 transition-all flex items-center justify-center gap-3 shadow-lg shadow-rose-900/20">
+                        Jugar ahora
+                        <Icons.ArrowRight />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Game 7: Sudoku */}
+                  <div 
+                    onClick={() => navigateTo('sudoku')}
+                    className="bg-white rounded-[2.5rem] overflow-hidden border border-indigo-50 shadow-xl hover:shadow-2xl transition-all group flex flex-col cursor-pointer"
+                  >
+                    <div className="relative h-56 overflow-hidden">
+                      <img src="sudoku_game_thumbnail.png" alt="Sudoku" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/60 to-transparent"></div>
+                      <div className="absolute bottom-4 left-6 flex items-center gap-3">
+                        <div className="w-12 h-12 bg-indigo-600 text-white rounded-xl flex items-center justify-center text-2xl shadow-lg border border-indigo-400/30">
+                          <Icons.Puzzle />
+                        </div>
+                        <span className="text-white font-bold text-lg">Lógica</span>
+                      </div>
+                    </div>
+                    <div className="p-8 flex flex-col flex-1">
+                      <h3 className="font-display text-2xl font-bold text-brand-900 mb-4">Sudoku</h3>
+                      <p className="text-gray-600 text-lg mb-8 flex-1 leading-relaxed">
+                        Ejercita el razonamiento lógico y la concentración rellenando la cuadrícula con números del 1 al 9.
+                      </p>
+                      <button className="w-full py-4 bg-indigo-900 text-white rounded-2xl font-bold text-lg group-hover:bg-indigo-800 transition-all flex items-center justify-center gap-3 shadow-lg shadow-indigo-900/20">
                         Jugar ahora
                         <Icons.ArrowRight />
                       </button>
@@ -3634,6 +3679,581 @@
       );
     };
 
+    // --- SECTION SUDOKU GAME ---
+    const SectionSudokuGame = function SectionSudokuGame({ isStandalone, navigateTo }) {
+      const { useState, useEffect, useCallback, useMemo } = React;
+
+      const LEVELS = useMemo(() => [
+        { id: 1, name: 'Básico', clues: 49, desc: 'Ideal para empezar y mantener activa la mente' },
+        { id: 2, name: 'Intermedio', clues: 36, desc: 'Un reto moderado para tu capacidad lógica' },
+        { id: 3, name: 'Avanzado', clues: 27, desc: 'Para expertos en concentración y razonamiento' }
+      ], []);
+
+      const [gameStarted, setGameStarted] = useState(false);
+      const [levelIdx, setLevelIdx] = useState(0);
+      const [board, setBoard] = useState(Array(9).fill(null).map(() => Array(9).fill(0)));
+      const [initialBoard, setInitialBoard] = useState(Array(9).fill(null).map(() => Array(9).fill(false)));
+      const [solution, setSolution] = useState(Array(9).fill(null).map(() => Array(9).fill(0)));
+      const [selectedCell, setSelectedCell] = useState(null);
+      const [hintsUsed, setHintsUsed] = useState(0);
+      const [showConflicts, setShowConflicts] = useState(true);
+      const [gameStatus, setGameStatus] = useState('playing'); // 'playing', 'finished'
+      const [startTime, setStartTime] = useState(0);
+      const [finalTime, setFinalTime] = useState(0);
+      const [stars, setStars] = useState(0);
+      const [feedbackMessage, setFeedbackMessage] = useState(null);
+
+      const generateSudoku = useCallback((difficultyIdx) => {
+        const base = [
+          [5, 3, 4, 6, 7, 8, 9, 1, 2],
+          [6, 7, 2, 1, 9, 5, 3, 4, 8],
+          [1, 9, 8, 3, 4, 2, 5, 6, 7],
+          [8, 5, 9, 7, 6, 1, 4, 2, 3],
+          [4, 2, 6, 8, 5, 3, 7, 9, 1],
+          [7, 1, 3, 9, 2, 4, 8, 5, 6],
+          [9, 6, 1, 5, 3, 7, 2, 8, 4],
+          [2, 8, 7, 4, 1, 9, 6, 3, 5],
+          [3, 4, 5, 2, 8, 6, 1, 7, 9]
+        ];
+
+        const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        const shuffledDigits = [...digits].sort(() => Math.random() - 0.5);
+        const map = {};
+        digits.forEach((d, i) => { map[d] = shuffledDigits[i]; });
+
+        let grid = base.map(row => row.map(val => map[val]));
+
+        const shuffleRows = (arr) => {
+          const res = [...arr];
+          const shuffleBlock = (r1, r2, r3) => {
+            const block = [res[r1], res[r2], res[r3]];
+            block.sort(() => Math.random() - 0.5);
+            res[r1] = block[0]; res[r2] = block[1]; res[r3] = block[2];
+          };
+          shuffleBlock(0, 1, 2);
+          shuffleBlock(3, 4, 5);
+          shuffleBlock(6, 7, 8);
+          return res;
+        };
+        grid = shuffleRows(grid);
+
+        const transpose = (arr) => arr[0].map((_, colIdx) => arr.map(row => row[colIdx]));
+        grid = transpose(grid);
+        grid = shuffleRows(grid);
+        grid = transpose(grid);
+
+        if (Math.random() > 0.5) grid = transpose(grid);
+
+        const sol = grid.map(row => [...row]);
+
+        const visibleClues = LEVELS[difficultyIdx].clues;
+        const hideCount = 81 - visibleClues;
+        
+        const indices = Array.from({ length: 81 }, (_, i) => i);
+        indices.sort(() => Math.random() - 0.5);
+
+        const initB = Array(9).fill(null).map(() => Array(9).fill(true));
+        const currB = grid.map(row => [...row]);
+
+        for (let i = 0; i < hideCount; i++) {
+          const idx = indices[i];
+          const r = Math.floor(idx / 9);
+          const c = idx % 9;
+          currB[r][c] = 0;
+          initB[r][c] = false;
+        }
+
+        setBoard(currB);
+        setInitialBoard(initB);
+        setSolution(sol);
+        setSelectedCell(null);
+        setHintsUsed(0);
+        setGameStatus('playing');
+        setStartTime(Date.now());
+        setFeedbackMessage(null);
+      }, [LEVELS]);
+
+      const startGame = (idx) => {
+        setLevelIdx(idx);
+        setGameStarted(true);
+        generateSudoku(idx);
+      };
+
+      const checkConflicts = useCallback((r, c, val) => {
+        if (val === 0) return false;
+        for (let i = 0; i < 9; i++) {
+          if (i !== c && board[r][i] === val) return true;
+          if (i !== r && board[i][c] === val) return true;
+        }
+        const bR = Math.floor(r / 3) * 3;
+        const bC = Math.floor(c / 3) * 3;
+        for (let i = bR; i < bR + 3; i++) {
+          for (let j = bC; j < bC + 3; j++) {
+            if ((i !== r || j !== c) && board[i][j] === val) return true;
+          }
+        }
+        return false;
+      }, [board]);
+
+      const completedRows = useMemo(() => {
+        const completed = [];
+        for (let r = 0; r < 9; r++) {
+          let correct = true;
+          for (let c = 0; c < 9; c++) {
+            if (board[r][c] === 0 || board[r][c] !== solution[r][c]) {
+              correct = false;
+              break;
+            }
+          }
+          if (correct) completed.push(r);
+        }
+        return completed;
+      }, [board, solution]);
+
+      const completedCols = useMemo(() => {
+        const completed = [];
+        for (let c = 0; c < 9; c++) {
+          let correct = true;
+          for (let r = 0; r < 9; r++) {
+            if (board[r][c] === 0 || board[r][c] !== solution[r][c]) {
+              correct = false;
+              break;
+            }
+          }
+          if (correct) completed.push(c);
+        }
+        return completed;
+      }, [board, solution]);
+
+      const completedBlocks = useMemo(() => {
+        const completed = [];
+        for (let b = 0; b < 9; b++) {
+          const br = Math.floor(b / 3) * 3;
+          const bc = (b % 3) * 3;
+          let correct = true;
+          for (let r = br; r < br + 3; r++) {
+            for (let c = bc; c < bc + 3; c++) {
+              if (board[r][c] === 0 || board[r][c] !== solution[r][c]) {
+                correct = false;
+                break;
+              }
+            }
+            if (!correct) break;
+          }
+          if (correct) completed.push(b);
+        }
+        return completed;
+      }, [board, solution]);
+
+      const inputDigit = useCallback((digit) => {
+        if (gameStatus !== 'playing' || !selectedCell) return;
+        const { r, c } = selectedCell;
+        if (initialBoard[r][c]) return;
+
+        const newBoard = board.map((row, ri) =>
+          row.map((val, ci) => (ri === r && ci === c ? digit : val))
+        );
+        setBoard(newBoard);
+        setFeedbackMessage(null);
+
+        let complete = true;
+        let correct = true;
+        for (let ri = 0; ri < 9; ri++) {
+          for (let ci = 0; ci < 9; ci++) {
+            if (newBoard[ri][ci] === 0) {
+              complete = false;
+            } else if (newBoard[ri][ci] !== solution[ri][ci]) {
+              correct = false;
+            }
+          }
+        }
+
+        if (complete && correct) {
+          const time = (Date.now() - startTime) / 1000;
+          setFinalTime(time.toFixed(1));
+          setGameStatus('finished');
+          
+          let s = 3;
+          if (levelIdx === 0) {
+            if (time < 180) s = 5;
+            else if (time < 300) s = 4;
+            else if (time > 480) s = 2;
+          } else if (levelIdx === 1) {
+            if (time < 300) s = 5;
+            else if (time < 600) s = 4;
+            else if (time > 900) s = 2;
+          } else {
+            if (time < 600) s = 5;
+            else if (time < 1000) s = 4;
+            else if (time > 1500) s = 2;
+          }
+          s = Math.max(2, s - Math.floor(hintsUsed / 2));
+          setStars(s);
+
+          if (window.confetti) window.confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+        }
+      }, [board, selectedCell, initialBoard, solution, gameStatus, startTime, levelIdx, hintsUsed]);
+
+      useEffect(() => {
+        const handleKeyDown = (e) => {
+          if (!gameStarted || gameStatus !== 'playing' || !selectedCell) return;
+          const { r, c } = selectedCell;
+          if (initialBoard[r][c]) return;
+
+          if (e.key >= '1' && e.key <= '9') {
+            inputDigit(parseInt(e.key));
+          } else if (e.key === 'Backspace' || e.key === 'Delete' || e.key === '0') {
+            inputDigit(0);
+          }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+      }, [gameStarted, gameStatus, selectedCell, initialBoard, inputDigit]);
+
+      const handleCellClick = (r, c) => {
+        setSelectedCell({ r, c });
+      };
+
+      const handleHint = () => {
+        if (gameStatus !== 'playing' || !selectedCell || hintsUsed >= 3) return;
+        const { r, c } = selectedCell;
+        if (initialBoard[r][c]) {
+          setFeedbackMessage({ type: 'info', text: 'Esta celda ya está fijada desde el inicio.' });
+          return;
+        }
+
+        const correctVal = solution[r][c];
+        setHintsUsed(prev => prev + 1);
+
+        const newBoard = board.map((row, ri) =>
+          row.map((val, ci) => (ri === r && ci === c ? correctVal : val))
+        );
+        setBoard(newBoard);
+
+        let complete = true;
+        let correct = true;
+        for (let ri = 0; ri < 9; ri++) {
+          for (let ci = 0; ci < 9; ci++) {
+            if (newBoard[ri][ci] === 0) {
+              complete = false;
+            } else if (newBoard[ri][ci] !== solution[ri][ci]) {
+              correct = false;
+            }
+          }
+        }
+
+        if (complete && correct) {
+          const time = (Date.now() - startTime) / 1000;
+          setFinalTime(time.toFixed(1));
+          setGameStatus('finished');
+          let s = Math.max(2, 4 - Math.floor((hintsUsed + 1) / 2));
+          setStars(s);
+          if (window.confetti) window.confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+        }
+      };
+
+      const handleVerify = () => {
+        if (gameStatus !== 'playing') return;
+        let hasErrors = false;
+        let isComplete = true;
+        
+        for (let r = 0; r < 9; r++) {
+          for (let c = 0; c < 9; c++) {
+            if (board[r][c] === 0) {
+              isComplete = false;
+            } else if (board[r][c] !== solution[r][c]) {
+              hasErrors = true;
+            }
+          }
+        }
+
+        if (!isComplete) {
+          if (hasErrors) {
+            setFeedbackMessage({ type: 'error', text: 'Hay números incorrectos y celdas vacías en el tablero.' });
+          } else {
+            setFeedbackMessage({ type: 'info', text: 'Todo lo que has completado hasta ahora está correcto. ¡Sigue así!' });
+          }
+        } else {
+          if (hasErrors) {
+            setFeedbackMessage({ type: 'error', text: 'El Sudoku está completo pero contiene errores. Revisa las celdas marcadas.' });
+          }
+        }
+      };
+
+      const handleResetBoard = () => {
+        if (window.confirm('¿Deseas vaciar todos tus números y reiniciar el Sudoku?')) {
+          const resetB = board.map((row, ri) =>
+            row.map((val, ci) => (initialBoard[ri][ci] ? val : 0))
+          );
+          setBoard(resetB);
+          setSelectedCell(null);
+          setFeedbackMessage(null);
+        }
+      };
+
+      const nextLevel = () => {
+        if (levelIdx < LEVELS.length - 1) {
+          startGame(levelIdx + 1);
+        } else {
+          setGameStarted(false);
+        }
+      };
+
+      const activeValue = selectedCell ? board[selectedCell.r][selectedCell.c] : null;
+
+      return (
+        <section className={`pt-36 pb-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-36' : ''}`}>
+          <div className="max-w-4xl w-full">
+            {!gameStarted ? (
+              <div className="max-w-2xl mx-auto text-center">
+                <div className="flex justify-start mb-8">
+                  <button onClick={() => navigateTo('cognitive')} className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-100 group">
+                    <Icons.ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                    <span>Volver</span>
+                  </button>
+                </div>
+                <h2 className="font-display text-4xl font-bold text-brand-900 mb-8 text-center">Sudoku</h2>
+                <div className="bg-white rounded-[3rem] border border-brand-100 shadow-2xl p-10 anim-scale-in">
+                  <div className="text-6xl mb-6">🧩</div>
+                  <h3 className="text-2xl font-bold text-brand-900 mb-6">Selecciona la dificultad</h3>
+                  <div className="grid grid-cols-1 gap-3">
+                    {LEVELS.map((level, idx) => (
+                      <button
+                        key={level.id}
+                        onClick={() => startGame(idx)}
+                        className="group p-5 rounded-2xl border-2 border-brand-50 hover:border-brand-500 hover:bg-brand-50 transition-all flex items-center justify-between px-8 animate-fade-in"
+                      >
+                        <div className="text-left">
+                          <span className="text-brand-900 font-bold text-xl block">{level.name}</span>
+                          <span className="text-brand-500 text-sm font-medium">{level.desc}</span>
+                        </div>
+                        <Icons.ArrowRight className="text-brand-300 group-hover:text-brand-600 group-hover:translate-x-1 transition-all" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-8 overflow-hidden rounded-xl bg-gray-50/50 min-h-[100px] flex flex-col items-center justify-center">
+                  <span className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Publicidad</span>
+                  <AdSenseBlock slot="1157680328" />
+                </div>
+              </div>
+            ) : (
+              <>
+                <GameHeader 
+                  title="Sudoku"
+                  subtitle={(
+                    <>
+                      <span className="bg-brand-900 text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-widest">Nivel {levelIdx + 1}</span>
+                      <span className="text-brand-600 font-bold uppercase tracking-widest">{LEVELS[levelIdx].name}</span>
+                    </>
+                  )}
+                  onBack={() => navigateTo('cognitive')}
+                  onRestart={() => generateSudoku(levelIdx)}
+                  onLevels={() => setGameStarted(false)}
+                  isStandalone={isStandalone}
+                />
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                  
+                  {/* Left Column: Instructions and Helpers */}
+                  <div className="lg:col-span-4 space-y-6">
+                    <div className="bg-white rounded-3xl p-6 border border-brand-100 shadow-xl text-left">
+                      <h4 className="font-bold text-brand-900 text-lg mb-3 flex items-center gap-2">
+                        <span>💡</span> ¿Cómo jugar?
+                      </h4>
+                      <p className="text-gray-500 text-sm leading-relaxed mb-4">
+                        Completa la cuadrícula de modo que cada fila, columna y recuadro de 3x3 contenga los números del 1 al 9 sin repetirse.
+                      </p>
+                      <ul className="text-gray-500 text-xs space-y-2 list-disc pl-4 leading-normal">
+                        <li>Selecciona una celda en el tablero.</li>
+                        <li>Pulsa un número del teclado numérico o usa tu teclado físico.</li>
+                        <li>Los números iniciales son oscuros y no se pueden cambiar.</li>
+                        <li>Los números incorrectos o duplicados se destacarán automáticamente en color rojo.</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Center Column: The Sudoku Grid and Keyboard */}
+                  <div className="lg:col-span-8 flex flex-col items-center">
+                    {gameStatus === 'playing' ? (
+                      <div className="w-full max-w-[458px] flex flex-col items-center space-y-6">
+                        
+                        {/* Board */}
+                        <div className="w-full bg-brand-900 border-4 border-brand-900 rounded-[2rem] shadow-2xl overflow-hidden">
+                          <div className="grid grid-cols-3 gap-[4px] bg-brand-900">
+                            {Array.from({ length: 9 }).map((_, b) => {
+                              const blockRow = Math.floor(b / 3);
+                              const blockCol = b % 3;
+                              return (
+                                <div key={b} className="grid grid-cols-3 gap-[1px] bg-brand-300">
+                                  {Array.from({ length: 9 }).map((_, i) => {
+                                    const r = blockRow * 3 + Math.floor(i / 3);
+                                    const c = blockCol * 3 + (i % 3);
+                                    const val = board[r][c];
+                                    const isInitial = initialBoard[r][c];
+                                    const isSelected = selectedCell && selectedCell.r === r && selectedCell.c === c;
+                                    const isSameRowOrCol = selectedCell && (
+                                      selectedCell.r === r || 
+                                      selectedCell.c === c || 
+                                      (Math.floor(selectedCell.r / 3) === Math.floor(r / 3) && Math.floor(selectedCell.c / 3) === Math.floor(c / 3))
+                                    );
+                                    const isSameValue = activeValue && val !== 0 && activeValue === val;
+                                    const isConflict = showConflicts && !isInitial && checkConflicts(r, c, val);
+                                    
+                                    const blockIndex = b;
+                                    const isPartOfCompletedGroup = completedRows.includes(r) || completedCols.includes(c) || completedBlocks.includes(blockIndex);
+
+                                    let cellBg = 'bg-white';
+                                    if (isSelected) cellBg = 'bg-accent-coral/20 ring-4 ring-accent-coral/50 ring-inset relative z-10';
+                                    else if (isPartOfCompletedGroup) cellBg = 'bg-emerald-100/80';
+                                    else if (isSameValue) cellBg = 'bg-amber-100';
+                                    else if (isSameRowOrCol) cellBg = 'bg-sky-50/60';
+                                    else if (isInitial) cellBg = 'bg-gray-50';
+
+                                    if (isConflict) cellBg = 'bg-red-50';
+
+                                    let cellText = isInitial ? 'text-brand-900 font-extrabold' : 'text-sky-700 font-bold';
+                                    if (isPartOfCompletedGroup) cellText = isInitial ? 'text-emerald-950 font-extrabold' : 'text-emerald-700 font-black';
+                                    if (isConflict) cellText = 'text-red-500 font-black';
+
+                                    return (
+                                      <button
+                                        key={`${r}-${c}`}
+                                        onClick={() => handleCellClick(r, c)}
+                                        className={`aspect-square w-full flex items-center justify-center text-xl sm:text-2xl transition-all focus:outline-none select-none ${cellBg} ${cellText}`}
+                                      >
+                                        {val !== 0 ? val : ''}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Feedback Banner */}
+                        {feedbackMessage && (
+                          <div className={`w-full p-4 rounded-2xl text-sm font-bold border ${
+                            feedbackMessage.type === 'error' ? 'bg-red-50 border-red-200 text-red-700' :
+                            feedbackMessage.type === 'success' ? 'bg-emerald-50 border-emerald-200 text-emerald-700' :
+                            'bg-blue-50 border-blue-200 text-blue-700'
+                          }`}>
+                            {feedbackMessage.text}
+                          </div>
+                        )}
+
+                        {/* Keyboard */}
+                        <div className="w-full space-y-4">
+                          <div className="flex justify-between items-center px-2 text-xs font-bold text-brand-400">
+                            <span>Pistas: {hintsUsed} / 3</span>
+                            <span>Pulsa para introducir número</span>
+                          </div>
+
+                          <div className="grid grid-cols-5 gap-2.5">
+                            {[1, 2, 3, 4, 5].map(num => (
+                              <button
+                                key={num}
+                                onClick={() => inputDigit(num)}
+                                className="h-14 sm:h-16 bg-white hover:bg-brand-50 border-2 border-brand-100 rounded-2xl flex items-center justify-center font-black text-xl sm:text-2xl text-brand-900 shadow-md active:scale-95 transition-all"
+                              >
+                                {num}
+                              </button>
+                            ))}
+                          </div>
+                          
+                          <div className="grid grid-cols-5 gap-2.5">
+                            {[6, 7, 8, 9].map(num => (
+                              <button
+                                key={num}
+                                onClick={() => inputDigit(num)}
+                                className="h-14 sm:h-16 bg-white hover:bg-brand-50 border-2 border-brand-100 rounded-2xl flex items-center justify-center font-black text-xl sm:text-2xl text-brand-900 shadow-md active:scale-95 transition-all"
+                              >
+                                {num}
+                              </button>
+                            ))}
+                            <button
+                              onClick={() => inputDigit(0)}
+                              className="h-14 sm:h-16 bg-brand-50 hover:bg-brand-100 border-2 border-brand-100 rounded-2xl flex items-center justify-center font-bold text-xs sm:text-sm text-brand-700 shadow-md active:scale-95 transition-all uppercase"
+                              title="Borrar número de la celda seleccionada"
+                            >
+                              Borrar
+                            </button>
+                          </div>
+
+                          {/* Utility Buttons */}
+                          <div className="grid grid-cols-3 gap-2.5 pt-4">
+                            <button
+                              onClick={handleVerify}
+                              className="py-3.5 bg-brand-900 text-white rounded-xl font-bold text-xs sm:text-sm hover:bg-brand-850 active:scale-95 shadow-md transition-all uppercase"
+                            >
+                              Comprobar
+                            </button>
+                            <button
+                              onClick={handleHint}
+                              disabled={hintsUsed >= 3 || !selectedCell}
+                              className="py-3.5 bg-amber-500 text-white rounded-xl font-bold text-xs sm:text-sm hover:bg-amber-600 active:scale-95 shadow-md transition-all disabled:opacity-50 uppercase"
+                              title="Revelar número de la celda seleccionada"
+                            >
+                              Pista
+                            </button>
+                            <button
+                              onClick={handleResetBoard}
+                              className="py-3.5 bg-gray-100 text-gray-500 rounded-xl font-bold text-xs sm:text-sm hover:bg-gray-200 active:scale-95 border border-gray-200 transition-all uppercase"
+                            >
+                              Reiniciar
+                            </button>
+                          </div>
+                        </div>
+
+                      </div>
+                    ) : (
+                      <div className="bg-white rounded-[3rem] p-12 shadow-2xl border border-brand-100 text-center anim-scale-in max-w-xl w-full">
+                        <div className="text-7xl mb-6">🎖️</div>
+                        <h3 className="text-4xl font-bold text-brand-900 mb-2">¡Sudoku Completado!</h3>
+                        <p className="text-brand-500 font-bold uppercase tracking-widest mb-8">{LEVELS[levelIdx].name}</p>
+                        
+                        <div className="flex justify-center gap-4 mb-8">
+                          {[1, 2, 3, 4, 5].map(s => (
+                            <Icons.Star key={s} className={`w-10 h-10 ${s <= stars ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200'}`} />
+                          ))}
+                        </div>
+
+                        <div className="bg-brand-50 p-8 rounded-3xl mb-8 flex justify-around">
+                          <div>
+                            <p className="text-brand-400 text-sm font-bold uppercase mb-2">Tiempo</p>
+                            <p className="text-4xl font-bold text-brand-900">{finalTime}s</p>
+                          </div>
+                          <div className="border-l border-brand-200 h-16 my-auto"></div>
+                          <div>
+                            <p className="text-brand-400 text-sm font-bold uppercase mb-2">Pistas</p>
+                            <p className="text-4xl font-bold text-brand-900">{hintsUsed}/3</p>
+                          </div>
+                        </div>
+
+                        <ShareButtons game="Sudoku" time={finalTime} />
+
+                        <div className="flex flex-col gap-3 mt-8">
+                          <button onClick={nextLevel} className="w-full py-5 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-brand-800 transition-all shadow-xl shadow-brand-900/20">
+                            {levelIdx < LEVELS.length - 1 ? 'Siguiente Nivel' : 'Finalizar'}
+                          </button>
+                          <button onClick={() => setGameStarted(false)} className="w-full py-4 text-brand-600 font-bold hover:bg-brand-50 rounded-xl transition-all">
+                            Cambiar Dificultad
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                </div>
+              </>
+            )}
+          </div>
+        </section>
+      );
+    };
+
     // --- SECTION RESOURCES FOR PROFESSIONALS ---
 
     // --- NAVBAR & FOOTER & COOKIES ---
@@ -3903,6 +4523,7 @@
         else if (pageParam === 'challenge') newPage = 'challenge';
         else if (pageParam === 'visual') newPage = 'visual';
         else if (pageParam === 'intruder') newPage = 'intruder';
+        else if (pageParam === 'sudoku') newPage = 'sudoku';
         else if (pageParam === 'games') newPage = 'cognitive';
 
         setCurrentPage(newPage);
@@ -3916,7 +4537,7 @@
       }, [syncPageFromUrl]);
 
       const navigateTo = useCallback((page, section = null) => {
-        const localPages = ['cognitive', 'memory', 'order', 'wordsearch', 'math', 'visual', 'intruder', 'challenge', 'games'];
+        const localPages = ['cognitive', 'memory', 'order', 'wordsearch', 'math', 'visual', 'intruder', 'challenge', 'sudoku', 'games'];
         
         if (localPages.includes(page)) {
           const urlPage = page === 'cognitive' || page === 'games' ? 'games' : page;
@@ -3939,7 +4560,7 @@
 
       const params = new URLSearchParams(window.location.search);
       const pageParam = params.get('page');
-      const isStandalone = (isInApp && sessionStorage.getItem('allowWebInApp') !== 'true') || ['memory', 'order', 'wordsearch', 'math', 'visual', 'intruder', 'challenge'].includes(pageParam);
+      const isStandalone = (isInApp && sessionStorage.getItem('allowWebInApp') !== 'true') || ['memory', 'order', 'wordsearch', 'math', 'visual', 'intruder', 'challenge', 'sudoku'].includes(pageParam);
 
       return (
         <>
@@ -4002,6 +4623,9 @@
             )}
             {currentPage === 'intruder' && (
               <SectionIntruderGame isStandalone={isStandalone} navigateTo={navigateTo} />
+            )}
+            {currentPage === 'sudoku' && (
+              <SectionSudokuGame isStandalone={isStandalone} navigateTo={navigateTo} />
             )}
             {currentPage === 'challenge' && (
               <SectionDailyChallenge isStandalone={isStandalone} navigateTo={navigateTo} />
