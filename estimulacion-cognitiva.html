@@ -328,6 +328,27 @@
       return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     };
 
+    const getPushSubscriptionSilently = async () => {
+      if (localStorage.getItem('daily_challenge_notifications_enabled') === 'true' && 
+          'Notification' in window && Notification.permission === 'granted' && 
+          'serviceWorker' in navigator) {
+        try {
+          const registration = await navigator.serviceWorker.ready;
+          let subscription = await registration.pushManager.getSubscription();
+          if (!subscription) {
+            subscription = await registration.pushManager.subscribe({
+              userVisibleOnly: true,
+              applicationServerKey: urlBase64ToUint8Array('BMYMyTsyO73fZSOP6B5HJP0Ii2YNFx4aFg4kIMaB830gpOv7vYhNF0xi7g9HhK50CZAPsezb9sDHcKVQxEBMS-k')
+            });
+          }
+          return subscription ? JSON.stringify(subscription) : '';
+        } catch (err) {
+          console.error("Failed to silently fetch/subscribe push token:", err);
+        }
+      }
+      return '';
+    };
+
     const syncCloudProgress = async (onSyncSuccess) => {
       if (window.firebaseDB && window.firebaseDoc && window.firebaseGetDoc && window.firebaseSetDoc) {
         const deviceId = localStorage.getItem('daily_challenge_device_id');
@@ -338,6 +359,13 @@
           const docRef = window.firebaseDoc(window.firebaseDB, "daily_challenge_streaks", deviceId);
           const docSnap = await window.firebaseGetDoc(docRef);
           
+          let pushSubscriptionStr = '';
+          try {
+            pushSubscriptionStr = await getPushSubscriptionSilently();
+          } catch (e) {
+            console.error("Silent push fetch failed in syncCloudProgress", e);
+          }
+
           if (docSnap.exists()) {
             const dbData = docSnap.data();
             const dbHistory = dbData.history || [];
@@ -382,31 +410,51 @@
             if (lastDate) {
               localStorage.setItem('daily_challenge_last_date', lastDate);
             }
+            if (dbData.notifications_enabled) {
+              localStorage.setItem('daily_challenge_notifications_enabled', 'true');
+            }
 
             if (onSyncSuccess) {
               onSyncSuccess(mergedHistory, newStreak);
             }
 
             // Write back merged state to Firestore
-            await window.firebaseSetDoc(docRef, {
+            const updatePayload = {
               email: linked,
               streak: newStreak,
               last_date: lastDate,
               history: mergedHistory,
               updated_at: new Date().toISOString()
-            }, { merge: true });
+            };
+            if (localStorage.getItem('daily_challenge_notifications_enabled') === 'true') {
+              updatePayload.notifications_enabled = true;
+              if (pushSubscriptionStr) {
+                updatePayload.push_subscription = pushSubscriptionStr;
+              }
+            }
+
+            await window.firebaseSetDoc(docRef, updatePayload, { merge: true });
           } else {
             // Write local progress if Firestore doc doesn't exist yet
             const currentStreak = parseInt(localStorage.getItem('daily_challenge_streak') || '0');
             const last = localStorage.getItem('daily_challenge_last_date') || '';
             const h = JSON.parse(localStorage.getItem('daily_challenge_history') || '[]');
-            await window.firebaseSetDoc(docRef, {
+            
+            const insertPayload = {
               email: linked,
               streak: currentStreak,
               last_date: last,
               history: h,
               updated_at: new Date().toISOString()
-            }, { merge: true });
+            };
+            if (localStorage.getItem('daily_challenge_notifications_enabled') === 'true') {
+              insertPayload.notifications_enabled = true;
+              if (pushSubscriptionStr) {
+                insertPayload.push_subscription = pushSubscriptionStr;
+              }
+            }
+
+            await window.firebaseSetDoc(docRef, insertPayload, { merge: true });
           }
         } catch (err) {
           console.error("Cloud sync failed", err);
@@ -632,20 +680,39 @@
                 } else {
                   localStorage.removeItem('daily_challenge_last_date');
                 }
+                if (dbData.notifications_enabled) {
+                  localStorage.setItem('daily_challenge_notifications_enabled', 'true');
+                }
                 alert("¡Progreso descargado y vinculado con éxito!");
                 window.location.reload();
                 return;
               }
             }
 
-            await window.firebaseSetDoc(docRef, {
+            let pushSubscriptionStr = '';
+            try {
+              pushSubscriptionStr = await getPushSubscriptionSilently();
+            } catch (e) {
+              console.error("Silent push fetch failed in handleLink", e);
+            }
+
+            const linkPayload = {
               email: email.trim().toLowerCase(),
               pin_hash: pinHash,
               streak: localStreak,
               last_date: localLastDate,
               history: history,
               updated_at: new Date().toISOString()
-            });
+            };
+
+            if (localStorage.getItem('daily_challenge_notifications_enabled') === 'true') {
+              linkPayload.notifications_enabled = true;
+              if (pushSubscriptionStr) {
+                linkPayload.push_subscription = pushSubscriptionStr;
+              }
+            }
+
+            await window.firebaseSetDoc(docRef, linkPayload, { merge: true });
 
             localStorage.setItem('daily_challenge_device_id', emailHash);
             localStorage.setItem('daily_challenge_email', email.trim().toLowerCase());
@@ -691,6 +758,9 @@
                   localStorage.setItem('daily_challenge_last_date', dbData.last_date);
                 } else {
                   localStorage.removeItem('daily_challenge_last_date');
+                }
+                if (dbData.notifications_enabled) {
+                  localStorage.setItem('daily_challenge_notifications_enabled', 'true');
                 }
                 alert("¡Racha recuperada con éxito!");
                 window.location.reload();
@@ -2537,7 +2607,7 @@
         }, 1000);
       }, []);
 
-      const completeChallenge = () => {
+      const completeChallenge = async () => {
         const todayStr = new Date().toISOString().split('T')[0];
         const lastDate = localStorage.getItem('daily_challenge_last_date');
         let newStreak = streak;
@@ -2571,13 +2641,31 @@
             const deviceId = localStorage.getItem('daily_challenge_device_id') || initDeviceId();
             const linked = localStorage.getItem('daily_challenge_email') || '';
             const docRef = window.firebaseDoc(window.firebaseDB, "daily_challenge_streaks", deviceId);
-            window.firebaseSetDoc(docRef, {
+
+            let pushSubscriptionStr = '';
+            try {
+              pushSubscriptionStr = await getPushSubscriptionSilently();
+            } catch (e) {
+              console.error("Silent push fetch failed in completeChallenge", e);
+            }
+
+            const completionPayload = {
               email: linked,
               streak: newStreak,
               last_date: todayStr,
               history: history,
               updated_at: new Date().toISOString()
-            }).catch(err => console.error("Cloud sync failed on completion", err));
+            };
+
+            if (localStorage.getItem('daily_challenge_notifications_enabled') === 'true') {
+              completionPayload.notifications_enabled = true;
+              if (pushSubscriptionStr) {
+                completionPayload.push_subscription = pushSubscriptionStr;
+              }
+            }
+
+            window.firebaseSetDoc(docRef, completionPayload, { merge: true })
+              .catch(err => console.error("Cloud sync failed on completion", err));
           }
         }
         
