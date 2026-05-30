@@ -146,23 +146,50 @@
 <body class="bg-white text-gray-900 antialiased">
   <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
   <div id="root">
+    <style>
+      /* Precarga de estilos para evitar parpadeo visual en carga inicial */
+      #root > header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 50 !important;
+        background-color: #F2F0E9 !important;
+        border-bottom: 1px solid rgba(26, 48, 82, 0.1) !important;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+      }
+      #main-content {
+        padding-top: 9rem !important; /* pt-36 = 9rem = 144px */
+      }
+    </style>
     <!-- Contenido estático de respaldo para SEO, Accesibilidad y AdSense -->
-    <header class="bg-brand-900 text-white py-6 shadow-md">
-      <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
-        <a href="index.html" class="flex items-center gap-3">
-          <img src="assets/iadapta_logo.png" alt="Logo de IAdapta" class="h-10" />
-          <span class="font-display text-2xl font-bold">IAdapta</span>
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#F2F0E9] border-b border-brand-900/10 shadow-sm">
+      <div class="max-w-[1400px] mx-auto px-4 sm:px-8 flex items-center justify-between h-24 md:h-28">
+        <a href="index.html" class="flex items-center hover:scale-105 transition-transform">
+          <img src="assets/iadapta_logo.png" alt="IAdapta" class="h-16 md:h-20 object-contain" />
         </a>
-        <nav class="hidden md:flex gap-6 text-sm font-bold uppercase tracking-wider">
-          <a href="index.html" class="hover:text-brand-300 transition-colors">Inicio</a>
-          <a href="estimulacion-cognitiva.html" class="hover:text-brand-300 transition-colors">Estimulación Cognitiva</a>
-          <a href="guias.html" class="hover:text-brand-300 transition-colors">Guías</a>
-          <a href="recursos.html" class="hover:text-brand-300 transition-colors">Recursos</a>
+        <nav class="hidden xl:flex items-center gap-1">
+          <a href="index.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Inicio</a>
+          <a href="index.html?page=analyzer" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Valoración de</span><span>la estancia</span>
+          </a>
+          <a href="guias.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Guías de</span><span>adaptación</span>
+          </a>
+          <a href="estimulacion-cognitiva.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Área</span><span>Cognitiva</span>
+          </a>
+          <a href="recursos.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Recursos para</span><span>profesionales</span>
+          </a>
+          <a href="index.html?page=about" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Sobre Mí</a>
+          <a href="index.html?page=contact" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Contacto</a>
+          <a href="index.html?page=cv" class="px-4 py-2.5 text-sm xl:text-base font-bold text-accent-coral hover:bg-white/50 border-2 border-accent-coral/10 rounded-xl transition-all ml-2">Mi CV</a>
         </nav>
       </div>
     </header>
 
-    <main id="main-content" class="py-12">
+    <main id="main-content" class="pt-36 pb-12">
       <!-- Section Title & Intro -->
       <section class="max-w-7xl mx-auto px-4 text-center py-12">
         <span class="inline-block bg-brand-100 text-brand-700 rounded-full px-5 py-2 text-sm font-bold uppercase tracking-widest mb-4">Entrena tu Mente</span>
