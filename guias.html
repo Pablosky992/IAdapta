@@ -1157,10 +1157,10 @@
 
       const linksMain = [
         { id: 'home', label: 'Inicio' },
-        { id: 'analyzer', label: 'Analizador IA' },
-        { id: 'guides', label: 'Guías de adaptación' },
-        { id: 'cognitive', label: 'Área Cognitiva' },
-        { id: 'resources', label: 'Recursos para profesionales' },
+        { id: 'analyzer', label: ['Valoración de', 'la estancia'] },
+        { id: 'guides', label: ['Guías de', 'adaptación'] },
+        { id: 'cognitive', label: ['Área', 'Cognitiva'] },
+        { id: 'resources', label: ['Recursos para', 'profesionales'] },
         { id: 'about', label: 'Sobre Mí' },
         { id: 'contact', label: 'Contacto' },
       ];
@@ -1189,8 +1189,8 @@
           <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-accent-cream/95 shadow-md backdrop-blur-md' : 'bg-accent-cream/80'}`}>
             <div className="max-w-[1400px] mx-auto px-4 sm:px-8">
               <div className={`flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-20' : 'h-24 md:h-28'}`}>
-                <button onClick={() => handle('home')} className="flex items-center rounded-xl p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 transition-transform hover:scale-105 active:scale-95">
-                  <img src="assets/iadapta_logo.png" alt="IAdapta" className={`object-contain transition-all duration-300 ${scrolled ? 'h-14' : 'h-16 md:h-20 lg:h-24'}`} />
+                <button onClick={() => handle('home')} className="flex items-center rounded-xl p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 transition-transform hover:scale-105 active:scale-95 flex-shrink-0">
+                  <img src="assets/iadapta_logo.png" alt="IAdapta" className={`object-contain transition-all duration-300 flex-shrink-0 ${scrolled ? 'h-14' : 'h-16 md:h-20 lg:h-24'}`} />
                 </button>
 
                 <div className="hidden xl:flex items-center gap-4">
@@ -1199,13 +1199,20 @@
                       <li key={link.id}>
                         <button 
                           onClick={() => handle(link.id)} 
-                          className={`px-3 py-2.5 rounded-xl text-sm xl:text-base font-bold transition-all duration-200 whitespace-nowrap ${
+                          className={`px-3 py-1.5 rounded-xl text-sm xl:text-base font-bold transition-all duration-200 ${
                             (currentPage === 'main' && activeSection === link.id) || (currentPage === link.id) || (link.id === 'home' && currentPage === 'main' && activeSection === 'home')
                             ? 'bg-brand-900 text-white shadow-sm' 
                             : 'text-brand-900/70 hover:text-brand-900 hover:bg-white/50'
                           }`}
                         >
-                          {link.label}
+                          {Array.isArray(link.label) ? (
+                            <span className="flex flex-col items-center leading-tight">
+                              <span>{link.label[0]}</span>
+                              <span>{link.label[1]}</span>
+                            </span>
+                          ) : (
+                            link.label
+                          )}
                         </button>
                       </li>
                     ))}
@@ -1240,7 +1247,7 @@
               <div className="xl:hidden bg-white border-t border-brand-100 px-4 py-3 space-y-1 shadow-xl">
                 {linksMain.map(link => (
                   <button key={link.id} onClick={() => handle(link.id)} className="w-full text-left px-4 py-3.5 rounded-xl text-lg font-semibold text-gray-700 hover:bg-brand-50">
-                    {link.label}
+                    {Array.isArray(link.label) ? link.label.join(' ') : link.label}
                   </button>
                 ))}
                 <a 
@@ -1283,7 +1290,7 @@
                   {[
                     { id: 'home', label: 'Inicio', isPage: false },
                     { id: 'cv', label: 'Curriculum Vitae', isPage: true },
-                    { id: 'analyzer', label: 'Analizador IA', isPage: true },
+                    { id: 'analyzer', label: 'Valoración de la estancia', isPage: true },
                     { id: 'guides', label: 'Guías', isPage: true },
                     { id: 'cognitive', label: 'Área Cognitiva', isPage: true },
                     { id: 'contact', label: 'Contacto', isPage: false },
