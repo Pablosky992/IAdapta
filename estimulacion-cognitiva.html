@@ -1344,8 +1344,44 @@
                   </p>
                 </div>
 
-
-
+                {/* LOGIN/REGISTER CALL TO ACTION BOX */}
+                {!linkedEmail ? (
+                  <div className="max-w-xl mx-auto mb-10 bg-brand-50 border border-brand-100 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm anim-fade-up">
+                    <div className="flex items-center gap-3 text-left">
+                      <div className="w-10 h-10 bg-brand-100 text-brand-600 rounded-xl flex items-center justify-center shrink-0">
+                        <Icons.User className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-brand-900 text-sm">¿Quieres guardar tu racha?</h4>
+                        <p className="text-xs text-gray-500">Inicia sesión o regístrate para sincronizar tu progreso en la nube.</p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => setIsCalendarOpen(true)}
+                      className="px-5 py-2.5 bg-brand-900 text-white font-bold text-xs rounded-xl shadow-md hover:bg-brand-800 transition-all whitespace-nowrap"
+                    >
+                      Iniciar sesión / Registrarse
+                    </button>
+                  </div>
+                ) : (
+                  <div className="max-w-xl mx-auto mb-10 bg-emerald-50/50 border border-emerald-100 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm anim-fade-up">
+                    <div className="flex items-center gap-3 text-left">
+                      <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center shrink-0">
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-brand-900 text-sm">Sesión iniciada correctamente</h4>
+                        <p className="text-xs text-gray-500">Progreso guardado en la nube como: <strong className="font-bold text-emerald-700">{linkedEmail}</strong></p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => setIsCalendarOpen(true)}
+                      className="px-4 py-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold text-xs rounded-xl transition-all whitespace-nowrap"
+                    >
+                      Gestionar cuenta
+                    </button>
+                  </div>
+                )}
 
                 {/* HORIZONTAL DAILY CHALLENGE CARD */}
                 <div 
