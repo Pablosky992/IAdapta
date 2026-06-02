@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Valora la accesibilidad de tu hogar en segundos. Análisis inteligente de barreras arquitectónicas en baños, cocinas y accesos con recomendaciones personalizadas." />
+  <meta name="keywords" content="terapia ocupacional, accesibilidad hogar, barreras arquitectonicas, prevencion caidas, valoracion accesibilidad, productos de apoyo" />
+  <link rel="canonical" href="https://iadapta.es/valoracion-estancia.html" />
+  <link rel="icon" type="image/png" href="assets/iadapta_logo.png" />
+  <title>IAdapta | Valoración de la Estancia</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- React 18 CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Marked.js for Markdown parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    marked.setOptions({
+      breaks: true,
+      gfm: true,
+      headerIds: false,
+      mangle: false
+    });
+  </script>
+
+  <!-- Tailwind config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#1A3052',
+            },
+            accent: {
+              coral: '#E87D55',
+              cream: '#F2F0E9',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['"Playfair Display"', 'serif'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest_pro.json">
+  <link rel="apple-touch-icon" href="assets/iadapta_brand_icon.png">
+  <meta name="theme-color" content="#1A3052" />
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker-pro.js')
+          .then(reg => console.log('Service Worker registrado'))
+          .catch(err => console.log('Error registrando SW', err));
+      });
+    }
+  </script>
+</head>
+
+<body class="bg-white text-gray-900 antialiased">
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+  <div id="root">
+    <style>
+      #root > header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 50 !important;
+        background-color: #F2F0E9 !important;
+        border-bottom: 1px solid rgba(26, 48, 82, 0.1) !important;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+      }
+      #main-content {
+        padding-top: 9rem !important;
+      }
+    </style>
+    <!-- Contenido estático de respaldo para SEO, Accesibilidad y AdSense -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#F2F0E9] border-b border-brand-900/10 shadow-sm">
+      <div class="max-w-[1400px] mx-auto px-4 sm:px-8 flex items-center justify-between h-24 md:h-28">
+        <a href="index.html" class="flex items-center hover:scale-105 transition-transform">
+          <img src="assets/iadapta_logo.png" alt="IAdapta" class="h-16 md:h-20 object-contain" />
+        </a>
+        <nav class="hidden xl:flex items-center gap-1">
+          <a href="index.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Inicio</a>
+          <a href="valoracion-estancia.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900 hover:text-brand-900 bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Valoración de</span><span>la estancia</span>
+          </a>
+          <a href="guias.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Guías de</span><span>adaptación</span>
+          </a>
+          <a href="estimulacion-cognitiva.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Área</span><span>Cognitiva</span>
+          </a>
+          <a href="recursos.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Recursos para</span><span>profesionales</span>
+          </a>
+          <a href="index.html#about" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Sobre Mí</a>
+          <a href="contacto.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Contacto</a>
+          <a href="cv.html" class="px-4 py-2.5 text-sm xl:text-base font-bold text-accent-coral hover:bg-white/50 border-2 border-accent-coral/10 rounded-xl transition-all ml-2">Mi CV</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content" class="pt-36 pb-12 bg-gradient-to-b from-sky-50 to-white min-h-screen">
+      <section class="max-w-4xl mx-auto px-4 text-center py-12">
+        <span class="inline-block bg-sky-100 text-sky-700 rounded-full px-5 py-2 text-sm font-bold uppercase tracking-widest mb-4">Inteligencia Artificial</span>
+        <h1 class="font-display text-4xl md:text-5xl font-bold text-brand-900 mb-6">
+          Valoración de la Estancia y Accesibilidad
+        </h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-12">
+          El primer paso para lograr un hogar seguro es saber qué elementos limitan la autonomía. Sube una fotografía de cualquier estancia (el baño, la cocina o el acceso a la vivienda) o completa nuestro cuestionario manual. Nuestro sistema analizará el espacio para detectar posibles riesgos y te ofrecerá recomendaciones prácticas y productos de apoyo específicos para mejorar tu calidad de vida.
+        </p>
+
+        <!-- Static Fallback Form representation for SEO -->
+        <div class="bg-white rounded-3xl border border-brand-100 shadow-xl p-8 md:p-10 text-left max-w-2xl mx-auto">
+          <h2 class="text-2xl font-bold text-brand-900 mb-6 border-b border-gray-100 pb-3">Cuestionario de Valoración del Hogar</h2>
+          <div class="space-y-6">
+            <div>
+              <h3 class="font-bold text-gray-800">1. Características de la vivienda y accesos</h3>
+              <p class="text-gray-500 text-sm">Preguntas acerca del tipo de vivienda (Piso o Casa), presencia de ascensor y las dimensiones generales del acceso.</p>
+            </div>
+            <div>
+              <h3 class="font-bold text-gray-800">2. Cuarto de baño</h3>
+              <p class="text-gray-500 text-sm">Valoración de la zona de ducha o bañera y elementos de soporte como asideros o elevadores de inodoro.</p>
+            </div>
+            <div>
+              <h3 class="font-bold text-gray-800">3. Movilidad y autonomía personal</h3>
+              <p class="text-gray-500 text-sm">Cuestiones sobre las ayudas técnicas actuales (bastones, andadores, sillas de ruedas), antecedentes de caídas y la percepción de seguridad al caminar.</p>
+            </div>
+            <div>
+              <h3 class="font-bold text-gray-800">4. Destreza manual y alimentación</h3>
+              <p class="text-gray-500 text-sm">Dificultades en pinza fina, temblores o falta de fuerza al manipular cubiertos y utensilios domésticos.</p>
+            </div>
+          </div>
+          <div class="mt-8 pt-6 border-t border-gray-100 text-center">
+            <span class="inline-block bg-brand-900 text-white font-bold py-3.5 px-8 rounded-xl">Cargando herramienta de análisis interactiva...</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-brand-900 text-white py-12">
+      <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div>
+          <h4 class="font-display text-xl font-bold">IAdapta Terapia Ocupacional</h4>
+          <p class="text-sm text-brand-300 mt-2">Plataforma web de accesibilidad y gimnasio cerebral.</p>
+        </div>
+        <div class="flex gap-4">
+          <a href="index.html" class="hover:underline">Inicio</a>
+          <a href="estimulacion-cognitiva.html" class="hover:underline">Estimulación Cognitiva</a>
+          <a href="guias.html" class="hover:underline">Guías</a>
+          <a href="recursos.html" class="hover:underline">Recursos</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Firebase dependencies (global definitions expected by component) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+    // Firebase configuration (loaded globally in window so react can see it)
+    const firebaseConfig = {
+      apiKey: "AIzaSyAs7cW-XW_21-Y8J2Nf1_Z_m7x", // informational mock/public values
+      authDomain: "iadapta-backend.firebaseapp.com",
+      projectId: "iadapta-backend",
+      storageBucket: "iadapta-backend.appspot.com",
+      messagingSenderId: "3892749102",
+      appId: "1:3892749102:web:e92ab4792c019d"
+    };
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      window.firebaseDB = getFirestore(app);
+      window.firebaseCollection = collection;
+      window.firebaseAddDoc = addDoc;
+      console.log("Firebase inicializado en valoración-estancia.html");
+    } catch (e) {
+      console.error("Error al inicializar Firebase en valoración-estancia.html:", e);
+    }
+  </script>
+
+  <script src="js/shared.js"></script>
+  <script src="js/analizador.js"></script>
+</body>
+
+</html>

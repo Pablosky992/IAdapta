@@ -1,10 +1,14 @@
-const CACHE_NAME = 'iadapta-pro-v1';
+const CACHE_NAME = 'iadapta-pro-v2';
 const ASSETS = [
   './',
   './index.html',
   './estimulacion-cognitiva.html',
   './recursos.html',
   './guias.html',
+  './valoracion-estancia.html',
+  './cv.html',
+  './contacto.html',
+  './aviso-legal.html',
   './css/styles.css',
   './catalogData.js',
   './pro_resources_icon.png',

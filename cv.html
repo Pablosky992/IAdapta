@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Currículum Vitae de Pablo Narciso Millán. Terapeuta Ocupacional especializado en geriatría, ortopedia e impresión 3D aplicada a la autonomía personal." />
+  <meta name="keywords" content="terapeuta ocupacional currículum, Pablo Narciso Millan, ortopedia Barcelona, geriatria Cataluña, impresin 3d ortesis, iadapta" />
+  <link rel="canonical" href="https://iadapta.es/cv.html" />
+  <link rel="icon" type="image/png" href="assets/iadapta_logo.png" />
+  <title>IAdapta | Mi CV - Pablo Narciso Millán</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- React 18 CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Tailwind config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#1A3052',
+            },
+            accent: {
+              coral: '#E87D55',
+              cream: '#F2F0E9',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['"Playfair Display"', 'serif'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest_pro.json">
+  <link rel="apple-touch-icon" href="assets/iadapta_brand_icon.png">
+  <meta name="theme-color" content="#1A3052" />
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker-pro.js')
+          .then(reg => console.log('Service Worker registrado'))
+          .catch(err => console.log('Error registrando SW', err));
+      });
+    }
+  </script>
+</head>
+
+<body class="bg-white text-gray-900 antialiased">
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+  <div id="root">
+    <style>
+      #root > header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 50 !important;
+        background-color: #F2F0E9 !important;
+        border-bottom: 1px solid rgba(26, 48, 82, 0.1) !important;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+      }
+      #main-content {
+        padding-top: 9rem !important;
+      }
+    </style>
+    <!-- Contenido estático de respaldo para SEO, Accesibilidad y AdSense -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#F2F0E9] border-b border-brand-900/10 shadow-sm">
+      <div class="max-w-[1400px] mx-auto px-4 sm:px-8 flex items-center justify-between h-24 md:h-28">
+        <a href="index.html" class="flex items-center hover:scale-105 transition-transform">
+          <img src="assets/iadapta_logo.png" alt="IAdapta" class="h-16 md:h-20 object-contain" />
+        </a>
+        <nav class="hidden xl:flex items-center gap-1">
+          <a href="index.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Inicio</a>
+          <a href="valoracion-estancia.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Valoración de</span><span>la estancia</span>
+          </a>
+          <a href="guias.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Guías de</span><span>adaptación</span>
+          </a>
+          <a href="estimulacion-cognitiva.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Área</span><span>Cognitiva</span>
+          </a>
+          <a href="recursos.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Recursos para</span><span>profesionales</span>
+          </a>
+          <a href="index.html#about" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Sobre Mí</a>
+          <a href="contacto.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Contacto</a>
+          <a href="cv.html" class="px-4 py-2.5 text-sm xl:text-base font-bold text-white bg-accent-coral rounded-xl transition-all ml-2">Mi CV</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content" class="pt-36 pb-12 bg-gray-50 min-h-screen">
+      <section class="max-w-5xl mx-auto px-4 py-12">
+        <div class="text-center mb-16">
+          <span class="inline-block bg-brand-100 text-brand-700 rounded-full px-5 py-2 text-sm font-bold uppercase tracking-widest mb-4">Perfil Profesional</span>
+          <h1 class="font-display text-4xl sm:text-5xl font-bold text-brand-900 mb-4">Curriculum Vitae</h1>
+          <p class="text-2xl font-bold text-brand-600 mb-2">Pablo Narciso Millán</p>
+          <div class="section-divider w-24 mx-auto mb-8"></div>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-12">
+          <!-- Experiencia -->
+          <div>
+            <h2 class="font-display text-2xl font-bold text-brand-900 mb-8 flex items-center gap-3">Experiencia Profesional</h2>
+            <div class="space-y-6">
+              <article class="bg-white border border-brand-100 rounded-2xl p-6 shadow-sm">
+                <span class="inline-block bg-brand-100 text-brand-600 text-xs font-bold rounded-full px-3 py-1 mb-2">09/2021 – Actualidad</span>
+                <h3 class="font-bold text-lg text-brand-900">Técnico y Terapeuta Ocupacional</h3>
+                <p class="text-brand-500 font-medium text-sm mb-2">Instituto Técnico Ortopédico, Barcelona</p>
+                <p class="text-gray-600 text-sm">Evaluación y diagnóstico de necesidades funcionales. Gestión de presupuestos y atención técnica en ortopedia.</p>
+              </article>
+              <article class="bg-white border border-brand-100 rounded-2xl p-6 shadow-sm">
+                <span class="inline-block bg-brand-100 text-brand-600 text-xs font-bold rounded-full px-3 py-1 mb-2">02/2016 – 09/2021</span>
+                <h3 class="font-bold text-lg text-brand-900">Terapeuta Ocupacional</h3>
+                <p class="text-brand-500 font-medium text-sm mb-2">Residencia asistida Sant Víctor, Artés</p>
+                <p class="text-gray-600 text-sm">Gestión de productos de apoyo. Diseño de actividades y programas de estimulación funcional y cognitiva.</p>
+              </article>
+              <article class="bg-white border border-brand-100 rounded-2xl p-6 shadow-sm">
+                <span class="inline-block bg-brand-100 text-brand-600 text-xs font-bold rounded-full px-3 py-1 mb-2">09/2015 – 04/2020</span>
+                <h3 class="font-bold text-lg text-brand-900">Terapeuta Ocupacional</h3>
+                <p class="text-brand-500 font-medium text-sm mb-2">Residencia Valldaura, Manresa</p>
+                <p class="text-gray-600 text-sm">Intervención integral en personas mayores con dependencia y fomento de la autonomía personal.</p>
+              </article>
+            </div>
+          </div>
+
+          <!-- Formación y Competencias -->
+          <div class="space-y-10">
+            <div>
+              <h2 class="font-display text-2xl font-bold text-brand-900 mb-6">Competencias Destacadas</h2>
+              <ul class="space-y-3 text-gray-700">
+                <li><strong>Geriatría y Autonomía:</strong> Rehabilitación funcional y programas centrados en la persona.</li>
+                <li><strong>Evaluación Ortoprotésica:</strong> Medición, adaptación y prescripción de productos de apoyo.</li>
+                <li><strong>Impresión 3D:</strong> Diseño y fabricación digital de adaptaciones y férulas de bajo coste.</li>
+              </ul>
+            </div>
+            <div>
+              <h2 class="font-display text-2xl font-bold text-brand-900 mb-6">Formación Académica</h2>
+              <ul class="space-y-4">
+                <li class="bg-white rounded-2xl p-4 border border-brand-100 shadow-sm flex items-center gap-4">
+                  <div class="w-12 h-12 bg-brand-50 rounded-xl flex items-center justify-center shrink-0 border border-brand-100">
+                    <span class="text-brand-600 font-bold text-xs">2015</span>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-brand-900 text-sm">Grado en Terapia Ocupacional</h3>
+                    <p class="text-gray-500 text-xs">EUIT Terrassa — Mención Intervención Avanzada</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-brand-900 text-white py-12">
+      <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div>
+          <h4 class="font-display text-xl font-bold">IAdapta Terapia Ocupacional</h4>
+          <p class="text-sm text-brand-300 mt-2">Plataforma web de accesibilidad y gimnasio cerebral.</p>
+        </div>
+        <div class="flex gap-4">
+          <a href="index.html" class="hover:underline">Inicio</a>
+          <a href="estimulacion-cognitiva.html" class="hover:underline">Estimulación Cognitiva</a>
+          <a href="guias.html" class="hover:underline">Guías</a>
+          <a href="recursos.html" class="hover:underline">Recursos</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/shared.js"></script>
+  <script src="js/cv.js"></script>
+</body>
+
+</html>

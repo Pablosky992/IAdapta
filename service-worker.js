@@ -1,10 +1,14 @@
-const CACHE_NAME = 'iadapta-v4'; // Bumped to force SW update
+const CACHE_NAME = 'iadapta-v5'; // Bumped to force SW update
 const ASSETS = [
   './',
   './index.html',
   './estimulacion-cognitiva.html',
   './recursos.html',
   './guias.html',
+  './valoracion-estancia.html',
+  './cv.html',
+  './contacto.html',
+  './aviso-legal.html',
   './css/styles.css',
   './catalogData.js',
   './games_icon.png',

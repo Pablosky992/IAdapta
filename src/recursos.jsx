@@ -1,0 +1,1509 @@
+const { Icons, Navbar, Footer, CookieBanner, AdSenseBlock } = window;
+
+const { useState, useEffect, useCallback, useRef, useMemo } = React;
+
+// --- SUB-NAVIGATION PILLS FOR TOOLS ---
+const ResourceSubNav = function ResourceSubNav({ currentView, onViewChange }) {
+  const tabs = [
+    { id: 'math', title: 'Generador de Fichas', shortTitle: 'Fichas', icon: <Icons.FileText className="w-4 h-4" />, color: 'bg-brand-900 border-brand-900' },
+    { id: 'ramp', title: 'Calculadora de Rampas', shortTitle: 'Rampas', icon: <Icons.TrendingUp className="w-4 h-4" />, color: 'bg-emerald-600 border-emerald-600' },
+    { id: 'circle', title: 'Calculadora de Círculo', shortTitle: 'Círculo', icon: <Icons.Circle className="w-4 h-4" />, color: 'bg-accent-coral border-accent-coral' },
+    { id: 'pao', title: 'Buscador PAO', shortTitle: 'Buscador PAO', icon: <Icons.Search className="w-4 h-4" />, color: 'bg-blue-900 border-blue-900' },
+    { id: '3dprint', title: 'Impresión 3D', shortTitle: 'Modelos 3D', icon: <Icons.Lightbulb className="w-4 h-4" />, color: 'bg-orange-500 border-orange-500' }
+  ];
+
+  return (
+    <div className="w-full max-w-6xl mx-auto mb-10">
+      <div className="flex items-center justify-between gap-4 flex-wrap border-b border-brand-100 pb-5">
+        {/* Volver button */}
+        <button 
+          onClick={() => onViewChange('menu')}
+          className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-4 py-2.5 rounded-xl shadow-sm border border-brand-100 group text-sm"
+        >
+          <Icons.ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+          <span>Volver a Recursos</span>
+        </button>
+
+        {/* Tab pills */}
+        <div className="flex gap-2 overflow-x-auto pb-1 max-w-full no-scrollbar whitespace-nowrap">
+          {tabs.map(tab => {
+            const isActive = currentView === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => onViewChange(tab.id)}
+                className={`inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl font-bold text-xs transition-all border-2
+                  ${isActive 
+                    ? `${tab.color} text-white shadow-md shadow-brand-900/10 scale-105`
+                    : 'bg-white border-brand-50 text-brand-500 hover:text-brand-900 hover:border-brand-200 hover:bg-brand-50/30'}`}
+              >
+                {tab.icon}
+                <span className="hidden md:inline">{tab.title}</span>
+                <span className="md:hidden">{tab.shortTitle}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- SECTION RESOURCES ---
+const SectionResources = function SectionResources({ navigateTo, isPWA, setShowInstaller }) {
+  const [view, setView] = useState('menu'); // 'menu', 'math', 'pao', 'ramp'
+  const [difficulty, setDifficulty] = useState('medium');
+  const [sheetType, setSheetType] = useState('math'); // 'math', 'wordsearch', 'visual'
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    
+    // Sincronizar vista con URL si existe parámetro 'tool'
+    const params = new URLSearchParams(window.location.search);
+    const tool = params.get('tool');
+    if (tool && ['math', 'pao', 'ramp', '3dprint', 'circle'].includes(tool)) {
+      setView(tool);
+    } else {
+      setView('menu');
+    }
+  }, []);
+
+  // Escuchar cambios de navegación externa/atrás
+  useEffect(() => {
+    const handleToolSync = () => {
+      const params = new URLSearchParams(window.location.search);
+      const tool = params.get('tool');
+      if (tool && ['math', 'pao', 'ramp', '3dprint', 'circle'].includes(tool)) {
+        setView(tool);
+      } else {
+        setView('menu');
+      }
+    };
+    window.addEventListener('popstate', handleToolSync);
+    return () => window.removeEventListener('popstate', handleToolSync);
+  }, []);
+
+  const updateView = (newView) => {
+    setView(newView);
+    const params = new URLSearchParams(window.location.search);
+    if (newView === 'menu') {
+      params.delete('tool');
+    } else {
+      params.set('tool', newView);
+    }
+    window.history.pushState({ view: newView }, '', `?${params.toString()}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // State for Ramp Calculator
+  const [rampHeight, setRampHeight] = useState(''); // en cm
+  const [rampLength, setRampLength] = useState(''); // en cm
+  const [rampSlope, setRampSlope] = useState('');   // en %
+
+  // State for Circle Calculator
+  const [circleDiameter, setCircleDiameter] = useState(''); // en mm
+  const [circlePerimeter, setCirclePerimeter] = useState(''); // en mm
+
+  const handleCircleChange = (field, value) => {
+    if (value === '') {
+      setCircleDiameter('');
+      setCirclePerimeter('');
+      return;
+    }
+    
+    // Normalizar punto a coma para visualización consistente en español
+    const cleanValue = value.replace('.', ',');
+    const parseValue = cleanValue.replace(',', '.');
+    
+    if (field === 'd') {
+      setCircleDiameter(cleanValue);
+      const d = parseFloat(parseValue);
+      if (!isNaN(d)) {
+        setCirclePerimeter((d * Math.PI).toFixed(2).replace('.', ','));
+      } else {
+        setCirclePerimeter('');
+      }
+    } else if (field === 'p') {
+      setCirclePerimeter(cleanValue);
+      const p = parseFloat(parseValue);
+      if (!isNaN(p)) {
+        setCircleDiameter((p / Math.PI).toFixed(2).replace('.', ','));
+      } else {
+        setCircleDiameter('');
+      }
+    }
+  };
+
+  const generateMathPDF = async () => {
+    setIsGenerating(true);
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    let ops = [];
+    const count = 20;
+    
+    for (let i = 0; i < count; i++) {
+      let a, b, op;
+      if (difficulty === 'easy') {
+        op = Math.random() > 0.5 ? '+' : '-';
+        a = Math.floor(Math.random() * 20) + 5;
+        b = Math.floor(Math.random() * 10) + 1;
+        if (op === '-' && a < b) [a, b] = [b, a];
+      } else if (difficulty === 'medium') {
+        const type = Math.floor(Math.random() * 3);
+        if (type === 0) { op = '+'; a = Math.floor(Math.random() * 80) + 10; b = Math.floor(Math.random() * 80) + 10; }
+        else if (type === 1) { op = '-'; a = Math.floor(Math.random() * 90) + 20; b = Math.floor(Math.random() * 50) + 5; if (a < b) [a, b] = [b, a]; }
+        else { op = 'x'; a = Math.floor(Math.random() * 9) + 2; b = Math.floor(Math.random() * 9) + 2; }
+      } else {
+        const type = Math.floor(Math.random() * 4);
+        if (type === 0) { op = '+'; a = Math.floor(Math.random() * 800) + 100; b = Math.floor(Math.random() * 800) + 100; }
+        else if (type === 1) { op = '-'; a = Math.floor(Math.random() * 900) + 100; b = Math.floor(Math.random() * 500) + 50; if (a < b) [a, b] = [b, a]; }
+        else if (type === 2) { op = 'x'; a = Math.floor(Math.random() * 50) + 10; b = Math.floor(Math.random() * 9) + 2; }
+        else { op = '/'; b = Math.floor(Math.random() * 8) + 2; a = b * (Math.floor(Math.random() * 20) + 2); }
+      }
+      ops.push(`${a} ${op} ${b} = `);
+    }
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.setTextColor(26, 48, 82);
+    doc.text("Ficha de Estimulación Cognitiva", 105, 25, { align: "center" });
+    doc.setFontSize(12);
+    doc.setTextColor(100, 100, 100);
+    doc.text("IAdapta | Terapia Ocupacional & Accesibilidad", 105, 32, { align: "center" });
+    doc.setDrawColor(200, 200, 200);
+    doc.line(20, 45, 120, 45); doc.text("Nombre:", 20, 43);
+    doc.line(140, 45, 190, 45); doc.text("Fecha:", 140, 43);
+    doc.setFontSize(18);
+    doc.setTextColor(33, 33, 33);
+    const col1X = 35;
+    const col2X = 115;
+    let y = 65;
+    ops.forEach((op, index) => {
+      const x = index < 10 ? col1X : col2X;
+      const currentY = index < 10 ? y + (index * 18) : y + ((index - 10) * 18);
+      doc.text(op, x, currentY);
+      doc.setDrawColor(220, 220, 220);
+      doc.line(x + (difficulty === 'hard' ? 45 : 35), currentY + 1, x + (difficulty === 'hard' ? 75 : 65), currentY + 1);
+    });
+    doc.setFontSize(10);
+    doc.setTextColor(150, 150, 150);
+    doc.text("Recurso gratuito generado en iadapta.es", 105, 285, { align: "center" });
+    doc.save(`Ficha_Matematicas_${difficulty.toUpperCase()}_IAdapta.pdf`);
+    setIsGenerating(false);
+  };
+
+  const generateWordSearchPDF = async () => {
+    setIsGenerating(true);
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    const size = difficulty === 'easy' ? 8 : difficulty === 'medium' ? 10 : 14;
+    const fontSize = difficulty === 'easy' ? 24 : difficulty === 'medium' ? 20 : 16;
+    const lineSpacing = difficulty === 'easy' ? 15 : difficulty === 'medium' ? 12 : 10;
+    
+    const words = ['MESA', 'SILLA', 'VASO', 'PLATO', 'CAMA', 'CASA', 'ROPA', 'LIBRO', 'AGUA', 'PAN', 'LUZ', 'RADIO', 'RELOJ', 'TIEMPO', 'LUZ', 'MANO', 'PIE', 'OJOS', 'PELO', 'CARA', 'COMER', 'DORMIR', 'PASILLO', 'BAÑO', 'COCINA']
+      .sort(() => Math.random() - 0.5)
+      .slice(0, difficulty === 'easy' ? 6 : difficulty === 'medium' ? 10 : 18);
+    
+    const grid = Array(size).fill(0).map(() => Array(size).fill(''));
+    words.forEach(word => {
+      let placed = false;
+      let attempts = 0;
+      while (!placed && attempts < 150) {
+        attempts++;
+        const isVert = Math.random() > 0.5;
+        const r = Math.floor(Math.random() * (isVert ? size - word.length + 1 : size));
+        const c = Math.floor(Math.random() * (isVert ? size : size - word.length + 1));
+        let fits = true;
+        for(let i=0; i<word.length; i++){
+          const rr = isVert ? r+i : r; const cc = isVert ? c : c+i;
+          if(grid[rr][cc] !== '' && grid[rr][cc] !== word[i]) { fits = false; break; }
+        }
+        if(fits) {
+          for(let i=0; i<word.length; i++){
+            const rr = isVert ? r+i : r; const cc = isVert ? c : c+i;
+            grid[rr][cc] = word[i];
+          }
+          placed = true;
+        }
+      }
+    });
+    const letters = 'ABCDE';
+    for(let r=0; r<size; r++) for(let c=0; c<size; c++) if(grid[r][c] === '') grid[r][c] = letters[Math.floor(Math.random() * letters.length)];
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.setTextColor(26, 48, 82);
+    doc.text("Ficha: Sopa de Letras", 105, 25, { align: "center" });
+    doc.setFontSize(12); doc.setTextColor(100, 100, 100);
+    doc.text(`Nivel: ${difficulty.toUpperCase()} | IAdapta Estimulación`, 105, 32, { align: "center" });
+    
+    // Grid drawing
+    doc.setFont("courier", "bold");
+    doc.setFontSize(fontSize);
+    doc.setTextColor(33, 33, 33);
+    let currentY = 60;
+    grid.forEach(row => {
+      doc.text(row.join('  '), 105, currentY, { align: "center" });
+      currentY += lineSpacing;
+    });
+
+    // Words list
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text("Encuentra las siguientes palabras:", 20, currentY + 20);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
+    const wordListStr = words.join('   -   ');
+    doc.text(wordListStr, 20, currentY + 30, { maxWidth: 170 });
+
+    // Footer
+    doc.setFontSize(10);
+    doc.setTextColor(150, 150, 150);
+    doc.text("Recurso gratuito generado en iadapta.es | Terapia Ocupacional & Accesibilidad", 105, 285, { align: "center" });
+
+    doc.save(`Sopa_Letras_${difficulty}_IAdapta.pdf`);
+    setIsGenerating(false);
+  };
+
+  const generateVisualPDF = async () => {
+    setIsGenerating(true);
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    const fontSize = difficulty === 'easy' ? 28 : difficulty === 'medium' ? 22 : 18;
+    const rowCount = difficulty === 'easy' ? 8 : difficulty === 'medium' ? 12 : 16;
+    const charsPerRow = difficulty === 'easy' ? 10 : difficulty === 'medium' ? 15 : 20;
+    const spaceBetween = difficulty === 'easy' ? '  ' : ' ';
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(24);
+    doc.setTextColor(26, 48, 82);
+    doc.text("Ficha: Agudeza Visual - Pág 1", 105, 25, { align: "center" });
+    doc.setFontSize(12); doc.setTextColor(100, 100, 100);
+    doc.text(`Nivel: ${difficulty.toUpperCase()} | Estimulación Cognitiva`, 105, 32, { align: "center" });
+    
+    const tasks = [
+      { q: "1. Busca la letra diferente en cada fila:", base: "E", target: "F" },
+      { q: "2. Localiza el número intruso:", base: "8", target: "3" },
+      { q: "3. Busca la letra minúscula entre mayúsculas:", base: "M", target: "m" }
+    ];
+
+    // Task 1
+    let currentY = 55;
+    doc.setFont("helvetica", "bold"); doc.setFontSize(18); doc.setTextColor(26, 48, 82);
+    doc.text(tasks[0].q, 20, currentY);
+    currentY += 15;
+    doc.setFont("courier", "bold"); doc.setFontSize(fontSize); doc.setTextColor(50, 50, 50);
+    for(let i=0; i<rowCount; i++){
+      if (currentY > 275) break;
+      const line = Array(charsPerRow).fill(tasks[0].base);
+      const tIdx = Math.floor(Math.random() * charsPerRow);
+      line[tIdx] = tasks[0].target;
+      doc.text(line.join(spaceBetween), 105, currentY, { align: "center" });
+      currentY += fontSize * 0.45 + 5;
+    }
+
+    // Footer P1
+    doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(150, 150, 150);
+    doc.text("Recurso gratuito generado en iadapta.es | Terapia Ocupacional & Accesibilidad", 105, 285, { align: "center" });
+
+    // Page 2 for Task 2 and 3
+    doc.addPage();
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(24);
+    doc.setTextColor(26, 48, 82);
+    doc.text("Ficha: Agudeza Visual - Pág 2", 105, 25, { align: "center" });
+    
+    currentY = 55;
+    for (let j = 1; j < tasks.length; j++) {
+      doc.setFont("helvetica", "bold"); doc.setFontSize(18); doc.setTextColor(26, 48, 82);
+      doc.text(tasks[j].q, 20, currentY);
+      currentY += 15;
+      doc.setFont("courier", "bold"); doc.setFontSize(fontSize); doc.setTextColor(50, 50, 50);
+      
+      const subRowCount = Math.floor(rowCount / 1.5);
+      for(let i=0; i<subRowCount; i++){
+        if (currentY > 275) break;
+        const line = Array(charsPerRow).fill(tasks[j].base);
+        const tIdx = Math.floor(Math.random() * charsPerRow);
+        line[tIdx] = tasks[j].target;
+        doc.text(line.join(spaceBetween), 105, currentY, { align: "center" });
+        currentY += fontSize * 0.45 + 5;
+      }
+      currentY += 20;
+    }
+
+    // Footer P2
+    doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(150, 150, 150);
+    doc.text("Recurso gratuito generado en iadapta.es | Terapia Ocupacional & Accesibilidad", 105, 285, { align: "center" });
+
+    doc.save(`Agudeza_Visual_PRO_${difficulty}_IAdapta.pdf`);
+    setIsGenerating(false);
+  };
+
+  const generateSudokuPDF = async () => {
+    setIsGenerating(true);
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const base = [
+      [5, 3, 4, 6, 7, 8, 9, 1, 2],
+      [6, 7, 2, 1, 9, 5, 3, 4, 8],
+      [1, 9, 8, 3, 4, 2, 5, 6, 7],
+      [8, 5, 9, 7, 6, 1, 4, 2, 3],
+      [4, 2, 6, 8, 5, 3, 7, 9, 1],
+      [7, 1, 3, 9, 2, 4, 8, 5, 6],
+      [9, 6, 1, 5, 3, 7, 2, 8, 4],
+      [2, 8, 7, 4, 1, 9, 6, 3, 5],
+      [3, 4, 5, 2, 8, 6, 1, 7, 9]
+    ];
+
+    const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const shuffledDigits = [...digits].sort(() => Math.random() - 0.5);
+    const map = {};
+    digits.forEach((d, i) => { map[d] = shuffledDigits[i]; });
+
+    let grid = base.map(row => row.map(val => map[val]));
+
+    const shuffleRows = (arr) => {
+      const res = [...arr];
+      const shuffleBlock = (r1, r2, r3) => {
+        const block = [res[r1], res[r2], res[r3]];
+        block.sort(() => Math.random() - 0.5);
+        res[r1] = block[0]; res[r2] = block[1]; res[r3] = block[2];
+      };
+      shuffleBlock(0, 1, 2);
+      shuffleBlock(3, 4, 5);
+      shuffleBlock(6, 7, 8);
+      return res;
+    };
+    grid = shuffleRows(grid);
+
+    const transpose = (arr) => arr[0].map((_, colIdx) => arr.map(row => row[colIdx]));
+    grid = transpose(grid);
+    grid = shuffleRows(grid);
+    grid = transpose(grid);
+
+    if (Math.random() > 0.5) grid = transpose(grid);
+
+    const clues = difficulty === 'easy' ? 49 : difficulty === 'medium' ? 36 : 27;
+    const hideCount = 81 - clues;
+    const indices = Array.from({ length: 81 }, (_, i) => i);
+    indices.sort(() => Math.random() - 0.5);
+
+    const board = grid.map(row => [...row]);
+    for (let i = 0; i < hideCount; i++) {
+      const idx = indices[i];
+      const r = Math.floor(idx / 9);
+      const c = idx % 9;
+      board[r][c] = 0;
+    }
+
+    // Draw page 1: Puzzle
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.setTextColor(26, 48, 82);
+    doc.text("Ficha: Sudoku", 105, 25, { align: "center" });
+    doc.setFontSize(12); doc.setTextColor(100, 100, 100);
+    doc.text(`Nivel: ${difficulty === 'easy' ? 'BÁSICO' : difficulty === 'medium' ? 'INTERMEDIO' : 'AVANZADO'} | IAdapta Estimulación`, 105, 32, { align: "center" });
+
+    doc.setDrawColor(200, 200, 200);
+    doc.line(20, 45, 120, 45); doc.text("Nombre:", 20, 43);
+    doc.line(140, 45, 190, 45); doc.text("Fecha:", 140, 43);
+
+    const xOffset = 51;
+    const yOffset = 65;
+
+    // Draw numbers
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+    doc.setTextColor(50, 50, 50);
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        if (board[r][c] !== 0) {
+          doc.text(board[r][c].toString(), xOffset + c * 12 + 6, yOffset + r * 12 + 8.5, { align: "center" });
+        }
+      }
+    }
+
+    // Draw grid lines
+    // Thin lines
+    doc.setLineWidth(0.25); doc.setDrawColor(150, 150, 150);
+    for (let i = 0; i <= 9; i++) {
+      if (i % 3 !== 0) {
+        doc.line(xOffset + i * 12, yOffset, xOffset + i * 12, yOffset + 108);
+        doc.line(xOffset, yOffset + i * 12, xOffset + 108, yOffset + i * 12);
+      }
+    }
+
+    // Thick lines
+    doc.setLineWidth(1.2); doc.setDrawColor(26, 48, 82);
+    for (let i = 0; i <= 9; i++) {
+      if (i % 3 === 0) {
+        doc.line(xOffset + i * 12, yOffset, xOffset + i * 12, yOffset + 108);
+        doc.line(xOffset, yOffset + i * 12, xOffset + 108, yOffset + i * 12);
+      }
+    }
+
+    // Instructions
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.setTextColor(26, 48, 82);
+    doc.text("Instrucciones:", 20, 195);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10.5);
+    doc.setTextColor(80, 80, 80);
+    doc.text("Completa la cuadrícula de modo que cada fila, cada columna y cada uno de los 9 bloques de 3x3 contenga los números del 1 al 9 sin repetirse.", 20, 202, { maxWidth: 170 });
+
+    // Footer P1
+    doc.setFontSize(9);
+    doc.setTextColor(150, 150, 150);
+    doc.text("Recurso gratuito generado en iadapta.es | Terapia Ocupacional & Accesibilidad", 105, 285, { align: "center" });
+
+    // Draw page 2: Solution
+    doc.addPage();
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.setTextColor(26, 48, 82);
+    doc.text("Solución del Sudoku", 105, 25, { align: "center" });
+    doc.setFontSize(12); doc.setTextColor(100, 100, 100);
+    doc.text(`Nivel: ${difficulty === 'easy' ? 'BÁSICO' : difficulty === 'medium' ? 'INTERMEDIO' : 'AVANZADO'} | IAdapta Estimulación`, 105, 32, { align: "center" });
+
+    // Draw solution numbers
+    doc.setFontSize(20);
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        const isUserField = board[r][c] === 0;
+        if (isUserField) {
+          doc.setFont("helvetica", "bold");
+          doc.setTextColor(232, 125, 85); // Accent Coral
+        } else {
+          doc.setFont("helvetica", "normal");
+          doc.setTextColor(100, 100, 100);
+        }
+        doc.text(grid[r][c].toString(), xOffset + c * 12 + 6, yOffset + r * 12 + 8.5, { align: "center" });
+      }
+    }
+
+    // Draw solution grid lines
+    // Thin lines
+    doc.setLineWidth(0.25); doc.setDrawColor(180, 180, 180);
+    for (let i = 0; i <= 9; i++) {
+      if (i % 3 !== 0) {
+        doc.line(xOffset + i * 12, yOffset, xOffset + i * 12, yOffset + 108);
+        doc.line(xOffset, yOffset + i * 12, xOffset + 108, yOffset + i * 12);
+      }
+    }
+
+    // Thick lines
+    doc.setLineWidth(1.2); doc.setDrawColor(26, 48, 82);
+    for (let i = 0; i <= 9; i++) {
+      if (i % 3 === 0) {
+        doc.line(xOffset + i * 12, yOffset, xOffset + i * 12, yOffset + 108);
+        doc.line(xOffset, yOffset + i * 12, xOffset + 108, yOffset + i * 12);
+      }
+    }
+
+    // Solution Info text
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.setTextColor(26, 48, 82);
+    doc.text("Nota para el Terapeuta:", 20, 195);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10.5);
+    doc.setTextColor(80, 80, 80);
+    doc.text("Los números destacados en color naranja corresponden a las soluciones que el usuario debía averiguar. Los números en gris son las pistas iniciales facilitadas en la ficha del paciente.", 20, 202, { maxWidth: 170 });
+
+    // Footer P2
+    doc.setFontSize(9);
+    doc.setTextColor(150, 150, 150);
+    doc.text("Recurso gratuito generado en iadapta.es | Terapia Ocupacional & Accesibilidad", 105, 285, { align: "center" });
+
+    doc.save(`Sudoku_PRO_${difficulty}_IAdapta.pdf`);
+    setIsGenerating(false);
+  };
+
+  const handleMainAction = () => {
+    if (sheetType === 'math') generateMathPDF();
+    else if (sheetType === 'wordsearch') generateWordSearchPDF();
+    else if (sheetType === 'visual') generateVisualPDF();
+    else if (sheetType === 'sudoku') generateSudokuPDF();
+  };
+
+  const handleSearch = (val) => {
+    setSearchTerm(val);
+    if (val.trim().length < 4) {
+      setSearchResults([]);
+      return;
+    }
+
+    const normalize = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const searchWords = normalize(val).trim().split(/\s+/);
+    
+    const filtered = window.CATALOG_DATA.filter(item => {
+      const content = normalize(`${item.tD} ${item.cD} ${item.tC} ${item.sC} ${item.gD}`);
+      return searchWords.every(word => content.includes(word));
+    }).slice(0, 30);
+    
+    setSearchResults(filtered);
+  };
+
+  // Ramp Calculation Logic
+  const handleRampChange = (field, value) => {
+    const val = value.replace(',', '.');
+    if (field === 'h') setRampHeight(val);
+    if (field === 'l') setRampLength(val);
+    if (field === 's') setRampSlope(val);
+
+    // React state update is async, so we use the local 'val' for the active field
+    setTimeout(() => {
+      const h = field === 'h' ? parseFloat(val) : parseFloat(rampHeight);
+      const l = field === 'l' ? parseFloat(val) : parseFloat(rampLength);
+      const s = field === 's' ? parseFloat(val) : parseFloat(rampSlope);
+
+      if (field === 'h' || field === 'l') {
+        if (!isNaN(h) && !isNaN(l) && l !== 0) {
+          setRampSlope(((h / l) * 100).toFixed(2));
+        } else if (field === 'h' && !isNaN(h) && !isNaN(s) && s !== 0) {
+          setRampLength(((h / (s / 100))).toFixed(2));
+        }
+      } else if (field === 's') {
+        if (!isNaN(s) && !isNaN(h) && s !== 0) {
+          setRampLength(((h / (s / 100))).toFixed(2));
+        } else if (!isNaN(s) && !isNaN(l)) {
+          setRampHeight(((s / 100) * l).toFixed(2));
+        }
+      }
+    }, 0);
+  };
+
+  const getCTEStatus = () => {
+    const h = parseFloat(rampHeight);
+    const l = parseFloat(rampLength);
+    const s = parseFloat(rampSlope);
+    
+    if (isNaN(h)) return { valid: true, msg: 'Introduce la altura para validar.' };
+    
+    // Calcular el mínimo L permitido para esta H
+    let minL = h / 0.10;
+    let maxS = 10;
+    
+    if (minL >= 300) {
+      minL = h / 0.08;
+      maxS = 8;
+    }
+    if (minL >= 600) {
+      minL = h / 0.06;
+      maxS = 6;
+    }
+
+    if (isNaN(l) || isNaN(s)) return { valid: true, msg: `Para esta altura, el mínimo permitido es L = ${minL.toFixed(1)} cm (S = ${maxS}%)`, minL, maxS };
+
+    let currentMaxS = 6;
+    if (l < 300) currentMaxS = 10;
+    else if (l < 600) currentMaxS = 8;
+
+    if (s > currentMaxS + 0.01) {
+      return { 
+        valid: false, 
+        msg: `Incumple CTE: Máximo ${currentMaxS}% para esta longitud. Mínimo permitido: L = ${minL.toFixed(1)} cm`,
+        minL,
+        maxS: currentMaxS
+      };
+    }
+    return { 
+      valid: true, 
+      msg: `Cumple normativa CTE (Máx. permitido: ${currentMaxS}%)`,
+      minL,
+      maxS: currentMaxS
+    };
+  };
+
+  const tools = [
+    {
+      id: 'math',
+      title: 'Generador de Fichas',
+      desc: 'Crea hojas de estimulación cognitiva (cálculo, sopas, agudeza) en PDF personalizadas.',
+      icon: <Icons.FilePdf />,
+      color: 'bg-brand-900 text-white',
+      badge: 'Estimulación',
+      image: 'worksheets_generic_bg_1778740651125.png'
+    },
+    {
+      id: 'ramp',
+      title: 'Calculadora de Rampas',
+      desc: 'Calcula pendientes y longitudes según la normativa de accesibilidad (CTE).',
+      icon: <Icons.TrendingUp />,
+      color: 'bg-emerald-600 text-white',
+      badge: 'Accesibilidad',
+      image: 'ramp_calculator_thumb_1778710368417.png'
+    },
+    {
+      id: 'circle',
+      title: 'Calculadora de Círculo',
+      desc: 'Calcula el diámetro a partir del perímetro y viceversa para diseño en milímetros (mm).',
+      icon: <Icons.Circle />,
+      color: 'bg-accent-coral text-white',
+      badge: 'Medición',
+      image: 'circle_calc_thumb.png'
+    },
+    {
+      id: 'pao',
+      title: 'Buscador PAO (CatSalut)',
+      desc: 'Consulta códigos, importes y descripciones de prestaciones ortoprotéticas.',
+      icon: <Icons.Search />,
+      color: 'bg-blue-900 text-white',
+      badge: 'Gestión',
+      image: 'pao_finder_thumb_1778710383483.png'
+    },
+    {
+      id: '3dprint',
+      title: 'Impresión 3D',
+      desc: 'Descubre y descarga modelos 3D de productos de apoyo gratuitos de la comunidad.',
+      icon: <Icons.Lightbulb />,
+      color: 'bg-orange-500 text-white',
+      badge: 'Tecnología',
+      image: '3d_printing_thumb.png'
+    }
+  ];
+
+  const cte = getCTEStatus();
+
+  return (
+    <section id="resources" className="pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen">
+      <div className="max-w-6xl mx-auto">
+        
+        {view !== 'menu' && (
+          <ResourceSubNav currentView={view} onViewChange={updateView} />
+        )}
+
+        {view === 'menu' && (
+          <div className="text-center mb-16">
+            <span className="inline-block bg-brand-100 text-brand-700 rounded-full px-5 py-2 text-base font-bold uppercase tracking-widest mb-4">Área del Profesional</span>
+            <h2 className="font-display text-4xl sm:text-5xl font-bold text-brand-900 mb-6">Recursos para Profesionales</h2>
+            <p className="text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
+              Bienvenido al espacio de recursos especializados para profesionales de la salud, la ergonomía y la accesibilidad. Esta suite de herramientas digitales ha sido diseñada para optimizar tu tiempo y simplificar la gestión técnica en el día a día. Desde la validación ágil de normativas arquitectónicas hasta la creación instantánea de materiales cognitivos a medida, encuentra aquí el apoyo práctico necesario para potenciar tus intervenciones y centrar toda tu energía en el bienestar del usuario.
+            </p>
+            <div className="section-divider w-24 mx-auto mb-8"></div>
+          </div>
+        )}
+
+        {view === 'menu' ? (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 anim-fade-in">
+            {tools.map(tool => (
+              <div 
+                key={tool.id}
+                onClick={() => updateView(tool.id)}
+                className="bg-white rounded-[2.5rem] overflow-hidden border border-brand-100 shadow-xl hover:shadow-2xl transition-all cursor-pointer group flex flex-col"
+              >
+                <div className="h-48 overflow-hidden relative">
+                  <img src={tool.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={tool.title} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                  <div className={`absolute top-4 right-4 w-12 h-12 ${tool.color} rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-6 transition-transform`}>
+                    {tool.icon}
+                  </div>
+                </div>
+                <div className="p-8 flex flex-col items-center text-center flex-1">
+                  <span className="text-brand-400 font-bold uppercase tracking-widest text-[10px] mb-3">{tool.badge}</span>
+                  <h3 className="font-display text-xl font-bold text-brand-900 mb-4">{tool.title}</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed mb-8 flex-1">{tool.desc}</p>
+                  <div className="inline-flex items-center gap-2 text-brand-600 font-bold group-hover:gap-3 transition-all text-sm">
+                    Abrir herramienta
+                    <Icons.ArrowRight />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : view === 'math' ? (
+          <div className="anim-scale-in">
+            <div className="bg-white rounded-[3rem] overflow-hidden shadow-2xl border border-brand-100 flex flex-col lg:flex-row mb-16">
+              <div className="flex-1 p-8 sm:p-12 lg:p-16">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-14 h-14 bg-brand-900 text-white rounded-2xl flex items-center justify-center shadow-lg">
+                    <Icons.FilePdf />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-3xl font-bold text-brand-900">Generador de Fichas</h3>
+                    <p className="text-brand-500 font-bold uppercase tracking-widest text-xs">Cálculo Matemático</p>
+                  </div>
+                </div>
+
+                <p className="text-gray-600 text-lg mb-6 leading-relaxed">
+                  Diseña sesiones de entrenamiento cognitivo a la medida de cada usuario de forma rápida y eficaz. Con nuestro generador, dispones de material ilimitado, aleatorio y adaptado a diferentes niveles de complejidad (cálculo, atención y lenguaje). Una solución práctica para enriquecer tus herramientas terapéuticas sin invertir horas en preparación administrativa.
+                </p>
+
+                <p className="text-gray-600 text-lg mb-10 leading-relaxed">
+                  Selecciona el tipo de actividad y la dificultad para generar un PDF personalizado listo para imprimir.
+                </p>
+
+                <div className="space-y-6 mb-10">
+                  <p className="font-bold text-brand-900 text-sm uppercase tracking-wider">Tipo de ficha</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {[
+                      { id: 'math', label: 'Cálculo', icon: <Icons.Calculator className="w-4 h-4" /> },
+                      { id: 'wordsearch', label: 'Sopa Letras', icon: <Icons.Search className="w-4 h-4" /> },
+                      { id: 'visual', label: 'Agudeza', icon: <Icons.Brain className="w-4 h-4" /> },
+                      { id: 'sudoku', label: 'Sudoku', icon: <Icons.Puzzle className="w-4 h-4" /> }
+                    ].map(type => (
+                      <button
+                        key={type.id}
+                        onClick={() => setSheetType(type.id)}
+                        className={`py-3 px-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 border-2 ${sheetType === type.id 
+                          ? 'bg-brand-50 border-brand-900 text-brand-900' 
+                          : 'bg-white border-gray-100 text-gray-400 hover:border-brand-200'}`}
+                      >
+                        {type.icon}
+                        {type.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-6 mb-12">
+                  <p className="font-bold text-brand-900 text-sm uppercase tracking-wider">Nivel de dificultad</p>
+                  <div className="grid grid-cols-3 gap-3">
+                    {[
+                      { id: 'easy', label: 'Básica' },
+                      { id: 'medium', label: 'Media' },
+                      { id: 'hard', label: 'Alta' }
+                    ].map(level => (
+                      <button
+                        key={level.id}
+                        onClick={() => setDifficulty(level.id)}
+                        className={`py-4 rounded-2xl font-bold transition-all border-2 ${difficulty === level.id 
+                          ? 'bg-brand-900 text-white border-brand-900 shadow-lg scale-105' 
+                          : 'bg-white text-gray-400 border-gray-100 hover:border-brand-200 hover:text-brand-600'}`}
+                      >
+                        {level.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleMainAction}
+                  disabled={isGenerating}
+                  className="w-full py-5 bg-brand-900 text-white rounded-2xl font-bold text-xl hover:bg-opacity-90 transition-all flex items-center justify-center gap-3 shadow-xl shadow-brand-900/20 disabled:opacity-50 group"
+                >
+                  {isGenerating ? (
+                    <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  ) : (
+                    <>
+                      <Icons.Download />
+                      Descargar Ficha PDF
+                    </>
+                  )}
+                </button>
+              </div>
+
+              <div className="lg:w-[45%] bg-brand-900 relative min-h-[400px] flex flex-col justify-end p-8 sm:p-12 lg:p-16 overflow-hidden">
+                <img src="resources_bg.png" className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay" alt="" />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-900 via-brand-900/40 to-transparent"></div>
+                <div className="relative z-10">
+                  <h4 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+                    <Icons.Lightbulb />
+                    Ventajas Clínicas
+                  </h4>
+                  <ul className="space-y-4 mb-10">
+                    {[
+                      'Material ilimitado y aleatorio.',
+                      'Ahorro crítico de tiempo administrativo.',
+                      'Adaptación al deterioro cognitivo.'
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-center gap-3 text-brand-100 font-medium">
+                        <div className="w-6 h-6 bg-accent-coral/20 text-accent-coral rounded-full flex items-center justify-center shrink-0">
+                          <Icons.Check />
+                        </div>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm">
+                    <p className="text-brand-200 italic text-lg leading-relaxed">
+                      "Automatizar el material de apoyo nos permite centrar toda nuestra energía en el paciente."
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <AdSenseBlock slot="5026466122" />
+          </div>
+        ) : view === 'ramp' ? (
+          <div className="anim-scale-in max-w-5xl mx-auto">
+            <div className="bg-white rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden">
+              <div className="p-8 sm:p-12">
+                <div className="flex items-center gap-4 mb-10">
+                  <div className="w-14 h-14 bg-emerald-600 text-white rounded-2xl flex items-center justify-center shadow-lg">
+                    <Icons.TrendingUp />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-3xl font-bold text-brand-900">Calculadora de Rampas</h3>
+                    <p className="text-emerald-600 font-bold uppercase tracking-widest text-xs">Cumplimiento CTE España</p>
+                  </div>
+                </div>
+
+                <p className="text-gray-600 text-lg mb-10 leading-relaxed">
+                  La accesibilidad física es el primer paso para garantizar la autonomía en el entorno. Con esta herramienta, puedes verificar en segundos la viabilidad técnica de cualquier rampa bajo el marco del CTE de España. Diseña con la seguridad de que tus propuestas de adaptación cumplen con los estándares legales de seguridad y funcionalidad.
+                </p>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                  <div className="space-y-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-brand-900 uppercase tracking-wider">Altura (cm)</label>
+                        <input 
+                          type="text" 
+                          value={rampHeight}
+                          onChange={(e) => handleRampChange('h', e.target.value)}
+                          className={`w-full p-4 rounded-2xl border-2 transition-all text-xl font-bold ${!cte.valid ? 'border-red-100 bg-red-50 text-red-600 focus:border-red-500' : 'border-brand-50 focus:border-emerald-500 bg-brand-50/30'}`}
+                          placeholder="Ej: 15"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-brand-900 uppercase tracking-wider">Longitud (cm)</label>
+                        <input 
+                          type="text" 
+                          value={rampLength}
+                          onChange={(e) => handleRampChange('l', e.target.value)}
+                          className={`w-full p-4 rounded-2xl border-2 transition-all text-xl font-bold ${!cte.valid ? 'border-red-100 bg-red-50 text-red-600 focus:border-red-500' : 'border-brand-50 focus:border-emerald-500 bg-brand-50/30'}`}
+                          placeholder="Ej: 250"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-brand-900 uppercase tracking-wider">Pendiente (%)</label>
+                        <input 
+                          type="text" 
+                          value={rampSlope}
+                          onChange={(e) => handleRampChange('s', e.target.value)}
+                          className={`w-full p-4 rounded-2xl border-2 transition-all text-xl font-bold ${!cte.valid ? 'border-red-100 bg-red-50 text-red-600 focus:border-red-500' : 'border-brand-50 focus:border-emerald-500 bg-brand-50/30'}`}
+                          placeholder="Ej: 8"
+                        />
+                      </div>
+                    </div>
+
+                    <div className={`p-6 rounded-3xl border-2 transition-all flex items-start gap-4 ${cte.valid ? 'bg-emerald-50 border-emerald-100 text-emerald-800' : 'bg-red-50 border-red-200 text-red-800'}`}>
+                      <div className={`p-2 rounded-xl ${cte.valid ? 'bg-emerald-200 text-emerald-700' : 'bg-red-200 text-red-700'}`}>
+                        {cte.valid ? <Icons.Check /> : <Icons.AlertCircle />}
+                      </div>
+                      <div>
+                        <p className="font-bold text-lg">{cte.valid ? 'Cálculo Correcto' : 'Incumple Normativa'}</p>
+                        <p className="opacity-80">{cte.msg || 'Introduce dos valores para calcular el tercero.'}</p>
+                      </div>
+                    </div>
+
+                    <button 
+                      onClick={() => { setRampHeight(''); setRampLength(''); setRampSlope(''); }}
+                      className="w-full py-4 rounded-2xl border-2 border-gray-100 text-gray-400 font-bold hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
+                    >
+                      <Icons.Refresh /> Limpiar valores
+                    </button>
+                  </div>
+
+                  <div className="bg-brand-50/50 rounded-[2rem] p-8 flex flex-col items-center justify-center min-h-[300px] border border-brand-100">
+                    <svg viewBox="0 0 400 200" className="w-full h-auto drop-shadow-xl">
+                      <line x1="20" y1="180" x2="380" y2="180" stroke="#1a3052" strokeWidth="4" strokeLinecap="round" />
+                      {parseFloat(rampHeight) > 0 && parseFloat(rampLength) > 0 ? (
+                        <>
+                          <path 
+                            d={`M 50 180 L 350 180 L 350 ${180 - Math.min(100, (parseFloat(rampHeight) * 2))} Z`} 
+                            fill={cte.valid ? '#10b981' : '#ef4444'} 
+                            fillOpacity="0.2"
+                            stroke={cte.valid ? '#10b981' : '#ef4444'}
+                            strokeWidth="4"
+                            strokeLinejoin="round"
+                            className="transition-all duration-500"
+                          />
+                          <text x="200" y="195" textAnchor="middle" className="text-[10px] font-bold fill-brand-900">{rampLength}cm</text>
+                          <text x="360" y={180 - Math.min(50, (parseFloat(rampHeight)))} textAnchor="start" className="text-[10px] font-bold fill-brand-900">{rampHeight}cm</text>
+                          <text x="200" y={170 - Math.min(50, (parseFloat(rampHeight)))} textAnchor="middle" className={`text-xs font-black ${cte.valid ? 'fill-emerald-600' : 'fill-red-600'}`}>{rampSlope}%</text>
+                        </>
+                      ) : (
+                        <text x="200" y="100" textAnchor="middle" className="fill-brand-200 font-bold italic">Esperando datos...</text>
+                      )}
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-brand-900 p-8 text-white">
+                <div className="max-w-3xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
+                      <Icons.Lightbulb className="text-emerald-400" />
+                    </div>
+                    <p className="text-sm font-medium text-brand-100">
+                      <strong>Norma CTE DB-SUA:</strong> Pendiente máx. 10% (L&lt;300cm), 8% (L&lt;600cm), 6% (Resto).
+                    </p>
+                  </div>
+                  <div className="text-xs text-brand-300 font-mono bg-black/20 px-4 py-2 rounded-lg border border-white/5">
+                    Fórmula: (H / L) * 100
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <AdSenseBlock slot="5026466122" />
+          </div>
+        ) : view === 'circle' ? (
+          <div className="anim-scale-in max-w-5xl mx-auto">
+            <div className="bg-white rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden">
+              <div className="p-8 sm:p-12">
+                <div className="flex items-center gap-4 mb-10">
+                  <div className="w-14 h-14 bg-accent-coral text-white rounded-2xl flex items-center justify-center shadow-lg">
+                    <Icons.Circle />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-3xl font-bold text-brand-900">Calculadora de Círculo</h3>
+                    <p className="text-accent-coral font-bold uppercase tracking-widest text-xs">Diámetro y Perímetro en Milímetros</p>
+                  </div>
+                </div>
+
+                <p className="text-gray-600 text-lg mb-10 leading-relaxed">
+                  Optimiza el proceso de diseño geométrico en tus intervenciones. Esta herramienta automatiza el cálculo de perímetros y diámetros cilíndricos a partir de una sola medida. Una solución rápida y funcional pensada para trasladar los datos de las valoraciones clínicas directamente al entorno de fabricación digital o personalización de herramientas de autonomía.
+                </p>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                  <div className="space-y-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-brand-900 uppercase tracking-wider">Diámetro (mm)</label>
+                        <input 
+                          type="text" 
+                          value={circleDiameter}
+                          onChange={(e) => handleCircleChange('d', e.target.value)}
+                          className="w-full p-4 rounded-2xl border-2 border-brand-50 focus:border-accent-coral bg-brand-50/30 transition-all text-xl font-bold"
+                          placeholder="Ej: 50"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-brand-900 uppercase tracking-wider">Perímetro (mm)</label>
+                        <input 
+                          type="text" 
+                          value={circlePerimeter}
+                          onChange={(e) => handleCircleChange('p', e.target.value)}
+                          className="w-full p-4 rounded-2xl border-2 border-brand-50 focus:border-accent-coral bg-brand-50/30 transition-all text-xl font-bold"
+                          placeholder="Ej: 157.08"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="p-6 rounded-3xl border-2 border-brand-100 bg-brand-50/30 text-brand-900 flex items-start gap-4">
+                      <div className="p-2 rounded-xl bg-brand-100 text-brand-700">
+                        <Icons.Lightbulb className="text-accent-coral" />
+                      </div>
+                      <div>
+                        <p className="font-bold text-lg">Información del Cálculo</p>
+                        {circleDiameter && circlePerimeter ? (
+                          <p className="opacity-80">
+                            Un círculo con un diámetro de <strong>{circleDiameter} mm</strong> tiene un perímetro de aproximadamente <strong>{circlePerimeter} mm</strong>.
+                          </p>
+                        ) : (
+                          <p className="opacity-80">Introduce el diámetro o el perímetro para calcular automáticamente el otro valor.</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <button 
+                      onClick={() => { setCircleDiameter(''); setCirclePerimeter(''); }}
+                      className="w-full py-4 rounded-2xl border-2 border-gray-100 text-gray-400 font-bold hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
+                    >
+                      <Icons.Refresh /> Limpiar valores
+                    </button>
+                  </div>
+
+                  <div className="bg-brand-50/50 rounded-[2rem] p-8 flex flex-col items-center justify-center min-h-[300px] border border-brand-100 relative overflow-hidden">
+                    {circleDiameter && circlePerimeter ? (
+                      <div className="w-full flex flex-col items-center">
+                        <svg viewBox="0 0 200 200" className="w-48 h-48 drop-shadow-xl mb-4">
+                          <circle cx="100" cy="100" r="80" fill="none" stroke="#e2e8f0" strokeWidth="2" />
+                          <circle 
+                            cx="100" 
+                            cy="100" 
+                            r="80" 
+                            fill="none" 
+                            stroke="#E87D55" 
+                            strokeWidth="4" 
+                            strokeDasharray="502.65" 
+                            strokeDashoffset="0"
+                            className="transition-all duration-500" 
+                          />
+                          <line 
+                            x1="20" 
+                            y1="100" 
+                            x2="180" 
+                            y2="100" 
+                            stroke="#1A3052" 
+                            strokeWidth="4" 
+                            strokeDasharray="4 4"
+                          />
+                          <circle cx="20" cy="100" r="4" fill="#1A3052" />
+                          <circle cx="180" cy="100" r="4" fill="#1A3052" />
+                        </svg>
+                        <div className="text-center space-y-2">
+                          <p className="text-sm font-bold text-brand-900">
+                            Diámetro (D): <span className="text-accent-coral font-mono text-base font-black">{circleDiameter} mm</span>
+                          </p>
+                          <p className="text-sm font-bold text-brand-900">
+                            Perímetro (P): <span className="text-brand-900 font-mono text-base font-black">{circlePerimeter} mm</span>
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-center">
+                        <svg viewBox="0 0 200 200" className="w-36 h-36 mx-auto mb-4 opacity-20">
+                          <circle cx="100" cy="100" r="80" fill="none" stroke="#1A3052" strokeWidth="4" strokeDasharray="6 6" />
+                          <line x1="20" y1="100" x2="180" y2="100" stroke="#1A3052" strokeWidth="2" />
+                        </svg>
+                        <span className="text-brand-500 font-bold italic text-sm">Esperando datos...</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="bg-brand-900 p-8 text-white">
+                <div className="max-w-3xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
+                      <Icons.Circle className="text-accent-coral" />
+                    </div>
+                    <p className="text-sm font-medium text-brand-100">
+                      <strong>Utilidad de Diseño:</strong> Ideal para dimensionar adaptadores de llaves, engrosadores de cubiertos o cualquier férula circular basándose en la medición de su contorno.
+                    </p>
+                  </div>
+                  <div className="text-xs text-brand-300 font-mono bg-black/20 px-4 py-2 rounded-lg border border-white/5 whitespace-nowrap">
+                    Fórmulas: P = π · D  |  D = P / π
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <AdSenseBlock slot="5026466122" />
+          </div>
+        ) : view === 'pao' ? (
+          <div className="anim-scale-in">
+            <div className="bg-white rounded-[3rem] p-8 sm:p-12 shadow-xl border border-brand-50">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-14 h-14 bg-blue-900 text-white rounded-2xl flex items-center justify-center shadow-lg">
+                  <Icons.Search />
+                </div>
+                <div>
+                  <h3 className="font-display text-3xl font-bold text-brand-900">Buscador PAO (CatSalut)</h3>
+                  <p className="text-blue-500 font-bold uppercase tracking-widest text-xs">Prestacions Ortoprotètiques</p>
+                </div>
+              </div>
+              
+              <p className="text-gray-600 text-lg mb-10 leading-relaxed">
+                Optimiza el tiempo dedicado a la gestión documental en tus intervenciones. Encuentra rápidamente las especificaciones, códigos y descripciones oficiales de los productos de apoyo financiados por el sistema de salud de Cataluña. Introduce el nombre del recurso o el código técnico para verificar los datos necesarios de forma centralizada y sin necesidad de consultar extensos manuales en PDF.
+              </p>
+
+              <div className="relative mb-12">
+                <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none text-blue-500">
+                  <Icons.Search />
+                </div>
+                <input 
+                  type="text" 
+                  placeholder="Ej: cadira de rodes, caminador, EPL 050..."
+                  className="w-full pl-16 pr-8 py-6 bg-white border-2 border-brand-100 rounded-[2rem] focus:ring-8 focus:ring-blue-500/10 focus:border-blue-500 transition-all text-xl shadow-sm placeholder:text-gray-400"
+                  value={searchTerm}
+                  onChange={(e) => handleSearch(e.target.value)}
+                />
+              </div>
+
+              {searchResults.length > 0 ? (
+                <div className="max-h-[600px] overflow-y-auto custom-scrollbar">
+                  {/* Vista Sobremesa: Tabla */}
+                  <div className="hidden md:block overflow-x-auto rounded-[2rem] border border-gray-100 shadow-inner bg-gray-50/30">
+                    <table className="w-full text-left border-collapse">
+                      <thead className="sticky top-0 z-10">
+                        <tr className="bg-brand-900 text-white">
+                          <th className="p-5 font-display text-sm uppercase tracking-widest">Código PAO</th>
+                          <th className="p-5 font-display text-sm uppercase tracking-widest">Producto / Descripción</th>
+                          <th className="p-5 font-display text-sm uppercase tracking-widest text-right">Importe</th>
+                          <th className="p-5 font-display text-sm uppercase tracking-widest text-center">Detalles</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100 bg-white">
+                        {searchResults.map((item, i) => (
+                          <tr key={i} className="hover:bg-blue-50/50 transition-colors group/row hover:relative hover:z-30">
+                            <td className="p-5 align-top">
+                              <div className="bg-brand-50 border border-brand-100 rounded-2xl p-4 text-center group-hover/row:bg-white transition-colors shadow-sm">
+                                <span className="font-mono text-xl font-black text-brand-900 tracking-tight block">
+                                  {item.sC} {item.tC}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="p-5">
+                              <p className="font-bold text-brand-900 text-lg mb-1">{item.tD}</p>
+                              <p className="text-xs text-brand-500 font-medium uppercase tracking-wider">{item.cD}</p>
+                            </td>
+                            <td className="p-5 text-right whitespace-nowrap">
+                              <p className="font-black text-emerald-600 text-xl">{item.p}€</p>
+                              <p className="text-xs text-gray-500 font-bold uppercase tracking-wide">Aportación: {item.u}€</p>
+                            </td>
+                            <td className="p-5 text-center align-middle">
+                               <button 
+                                 onClick={() => setSelectedItem(item)}
+                                 className="w-12 h-12 bg-gray-50 border-2 border-gray-100 rounded-2xl flex items-center justify-center text-brand-600 hover:bg-brand-900 hover:text-white transition-all shadow-sm active:scale-95"
+                                 title="Ver detalles del producto"
+                               >
+                                 <Icons.Search />
+                               </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Vista Móvil: Tarjetas */}
+                  <div className="md:hidden space-y-5">
+                    {searchResults.map((item, i) => (
+                      <div key={i} className="bg-white rounded-3xl border border-brand-100 p-7 shadow-md">
+                        <div className="flex justify-between items-start mb-5">
+                          <div className="bg-brand-900 text-white px-5 py-2.5 rounded-xl font-mono font-bold text-xl">
+                            {item.sC} {item.tC}
+                          </div>
+                          <div className="text-right">
+                            <p className="font-black text-emerald-600 text-2xl">{item.p}€</p>
+                            <p className="text-xs text-gray-500 font-bold uppercase">Usuario: {item.u}€</p>
+                          </div>
+                        </div>
+                        <h4 className="font-bold text-brand-900 text-xl mb-2 leading-tight">{item.tD}</h4>
+                        <p className="text-sm text-brand-500 uppercase tracking-wide mb-6 font-medium">{item.cD}</p>
+                        
+                        <div className="grid grid-cols-2 gap-4 pt-5 border-t border-brand-50">
+                          <div className="bg-brand-50 p-4 rounded-2xl">
+                            <span className="block text-[11px] text-brand-400 uppercase font-bold mb-1 tracking-wider">Validación Sanitaria</span>
+                            <span className="font-bold text-brand-800 text-sm">{item.v === 'S' ? 'Necesaria' : 'No requiere'}</span>
+                          </div>
+                          <div className="bg-brand-50 p-4 rounded-2xl">
+                            <span className="block text-[11px] text-brand-400 uppercase font-bold mb-1 tracking-wider">Periodicidad Mín.</span>
+                            <span className="font-bold text-brand-800 text-sm">{item.m} meses</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : searchTerm.length >= 4 ? (
+                <div className="text-center py-20 bg-gray-50 rounded-[2rem] border-2 border-dashed border-gray-200">
+                  <div className="text-5xl mb-4">🔍</div>
+                  <p className="text-xl text-gray-500">No se han encontrado resultados para "{searchTerm}"</p>
+                </div>
+              ) : (
+                <div className="text-center py-20 bg-blue-50/30 rounded-[2rem] border border-blue-100">
+                  <div className="text-5xl mb-4 text-blue-200">⌨️</div>
+                  <p className="text-xl text-blue-900/60 font-medium">Escribe al menos 4 caracteres para buscar</p>
+                </div>
+              )}
+            </div>
+            
+            <AdSenseBlock slot="5026466122" />
+          </div>
+        ) : view === '3dprint' ? (
+          <div className="anim-scale-in">
+            <div className="bg-white rounded-[3rem] p-8 sm:p-12 shadow-xl border border-brand-50 mb-16">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-14 h-14 bg-orange-500 text-white rounded-2xl flex items-center justify-center shadow-lg">
+                  <Icons.Lightbulb />
+                </div>
+                <div>
+                  <h3 className="font-display text-3xl font-bold text-brand-900">Impresión 3D</h3>
+                  <p className="text-orange-500 font-bold uppercase tracking-widest text-xs">Productos de Apoyo</p>
+                </div>
+              </div>
+              
+              <div className="space-y-6 text-xl text-gray-700 leading-relaxed mb-12 max-w-4xl">
+                <p>
+                  La impresión 3D permite que soluciones muy útiles lleguen a cualquier casa de forma sencilla. Hay muchísima gente compartiendo sus ideas generosamente por internet, lo que hace que hoy sea más fácil que nunca encontrar herramientas que nos ayuden con las tareas del día a día.
+                </p>
+                <p>
+                  Pequeñas piezas, como adaptadores de llaves o mangos para cubiertos, suponen un gran cambio en la autonomía. Al estar listos para descargar e imprimir, son opciones rápidas y económicas para mejorar el entorno personal sin necesidad de realizar grandes inversiones.
+                </p>
+                <p>
+                  Aquí tienes un recopilatorio de modelos interesantes seleccionados de plataformas como Thingiverse. Son recursos creados por otros usuarios para ayudar a los demás; te invitamos a explorar estas ideas y descubrir todo lo que se puede conseguir con esta tecnología.
+                </p>
+              </div>
+
+              <a href="https://www.thingiverse.com/Pablosky92/collections/44071207/things" target="_blank" rel="noopener noreferrer" className="block group mb-16">
+                <div className="bg-orange-50 rounded-[2rem] overflow-hidden border border-orange-100 shadow-md group-hover:shadow-xl group-hover:border-orange-200 transition-all flex flex-col md:flex-row">
+                  <div className="md:w-1/3 h-64 md:h-auto overflow-hidden relative">
+                    <img src="3d_printed_objects.png" alt="Objetos impresos en 3D" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/30"></div>
+                  </div>
+                  <div className="p-8 md:p-12 flex-1 flex flex-col justify-center bg-white relative">
+                    <div className="absolute top-0 right-0 p-6 opacity-10">
+                      <Icons.Search className="w-24 h-24" />
+                    </div>
+                    <h4 className="font-display text-2xl font-bold text-brand-900 mb-3 relative z-10 group-hover:text-orange-600 transition-colors">Colección Thingiverse</h4>
+                    <p className="text-gray-500 mb-6 relative z-10">Explora la carpeta con decenas de archivos STL listos para imprimir: adaptadores de baño, cubiertos, llaves y más soluciones prácticas.</p>
+                    <div className="inline-flex items-center gap-2 text-orange-600 font-bold group-hover:gap-3 transition-all relative z-10">
+                      Abrir colección en Thingiverse
+                      <Icons.ArrowRight />
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <div className="pt-12 border-t border-brand-100 relative">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-6">
+                  <span className="text-brand-400 font-bold uppercase tracking-widest text-xs flex items-center gap-2">
+                    <Icons.Star className="w-4 h-4 text-amber-400" /> Material Recomendado
+                  </span>
+                </div>
+
+                <div className="space-y-6 mt-8">
+                  {/* PLA */}
+                  <a href="https://amzn.to/4uxnC1f" target="_blank" rel="noopener noreferrer" className="block group">
+                    <div className="bg-white rounded-[2.5rem] p-4 sm:p-6 border-2 border-brand-50 shadow-xl group-hover:border-brand-300 group-hover:shadow-2xl transition-all flex flex-col sm:flex-row items-center gap-8">
+                      <div className="w-full sm:w-48 h-48 rounded-2xl overflow-hidden shrink-0 bg-gray-50 relative">
+                        <img src="pla_filament_product.png" alt="Filamento PLA" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        <div className="absolute top-2 left-2 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-brand-900 shadow-sm border border-brand-100">PLA</div>
+                      </div>
+                      <div className="flex-1 text-center sm:text-left pb-4 sm:pb-0">
+                        <h4 className="font-display text-2xl font-bold text-brand-900 mb-2 group-hover:text-brand-600 transition-colors">Filamento PLA de alta calidad</h4>
+                        <p className="text-gray-600 mb-6">El material ideal para imprimir productos de apoyo: fácil de usar, resistente y versátil para todas tus creaciones diarias.</p>
+                        <span className="inline-flex items-center justify-center gap-2 bg-brand-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-800 transition-all shadow-md group-hover:shadow-lg w-full sm:w-auto">
+                          Ver producto en Amazon
+                          <Icons.ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+
+                  {/* PETG */}
+                  <a href="https://amzn.to/3RHR3yM" target="_blank" rel="noopener noreferrer" className="block group">
+                    <div className="bg-white rounded-[2.5rem] p-4 sm:p-6 border-2 border-brand-50 shadow-xl group-hover:border-brand-300 group-hover:shadow-2xl transition-all flex flex-col sm:flex-row items-center gap-8">
+                      <div className="w-full sm:w-48 h-48 rounded-2xl overflow-hidden shrink-0 bg-gray-50 relative">
+                        <img src="petg_filament_product.png" alt="Filamento PETG" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        <div className="absolute top-2 left-2 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-brand-900 shadow-sm border border-brand-100">PETG</div>
+                      </div>
+                      <div className="flex-1 text-center sm:text-left pb-4 sm:pb-0">
+                        <h4 className="font-display text-2xl font-bold text-brand-900 mb-2 group-hover:text-brand-600 transition-colors">Filamento PETG muy resistente</h4>
+                        <p className="text-gray-600 mb-6">Perfecto para adaptaciones que requieran mayor resistencia a impactos o estén expuestas a cambios de temperatura.</p>
+                        <span className="inline-flex items-center justify-center gap-2 bg-brand-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-800 transition-all shadow-md group-hover:shadow-lg w-full sm:w-auto">
+                          Ver producto en Amazon
+                          <Icons.ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+
+                  {/* ABS */}
+                  <a href="https://amzn.to/4wyJLNI" target="_blank" rel="noopener noreferrer" className="block group">
+                    <div className="bg-white rounded-[2.5rem] p-4 sm:p-6 border-2 border-brand-50 shadow-xl group-hover:border-brand-300 group-hover:shadow-2xl transition-all flex flex-col sm:flex-row items-center gap-8">
+                      <div className="w-full sm:w-48 h-48 rounded-2xl overflow-hidden shrink-0 bg-gray-50 relative">
+                        <img src="abs_filament_product.png" alt="Filamento ABS" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        <div className="absolute top-2 left-2 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-brand-900 shadow-sm border border-brand-100">ABS</div>
+                      </div>
+                      <div className="flex-1 text-center sm:text-left pb-4 sm:pb-0">
+                        <h4 className="font-display text-2xl font-bold text-brand-900 mb-2 group-hover:text-brand-600 transition-colors">Filamento ABS para mecánicas</h4>
+                        <p className="text-gray-600 mb-6">Excelente durabilidad and resistencia al desgaste, ideal para engranajes y piezas que sufran mucha fricción continua.</p>
+                        <span className="inline-flex items-center justify-center gap-2 bg-brand-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-800 transition-all shadow-md group-hover:shadow-lg w-full sm:w-auto">
+                          Ver producto en Amazon
+                          <Icons.ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+
+                  {/* TPU */}
+                  <a href="https://amzn.to/4eLxH5z" target="_blank" rel="noopener noreferrer" className="block group">
+                    <div className="bg-white rounded-[2.5rem] p-4 sm:p-6 border-2 border-brand-50 shadow-xl group-hover:border-brand-300 group-hover:shadow-2xl transition-all flex flex-col sm:flex-row items-center gap-8">
+                      <div className="w-full sm:w-48 h-48 rounded-2xl overflow-hidden shrink-0 bg-gray-50 relative">
+                        <img src="tpu_filament_product.png" alt="Filamento TPU" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        <div className="absolute top-2 left-2 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-brand-900 shadow-sm border border-brand-100">TPU</div>
+                      </div>
+                      <div className="flex-1 text-center sm:text-left pb-4 sm:pb-0">
+                        <h4 className="font-display text-2xl font-bold text-brand-900 mb-2 group-hover:text-brand-600 transition-colors">Filamento TPU flexible</h4>
+                        <p className="text-gray-600 mb-6">Material elástico tipo goma, fantástico para crear fundas, protectores antideslizantes o agarraderas ergonómicas.</p>
+                        <span className="inline-flex items-center justify-center gap-2 bg-brand-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-800 transition-all shadow-md group-hover:shadow-lg w-full sm:w-auto">
+                          Ver producto en Amazon
+                          <Icons.ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+            
+            <AdSenseBlock slot="5026466122" />
+          </div>
+        ) : null}
+      </div>
+
+      {/* Modal de Detalles del Producto PAO */}
+      {selectedItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in" onClick={() => setSelectedItem(null)}>
+          <div className="bg-white w-full max-w-lg rounded-[3rem] p-8 sm:p-10 shadow-2xl border border-brand-100 relative anim-scale-in" onClick={e => e.stopPropagation()}>
+            <button 
+              onClick={() => setSelectedItem(null)}
+              className="absolute top-6 right-6 w-10 h-10 bg-gray-50 hover:bg-gray-100 rounded-full flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"
+            >
+              <Icons.X className="w-5 h-5" />
+            </button>
+            
+            <div className="mb-6">
+              <span className="bg-brand-50 text-brand-900 border border-brand-100 px-4 py-1.5 rounded-full font-mono font-bold text-sm">
+                Código PAO: {selectedItem.sC} {selectedItem.tC}
+              </span>
+            </div>
+            
+            <h3 className="text-2xl font-bold text-brand-900 mb-2 leading-tight">
+              {selectedItem.tD}
+            </h3>
+            <p className="text-xs text-brand-500 uppercase tracking-wider font-semibold mb-6">
+              {selectedItem.cD}
+            </p>
+            
+            <div className="grid grid-cols-2 gap-4 mb-8">
+              <div className="bg-emerald-50/50 border border-emerald-100 p-5 rounded-2xl">
+                <span className="block text-[11px] text-emerald-700 uppercase font-bold mb-1 tracking-wider">Importe Máximo</span>
+                <span className="font-black text-emerald-600 text-2xl">{selectedItem.p}€</span>
+              </div>
+              <div className="bg-blue-50/50 border border-blue-100 p-5 rounded-2xl">
+                <span className="block text-[11px] text-blue-700 uppercase font-bold mb-1 tracking-wider">Aportación Usuario</span>
+                <span className="font-black text-brand-900 text-2xl">{selectedItem.u}€</span>
+              </div>
+            </div>
+            
+            <div className="space-y-4 pt-6 border-t border-gray-100">
+              <div className="flex justify-between items-center py-2.5">
+                <span className="text-gray-500 font-medium">Validación Sanitaria:</span>
+                <span className={`px-3 py-1 rounded-full text-xs font-bold ${selectedItem.v === 'S' ? 'bg-amber-50 text-amber-800 border border-amber-100' : 'bg-gray-50 text-gray-600 border border-gray-100'}`}>
+                  {selectedItem.v === 'S' ? 'Necesaria (Sí)' : 'No requiere (No)'}
+                </span>
+              </div>
+              <div className="flex justify-between items-center py-2.5">
+                <span className="text-gray-500 font-medium">Periodicidad Mínima:</span>
+                <span className="font-bold text-brand-900">{selectedItem.m} meses</span>
+              </div>
+              <div className="flex justify-between items-center py-2.5">
+                <span className="text-gray-500 font-medium">Aportación CatSalut:</span>
+                <span className="font-bold text-emerald-600">{selectedItem.s}€</span>
+              </div>
+            </div>
+            
+            <div className="mt-8">
+              <button 
+                onClick={() => setSelectedItem(null)}
+                className="w-full py-4 bg-brand-900 hover:bg-brand-950 text-white rounded-2xl font-bold transition-all shadow-md active:scale-[0.98]"
+              >
+                Cerrar Detalles
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+};
+
+// --- APP ---
+function App() {
+  const [currentPage, setCurrentPage] = useState('resources');
+  const [isPWA, setIsPWA] = useState(false);
+  const [installable, setInstallable] = useState(false);
+  const [showInstaller, setShowInstaller] = useState(false);
+
+  const isInApp = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('browser') === 'true') return false;
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  }, []);
+
+  const checkPWA = useCallback(() => {
+    setIsPWA(isInApp);
+  }, [isInApp]);
+
+  useEffect(() => {
+    checkPWA();
+    window.addEventListener('pwa-installable', () => setInstallable(true));
+    window.addEventListener('pwa-installed', () => { setInstallable(false); checkPWA(); });
+    
+    if (window.deferredPrompt) {
+      setInstallable(true);
+    }
+  }, [checkPWA]);
+
+  const navigateTo = useCallback((page, section = null) => {
+    if (page === 'resources') {
+      setCurrentPage('resources');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    } else {
+      let target = 'index.html';
+      if (page === 'cognitive' || page === 'games') target = 'estimulacion-cognitiva.html';
+      else if (page === 'guides') target = 'guias.html';
+      else if (page === 'cv') target = 'cv.html';
+      else if (page === 'analyzer') target = 'valoracion-estancia.html';
+      else if (page === 'contact') target = 'contacto.html';
+      else if (page === 'legal') target = 'aviso-legal.html';
+      
+      if (section) {
+        target += '?section=' + section;
+      }
+      window.location.href = target;
+    }
+  }, []);
+
+  const isStandalone = isInApp && sessionStorage.getItem('allowWebInApp') !== 'true';
+
+  return (
+    <>
+      {showInstaller && (
+        <div className="fixed inset-x-0 bottom-0 z-[100] p-4 anim-slide-up">
+          <div className="bg-white rounded-[2rem] p-6 max-w-lg mx-auto shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.3)] border-t-4 border-brand-900 text-center">
+            <div className="flex items-center gap-4 mb-5 text-left">
+              <div className="w-12 h-12 bg-brand-50 text-brand-900 rounded-xl flex items-center justify-center text-xl">
+                <Icons.Download />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-display text-lg font-bold text-brand-900">¿Instalar Recursos IAdapta?</h3>
+                <p className="text-xs text-gray-500 leading-tight">Acceso directo a herramientas profesionales en tu pantalla.</p>
+              </div>
+              <button onClick={() => setShowInstaller(false)} className="p-2 text-gray-300">
+                <Icons.X />
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <button 
+                onClick={() => {
+                  if (window.deferredPrompt) {
+                    window.deferredPrompt.prompt();
+                    setShowInstaller(false);
+                  } else {
+                    alert("Nota de sistema:\n\nPara instalar la App:\n1. Toca compartir o menú en tu navegador.\n2. Selecciona 'Añadir a pantalla de inicio'.");
+                    setShowInstaller(false);
+                  }
+                }}
+                className="py-3.5 bg-brand-900 text-white rounded-xl font-bold text-sm hover:bg-brand-800 transition-all active:scale-95 shadow-lg shadow-brand-900/20"
+              >
+                Instalar Ahora
+              </button>
+              <button onClick={() => setShowInstaller(false)} className="py-3.5 bg-gray-100 text-gray-600 rounded-xl font-bold text-sm hover:bg-gray-200 transition-all">
+                Más tarde
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {!isStandalone && <Navbar currentPage="resources" />}
+      <main id="main-content">
+        <SectionResources navigateTo={navigateTo} isPWA={isPWA} setShowInstaller={setShowInstaller} />
+      </main>
+      {!isStandalone && <Footer currentPage="resources" />}
+      {!isStandalone && <CookieBanner />}
+    </>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);

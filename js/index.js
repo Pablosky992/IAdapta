@@ -1,0 +1,239 @@
+(function() {
+const {
+  Icons,
+  Navbar,
+  Footer,
+  CookieBanner
+} = window;
+const {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo
+} = React;
+
+// --- COMPONENTE SECTIONABOUT ---
+const SectionAbout = function SectionAbout() {
+  return /*#__PURE__*/React.createElement("section", {
+    id: "about",
+    className: "pt-36 pb-24 px-4 bg-white relative"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "max-w-6xl mx-auto"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "bg-gradient-to-br from-brand-50 to-sky-50 rounded-3xl border border-brand-100 shadow-lg p-8 md:p-12 flex flex-col md:flex-row gap-10 items-center"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "shrink-0 relative"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "absolute inset-0 bg-brand-400 rounded-full blur-2xl opacity-20"
+  }), /*#__PURE__*/React.createElement("img", {
+    src: "narciso_millan_portrait.jpg",
+    alt: "Pablo Narciso Mill\xE1n",
+    className: "relative w-64 h-64 rounded-full object-cover shadow-xl border-4 border-white z-10"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "flex-1 text-center md:text-left"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "inline-block bg-white text-brand-600 border border-brand-200 text-sm font-bold uppercase tracking-widest rounded-full px-4 py-1.5 mb-4 shadow-sm"
+  }, "Sobre M\xED"), /*#__PURE__*/React.createElement("h2", {
+    className: "font-display text-4xl font-bold text-brand-900 mb-4"
+  }, "Pablo Narciso Mill\xE1n"), /*#__PURE__*/React.createElement("div", {
+    className: "space-y-4 text-xl text-gray-700 leading-relaxed mb-6"
+  }, /*#__PURE__*/React.createElement("p", null, "Terapeuta Ocupacional graduado en 2015 con una s\xF3lida trayectoria en ", /*#__PURE__*/React.createElement("strong", {
+    className: "text-brand-700"
+  }, "geriatr\xEDa y ortopedia"), ". Mi enfoque se centra en potenciar la autonom\xEDa de las personas mediante intervenciones personalizadas que combinan la experiencia cl\xEDnica con soluciones pr\xE1cticas y resolutivas para el d\xEDa a d\xEDa."), /*#__PURE__*/React.createElement("p", null, "Aprovecho mi conocimiento en herramientas innovadoras como la ", /*#__PURE__*/React.createElement("strong", {
+    className: "text-brand-700"
+  }, "impresi\xF3n 3D"), " para promover el uso de adaptaciones funcionales de bajo coste, buscando siempre que la tecnolog\xEDa sea un puente hacia la independencia. Mi objetivo es mejorar la calidad de vida de mis pacientes, ofreciendo una atenci\xF3n t\xE9cnica, emp\xE1tica y adaptada a las necesidades reales de cada entorno.")), /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-col sm:flex-row items-center justify-between gap-6"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-wrap gap-3 justify-center md:justify-start"
+  }, ['Geriatría', 'Ortopedia', 'Impresión 3D', 'Adaptación del Entorno'].map(tag => /*#__PURE__*/React.createElement("span", {
+    key: tag,
+    className: "bg-white border border-brand-200 text-brand-700 rounded-full px-4 py-1.5 text-sm font-semibold shadow-sm"
+  }, tag))), /*#__PURE__*/React.createElement("a", {
+    href: "cv.html",
+    className: "shrink-0 flex items-center gap-2 bg-brand-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-800 transition-all shadow-md hover:shadow-lg active:scale-95 group"
+  }, /*#__PURE__*/React.createElement(Icons.FileText, null), "Ver Curr\xEDculum", /*#__PURE__*/React.createElement("span", {
+    className: "transition-transform group-hover:translate-x-1"
+  }, /*#__PURE__*/React.createElement(Icons.ArrowRight, null))))))));
+};
+
+// --- COMPONENTE SECTIONHOME ---
+const SectionHome = function SectionHome() {
+  const cards = [{
+    id: 'analyzer',
+    icon: /*#__PURE__*/React.createElement(Icons.Brain, null),
+    color: 'bg-sky-100 text-sky-600',
+    badge: 'Inteligencia Artificial',
+    title: 'Valoración de la estancia',
+    desc: 'Introduce las características de tu hogar o espacio y nuestra inteligencia artificial evaluará las barreras arquitectónicas existentes, sugiriendo las mejores adaptaciones.',
+    cta: 'Valorar estancia',
+    img: 'ai_analyzer_thumbnail.png',
+    href: 'valoracion-estancia.html'
+  }, {
+    id: 'guides',
+    icon: /*#__PURE__*/React.createElement(Icons.Book, null),
+    color: 'bg-indigo-100 text-indigo-600',
+    badge: 'Recursos',
+    title: 'Guías de Adaptación',
+    desc: 'Consejos prácticos, normativas y descripciones detalladas de productos de apoyo para adaptar el baño, cocina, dormitorio y zonas comunes del hogar, previniendo caídas.',
+    cta: 'Explorar guías',
+    img: 'adaptation_guides_thumbnail.png',
+    href: 'guias.html'
+  }, {
+    id: 'cognitive',
+    icon: /*#__PURE__*/React.createElement(Icons.Puzzle, null),
+    color: 'bg-emerald-100 text-emerald-600',
+    badge: 'Entrenamiento Mental',
+    title: 'Ejercicios Mentales',
+    desc: 'Ejercicios prácticos, retos diarios de memoria, cálculo numérico, sopas de letras y atención visual diseñados para fortalecer la agilidad mental y promover la autonomía personal.',
+    cta: 'Entrenar ahora',
+    img: 'mental_exercises_thumbnail.png',
+    href: 'estimulacion-cognitiva.html'
+  }, {
+    id: 'resources',
+    icon: /*#__PURE__*/React.createElement(Icons.FilePdf, null),
+    color: 'bg-rose-100 text-rose-600',
+    badge: 'Área Profesional',
+    title: 'Recursos para Profesionales',
+    desc: 'Herramientas y materiales descargables diseñados para facilitar la práctica clínica diaria de terapeutas ocupacionales y profesionales de la salud.',
+    cta: 'Ver recursos',
+    img: 'resources_bg.png',
+    href: 'recursos.html'
+  }, {
+    id: 'cv',
+    icon: /*#__PURE__*/React.createElement(Icons.FileText, null),
+    color: 'bg-blue-100 text-blue-600',
+    badge: 'Perfil Profesional',
+    title: 'Mi Trayectoria',
+    desc: 'Conoce mi formación, experiencia clínica en geriatría y ortopedia, y competencias avanzadas en impresión 3D.',
+    cta: 'Saber más',
+    img: 'cv_trayectoria_thumbnail_ot_v2.png',
+    href: 'cv.html'
+  }];
+  return /*#__PURE__*/React.createElement("div", {
+    id: "home"
+  }, /*#__PURE__*/React.createElement("section", {
+    className: "hero-gradient min-h-[90vh] flex flex-col justify-center pt-32 pb-20 px-4"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "max-w-7xl mx-auto w-full"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-center mb-16"
+  }, /*#__PURE__*/React.createElement("h1", {
+    className: "font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-brand-900 leading-tight mb-6"
+  }, "Tu bienestar y", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
+    className: "text-brand-500"
+  }, "autonom\xEDa"), ", primero"), /*#__PURE__*/React.createElement("p", {
+    className: "text-xl sm:text-2xl text-gray-600 leading-relaxed max-w-3xl mx-auto mb-10"
+  }, "Evaluaci\xF3n experta de tu entorno y asesoramiento en productos de apoyo. ", /*#__PURE__*/React.createElement("strong", {
+    className: "text-brand-700"
+  }, "\"Te gu\xEDo en la adaptaci\xF3n de tu casa para que vuelvas a moverte con seguridad y total confianza.\""))), /*#__PURE__*/React.createElement("div", {
+    className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center"
+  }, cards.map((c, i) => /*#__PURE__*/React.createElement("a", {
+    key: c.id,
+    href: c.href,
+    className: "bg-white rounded-3xl overflow-hidden border border-blue-50 shadow-lg card-lift flex flex-col cursor-pointer group block"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "relative h-44 overflow-hidden"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: c.img,
+    alt: c.title,
+    className: "w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: `absolute top-4 right-4 w-12 h-12 ${c.color} rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-6 transition-transform`
+  }, c.icon)), /*#__PURE__*/React.createElement("div", {
+    className: "p-6 flex flex-col flex-1"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-[10px] font-bold uppercase tracking-[0.2em] text-brand-400 mb-2"
+  }, c.badge), /*#__PURE__*/React.createElement("h2", {
+    className: "font-display text-xl font-bold text-brand-900 mb-3 group-hover:text-brand-600 transition-colors leading-tight"
+  }, c.title), /*#__PURE__*/React.createElement("p", {
+    className: "text-gray-600 text-sm leading-relaxed flex-1 line-clamp-3"
+  }, c.desc), /*#__PURE__*/React.createElement("div", {
+    className: "mt-6 inline-flex items-center gap-2 text-brand-600 font-bold text-sm group-hover:gap-3 transition-all"
+  }, c.cta, /*#__PURE__*/React.createElement(Icons.ArrowRight, null)))))))));
+};
+
+// --- COMPONENTE SECTIONCONTACT ---
+const SectionContact = function SectionContact() {
+  const info = [{
+    icon: /*#__PURE__*/React.createElement(Icons.Mail, null),
+    label: 'Correo electrónico',
+    value: 'iadaptato@gmail.com',
+    href: 'mailto:iadaptato@gmail.com'
+  }, {
+    icon: /*#__PURE__*/React.createElement(Icons.Location, null),
+    label: 'Localización',
+    value: 'Barcelona, España',
+    href: null
+  }, {
+    icon: /*#__PURE__*/React.createElement(Icons.Heart, {
+      className: "fill-red-500 text-red-500"
+    }),
+    label: 'Apoyo al proyecto',
+    value: 'Realizar una donación',
+    href: 'https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8',
+    special: true
+  }];
+  return /*#__PURE__*/React.createElement("section", {
+    id: "contact",
+    className: "pt-36 pb-24 px-4 bg-gradient-to-b from-brand-50 to-white"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "max-w-6xl mx-auto"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-center mb-14"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "inline-block bg-brand-100 text-brand-700 rounded-full px-5 py-2 text-base font-bold uppercase tracking-widest mb-4"
+  }, "Contacto"), /*#__PURE__*/React.createElement("h2", {
+    className: "font-display text-4xl sm:text-5xl font-bold text-brand-900 mb-4"
+  }, "Hablemos"), /*#__PURE__*/React.createElement("div", {
+    className: "section-divider w-24 mx-auto mb-6"
+  }), /*#__PURE__*/React.createElement("p", {
+    className: "text-xl text-gray-600 max-w-2xl mx-auto"
+  }, "\xBFTienes dudas, quieres solicitar una valoraci\xF3n o simplemente saludar? Estar\xE9 encantado de atenderte.")), /*#__PURE__*/React.createElement("div", {
+    className: "max-w-xl mx-auto space-y-6"
+  }, info.map((item, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    className: `flex items-center gap-5 border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all ${item.special ? 'bg-rose-50 border-rose-200 shadow-rose-100' : 'bg-white border-brand-100'}`
+  }, /*#__PURE__*/React.createElement("div", {
+    className: `w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${item.special ? 'bg-white text-red-600 shadow-sm' : 'bg-brand-100 text-brand-600'}`
+  }, item.icon), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    className: `text-sm font-bold uppercase tracking-widest mb-0.5 ${item.special ? 'text-rose-400' : 'text-brand-400'}`
+  }, item.label), item.href ? /*#__PURE__*/React.createElement("a", {
+    href: item.href,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    className: `text-xl font-semibold underline underline-offset-2 transition-colors ${item.special ? 'text-rose-700 hover:text-rose-900' : 'text-brand-800 hover:text-brand-600'}`
+  }, item.value) : /*#__PURE__*/React.createElement("p", {
+    className: "text-xl font-semibold text-brand-800"
+  }, item.value)))), /*#__PURE__*/React.createElement("div", {
+    className: "rounded-3xl overflow-hidden shadow-2xl border border-brand-100 mt-10"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: "contact_ot.jpg",
+    alt: "Consulta de Terapia Ocupacional - Intervenci\xF3n profesional",
+    className: "w-full h-auto object-cover hover:scale-105 transition-transform duration-1000"
+  })))));
+};
+
+// --- APLICACIÓN PRINCIPAL ---
+function App() {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Navbar, {
+    currentPage: "home"
+  }), /*#__PURE__*/React.createElement("main", {
+    id: "main-content"
+  }, /*#__PURE__*/React.createElement(SectionHome, null), /*#__PURE__*/React.createElement("div", {
+    className: "max-w-4xl mx-auto px-4"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "section-divider my-0"
+  })), /*#__PURE__*/React.createElement(SectionAbout, null), /*#__PURE__*/React.createElement("div", {
+    className: "max-w-4xl mx-auto px-4"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "section-divider my-0"
+  })), /*#__PURE__*/React.createElement(SectionContact, null)), /*#__PURE__*/React.createElement(Footer, {
+    currentPage: "home"
+  }), /*#__PURE__*/React.createElement(CookieBanner, null));
+}
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(/*#__PURE__*/React.createElement(App, null));
+})();
