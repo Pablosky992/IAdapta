@@ -14,7 +14,12 @@ const {
 } = React;
 const SectionCV = function SectionCV() {
   const experience = [{
-    period: '09/2021 – Actualidad',
+    period: '06/2026 – Actualidad',
+    role: 'Terapeuta Ocupacional',
+    place: 'Ortopedia LaFACT',
+    desc: 'Asesoramiento especializado en productos de apoyo y adaptaciones funcionales. Valoración integral de la autonomía y diseño de soluciones personalizadas.'
+  }, {
+    period: '09/2021 – 05/2026',
     role: 'Técnico y Terapeuta Ocupacional',
     place: 'Instituto Técnico Ortopédico, Barcelona',
     desc: 'Evaluación y diagnóstico de necesidades funcionales. Control de stock y gestión de proveedores. Elaboración de presupuestos personalizados. Responsable de tienda y atención al cliente.'

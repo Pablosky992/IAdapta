@@ -1407,7 +1407,7 @@ const SectionWordSearch = function SectionWordSearch({
     useCallback,
     useRef
   } = React;
-  const WORD_LIST = ['DUCHA', 'COMER', 'CAMINADOR', 'SILLA', 'MOVIL', 'TELEFONO', 'DORMIR', 'JUGAR', 'ASEO', 'VESTIR', 'COCINAR', 'PASEAR', 'LLAVES', 'GAFAS', 'RELOJ', 'PASTILLA', 'SOPA', 'AGUA', 'RADIO', 'LIBRO', 'CUIDADO', 'AYUDA', 'VASO', 'PLATO', 'CAMA', 'SOFA', 'MESA', 'ROPA', 'ZAPATOS', 'BAÑO', 'COCINA', 'PASILLO', 'ESPEJO', 'RELOJ', 'TIEMPO', 'LUZ', 'MANO', 'PIE', 'SALUD'];
+  const WORD_LIST = ['DUCHA', 'COMER', 'CAMINADOR', 'SILLA', 'MOVIL', 'TELEFONO', 'DORMIR', 'JUGAR', 'ASEO', 'VESTIR', 'COCINAR', 'PASEAR', 'LLAVES', 'GAFAS', 'RELOJ', 'PASTILLA', 'SOPA', 'AGUA', 'RADIO', 'LIBRO', 'CUIDADO', 'AYUDA', 'VASO', 'PLATO', 'CAMA', 'SOFA', 'MESA', 'ROPA', 'ZAPATOS', 'BAÑO', 'COCINA', 'PASILLO', 'ESPEJO', 'TIEMPO', 'LUZ', 'MANO', 'PIE', 'SALUD'];
   const [gameStarted, setGameStarted] = useState(false);
   const [levelIdx, setLevelIdx] = useState(0);
   const [grid, setGrid] = useState([]);
@@ -1429,76 +1429,89 @@ const SectionWordSearch = function SectionWordSearch({
       wordCount,
       directions
     } = currentLevel;
-    const newGrid = Array(rows).fill(0).map(() => Array(cols).fill(''));
-    const placedWords = [];
-    const pool = [...WORD_LIST].sort(() => Math.random() - 0.5).slice(0, wordCount);
-    pool.forEach(word => {
-      let placed = false;
-      let attempts = 0;
-      while (!placed && attempts < 250) {
-        attempts++;
-        const dirType = directions[Math.floor(Math.random() * directions.length)];
-        let dr, dc;
+    let newGrid = [];
+    let placedWords = [];
+    const uniqueWordList = Array.from(new Set(WORD_LIST));
+    let success = false;
+    let retries = 0;
+    while (!success && retries < 25) {
+      retries++;
+      newGrid = Array(rows).fill(0).map(() => Array(cols).fill(''));
+      placedWords = [];
 
-        // 0:H, 1:V, 2:D, 3:HR, 4:VR, 5:DR, 6:D2, 7:D2R
-        if (dirType === 0) {
-          dr = 0;
-          dc = 1;
-        } else if (dirType === 1) {
-          dr = 1;
-          dc = 0;
-        } else if (dirType === 2) {
-          dr = 1;
-          dc = 1;
-        } else if (dirType === 3) {
-          dr = 0;
-          dc = -1;
-        } else if (dirType === 4) {
-          dr = -1;
-          dc = 0;
-        } else if (dirType === 5) {
-          dr = -1;
-          dc = -1;
-        } else if (dirType === 6) {
-          dr = 1;
-          dc = -1;
-        } else if (dirType === 7) {
-          dr = -1;
-          dc = 1;
-        }
-        const r = Math.floor(Math.random() * rows);
-        const c = Math.floor(Math.random() * cols);
-        const endR = r + (word.length - 1) * dr;
-        const endC = c + (word.length - 1) * dc;
-        if (endR < 0 || endR >= rows || endC < 0 || endC >= cols) continue;
-        let fits = true;
-        for (let i = 0; i < word.length; i++) {
-          const rr = r + i * dr;
-          const cc = c + i * dc;
-          if (newGrid[rr][cc] !== '' && newGrid[rr][cc] !== word[i]) {
-            fits = false;
-            break;
+      // Shuffle and pick unique words
+      const pool = [...uniqueWordList].sort(() => Math.random() - 0.5).slice(0, wordCount);
+      pool.forEach(word => {
+        let placed = false;
+        let attempts = 0;
+        while (!placed && attempts < 150) {
+          attempts++;
+          const dirType = directions[Math.floor(Math.random() * directions.length)];
+          let dr, dc;
+
+          // 0:H, 1:V, 2:D, 3:HR, 4:VR, 5:DR, 6:D2, 7:D2R
+          if (dirType === 0) {
+            dr = 0;
+            dc = 1;
+          } else if (dirType === 1) {
+            dr = 1;
+            dc = 0;
+          } else if (dirType === 2) {
+            dr = 1;
+            dc = 1;
+          } else if (dirType === 3) {
+            dr = 0;
+            dc = -1;
+          } else if (dirType === 4) {
+            dr = -1;
+            dc = 0;
+          } else if (dirType === 5) {
+            dr = -1;
+            dc = -1;
+          } else if (dirType === 6) {
+            dr = 1;
+            dc = -1;
+          } else if (dirType === 7) {
+            dr = -1;
+            dc = 1;
           }
-        }
-        if (fits) {
-          const cells = [];
+          const r = Math.floor(Math.random() * rows);
+          const c = Math.floor(Math.random() * cols);
+          const endR = r + (word.length - 1) * dr;
+          const endC = c + (word.length - 1) * dc;
+          if (endR < 0 || endR >= rows || endC < 0 || endC >= cols) continue;
+          let fits = true;
           for (let i = 0; i < word.length; i++) {
             const rr = r + i * dr;
             const cc = c + i * dc;
-            newGrid[rr][cc] = word[i];
-            cells.push({
-              r: rr,
-              c: cc
-            });
+            if (newGrid[rr][cc] !== '' && newGrid[rr][cc] !== word[i]) {
+              fits = false;
+              break;
+            }
           }
-          placedWords.push({
-            word,
-            cells
-          });
-          placed = true;
+          if (fits) {
+            const cells = [];
+            for (let i = 0; i < word.length; i++) {
+              const rr = r + i * dr;
+              const cc = c + i * dc;
+              newGrid[rr][cc] = word[i];
+              cells.push({
+                r: rr,
+                c: cc
+              });
+            }
+            placedWords.push({
+              word,
+              cells
+            });
+            placed = true;
+          }
         }
+      });
+      if (placedWords.length === wordCount) {
+        success = true;
       }
-    });
+    }
     const letters = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
@@ -1584,11 +1597,25 @@ const SectionWordSearch = function SectionWordSearch({
     const dr = Math.sign(end.r - start.r);
     const dc = Math.sign(end.c - start.c);
     const len = Math.max(Math.abs(end.r - start.r), Math.abs(end.c - start.c)) + 1;
-    let wordStr = '';
-    for (let i = 0; i < len; i++) {
-      wordStr += grid[start.r + i * dr][start.c + i * dc];
-    }
-    const match = wordsToFind.find(w => w.word === wordStr || w.word === wordStr.split('').reverse().join(''));
+
+    // Find if there is a word in wordsToFind that matches this path exactly
+    const match = wordsToFind.find(w => {
+      if (w.cells.length !== len) return false;
+      // Check forward path
+      let forwardMatch = true;
+      let backwardMatch = true;
+      for (let i = 0; i < len; i++) {
+        const pr = start.r + i * dr;
+        const pc = start.c + i * dc;
+        if (pr !== w.cells[i].r || pc !== w.cells[i].c) {
+          forwardMatch = false;
+        }
+        if (pr !== w.cells[len - 1 - i].r || pc !== w.cells[len - 1 - i].c) {
+          backwardMatch = false;
+        }
+      }
+      return forwardMatch || backwardMatch;
+    });
     if (match && !foundWords.some(fw => fw.word === match.word)) {
       const newFound = [...foundWords, match];
       setFoundWords(newFound);
@@ -1761,7 +1788,7 @@ const SectionWordSearch = function SectionWordSearch({
     className: "grid grid-cols-2 lg:grid-cols-1 gap-2 max-h-[350px] sm:max-h-[550px] overflow-y-auto pr-2 pb-12 custom-scrollbar"
   }, wordsToFind.map((w, i) => /*#__PURE__*/React.createElement("div", {
     key: i,
-    className: `text-base font-semibold py-2 px-3 rounded-xl transition-all duration-300 border ${foundWords.some(fw => fw.word === w.word) ? 'text-emerald-300 line-through bg-emerald-50 border-emerald-100' : 'text-brand-700 bg-white border-brand-50 shadow-sm'}`
+    className: `text-base font-semibold py-2 px-3 rounded-xl transition-all duration-300 border ${foundWords.some(fw => fw.word === w.word) ? 'text-emerald-700 line-through bg-emerald-50 border-emerald-100' : 'text-brand-700 bg-white border-brand-50 shadow-sm'}`
   }, w.word)))))), gameStatus === 'won' && /*#__PURE__*/React.createElement("div", {
     className: "fixed inset-0 z-[60] bg-brand-900/40 backdrop-blur-sm flex items-center justify-center p-4"
   }, /*#__PURE__*/React.createElement("div", {
