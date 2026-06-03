@@ -1738,10 +1738,9 @@ const SectionWordSearch = function SectionWordSearch({
   }), /*#__PURE__*/React.createElement("div", {
     className: "flex flex-col lg:flex-row gap-8 items-start justify-center mb-24"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "bg-white p-3 rounded-3xl shadow-2xl border-8 border-brand-100 select-none touch-none grid gap-1 w-full max-w-[420px] relative overflow-hidden",
+    className: "bg-white p-3 rounded-3xl shadow-2xl border-8 border-brand-100 select-none touch-none grid gap-1 w-full max-w-[420px] relative",
     style: {
-      gridTemplateColumns: `repeat(${currentLevel.cols}, minmax(0, 1fr))`,
-      aspectRatio: `${currentLevel.cols}/${currentLevel.rows}`
+      gridTemplateColumns: `repeat(${currentLevel.cols}, minmax(0, 1fr))`
     },
     onMouseDown: handleStart,
     onMouseMove: handleMove,
@@ -1758,7 +1757,7 @@ const SectionWordSearch = function SectionWordSearch({
       key: `${r}-${c}`,
       "data-r": r,
       "data-c": c,
-      className: `flex items-center justify-center text-xl sm:text-2xl font-bold rounded-lg transition-all duration-200
+      className: `flex items-center justify-center aspect-square text-base min-[380px]:text-lg sm:text-2xl font-bold rounded-lg transition-all duration-200
                             ${found ? 'bg-emerald-500 text-white shadow-sm scale-95' : selected ? 'bg-brand-600 text-white shadow-lg scale-105 z-10' : hinted ? 'bg-amber-100 text-amber-700 border-2 border-amber-400 animate-pulse' : 'text-brand-900 hover:bg-brand-50'}`
     }, letter);
   }))), /*#__PURE__*/React.createElement("div", {
