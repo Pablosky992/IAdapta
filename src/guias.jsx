@@ -400,7 +400,7 @@ const SectionGuides = function SectionGuides() {
       articles: [
         {
           title: 'Movilidad y Autonomía: Prescripción de Productos de Apoyo',
-          image: 'assets/movilidad_adaptada.png',
+          image: 'assets/movilidad_adaptada.jpg',
           hasMore: true,
           renderText: (isExpanded, onCategoryChange) => (
             <div className="space-y-4 text-gray-700">

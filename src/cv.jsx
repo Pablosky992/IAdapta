@@ -4,7 +4,8 @@ const { useState, useEffect, useCallback, useRef, useMemo } = React;
 
 const SectionCV = function SectionCV() {
   const experience = [
-    { period: '09/2021 – Actualidad', role: 'Técnico y Terapeuta Ocupacional', place: 'Instituto Técnico Ortopédico, Barcelona', desc: 'Evaluación y diagnóstico de necesidades funcionales. Control de stock y gestión de proveedores. Elaboración de presupuestos personalizados. Responsable de tienda y atención al cliente.' },
+    { period: '06/2026 – Actualidad', role: 'Terapeuta Ocupacional', place: 'Ortopedia LaFACT', desc: 'Asesoramiento especializado en productos de apoyo y adaptaciones funcionales. Valoración integral de la autonomía y diseño de soluciones personalizadas.' },
+    { period: '09/2021 – 05/2026', role: 'Técnico y Terapeuta Ocupacional', place: 'Instituto Técnico Ortopédico, Barcelona', desc: 'Evaluación y diagnóstico de necesidades funcionales. Control de stock y gestión de proveedores. Elaboración de presupuestos personalizados. Responsable de tienda y atención al cliente.' },
     { period: '02/2016 – 09/2021', role: 'Terapeuta Ocupacional', place: 'Residencia asistida Sant Víctor, Artés', desc: 'Gestión de productos ortopédicos. Diseño de actividades de estimulación funcional y cognitiva. Promoción de la autonomía mediante intervención centrada en la persona.' },
     { period: '09/2015 – 04/2020', role: 'Terapeuta Ocupacional', place: 'Residencia Valldaura, Manresa', desc: 'Intervención integral en personas mayores con dependencia. Trabajo multidisciplinar para un enfoque global y continuo.' },
     { period: '06/2014 – 12/2014', role: 'Auxiliar de Terapia Ocupacional', place: 'Centro de Día MonBarnasalud, L\'Hospitalet', desc: 'Apoyo en sesiones terapéuticas y actividades de estimulación funcional y cognitiva. Facilitación de la participación y fomento de la autonomía en AVD.' },
