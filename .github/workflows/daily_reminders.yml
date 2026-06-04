@@ -2,8 +2,8 @@ name: Send Daily Reminders
 
 on:
   schedule:
-    # Runs at 18:00 UTC every day (which is 20:00 CET in Spain winter / 21:00 CEST summer)
-    - cron: '0 18 * * *'
+    # Runs at 17:00 UTC every day (which is 18:00 CET in Spain winter / 19:00 CEST summer)
+    - cron: '0 17 * * *'
   workflow_dispatch: # Allows manual triggering from the Actions tab in GitHub
 
 jobs:
