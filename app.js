@@ -5432,18 +5432,42 @@ function initNatalCard() {
     panel.classList.add('hidden');
   });  const contactBtn = document.getElementById('contact-email-btn');
   if (contactBtn) {
-    contactBtn.addEventListener('click', () => {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText('expondudas@yahoo.com').then(() => {
-          const originalText = contactBtn.innerHTML;
-          contactBtn.innerHTML = '✉️ ¡Copiado!';
-          setTimeout(() => {
-            contactBtn.innerHTML = originalText;
-          }, 2000);
-        }).catch(err => {
-          console.error('Error al copiar: ', err);
-        });
-      }
+    contactBtn.addEventListener('click', (e) => {
+      e.preventDefault(); // Evitar que el mailto interrumpa o falle en sistemas sin cliente
+      
+      const email = 'expondudas@yahoo.com';
+      
+      // Método de copia compatible con HTTPS (navigator.clipboard) y HTTP (execCommand)
+      const executeCopy = (text) => {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          return navigator.clipboard.writeText(text);
+        } else {
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          try {
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            return Promise.resolve();
+          } catch (err) {
+            document.body.removeChild(textarea);
+            return Promise.reject(err);
+          }
+        }
+      };
+
+      executeCopy(email).then(() => {
+        const originalText = contactBtn.innerHTML;
+        contactBtn.innerHTML = '✉️ ¡Copiado!';
+        setTimeout(() => {
+          contactBtn.innerHTML = originalText;
+        }, 2000);
+      }).catch(err => {
+        console.error('Error al copiar: ', err);
+      });
     });
   }
 
