@@ -75,11 +75,21 @@ const SectionLegal = function SectionLegal() {
               </section>
               <section>
                 <h2 className="text-2xl font-bold text-brand-800 mb-4">2. Uso de Cookies</h2>
-                <p>Utilizamos cookies propias y de terceros para mejorar la experiencia de usuario y gestionar los enlaces de afiliación de Amazon:</p>
-                <ul className="mt-4 space-y-2 list-disc pl-6">
+                <p>Utilizamos cookies propias y de terceros para mejorar la experiencia de usuario, gestionar los enlaces de afiliación y mostrar publicidad:</p>
+                <ul className="mt-4 space-y-2 list-disc pl-6 mb-4">
                   <li><strong>Cookies de Afiliación:</strong> Al clicar en productos recomendados, Amazon instala una cookie (24h) para identificar el origen de la compra.</li>
                   <li><strong>Cookies Técnicas:</strong> Necesarias para recordar tus preferencias (como la aceptación de este aviso).</li>
                 </ul>
+                <h3 className="font-bold text-brand-700 mt-6 mb-2">Cookies Publicitarias de Google AdSense</h3>
+                <p className="mb-2 text-sm">
+                  Los proveedores de terceros, incluido Google, utilizan cookies para publicar anuncios basándose en las visitas anteriores de un usuario a nuestro sitio web o a otros sitios de Internet.
+                </p>
+                <p className="mb-2 text-sm">
+                  El uso de cookies de publicidad permite a Google y a sus socios publicar anuncios basados en las visitas que los usuarios realizan a este sitio web y a otros en Internet.
+                </p>
+                <p className="text-sm">
+                  Los usuarios pueden inhabilitar la publicidad personalizada. Para ello, pueden visitar la <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">Configuración de anuncios de Google</a>.
+                </p>
               </section>
               <section>
                 <h2 className="text-2xl font-bold text-brand-800 mb-4">3. Valoración de la estancia (Gemini Vision)</h2>
