@@ -1,1472 +1,319 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>El Eco de las Estrellas — Sintoniza con tu vibración astral y el tarot</title>
-  
-  <!-- Favicon / Icono de la pestaña -->
-  <link rel="icon" type="image/png" href="assets/logo_luna_v2.png">
-  <link rel="apple-touch-icon" href="assets/logo_luna_v2.png">
-  
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="Consulta el oráculo interactivo de El Eco de las Estrellas. Realiza tiradas de 1 y 3 cartas para Sí/No, o una tirada completa del destino con síntesis narrativa explicativa.">
-  
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://elecodelasestrellas.com/">
-  <meta property="og:title" content="El Eco de las Estrellas — Sintoniza con tu vibración astral y el tarot">
-  <meta property="og:description" content="Consulta el oráculo interactivo. Realiza tiradas de tarot, horóscopos diarios, perfil numerológico y consulta la fase lunar actual.">
-  <meta property="og:image" content="assets/logo_luna_v2.png">
 
-  <!-- Twitter / X -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="https://elecodelasestrellas.com/">
-  <meta name="twitter:title" content="El Eco de las Estrellas — Sintoniza con tu vibración astral y el tarot">
-  <meta name="twitter:description" content="Consulta el oráculo interactivo. Realiza tiradas de tarot, horóscopos diarios, perfil numerológico y consulta la fase lunar actual.">
-  <meta name="twitter:image" content="assets/logo_luna_v2.png">
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
-  
-  <!-- CSS Styles -->
-  <link rel="stylesheet" href="style.css">
-  
-  <!-- Google AdSense -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="IAdapta: Expertos en Terapia Ocupacional, Accesibilidad y Estimulación Cognitiva. Guías para la adaptación del hogar, recursos para profesionales y retos mentales diarios." />
+  <meta name="keywords" content="terapia ocupacional, accesibilidad, estimulacion cognitiva, adaptacion hogar, recursos para profesionales, juegos de memoria, autonomia personal, salud mental, productos de apoyo" />
+  <link rel="canonical" href="https://iadapta.es/" />
+  <meta name="google-adsense-account" content="ca-pub-9370167145239765">
+  <link rel="icon" type="image/png" href="assets/iadapta_logo.png" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9370167145239765"
      crossorigin="anonymous"></script>
+  <title>IAdapta | Terapia Ocupacional y Accesibilidad</title>
+
+  <!-- Redirección Legacy para SPA / PWA -->
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const p = params.get('page');
+    if (p === 'games' || p === 'cognitive' || p === 'memory' || p === 'order' || p === 'wordsearch' || p === 'math' || p === 'visual' || p === 'intruder' || p === 'challenge' || p === 'sudoku') {
+      window.location.replace('estimulacion-cognitiva.html' + window.location.search);
+    } else if (p === 'resources') {
+      window.location.replace('recursos.html' + window.location.search);
+    } else if (p === 'guides') {
+      window.location.replace('guias.html' + window.location.search);
+    } else if (p === 'analyzer') {
+      window.location.replace('valoracion-estancia.html' + window.location.search);
+    } else if (p === 'cv') {
+      window.location.replace('cv.html' + window.location.search);
+    } else if (p === 'about') {
+      window.location.replace('index.html#about');
+    } else if (p === 'contact') {
+      window.location.replace('contacto.html');
+    } else if (p === 'legal') {
+      window.location.replace('aviso-legal.html');
+    }
+  </script>
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalBusiness",
+    "name": "IAdapta",
+    "alternateName": "IAdapta Terapia Ocupacional",
+    "description": "Plataforma de Terapia Ocupacional especializada en accesibilidad y estimulación cognitiva.",
+    "url": "https://iadapta.es",
+    "logo": "https://iadapta.es/assets/iadapta_logo.png",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "España"
+    },
+    "medicalSpecialty": ["OccupationalTherapy", "PhysicalTherapy", "Geriatrics"],
+    "offers": {
+      "@type": "Offer",
+      "name": "Recursos para Profesionales y Juegos Cognitivos"
+    }
+  }
+  </script>
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://iadapta.es/" />
+  <meta property="og:title" content="IAdapta | Autonomía y Mente Activa" />
+  <meta property="og:description" content="Entrena tu mente y mejora la accesibilidad de tu entorno con IAdapta." />
+  <meta property="og:image" content="https://iadapta.es/assets/iadapta_logo_social.jpg" />
+  <meta property="og:image:secure_url" content="https://iadapta.es/assets/iadapta_logo_social.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://iadapta.es/" />
+  <meta property="twitter:title" content="IAdapta | Autonomía y Mente Activa" />
+  <meta property="twitter:description" content="Supera retos diarios y mejora tu agudeza mental con Terapia Ocupacional." />
+  <meta property="twitter:image" content="https://iadapta.es/assets/iadapta_logo_social.jpg" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- React 18 CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+
+
+  <!-- Marked.js for Markdown parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    marked.setOptions({
+      breaks: true,
+      gfm: true,
+      headerIds: false,
+      mangle: false
+    });
+  </script>
+
+  <!-- Tailwind config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#1A3052',
+            },
+            accent: {
+              coral: '#E87D55',
+              cream: '#F2F0E9',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['"Playfair Display"', 'serif'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- PWA Manifest Selection -->
+
+  <link rel="apple-touch-icon" href="assets/iadapta_brand_icon.png">
+  <meta name="theme-color" content="#1A3052" />
+
+  <!-- Firebase SDK and Configuration -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js";
+
+     const firebaseConfig = {
+       apiKey: "AIza" + "SyA3teph1wXtdLCnW7ao132Z2atCSxQTEq0",
+       authDomain: "iadapta-1a0fb.firebaseapp.com",
+       databaseURL: "https://iadapta-1a0fb-default-rtdb.firebaseio.com",
+       projectId: "iadapta-1a0fb",
+       storageBucket: "iadapta-1a0fb.firebasestorage.app",
+       messagingSenderId: "997653142459",
+       appId: "1:997653142459:web:2017ed637e4d5e773b829e",
+       measurementId: "G-CBD6Q1S96V"
+     };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const analytics = getAnalytics(app);
+
+    window.firebaseDB = db;
+    window.firebaseAddDoc = addDoc;
+    window.firebaseCollection = collection;
+    console.log("Firebase Firestore initialized");
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('Service Worker registrado'))
+          .catch(err => console.log('Error registrando SW', err));
+      });
+    }
+  </script>
 </head>
-<body>
 
-  <!-- Mystical Stars Background -->
-  <div class="stars-container">
-    <div class="stars"></div>
-    <div class="twinkling"></div>
-    <canvas id="constellations-canvas"></canvas>
-  </div>
-
-  <div class="app-container">
-    <!-- Header -->
-    <header class="app-header">
-      <div class="logo">
-        <img src="assets/logo_luna_v2.png" class="logo-img" alt="Luna llena mística - El Eco de las estrellas">
-      </div>
-      <h1 class="main-title">EL ECO DE LAS ESTRELLAS</h1>
-
-      <p class="subtitle">Sintoniza con tu vibración astral y el tarot</p>
-      
-      <!-- Widget de Fase Lunar -->
-      <div class="moon-phase-widget" id="moon-phase-widget">
-        <div class="moon-phase-main">
-          <div class="moon-icon-container" id="moon-icon"></div>
-          <div class="moon-text-content">
-            <span class="moon-label">Fase Lunar de Hoy</span>
-            <span class="moon-name" id="moon-name">Luna Nueva</span>
-          </div>
-        </div>
-        <div class="moon-phase-description" id="moon-phase-description">
-          Calculando la influencia lunar para el día de hoy...
-        </div>
+<body class="bg-white text-gray-900 antialiased">
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+  <div id="root">
+    <style>
+      /* Precarga de estilos para evitar parpadeo visual en carga inicial */
+      #root > header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 50 !important;
+        background-color: #F2F0E9 !important;
+        border-bottom: 1px solid rgba(26, 48, 82, 0.1) !important;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+      }
+      #main-content {
+        padding-top: 8rem !important; /* pt-32 = 8rem = 128px */
+      }
+    </style>
+    <!-- Contenido estático de respaldo para SEO, Accesibilidad y AdSense -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#F2F0E9] border-b border-brand-900/10 shadow-sm">
+      <div class="max-w-[1400px] mx-auto px-4 sm:px-8 flex items-center justify-between h-24 md:h-28">
+        <a href="index.html" class="flex items-center hover:scale-105 transition-transform">
+          <img src="assets/iadapta_logo.png" alt="IAdapta" class="h-16 md:h-20 object-contain" />
+        </a>
+        <nav class="hidden xl:flex items-center gap-1">
+          <a href="index.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Inicio</a>
+          <a href="valoracion-estancia.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Valoración de</span><span>la estancia</span>
+          </a>
+          <a href="guias.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Guías de</span><span>adaptación</span>
+          </a>
+          <a href="estimulacion-cognitiva.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Área</span><span>Cognitiva</span>
+          </a>
+          <a href="recursos.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Recursos para</span><span>profesionales</span>
+          </a>
+          <a href="index.html#about" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Sobre Mí</a>
+          <a href="contacto.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Contacto</a>
+          <a href="cv.html" class="px-4 py-2.5 text-sm xl:text-base font-bold text-white bg-accent-coral hover:bg-white/50 border-2 border-accent-coral/10 rounded-xl transition-all ml-2">Mi CV</a>
+        </nav>
       </div>
     </header>
 
-    <!-- Menú de Pestañas -->
-    <nav class="app-nav" aria-label="Navegación principal">
-      <button type="button" class="nav-tab active" data-tab="oracle">
-        <span class="tab-icon">🔮</span> El Oráculo
-      </button>
-      <button type="button" class="nav-tab" data-tab="daily">
-        <span class="tab-icon">🌟</span> Carta del Día
-      </button>
-      <button type="button" class="nav-tab" data-tab="horoscope">
-        <span class="tab-icon">✨</span> Tu Horóscopo
-      </button>
-      <button type="button" class="nav-tab" data-tab="lunar">
-        <span class="tab-icon">🌙</span> La Luna
-      </button>
-      <button type="button" class="nav-tab" data-tab="numerology">
-        <span class="tab-icon">🔢</span> Numerología
-      </button>
-      <button type="button" class="nav-tab" data-tab="book">
-        <span class="tab-icon">📖</span> El Libro del Tarot
-      </button>
-    </nav>
+    <main id="main-content" class="pt-32 pb-12">
+      <!-- Hero Section -->
+      <section class="max-w-7xl mx-auto px-4 text-center py-16">
+        <h1 class="font-display text-5xl md:text-6xl font-bold text-brand-900 mb-6">
+          Tu bienestar y <span class="text-brand-500">autonomía</span>, primero
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
+          Evaluación experta de tu entorno y asesoramiento en productos de apoyo. 
+          <strong>"Te guío en la adaptación de tu casa para que vuelvas a moverte con seguridad y total confianza."</strong>
+        </p>
+      </section>
 
-    <!-- Contenido de Pestañas -->
-    <!-- Pestaña 1: El Oráculo (Consulta y Resultados) -->
-    <div id="oracle-tab-content" class="tab-content">
-      <main class="main-layout">
-      <!-- Configuration Panel -->
-      <section class="config-panel" aria-label="Configuración de la consulta">
-        <div class="glass-card">
-          <h2 class="panel-title">Prepara tu Consulta</h2>
-          
-          <!-- Question Input -->
-          <div class="form-group">
-            <label for="question-input">Escribe tu pregunta para el oráculo:</label>
-            <input type="text" id="question-input" placeholder="Ej: ¿Conseguiré el trabajo al que postulé?" autocomplete="off">
-          </div>
+      <!-- Servicios principales -->
+      <section class="max-w-7xl mx-auto px-4 py-12">
+        <h2 class="font-display text-3xl font-bold text-center text-brand-900 mb-12">Servicios y Herramientas</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8">
+            <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">Valoración de la estancia con IA</h3>
+            <p class="text-gray-600 mb-6">
+              Introduce las características de tu hogar o espacio y nuestra inteligencia artificial evaluará las barreras arquitectónicas existentes, sugiriendo las mejores adaptaciones.
+            </p>
+            <a href="valoracion-estancia.html" class="text-brand-600 font-bold hover:underline">Valorar estancia &rarr;</a>
+          </article>
 
-          <!-- Category Selection -->
-          <div class="form-group">
-            <label for="category-select">Selecciona la categoría de tu pregunta:</label>
-            <div class="select-wrapper">
-              <select id="category-select" class="premium-select">
-                <option value="general">✦ General (Destino y vida)</option>
-                <option value="love">✦ Amor (Afecto y sentimientos)</option>
-                <option value="work">✦ Trabajo (Profesión y economía)</option>
-                <option value="health">✦ Salud (Bienestar y energía)</option>
-              </select>
-            </div>
-          </div>
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8">
+            <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">Guías de Adaptación</h3>
+            <p class="text-gray-600 mb-6">
+              Consejos prácticos, normativas y descripciones detalladas de productos de apoyo para adaptar el baño, cocina, dormitorio y zonas comunes del hogar, previniendo caídas.
+            </p>
+            <a href="guias.html" class="text-brand-600 font-bold hover:underline">Explorar guías &rarr;</a>
+          </article>
 
-          <!-- Spread Selection -->
-          <div class="form-group">
-            <label for="spread-select">Elige el tipo de tirada:</label>
-            <div class="select-wrapper">
-              <select id="spread-select" class="premium-select">
-                <option value="yesno1">✦ Sí o No (1 carta)</option>
-                <option value="yesno3">✦ Sí o No (3 cartas)</option>
-                <option value="destiny">✦ Tirada del Destino (3 cartas - Pasado/Presente/Futuro)</option>
-                <option value="cross5">✦ Tirada en Cruz (5 cartas - Pros/Contras/Central)</option>
-                <option value="pyramid6">✦ Pirámide Invertida (6 cartas - Decantación evolutiva)</option>
-                <option value="celtic10">✦ La Cruz Celta (10 cartas - Lectura Completa Evolutiva)</option>
-                <option value="mirror4">✦ El Espejo Relacional (4 cartas - Pareja y Proyecciones)</option>
-                <option value="clarity4">✦ Hechizo de Claridad (4 cartas - Bloqueo y Solución)</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Reversals Toggle -->
-          <div class="form-group" style="margin-bottom: 1.5rem;">
-            <div class="toggle-container" style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); border: 1.5px solid var(--border-color); padding: 0.75rem 1rem; border-radius: 8px;">
-              <span class="toggle-label" style="font-size: 0.9rem; color: var(--text-muted); letter-spacing: 0.05em;">Permitir cartas invertidas</span>
-              <label class="toggle-switch" style="position: relative; display: inline-block; width: 44px; height: 24px; cursor: pointer;">
-                <input type="checkbox" id="reversals-toggle" style="opacity: 0; width: 0; height: 0;">
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-          </div>
-
-          <!-- Action Button -->
-          <button type="button" id="consult-btn" class="consult-button">
-            CONSULTAR EL ORÁCULO
-          </button>
-
-          <!-- MEJORA 4: Guided Questions Panel -->
-          <div id="guided-questions-panel" class="guided-questions-panel">
-            <p class="guided-q-title">&#x2728; Sugerencias de preguntas:</p>
-            <!-- Chips will be injected by JS based on category -->
-          </div>
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8">
+            <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">Estimulación Cognitiva</h3>
+            <p class="text-gray-600 mb-6">
+              Ejercicios prácticos, retos diarios de memoria, cálculo numérico, sopas de letras y atención visual diseñados para fortalecer la agilidad mental y promover la autonomía personal.
+            </p>
+            <a href="estimulacion-cognitiva.html" class="text-brand-600 font-bold hover:underline">Entrenar mente &rarr;</a>
+          </article>
         </div>
       </section>
 
-      <!-- Reading Table (Tapete) -->
-      <section class="reading-table" aria-label="Tapete de lectura de cartas">
-        <div class="tapete-mat">
-          <div class="tapete-header">
-            <h2 id="reading-status-title">Prepara tu mente y formula tu pregunta...</h2>
-            <p id="reading-status-desc">Selecciona tus opciones en el panel lateral y pulsa el botón dorado.</p>
+      <!-- Sobre mí -->
+      <section id="about" class="max-w-6xl mx-auto px-4 py-16">
+        <div class="bg-gradient-to-br from-brand-50 to-sky-50 rounded-3xl border border-brand-100 p-8 md:p-12 flex flex-col md:flex-row gap-10 items-center">
+          <div class="shrink-0">
+            <img src="narciso_millan_portrait.jpg" alt="Pablo Narciso Millán - Terapeuta Ocupacional" class="w-48 h-48 rounded-full object-cover shadow-md border-4 border-white" />
           </div>
-
-          <!-- Cards Deal Board -->
-          <div class="cards-board" id="cards-board">
-            <!-- Dynamic placeholders and card elements will be generated here -->
-          </div>
-
-          <!-- Instructions or Deck display -->
-          <div class="deck-container" id="deck-container">
-            <div class="mystical-deck" id="mystical-deck">
-              <!-- Animated deck cards -->
-              <div class="deck-card"></div>
-              <div class="deck-card"></div>
-              <div class="deck-card"></div>
-              <div class="deck-card"></div>
+          <div>
+            <span class="inline-block bg-white text-brand-600 border border-brand-200 text-xs font-bold uppercase tracking-widest rounded-full px-3 py-1 mb-4 shadow-sm">Sobre Mí</span>
+            <h2 class="font-display text-3xl font-bold text-brand-900 mb-4">Pablo Narciso Millán</h2>
+            <div class="space-y-4 text-gray-700 text-lg leading-relaxed">
+              <p>
+                Soy Terapeuta Ocupacional graduado en 2015 con una amplia experiencia en el sector de la geriatría, la rehabilitación y la ortopedia. Mi enfoque terapéutico se centra en potenciar la autonomía del paciente mediante la adaptación de su entorno inmediato.
+              </p>
+              <p>
+                Aprovecho las últimas tecnologías, como el diseño y la impresión 3D, para confeccionar y promover el uso de adaptaciones funcionales y productos de apoyo de bajo coste, logrando que la tecnología sea accesible y suponga un impacto real en la calidad de vida y la independencia de las personas mayores o con diversidad funcional.
+              </p>
             </div>
-            <button type="button" id="shuffle-btn" class="shuffle-button">Barajar Mazo</button>
+            <div class="flex flex-wrap gap-2 mt-6">
+              <span class="bg-white border border-brand-200 text-brand-700 rounded-full px-3 py-1 text-xs font-semibold">Geriatría</span>
+              <span class="bg-white border border-brand-200 text-brand-700 rounded-full px-3 py-1 text-xs font-semibold">Ortopedia</span>
+              <span class="bg-white border border-brand-200 text-brand-700 rounded-full px-3 py-1 text-xs font-semibold">Impresión 3D</span>
+              <span class="bg-white border border-brand-200 text-brand-700 rounded-full px-3 py-1 text-xs font-semibold">Accesibilidad y Autonomía</span>
+            </div>
           </div>
         </div>
       </section>
     </main>
 
-    <!-- Interpretation Panel (Results) -->
-    <section class="results-panel hidden" id="results-panel" aria-label="Resultados de la lectura">
-      <div class="glass-card result-container">
-        
-        <!-- Results Header -->
-        <div class="result-header">
-          <span class="category-badge" id="result-category-badge">Amor</span>
-          <h2 class="result-title">El veredicto del Oráculo</h2>
-          <p class="user-question-text" id="result-question-text">¿Pregunta?</p>
-          <!-- MEJORA 2: Share Button -->
-          <button type="button" class="share-reading-btn" id="share-reading-btn">
-            💫 Compartir esta lectura
-          </button>
+    <footer class="bg-brand-900 text-white py-12 mt-12">
+      <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div>
+          <h4 class="font-display text-xl font-bold">IAdapta Terapia Ocupacional</h4>
+          <p class="text-sm text-brand-300 mt-2">Promoviendo la autonomía personal y la estimulación cognitiva.</p>
         </div>
-
-        <!-- Yes/No Verdict Section (For yesno1 and yesno3) -->
-        <div class="yesno-verdict-section hidden" id="yesno-verdict-section">
-          <div class="verdict-display">
-            <span class="verdict-label">Respuesta del Tarot:</span>
-            <div class="verdict-badge" id="verdict-badge">SÍ</div>
-          </div>
-          <p class="verdict-explanation" id="verdict-explanation">Explicación del sí o no...</p>
-        </div>
-
-        <!-- Lunar Influence Section -->
-        <div class="lunar-influence-section hidden" id="lunar-influence-section">
-          <div class="lunar-influence-header">
-            <span class="lunar-symbol" id="lunar-influence-symbol">🌕</span>
-            <h4>Sinergia Lunar de la Lectura</h4>
-          </div>
-          <p id="lunar-influence-text">Cargando influencia lunar...</p>
-        </div>
-
-        <!-- MEJORA 9: Oracle Loader (shown briefly before synthesis) -->
-        <div class="destiny-synthesis-section hidden" id="oracle-loader-section">
-          <div id="oracle-loader-overlay">
-            <div class="oracle-loader-crystal">🔮</div>
-            <p class="oracle-loader-text">El oráculo está hablando<span class="oracle-loader-dots">...</span></p>
-          </div>
-        </div>
-
-        <!-- Narrative Synthesis Section (For destiny) -->
-        <div class="destiny-synthesis-section hidden" id="destiny-synthesis-section">
-          <h3 class="section-title">Síntesis Narrativa del Destino</h3>
-          <div class="narrative-box">
-            <p id="destiny-synthesis-text">La narrativa que conecta pasado, presente y futuro aparecerá aquí...</p>
-          </div>
-        </div>
-
-        <!-- Divisor Místico -->
-        <div class="mystical-divider">
-          <svg viewBox="0 0 100 8" class="divider-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 4H42M58 4H100" stroke="var(--border-color)" stroke-width="0.75" />
-            <polygon points="50,0.5 51.5,3.5 55,3.5 52.5,5.5 54,8.5 50,6.8 46,8.5 47.5,5.5 45,3.5 48.5,3.5" fill="var(--gold-color)" />
-          </svg>
-        </div>
-
-        <!-- Individual Card Detail Breakdown -->
-        <div class="cards-breakdown">
-          <h3 class="section-title">Detalle de las Cartas Reveladas</h3>
-          <div class="breakdown-grid" id="breakdown-grid">
-            <!-- Dynamic card cards will be inserted here -->
-          </div>
-        </div>
-
-        <!-- Divisor Místico -->
-        <div class="mystical-divider">
-          <svg viewBox="0 0 100 8" class="divider-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 4H42M58 4H100" stroke="var(--border-color)" stroke-width="0.75" />
-            <polygon points="50,0.5 51.5,3.5 55,3.5 52.5,5.5 54,8.5 50,6.8 46,8.5 47.5,5.5 45,3.5 48.5,3.5" fill="var(--gold-color)" />
-          </svg>
-        </div>
-
-        <!-- Reset Button -->
-        <div class="reset-container">
-          <button type="button" id="reset-btn" class="reset-button">
-            REALIZAR OTRA CONSULTA
-          </button>
-        </div>
-        
-    </section>
-
-    <!-- Reading History Panel (Diario del Destino) -->
-    <section class="history-panel" id="history-panel" aria-label="Historial de consultas">
-      <div class="glass-card history-container">
-        <div class="history-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem;">
-          <h3 class="section-title" style="margin-bottom: 0; border: none; font-size: 1.4rem;">Tu Diario del Destino</h3>
-          <button type="button" id="clear-history-btn" class="clear-history-button" style="background: transparent; border: 1px solid var(--error-color); color: var(--error-color); border-radius: 20px; padding: 0.35rem 1rem; font-size: 0.8rem; cursor: pointer; transition: var(--transition-smooth);">Borrar Diario</button>
-        </div>
-        
-        <div id="history-list" class="history-list">
-          <!-- History items will be generated here -->
-          <p class="no-history-text" style="color: var(--text-muted); text-align: center; font-style: italic; padding: 2rem 0;">Aún no has registrado lecturas en tu diario de destino. Las consultas que realices aparecerán aquí.</p>
+        <div class="flex gap-4">
+          <a href="index.html" class="hover:underline">Inicio</a>
+          <a href="estimulacion-cognitiva.html" class="hover:underline">Estimulación Cognitiva</a>
+          <a href="guias.html" class="hover:underline">Guías</a>
+          <a href="recursos.html" class="hover:underline">Recursos</a>
         </div>
       </div>
-    </section>
-    </div> <!-- Cierre de #oracle-tab-content -->
-
-    <!-- Pestaña 6: Carta del Día Express -->
-    <div id="daily-tab-content" class="tab-content hidden">
-      <div class="daily-card-tab-container" style="max-width: 800px; margin: 0 auto 3rem auto;">
-        
-        <!-- Cabecera de la pestaña -->
-        <div class="daily-tab-header" style="text-align:center; margin-bottom: 2rem;">
-          <h2 class="panel-title" style="border: none; padding: 0; margin-bottom: 0.5rem; font-size: 1.8rem; text-align: center;">Vibración Diaria y Astral</h2>
-          <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 500px; margin: 0 auto;">
-            Descubre los mensajes que el cosmos tiene preparados para ti hoy a través del Tarot, la numerología y los tránsitos anuales.
-          </p>
-        </div>
-
-        <!-- Sub-navegación de la pestaña diaria -->
-        <div class="daily-sub-nav" id="daily-sub-nav">
-          <button type="button" class="daily-sub-tab active" data-daily-sub="express">🔮 Consejo Diario</button>
-          <button type="button" class="daily-sub-tab" data-daily-sub="natal">🌟 Arcano Natal</button>
-          <button type="button" class="daily-sub-tab" data-daily-sub="yearly">🌌 Tirada del Año</button>
-        </div>
-
-        <!-- Sección 1: Consejo Diario -->
-        <div id="daily-express-section" class="daily-section-content">
-          <div class="glass-card" style="padding: 2.5rem; display: flex; flex-direction: column; align-items: center; gap: 2rem;">
-            <!-- El mazo interactivo de la carta diaria -->
-            <div class="daily-express-layout" style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem; width: 100%;">
-              <div class="daily-express-card-wrapper" style="perspective: 1000px; width: 170px; height: 280px; margin: 1rem 0;">
-                <div class="card-wrapper daily-express-card" id="daily-express-card" style="width: 100%; height: 100%;">
-                  <div class="card-inner">
-                    <div class="card-back"></div>
-                    <div class="card-front" id="daily-express-card-front"></div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Panel de Instrucciones -->
-              <div id="daily-express-instructions" class="daily-express-instructions">
-                <p style="font-size: 1.05rem; font-style: italic; color: var(--gold-color); animation: logo-moon-float 4s ease-in-out infinite; margin: 0;">Haz clic en la carta para revelarla</p>
-              </div>
-
-              <!-- Panel de Resultados Completo (Oculto inicialmente) -->
-              <div id="daily-express-info" class="daily-express-info hidden" style="width: 100%;">
-                <h3 id="daily-express-name" class="gold" style="font-family: var(--font-serif); font-size: 1.6rem; letter-spacing: 0.05em; margin-bottom: 0.75rem; text-align:center;">El Sol</h3>
-                
-                <!-- Badges de arquetipo y planeta -->
-                <div id="daily-express-badges" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; margin-bottom: 1.25rem;"></div>
-
-                <!-- Consejo principal -->
-                <div class="narrative-box" id="daily-express-advice" style="background: rgba(8, 7, 17, 0.6); border-left: 4px solid var(--gold-color); padding: 1.5rem 1.75rem; border-radius: 0 16px 16px 0; text-align: left; line-height: 1.65; font-size: 0.98rem; color: var(--text-main); margin-bottom: 0.75rem;">
-                  <!-- El consejo se inyectará aquí -->
-                </div>
-
-                <!-- Afirmación y ritual diario -->
-                <div class="daily-full-reading" id="daily-full-reading">
-                  <!-- Afirmación del día -->
-                  <div class="daily-affirmation-box" id="daily-affirmation"></div>
-                  
-                  <!-- Ritual del día -->
-                  <div class="daily-ritual-box" id="daily-ritual">
-                    <div class="daily-ritual-icon">🗓️</div>
-                    <div class="daily-ritual-content">
-                      <h4>RITUAL DEL DÍA</h4>
-                      <p id="daily-ritual-text"></p>
-                    </div>
-                  </div>
-                </div>
-
-                <div style="text-align:center; margin-top:1.5rem;">
-                  <button type="button" class="shuffle-button daily-express-redraw" id="daily-express-redraw" style="padding: 0.75rem 2.5rem; font-size: 0.95rem;">
-                    Obtener otra carta del mazo
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Sección 2: Arcano Natal -->
-        <div id="daily-natal-section" class="daily-section-content hidden">
-          <div class="glass-card" style="padding: 2.5rem;">
-            <h3 class="section-title" style="text-align: center;">Tu Carta Natal Personal 🌟</h3>
-            <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 1.5rem; text-align: center;">Descubre el Arcano del Tarot que rige tu camino de vida según tu fecha de nacimiento.</p>
-            
-            <div id="natal-card-form" style="display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap; margin-bottom: 1.5rem; justify-content: center; max-width: 500px; margin-left: auto; margin-right: auto;">
-              <div style="flex: 1; min-width: 200px;">
-                <label for="natal-birthdate" style="font-size: 0.82rem; color: var(--text-muted); display: block; margin-bottom: 0.35rem;">Fecha de Nacimiento:</label>
-                <input type="date" id="natal-birthdate" class="premium-select" style="width: 100%; padding: 0.6rem 0.85rem; font-size: 0.9rem; font-family: var(--font-sans); cursor: pointer;">
-              </div>
-              <button type="button" id="natal-reveal-btn" class="consult-button" style="padding: 0.65rem 1.75rem; font-size: 0.88rem; white-space: nowrap;">
-                REVELAR MI ARCANO
-              </button>
-            </div>
-            
-            <!-- Resultado natal -->
-            <div id="natal-card-result" class="hidden" style="margin-top: 1.5rem;">
-              <div class="natal-card-reveal">
-                <div class="natal-card-visual" id="natal-card-img"></div>
-                <div class="natal-card-info">
-                  <div class="natal-card-number" id="natal-life-number">7</div>
-                  <div class="natal-card-title" id="natal-card-name">El Carro</div>
-                  <div class="natal-numerology-row" id="natal-pills"></div>
-                  <p class="natal-card-description" id="natal-card-desc"></p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Sección 3: Tirada del Año -->
-        <div id="daily-yearly-section" class="daily-section-content hidden">
-          <div class="glass-card" style="padding: 2.5rem;">
-            <h3 class="section-title" style="text-align: center;">Tu Tirada del Año 2026 🌌</h3>
-            <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 1.5rem; text-align: center;">El oráculo proyecta la energía de un Arcano para cada mes del año. Haz clic en el mes para leer la interpretación.</p>
-            <div class="yearly-spread-grid" id="yearly-spread-grid">
-              <!-- Generado dinámicamente por JS -->
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Pestaña 3: Tu Horóscopo (Astrología y Tarot) -->
-    <div id="horoscope-tab-content" class="tab-content hidden">
-      <main class="main-layout">
-        <!-- Configuration Panel -->
-        <section class="config-panel" aria-label="Configuración del horóscopo">
-          <div class="glass-card">
-            <h2 class="panel-title">Predicción Astrológica</h2>
-            
-            <div class="numerology-mode-toggle astro-mode-toggle" style="margin-bottom: 1.5rem;" id="astro-mode-toggle">
-              <button type="button" class="mode-btn active" data-astro-mode="tarot">Tiradas de Tarot</button>
-              <button type="button" class="mode-btn" data-astro-mode="transits">Tránsitos Celestes</button>
-            </div>
-            
-            <!-- Zodiac Sign Selection (Shared) -->
-            <div class="form-group">
-              <label for="zodiac-select">Selecciona tu Signo del Zodiaco:</label>
-              <div class="select-wrapper">
-                <select id="zodiac-select" class="premium-select">
-                  <option value="aries">Aries ♈</option>
-                  <option value="tauro">Tauro ♉</option>
-                  <option value="geminis">Géminis ♊</option>
-                  <option value="cancer">Cáncer ♋</option>
-                  <option value="leo">Leo ♌</option>
-                  <option value="virgo">Virgo ♍</option>
-                  <option value="libra">Libra ♎</option>
-                  <option value="escorpio">Escorpio ♏</option>
-                  <option value="sagitario">Sagitario ♐</option>
-                  <option value="capricornio">Capricornio ♑</option>
-                  <option value="acuario">Acuario ♒</option>
-                  <option value="piscis">Piscis ♓</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Formulario Modo Tarot -->
-            <div id="astro-tarot-form-group">
-              <!-- Horoscope Spread Selection -->
-              <div class="form-group">
-                <label for="astro-spread-select">Elige tu Tirada del Horóscopo:</label>
-                <div class="select-wrapper">
-                  <select id="astro-spread-select" class="premium-select">
-                    <option value="astro_daily">✦ Tirada Diaria (1 carta)</option>
-                    <option value="astro_weekly">✦ Tirada Semanal (3 cartas)</option>
-                    <option value="astro_houses">✦ Rueda de las 12 Casas (12 cartas)</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Action Button -->
-              <button type="button" id="astro-consult-btn" class="consult-button">
-                CONSULTAR ASTROS
-              </button>
-            </div>
-
-            <!-- Formulario Modo Tránsitos Celestes -->
-            <div id="astro-transits-form-group" class="hidden">
-              <div class="form-group">
-                <label for="astro-transits-period-select">Período de Predicción:</label>
-                <div class="select-wrapper">
-                  <select id="astro-transits-period-select" class="premium-select">
-                    <option value="daily">✦ Clima Diario (La Luna)</option>
-                    <option value="weekly">✦ Clima Semanal (Planetas Rápidos)</option>
-                    <option value="monthly">✦ Clima Mensual (Sol y Lentos)</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Action Button -->
-              <button type="button" id="astro-transits-consult-btn" class="consult-button success-theme">
-                LEER CLIMA CELESTE
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <!-- Astro Reading Table (Tapete Astrológico) -->
-        <section class="reading-table" aria-label="Tapete de lectura astrológica">
-          <div class="tapete-mat">
-            <div class="tapete-header">
-              <h2 id="astro-reading-status-title">Alinea tu energía con el Zodíaco...</h2>
-              <p id="astro-reading-status-desc">Elige tu signo y realiza la tirada para consultar el clima astral.</p>
-            </div>
-
-            <!-- Astro Cards Deal Board -->
-            <div class="cards-board" id="astro-cards-board">
-              <!-- Dynamic placeholders and card elements will be generated here -->
-            </div>
-
-            <!-- Instructions or Deck display -->
-            <div class="deck-container" id="astro-deck-container">
-              <div class="mystical-deck" id="astro-mystical-deck">
-                <div class="deck-card"></div>
-                <div class="deck-card"></div>
-                <div class="deck-card"></div>
-                <div class="deck-card"></div>
-              </div>
-              <button type="button" id="astro-shuffle-btn" class="shuffle-button">Barajar Astros</button>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <!-- Astro Interpretation Panel (Results) -->
-      <section class="results-panel hidden" id="astro-results-panel" aria-label="Resultados del horóscopo">
-        <div class="glass-card result-container">
-          
-          <!-- Results Header -->
-          <div class="result-header">
-            <span class="category-badge" id="astro-result-badge">Predicción Astrológica</span>
-            <h2 class="result-title" id="astro-result-title">Tu Horóscopo del Destino</h2>
-            <p class="user-question-text" id="astro-user-sign-text">Signo: Libra</p>
-          </div>
-
-          <!-- Tarot Results Group -->
-          <div id="astro-tarot-results-group">
-            <!-- Astro Climate Card (Three Columns) -->
-            <div class="astro-climate-card" id="astro-climate-card">
-              <!-- 3 columns: User Sign Info, Sun Transit Info, Moon Transit Info -->
-              <div class="climate-col user-sign-info">
-                <div class="climate-header">
-                  <span class="climate-icon" id="climate-user-icon">♈</span>
-                  <h4>Tu Signo</h4>
-                </div>
-                <p class="climate-subtitle" id="climate-user-name">Aries</p>
-                <div class="climate-desc" id="climate-user-desc">
-                  Cargando tu correspondencia física...
-                </div>
-              </div>
-              
-              <div class="climate-col sun-transit-info">
-                <div class="climate-header">
-                  <span class="climate-icon">☀️</span>
-                  <h4>Tránsito Solar</h4>
-                </div>
-                <p class="climate-subtitle" id="climate-sun-name">Temporada de...</p>
-                <div class="climate-desc" id="climate-sun-desc">
-                  Cargando influjo solar y chakra...
-                </div>
-              </div>
-              
-              <div class="climate-col moon-transit-info">
-                <div class="climate-header">
-                  <div class="climate-moon-svg-container" id="climate-moon-icon"></div>
-                  <h4>Tránsito Lunar</h4>
-                </div>
-                <p class="climate-subtitle" id="climate-moon-name">Luna en...</p>
-                <div class="climate-desc" id="climate-moon-desc">
-                  Cargando fase y ángel regente...
-                </div>
-              </div>
-            </div>
-
-            <!-- Predicción Rápida -->
-            <div id="astro-summary-forecast-section" class="astro-summary-forecast-section">
-              <h3 class="section-title" id="astro-summary-title">Tu Clave del Día</h3>
-              <div class="narrative-box summary-forecast-box" style="margin-bottom: 2rem; border-left: 4px solid var(--gold-color); background: rgba(229, 193, 88, 0.04); padding: 1.25rem 1.5rem; border-radius: 0 12px 12px 0;">
-                <p id="astro-summary-forecast-text" style="font-size: 1.15rem; line-height: 1.6; font-weight: 500; font-style: italic; color: var(--text-main); margin: 0;"></p>
-              </div>
-            </div>
-
-            <!-- Narrative Synthesis Section -->
-            <div class="destiny-synthesis-section">
-              <h3 class="section-title">Síntesis y Predicción Astrológica</h3>
-              <div class="narrative-box">
-                <p id="astro-forecast-text">El horóscopo que unifica tránsitos, signos y cartas aparecerá aquí...</p>
-              </div>
-            </div>
-
-            <!-- Special Synastry / Conjunctions (Benages couples, Sign Match) -->
-            <div class="astro-special-section hidden" id="astro-special-section">
-              <h3 class="section-title">Alineaciones de Destino Detectadas</h3>
-              <div class="special-box" id="astro-special-box">
-                <!-- Special synergy/couple info here -->
-              </div>
-            </div>
-
-            <!-- Divisor Místico -->
-            <div class="mystical-divider">
-              <svg viewBox="0 0 100 8" class="divider-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 4H42M58 4H100" stroke="var(--border-color)" stroke-width="0.75" />
-                <polygon points="50,0.5 51.5,3.5 55,3.5 52.5,5.5 54,8.5 50,6.8 46,8.5 47.5,5.5 45,3.5 48.5,3.5" fill="var(--gold-color)" />
-              </svg>
-            </div>
-
-            <!-- Individual Card Detail Breakdown -->
-            <div class="cards-breakdown">
-              <h3 class="section-title">Detalle de las Cartas de Tránsito</h3>
-              <div class="breakdown-grid" id="astro-breakdown-grid">
-                <!-- Dynamic card breakdown list -->
-              </div>
-            </div>
-          </div>
-
-          <!-- Celestial Transits Results Group -->
-          <div id="astro-transits-results-group" class="hidden">
-            <div class="transits-dashboard">
-              <div class="transits-wheel-section">
-                <h3 class="section-title">Rueda de Aspectos Celestes</h3>
-                <p class="section-subtitle">Alineaciones geométricas calculadas entre los planetas y tu signo solar.</p>
-                <div class="aspects-wheel-container">
-                  <div id="aspects-wheel-dial" class="aspects-wheel-dial">
-                    <!-- Dynamically populated SVG -->
-                  </div>
-                </div>
-                <div class="aspects-legend">
-                  <div class="legend-item"><span class="legend-dot conjunction"></span>Conjunción (0° - Fusión)</div>
-                  <div class="legend-item"><span class="legend-dot sextile"></span>Sextil (60° - Armonía)</div>
-                  <div class="legend-item"><span class="legend-dot square"></span>Cuadratura (90° - Tensión)</div>
-                  <div class="legend-item"><span class="legend-dot trine"></span>Trígono (120° - Fluidez)</div>
-                  <div class="legend-item"><span class="legend-dot opposition"></span>Oposición (180° - Reto)</div>
-                </div>
-              </div>
-
-              <div class="transits-grid-section">
-                <h3 class="section-title">Posiciones Celestes en Tiempo Real</h3>
-                <p class="section-subtitle">Coordenadas exactas en la eclíptica para el momento de consulta.</p>
-                <div class="transits-planets-grid" id="transits-planets-grid">
-                  <!-- Dynamically populated planet cards -->
-                </div>
-              </div>
-            </div>
-
-            <!-- Detailed Forecast Narratives -->
-            <div class="transits-narratives">
-              <h3 class="section-title">Lectura Detallada del Clima Astral</h3>
-              
-              <div class="narrative-card general">
-                <div class="narrative-header">
-                  <span class="narrative-icon">🌌</span>
-                  <h4>Influencia y Clima General</h4>
-                </div>
-                <div class="narrative-body" id="transits-general-box">
-                  <!-- Text content -->
-                </div>
-              </div>
-
-              <div class="narrative-card love">
-                <div class="narrative-header">
-                  <span class="narrative-icon">💖</span>
-                  <h4>Amor y Relaciones</h4>
-                </div>
-                <div class="narrative-body" id="transits-love-box">
-                  <!-- Text content -->
-                </div>
-              </div>
-
-              <div class="narrative-card career">
-                <div class="narrative-header">
-                  <span class="narrative-icon">💼</span>
-                  <h4>Trabajo, Finanzas y Éxito</h4>
-                </div>
-                <div class="narrative-body" id="transits-career-box">
-                  <!-- Text content -->
-                </div>
-              </div>
-
-              <div class="narrative-card mind">
-                <div class="narrative-header">
-                  <span class="narrative-icon">🧘</span>
-                  <h4>Mente, Salud y Espiritualidad</h4>
-                </div>
-                <div class="narrative-body" id="transits-mind-box">
-                  <!-- Text content -->
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Divisor Místico -->
-          <div class="mystical-divider">
-            <svg viewBox="0 0 100 8" class="divider-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M0 4H42M58 4H100" stroke="var(--border-color)" stroke-width="0.75" />
-              <polygon points="50,0.5 51.5,3.5 55,3.5 52.5,5.5 54,8.5 50,6.8 46,8.5 47.5,5.5 45,3.5 48.5,3.5" fill="var(--gold-color)" />
-            </svg>
-          </div>
-
-          <!-- Reset Button -->
-          <div class="reset-container">
-            <button type="button" id="astro-reset-btn" class="reset-button">
-              REALIZAR OTRA TIRADA ASTRO
-            </button>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <!-- Pestaña 5: La Luna (Influencia Lunar) -->
-    <div id="lunar-tab-content" class="tab-content hidden">
-      <main class="main-layout">
-        <!-- Panel de Configuración e Info Rápida -->
-        <section class="config-panel" aria-label="Información lunar">
-          <div class="glass-card">
-            <h2 class="panel-title">Estado de la Luna</h2>
-            
-            <div class="lunar-widget-display">
-              <div class="lunar-tab-emoji-container">
-                <div class="lunar-tab-moon-svg-container" id="lunar-tab-emoji"></div>
-              </div>
-              <div class="lunar-quick-info">
-                <h3 id="lunar-tab-phase-name">Luna Nueva</h3>
-                <p class="lunar-info-detail">Iluminación: <span id="lunar-tab-illumination">0%</span></p>
-                <p class="lunar-info-detail">Edad lunar: <span id="lunar-tab-age">0.0 días</span></p>
-              </div>
-            </div>
-
-            <!-- Toggles de Hemisferio -->
-            <div class="form-group" style="margin-top: 1.5rem;">
-              <label>Hemisferio de Observación:</label>
-              <div class="numerology-mode-toggle" style="margin-bottom: 0;">
-                <button type="button" class="mode-btn active" id="lunar-hem-north" data-hem="north">Norte (España/N. Am.)</button>
-                <button type="button" class="mode-btn" id="lunar-hem-south" data-hem="south">Sur (S. Am./Aus.)</button>
-              </div>
-            </div>
-
-            <!-- Consulta de Fecha Específica -->
-            <div class="form-group" style="margin-top: 1.5rem;">
-              <label for="lunar-search-date">Consultar Fecha Astral:</label>
-              <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                <input type="date" id="lunar-search-date" class="premium-input" style="padding: 0.5rem; font-size: 0.9rem; flex: 1; min-width: 0;" aria-label="Fecha astral a consultar">
-                <button type="button" class="mode-btn" id="lunar-search-date-btn" style="padding: 0.5rem 1rem; min-width: auto; margin: 0; font-size: 0.9rem;">Consultar</button>
-              </div>
-            </div>
-
-            <div class="mystical-divider" style="margin: 1.5rem 0;">
-              <svg viewBox="0 0 100 8" class="divider-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 4H42M58 4H100" stroke="var(--border-color)" stroke-width="0.75" />
-                <polygon points="50,0.5 51.5,3.5 55,3.5 52.5,5.5 54,8.5 50,6.8 46,8.5 47.5,5.5 45,3.5 48.5,3.5" fill="var(--gold-color)" />
-              </svg>
-            </div>
-
-            <!-- Tránsito Lunar Rápido -->
-            <div class="lunar-quick-stats">
-              <div class="lunar-stat-item">
-                <span class="stat-icon">🌌</span>
-                <div class="stat-content">
-                  <span class="stat-label">Tránsito Zodíaco</span>
-                  <span class="stat-value" id="lunar-tab-transit">Luna en -</span>
-                </div>
-              </div>
-              <div class="lunar-stat-item">
-                <span class="stat-icon">🛡️</span>
-                <div class="stat-content">
-                  <span class="stat-label">Ángel Regente</span>
-                  <span class="stat-value" id="lunar-tab-angel">Gabriel</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Galería Visual de Fases Lunares (Compacta en el lateral) -->
-          <div class="glass-card" style="margin-top: 1.5rem; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
-            <div style="text-align: center;">
-              <h3 class="panel-title" style="margin-bottom: 0.25rem; font-size: 1.15rem; border: none; padding: 0;">Galería de Fases</h3>
-              <p style="color: var(--text-muted); font-size: 0.78rem; margin: 0; margin-bottom: 0.5rem;">Haz clic en una fase para explorar su grimorio detallado.</p>
-            </div>
-
-            <div class="lunar-image-gallery sidebar-gallery">
-              <!-- Luna Llena -->
-              <div class="lunar-image-card" data-phase="full">
-                <img src="assets/luna_llena.png" alt="Luna Llena — Plenitud e intuición máxima" loading="lazy">
-                <div class="lunar-image-overlay">
-                  <h4>🌕 Luna Llena</h4>
-                  <p>Fase de plenitud espiritual, rituales de carga y máxima intuición.</p>
-                </div>
-              </div>
-
-              <!-- Luna Creciente -->
-              <div class="lunar-image-card" data-phase="crescent">
-                <img src="assets/luna_creciente.png" alt="Luna Creciente — Acción e intención" loading="lazy">
-                <div class="lunar-image-overlay">
-                  <h4>🌒 Creciente</h4>
-                  <p>Siembra de intenciones, visualización de metas y acción inicial.</p>
-                </div>
-              </div>
-
-              <!-- Luna Nueva -->
-              <div class="lunar-image-card" data-phase="new">
-                <img src="assets/luna_nueva.png" alt="Luna Nueva — Inicio y siembra" loading="lazy">
-                <div class="lunar-image-overlay">
-                  <h4>🌑 Luna Nueva</h4>
-                  <p>Ciclo de introspección, vacío y nuevos comienzos místicos.</p>
-                </div>
-              </div>
-
-              <!-- Cuarto Creciente -->
-              <div class="lunar-image-card" data-phase="quarter">
-                <img src="assets/luna_cuarto.png" alt="Cuarto Creciente — Decisión y acción" loading="lazy">
-                <div class="lunar-image-overlay">
-                  <h4>🌓 Cuarto Crec.</h4>
-                  <p>Toma de decisiones, superación de obstáculos y fuerza.</p>
-                </div>
-              </div>
-
-              <!-- Luna Menguante -->
-              <div class="lunar-image-card" data-phase="waning">
-                <img src="assets/luna_menguante_v2.png" alt="Luna Menguante — Cierre y descanso" loading="lazy">
-                <div class="lunar-image-overlay">
-                  <h4>🌘 Menguante</h4>
-                  <p>Cierre de ciclos, liberación de ataduras y purificación.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Tapete de Detalle Lunar (Resultados) -->
-        <section class="reading-table" aria-label="Detalles de la influencia lunar">
-          <div class="tapete-mat" style="min-height: 480px; justify-content: flex-start; align-items: stretch; display: flex; flex-direction: column; gap: 2rem;">
-            <!-- Carta Clima Lunar Principal -->
-            <div class="destiny-synthesis-section" style="margin-top: 0;">
-              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 0.75rem; gap: 0.75rem;">
-                <h3 class="section-title" id="lunar-clima-title" style="margin: 0;">La Influencia Lumínica de Hoy</h3>
-                <div id="lunar-selected-date-indicator" class="hidden" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--gold-color);">
-                  <span id="lunar-selected-date-text"></span>
-                  <button type="button" class="mode-btn" id="lunar-back-to-today-btn" style="padding: 0.25rem 0.6rem; min-width: auto; font-size: 0.75rem; margin: 0;">Volver a Hoy 🔄</button>
-                </div>
-              </div>
-              <div class="narrative-box" id="lunar-tab-phase-desc">
-                Calculando la influencia de la fase lunar actual...
-              </div>
-            </div>
-
-            <!-- Consejos del Grimorio -->
-            <div class="destiny-synthesis-section">
-              <h3 class="section-title">Consejos y Rituales del Grimorio</h3>
-              <div class="astro-climate-card two-col-grid" style="margin-bottom: 0;">
-                <div class="climate-col">
-                  <div class="climate-header">
-                    <span class="climate-icon" style="color: var(--gold-color);">🔮</span>
-                    <h4>Ritual Recomendado</h4>
-                  </div>
-                  <div class="climate-desc" id="lunar-tab-ritual" style="font-size: 0.9rem; text-align: left; line-height: 1.5; width: 100%;">
-                    Cargando ritual de fase...
-                  </div>
-                </div>
-
-                <div class="climate-col">
-                  <div class="climate-header">
-                    <span class="climate-icon" style="color: var(--purple-color);">🃏</span>
-                    <h4>Cuidado del Mazo</h4>
-                  </div>
-                  <div class="climate-desc" id="lunar-tab-tarot-care" style="font-size: 0.9rem; text-align: left; line-height: 1.5; width: 100%;">
-                    Cargando cuidado del mazo...
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Interactive Transit Card -->
-            <div class="destiny-synthesis-section">
-              <h3 class="section-title">Tránsito Lunar Personal</h3>
-              <div class="glass-card" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; background: rgba(13, 11, 26, 0.45); border-radius: 16px;">
-                <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-                  <label for="lunar-user-sign-select" style="font-size: 0.95rem; font-weight: 500; color: var(--text-main);">Selecciona tu Signo para ver tu tránsito:</label>
-                  <div class="select-wrapper" style="width: 200px; margin-bottom: 0;">
-                    <select id="lunar-user-sign-select" class="premium-select" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
-                      <option value="aries">♈ Aries</option>
-                      <option value="tauro">♉ Tauro</option>
-                      <option value="geminis">♊ Géminis</option>
-                      <option value="cancer">♋ Cáncer</option>
-                      <option value="leo">♌ Leo</option>
-                      <option value="virgo">♍ Virgo</option>
-                      <option value="libra">♎ Libra</option>
-                      <option value="escorpio">♏ Escorpio</option>
-                      <option value="sagitario">♐ Sagitario</option>
-                      <option value="capricornio">♑ Capricornio</option>
-                      <option value="acuario">♒ Acuario</option>
-                      <option value="piscis">♓ Piscis</option>
-                    </select>
-                  </div>
-                </div>
-                
-                <div class="narrative-box" id="lunar-transit-personal-box" style="margin-top: 0.5rem; background: rgba(8, 7, 17, 0.5); border-left: 3px solid var(--purple-color);">
-                  Introduce tu signo zodiacal para ver la sintonía con la posición lunar de hoy.
-                </div>
-              </div>
-            </div>
-
-            <!-- Calendario Lunar Interactivo -->
-            <div class="destiny-synthesis-section">
-              <h3 class="section-title">Calendario Lunar 📅</h3>
-              <div class="glass-card" style="padding: 1.5rem; background: rgba(13, 11, 26, 0.45); border-radius: 16px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; gap: 0.5rem;">
-                  <button type="button" class="mode-btn" id="lunar-cal-prev" style="padding: 0.4rem 0.8rem; min-width: auto; font-size: 0.85rem; margin: 0;">◀ Ant.</button>
-                  <h4 id="lunar-cal-month-year" style="font-family: var(--font-serif); font-size: 1.2rem; margin: 0; color: var(--gold-color); letter-spacing: 0.05em; text-align: center;"></h4>
-                  <button type="button" class="mode-btn" id="lunar-cal-next" style="padding: 0.4rem 0.8rem; min-width: auto; font-size: 0.85rem; margin: 0;">Sig. ▶</button>
-                </div>
-                
-                <div class="lunar-calendar-grid" id="lunar-calendar-grid">
-                  <!-- Generado dinámicamente por JS -->
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </section>
-      </main>
-
-      
-    </div>
-
-    <!-- Pestaña 2: El Libro del Tarot (Enciclopedia) -->
-    <div id="book-tab-content" class="tab-content hidden">
-      <div class="glass-card book-container">
-        <h2 class="panel-title" style="text-align: center; margin-bottom: 1.25rem;">El Libro de los Arcanos</h2>
-        <p class="book-intro" style="color: var(--text-muted); text-align: center; max-width: 700px; margin: 0 auto 2rem auto; line-height: 1.6;">
-          Explora la sabiduría ancestral de los 22 Arcanos Mayores. Selecciona cualquier carta para abrir el grimorio y estudiar sus correspondencias astrológicas, significados en el amor, trabajo, salud y su vibración espiritual.
-        </p>
-        
-        <!-- MEJORA 7: Búsqueda + Filtros + Vista -->
-        <div style="margin-bottom: 2rem;">
-          <div class="book-controls" style="display: flex; justify-content: center; margin-bottom: 1rem;">
-            <input type="text" id="book-search" placeholder="Buscar carta (ej: El Loco, El Sol)..." autocomplete="off" style="max-width: 400px; width: 100%; padding: 0.85rem 1.5rem; background: rgba(8, 7, 17, 0.7); border: 1.5px solid var(--border-color); border-radius: 20px; color: var(--text-main); font-family: var(--font-sans); text-align: center; font-size: 0.95rem; transition: var(--transition-smooth); outline: none;">
-          </div>
-          <div class="book-filters-bar">
-            <button type="button" class="book-filter-chip active" data-filter="all">Todas</button>
-            <button type="button" class="book-filter-chip" data-filter="mayores">Arcanos Mayores</button>
-            <button type="button" class="book-filter-chip" data-filter="menores">Arcanos Menores</button>
-            <button type="button" class="book-filter-chip" data-filter="fire">🔥 Bastos (Fuego)</button>
-            <button type="button" class="book-filter-chip" data-filter="water">💧 Copas (Agua)</button>
-            <button type="button" class="book-filter-chip" data-filter="air">💨 Espadas (Aire)</button>
-            <button type="button" class="book-filter-chip" data-filter="earth">🌿 Oros (Tierra)</button>
-            <div class="book-view-toggle">
-              <button type="button" class="book-view-btn active" id="book-view-grid" title="Vista cuadrícula">⋯</button>
-              <button type="button" class="book-view-btn" id="book-view-list" title="Vista lista">☰</button>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Grid de Cartas -->
-        <div class="book-grid" id="book-grid">
-          <!-- Las cartas de la enciclopedia se generarán dinámicamente aquí -->
-        </div>
-      </div>
-    </div>
-
-    <!-- Pestaña 4: Numerología (Perfil Kármico) -->
-    <div id="numerology-tab-content" class="tab-content hidden">
-      <main class="main-layout">
-        <!-- Configuration Panel -->
-        <section class="config-panel" aria-label="Configuración de numerología">
-          <div class="glass-card">
-            <h2 class="panel-title">Estudio Numerológico</h2>
-
-            <div class="numerology-mode-toggle">
-              <button type="button" class="mode-btn active" data-mode="personal">Perfil Personal</button>
-              <button type="button" class="mode-btn" data-mode="compatibility">Compatibilidad</button>
-              <button type="button" class="mode-btn" data-mode="year">Año Personal</button>
-            </div>
-            
-            <!-- Formulario Perfil Personal -->
-            <div id="num-personal-form">
-              <div class="form-group">
-                <label for="num-name-input">Nombre Completo (sin tildes):</label>
-                <input type="text" id="num-name-input" placeholder="Ej: Juan Perez Garcia" autocomplete="off">
-              </div>
-
-              <div class="form-group">
-                <label for="num-birth-input">Fecha de Nacimiento:</label>
-                <input type="date" id="num-birth-input">
-              </div>
-
-              <button type="button" id="num-calculate-btn" class="consult-button">
-                CALCULAR PERFIL
-              </button>
-            </div>
-
-            <!-- Formulario Compatibilidad -->
-            <div id="num-compat-form" class="hidden">
-              <h4 class="form-section-title gold">Persona 1</h4>
-              <div class="form-group small-margin">
-                <label for="num-name-input-p1">Nombre Completo:</label>
-                <input type="text" id="num-name-input-p1" class="small-input" placeholder="Ej: Juan Perez Garcia" autocomplete="off">
-              </div>
-              <div class="form-group medium-margin">
-                <label for="num-birth-input-p1">Fecha de Nacimiento:</label>
-                <input type="date" id="num-birth-input-p1" class="small-input">
-              </div>
-
-              <h4 class="form-section-title purple">Persona 2</h4>
-              <div class="form-group small-margin">
-                <label for="num-name-input-p2">Nombre Completo:</label>
-                <input type="text" id="num-name-input-p2" class="small-input" placeholder="Ej: Maria Lopez Gomez" autocomplete="off">
-              </div>
-              <div class="form-group large-margin">
-                <label for="num-birth-input-p2">Fecha de Nacimiento:</label>
-                <input type="date" id="num-birth-input-p2" class="small-input">
-              </div>
-
-              <button type="button" id="num-compat-btn" class="consult-button purple-theme">
-                CALCULAR AFINIDAD
-              </button>
-            </div>
-
-            <!-- Formulario Año Personal -->
-            <div id="num-year-form" class="hidden">
-              <div class="form-group">
-                <label for="num-year-birth-input">Fecha de Nacimiento:</label>
-                <input type="date" id="num-year-birth-input">
-              </div>
-
-              <div class="form-group">
-                <label for="num-year-target-input">Año a Consultar:</label>
-                <input type="number" id="num-year-target-input" min="1000" max="3000" value="2026">
-              </div>
-
-              <button type="button" id="num-year-btn" class="consult-button success-theme">
-                CALCULAR CICLO
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <!-- Results Table / Tapete -->
-        <section class="reading-table" aria-label="Resultados numerológicos">
-          <div class="tapete-mat" style="min-height: 480px; justify-content: flex-start; align-items: stretch; display: flex; flex-direction: column;">
-            <div class="tapete-header" style="margin-bottom: 2rem;">
-              <h2 id="num-reading-status-title">Descubre las vibraciones de tu destino...</h2>
-              <p id="num-reading-status-desc">Introduce tu nombre y fecha en el panel lateral para iniciar el cálculo.</p>
-            </div>
-
-            <!-- Numerology Results Content -->
-            <div id="num-results-panel" class="hidden" style="display: flex; flex-direction: column; gap: 2rem; width: 100%;">
-              
-              <!-- Personal Results Container -->
-              <div id="num-personal-results" style="display: flex; flex-direction: column; gap: 2rem; width: 100%;">
-                <!-- Triple Card: Soul, Personality, Destiny -->
-                <div class="astro-climate-card" style="margin-bottom: 0;">
-                  <div class="climate-col">
-                    <div class="climate-header">
-                      <span class="climate-icon" style="color: var(--gold-color);">🤍</span>
-                      <h4>Número del Alma</h4>
-                    </div>
-                    <p class="climate-subtitle" id="num-soul-val">-</p>
-                    <div class="climate-desc" style="font-size: 0.85rem;" id="num-soul-desc">Tu yo interno y deseos del corazón.</div>
-                  </div>
-
-                  <div class="climate-col">
-                    <div class="climate-header">
-                      <span class="climate-icon" style="color: var(--purple-color);">👤</span>
-                      <h4>Personalidad</h4>
-                    </div>
-                    <p class="climate-subtitle" id="num-personality-val">-</p>
-                    <div class="climate-desc" style="font-size: 0.85rem;" id="num-personality-desc">Tu yo externo y máscara social.</div>
-                  </div>
-
-                  <div class="climate-col">
-                    <div class="climate-header">
-                      <span class="climate-icon" style="color: var(--success-color);">🛤️</span>
-                      <h4>Sendero de Vida</h4>
-                    </div>
-                    <p class="climate-subtitle" id="num-destiny-val">-</p>
-                    <div class="climate-desc" style="font-size: 0.85rem;" id="num-destiny-desc">Tu sendero natal y misión de vida.</div>
-                  </div>
-                </div>
-
-                <!-- Double Card: Potential and Birthday -->
-                <div class="astro-climate-card two-col-grid" style="margin-bottom: 0;">
-                  <div class="climate-col">
-                    <div class="climate-header">
-                      <span class="climate-icon" style="color: var(--gold-color);">🌟</span>
-                      <h4>Número Potencial</h4>
-                    </div>
-                    <p class="climate-subtitle" id="num-potential-val">-</p>
-                    <div class="climate-desc" style="font-size: 0.85rem;" id="num-potential-desc">Tus dones en la madurez.</div>
-                  </div>
-
-                  <div class="climate-col">
-                    <div class="climate-header">
-                      <span class="climate-icon" style="color: var(--purple-color);">📅</span>
-                      <h4>Día de Nacimiento</h4>
-                    </div>
-                    <p class="climate-subtitle" id="num-birthday-val">-</p>
-                    <div class="climate-desc" style="font-size: 0.85rem;" id="num-birthday-desc">Tus virtudes del día natal.</div>
-                  </div>
-                </div>
-
-                <!-- Narrative Analysis Box -->
-                <div class="destiny-synthesis-section">
-                  <h3 class="section-title">Análisis de Personalidad y Misión</h3>
-                  <div class="narrative-box" id="num-analysis-box">
-                    <!-- Generated analysis text -->
-                  </div>
-                </div>
-
-                <!-- Karmic Box -->
-                <div class="destiny-synthesis-section">
-                  <h3 class="section-title">Estudio Kármico del Nombre</h3>
-                  <div class="narrative-box" id="num-karmic-box">
-                    <!-- Generated karmic text -->
-                  </div>
-                </div>
-              </div>
-
-              <!-- Compatibility Results Container -->
-              <div id="num-compat-results" class="hidden" style="display: flex; flex-direction: column; gap: 2rem; width: 100%;">
-                <!-- Compatibility Score Circle -->
-                <div class="compat-score-wrapper">
-                  <div class="compat-score-circle">
-                    <span id="num-compat-percent-val">0%</span>
-                  </div>
-                  <h4 id="num-compat-title-val">Afinidad Cósmica</h4>
-                  <p id="num-compat-summary-val">Introduce los nombres y fechas en el panel lateral para calcular la compatibilidad.</p>
-                </div>
-
-                <!-- Grid of 4 Cards: Soul Connection, Personality Connection, Destiny Connection, Elemental Alchemy -->
-                <div class="astro-climate-card two-col-grid" style="margin-bottom: 0;">
-                  <div class="climate-col">
-                    <div class="climate-header">
-                      <span class="climate-icon" style="color: var(--gold-color);">🤍</span>
-                      <h4>Afinidad del Alma</h4>
-                    </div>
-                    <p class="climate-subtitle" id="num-compat-soul-val">-</p>
-                    <div class="climate-desc" style="font-size: 0.85rem;" id="num-compat-soul-desc">Compatibilidad de deseos y conexión interna.</div>
-                  </div>
-
-                  <div class="climate-col">
-                    <div class="climate-header">
-                      <span class="climate-icon" style="color: var(--purple-color);">👤</span>
-                      <h4>Afinidad Exterior</h4>
-                    </div>
-                    <p class="climate-subtitle" id="num-compat-personality-val">-</p>
-                    <div class="climate-desc" style="font-size: 0.85rem;" id="num-compat-personality-desc">Compatibilidad de trato diario y social.</div>
-                  </div>
-
-                  <div class="climate-col">
-                    <div class="climate-header">
-                      <span class="climate-icon" style="color: var(--success-color);">🛤️</span>
-                      <h4>Misión de Pareja</h4>
-                    </div>
-                    <p class="climate-subtitle" id="num-compat-destiny-val">-</p>
-                    <div class="climate-desc" style="font-size: 0.85rem;" id="num-compat-destiny-desc">El aprendizaje o propósito evolutivo de la unión.</div>
-                  </div>
-
-                  <div class="climate-col">
-                    <div class="climate-header">
-                      <span class="climate-icon" style="color: var(--gold-color);">🧪</span>
-                      <h4>Alquimia Elemental</h4>
-                    </div>
-                    <p class="climate-subtitle" id="num-compat-alchemy-val">-</p>
-                    <div class="climate-desc" style="font-size: 0.85rem;" id="num-compat-alchemy-desc">Afinidad de vuestros elementos de nacimiento.</div>
-                  </div>
-                </div>
-
-                <!-- Narrative Analysis Box -->
-                <div class="destiny-synthesis-section">
-                  <h3 class="section-title">Análisis de la Sinastría</h3>
-                  <div class="narrative-box" id="num-compat-analysis-box">
-                    <!-- Generated analysis text -->
-                  </div>
-                </div>
-
-                <!-- Advice Box -->
-                <div class="destiny-synthesis-section">
-                  <h3 class="section-title">El Consejo Evolutivo del Vínculo</h3>
-                  <div class="narrative-box" id="num-compat-advice-box">
-                    <!-- Generated advice text -->
-                  </div>
-                </div>
-              </div>
-
-              <!-- Year Cycle Results Container -->
-              <div id="num-year-results" class="hidden" style="display: flex; flex-direction: column; gap: 2rem; width: 100%;">
-                <div class="year-cycle-timeline-wrapper">
-                  <h3 class="section-title" style="text-align: center;">Tu Ciclo de Vida: El Sendero de 9 Años</h3>
-                  <div class="year-timeline" id="year-timeline-display">
-                    <!-- 9 nodes generated dynamically in JS -->
-                  </div>
-                </div>
-                
-                <div class="astro-climate-card" style="margin-bottom: 0;">
-                  <div class="climate-col" style="flex: 1 1 100%; border-right: none; padding: 1.5rem;">
-                    <div class="climate-header" style="justify-content: center; margin-bottom: 1rem;">
-                      <span class="climate-icon" id="num-year-icon" style="color: var(--gold-color);">🔢</span>
-                      <h4 id="num-year-title" class="gold" style="font-size: 1.25rem; margin: 0;">Año Personal -</h4>
-                    </div>
-                    <p class="climate-subtitle" id="num-year-subtitle" style="text-align: center; font-size: 1.1rem; color: var(--purple-color); font-weight: 700; margin-bottom: 1rem;">-</p>
-                    <div class="climate-desc" style="font-size: 0.95rem; line-height: 1.6; text-align: center; max-width: 700px; margin: 0 auto;" id="num-year-desc">
-                      Introduce tus datos para calcular las vibraciones del año en curso.
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="destiny-synthesis-section">
-                  <h3 class="section-title">Pronóstico y Recomendaciones del Año</h3>
-                  <div class="narrative-box" id="num-year-forecast-box">
-                    <!-- Year forecast description -->
-                  </div>
-                </div>
-              </div>
-
-              <!-- Reset Button -->
-              <div class="reset-container" style="text-align: center; margin-top: 1rem;">
-                <button type="button" id="num-reset-btn" class="reset-button" style="display: inline-block;">
-                  REALIZAR OTRO ESTUDIO
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
-  </div> <!-- Cierre de .app-container -->
-
-  <!-- Modal de Detalles (Grimorio) -->
-  <div class="mystical-modal hidden" id="card-detail-modal">
-    <div class="modal-overlay" id="modal-overlay"></div>
-    <div class="modal-content glass-card">
-      <button type="button" class="close-modal-btn" id="close-modal-btn" aria-label="Cerrar modal">&times;</button>
-      <div class="modal-body" id="modal-body">
-        <!-- El contenido detallado de la carta se inyectará dinámicamente aquí -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Místico para Detalle de Fases Lunares -->
-  <div id="lunar-modal" class="lunar-modal hidden" aria-hidden="true" role="dialog">
-    <div class="lunar-modal-backdrop" id="lunar-modal-backdrop"></div>
-    <div class="glass-card lunar-modal-content">
-      <button type="button" class="lunar-modal-close" id="lunar-modal-close" aria-label="Cerrar ventana">&times;</button>
-      <div class="lunar-modal-body">
-        <div class="lunar-modal-header-layout">
-          <div class="lunar-modal-image-container">
-            <img id="lunar-modal-img" src="" alt="Fase lunar seleccionada">
-          </div>
-          <div class="lunar-modal-title-container">
-            <h2 id="lunar-modal-title" class="gold">Luna Llena</h2>
-            <p id="lunar-modal-subtitle" class="purple">Fase de Plenitud e Intuición Máxima</p>
-          </div>
-        </div>
-        
-        <div class="mystical-divider" style="margin: 1.5rem 0;">
-          <svg viewBox="0 0 100 8" class="divider-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 4H42M58 4H100" stroke="var(--border-color)" stroke-width="0.75" />
-            <polygon points="50,0.5 51.5,3.5 55,3.5 52.5,5.5 54,8.5 50,6.8 46,8.5 47.5,5.5 45,3.5 48.5,3.5" fill="var(--gold-color)" />
-          </svg>
-        </div>
-
-        <div class="lunar-modal-info-grid">
-          <div class="lunar-modal-section">
-            <h4 class="gold"><span class="icon">🌌</span> Influencia Espiritual y Energías</h4>
-            <p id="lunar-modal-influence">Explicación extendida de la fase lunar...</p>
-          </div>
-
-          <div class="lunar-modal-section">
-            <h4 class="gold"><span class="icon">🕯️</span> Ritual Recomendado</h4>
-            <p id="lunar-modal-ritual">Ritual detallado paso a paso...</p>
-          </div>
-
-          <div class="lunar-modal-section">
-            <h4 class="gold"><span class="icon">🃏</span> Correspondencia con el Tarot y Cuidado del Mazo</h4>
-            <p id="lunar-modal-tarot">Cómo influye en las cartas y cómo limpiarlas...</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Floating Settings Button -->
-  <button type="button" id="astral-settings-btn" class="astral-settings-btn" aria-label="Ajustes Astrales y Accesibilidad" title="Ajustes Astrales">
-    ✨
-  </button>
-
-    <!-- Footer Legal -->
-    <footer class="app-footer">
-      <div class="footer-links">
-        <a href="#" class="legal-link" data-legal="aviso">Aviso Legal</a>
-        <span class="footer-separator">•</span>
-        <a href="#" class="legal-link" data-legal="privacidad">Política de Privacidad</a>
-        <span class="footer-separator">•</span>
-        <a href="#" class="legal-link" data-legal="cookies">Política de Cookies</a>
-      </div>
-      <p class="footer-copy">&copy; 2026 El Eco de las Estrellas. Todos los derechos reservados.</p>
     </footer>
-  </div> <!-- Fin de .app-container -->
-
-  <!-- Sliding Settings Panel -->
-  <div id="astral-settings-panel" class="astral-settings-panel hidden" role="dialog" aria-labelledby="settings-panel-title" aria-modal="true">
-    <div class="settings-panel-content glass-card">
-      <div class="settings-panel-header">
-        <h3 id="settings-panel-title" class="gold">✦ Ajustes Astrales ✦</h3>
-        <button type="button" id="settings-close-btn" class="settings-close-btn" aria-label="Cerrar Ajustes">&times;</button>
-      </div>
-      
-      <div class="settings-panel-body">
-        <!-- Audio Section -->
-        <div class="settings-section">
-          <h4 class="settings-section-title">🔮 Armonía Celestial</h4>
-          <div class="settings-control-row">
-            <label for="audio-toggle" class="control-label">Música ambiente</label>
-            <label class="toggle-switch">
-              <input type="checkbox" id="audio-toggle">
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-          <div class="settings-control-row volume-row">
-            <label for="audio-volume" class="control-label">Volumen astral</label>
-            <input type="range" id="audio-volume" min="0" max="1" step="0.05" value="0.5" class="premium-slider" aria-label="Volumen de música ambiente">
-          </div>
-        </div>
-
-        <!-- Appearance Section -->
-        <div class="settings-section">
-          <h4 class="settings-section-title">🌙 Apariencia Cósmica</h4>
-          <div class="settings-control-row">
-            <span class="control-label">Tema del Templo</span>
-            <div class="theme-toggle-group">
-              <button type="button" class="theme-btn active" id="theme-dark-btn" title="Modo Noche">🌙 Noche</button>
-              <button type="button" class="theme-btn" id="theme-light-btn" title="Modo Día">☀️ Día</button>
-            </div>
-          </div>
-          <div class="settings-control-row">
-            <label for="high-contrast-toggle" class="control-label">Alto Contraste 👁️</label>
-            <label class="toggle-switch">
-              <input type="checkbox" id="high-contrast-toggle">
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Accessibility Section -->
-        <div class="settings-section">
-          <h4 class="settings-section-title">✍️ Tamaño del Texto</h4>
-          <div class="settings-control-row">
-            <span class="control-label">Ajuste de lectura</span>
-            <div class="font-size-group">
-              <button type="button" class="font-btn" data-size="small" title="Texto Pequeño">A-</button>
-              <button type="button" class="font-btn active" data-size="medium" title="Texto Normal">A</button>
-              <button type="button" class="font-btn" data-size="large" title="Texto Grande">A+</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Onboarding/Help Section -->
-        <div class="settings-section">
-          <h4 class="settings-section-title">📖 Sabiduría y Guía</h4>
-          <button type="button" id="replay-onboarding-btn" class="settings-action-btn">
-            🌌 Iniciar Guía del Oráculo
-          </button>
-        </div>
-
-        <!-- Contact Section -->
-        <div class="settings-section" style="margin-top: 0.5rem; text-align: center;">
-          <a href="mailto:expondudas@yahoo.com" id="contact-email-btn" class="settings-action-btn" style="display: inline-block; text-decoration: none; font-size: 0.8rem; opacity: 0.6; padding: 0.5rem; width: auto; min-width: 120px; text-align: center; line-height: 1.5;">
-            ✉️ expondudas@yahoo.com
-          </a>
-        </div>
-      </div>
-    </div>
   </div>
 
-  <!-- Onboarding Modal -->
-  <div id="onboarding-modal" class="onboarding-modal hidden" role="dialog" aria-labelledby="onboarding-title" aria-modal="true">
-    <div class="onboarding-content glass-card">
-      <div class="onboarding-header">
-        <h3 id="onboarding-title" class="gold">✦ Guía del Oráculo ✦</h3>
-        <button type="button" id="onboarding-close-btn" class="onboarding-close-btn" aria-label="Cerrar Guía">&times;</button>
-      </div>
-      
-      <div class="onboarding-body">
-        <div class="onboarding-slide-container">
-          <!-- Slide 1 -->
-          <div class="onboarding-slide active" data-step="1">
-            <div class="onboarding-icon">🔮</div>
-            <h4>El Oráculo del Destino</h4>
-            <p>Bienvenido a <strong>El Eco de las Estrellas</strong>. En esta pestaña, puedes formular tus dudas al cosmos. Elige tu tirada (desde un Sí/No rápido hasta la profunda Cruz Celta), escribe tu pregunta con el corazón abierto y revela las cartas en el tapete místico.</p>
-          </div>
-          <!-- Slide 2 -->
-          <div class="onboarding-slide" data-step="2">
-            <div class="onboarding-icon">🌟</div>
-            <h4>Carta del Día e Identidad Astral</h4>
-            <p>En la sección <strong>Carta del Día</strong> encontrarás tu Arcano protector de hoy con su afirmación y ritual. También podrás calcular tu <strong>Carta Natal de Tarot</strong> vitalicia y tu <strong>Tirada del Año</strong> completa mes a mes.</p>
-          </div>
-          <!-- Slide 3 -->
-          <div class="onboarding-slide" data-step="3">
-            <div class="onboarding-icon">✨</div>
-            <h4>Tu Horóscopo y Tránsitos</h4>
-            <p>Descubre el mensaje de las cartas para tu signo en el <strong>Horóscopo</strong> diario, o bien cambia al modo de <strong>Tránsitos Celestes</strong> para contemplar las influencias astronómicas reales del cielo sobre tu signo.</p>
-          </div>
-          <!-- Slide 4 -->
-          <div class="onboarding-slide" data-step="4">
-            <div class="onboarding-icon">🌙</div>
-            <h4>Ciclo Lunar y Rituales</h4>
-            <p>La Luna guía nuestras mareas internas. Sigue la <strong>Fase Lunar</strong> actual, consulta sus rituales sugeridos y siembra tus anhelos en la <strong>Siembra de Intenciones</strong> interactiva para cargarlos con la energía de la lunación.</p>
-          </div>
-          <!-- Slide 5 -->
-          <div class="onboarding-slide" data-step="5">
-            <div class="onboarding-icon">🔢</div>
-            <h4>Numerología y Destino</h4>
-            <p>Los números guardan vibraciones secretas. Calcula tu <strong>Sendero de Vida</strong>, tu <strong>Año Personal</strong> actual, y explora tu <strong>Vínculo y Compatibilidad</strong> amorosa o laboral con las vibraciones de otra alma.</p>
-          </div>
-          <!-- Slide 6 -->
-          <div class="onboarding-slide" data-step="6">
-            <div class="onboarding-icon">📖</div>
-            <h4>El Libro del Tarot</h4>
-            <p>Un grimorio completo a tu disposición. Explora los <strong>22 Arcanos Mayores</strong>, sus planetas, elementos y significados al derecho e invertidos. Usa los filtros rápidos y alterna entre vista de cuadrícula o lista.</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="onboarding-footer">
-        <button type="button" id="onboarding-prev-btn" class="onboarding-nav-btn disabled" disabled>Atrás</button>
-        <div class="onboarding-dots">
-          <span class="dot active" data-step="1"></span>
-          <span class="dot" data-step="2"></span>
-          <span class="dot" data-step="3"></span>
-          <span class="dot" data-step="4"></span>
-          <span class="dot" data-step="5"></span>
-          <span class="dot" data-step="6"></span>
-        </div>
-        <button type="button" id="onboarding-next-btn" class="onboarding-nav-btn">Siguiente</button>
-      </div>
-      <div class="onboarding-skip-container">
-        <label class="onboarding-dont-show">
-          <input type="checkbox" id="onboarding-dont-show-checkbox"> No volver a mostrar al inicio
-        </label>
-        <button type="button" id="onboarding-skip-btn" class="onboarding-skip-btn">Omitir</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Legal Modal -->
-  <div id="legal-modal" class="onboarding-modal hidden" role="dialog" aria-modal="true">
-    <div class="onboarding-content glass-card" style="max-width: 800px;">
-      <div class="onboarding-header">
-        <h3 id="legal-modal-title" class="gold">Términos Legales</h3>
-        <button type="button" id="legal-close-btn" class="onboarding-close-btn" aria-label="Cerrar">&times;</button>
-      </div>
-      <div class="onboarding-body" id="legal-modal-body" style="text-align: left; max-height: 60vh; overflow-y: auto; padding: 1rem 2rem; line-height: 1.6; font-size: 0.9rem;">
-        <!-- El texto legal se inyectará aquí -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Cookies Banner -->
-  <div id="cookies-banner" class="cookies-banner hidden" role="dialog" aria-live="polite">
-    <div class="cookies-content">
-      <div class="cookies-text">
-        <h4 class="gold" style="margin:0 0 0.5rem 0; font-family:'Cinzel',serif;">Galletas del Destino (Cookies)</h4>
-        <p style="margin:0; font-size:0.85rem; line-height:1.4;">
-          Utilizamos cookies técnicas locales para guardar tus preferencias astrales y mejorar la experiencia. También podríamos incluir cookies de terceros en el futuro para mostrar contenido o anuncios relevantes. 
-          <a href="#" class="legal-link" data-legal="cookies" style="color:var(--gold-light); text-decoration:underline;">Saber más</a>.
-        </p>
-      </div>
-      <div class="cookies-actions">
-        <button type="button" id="btn-accept-cookies" class="primary-btn pulse-button" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Aceptar Todas</button>
-        <button type="button" id="btn-reject-cookies" class="secondary-btn" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Solo Técnicas</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Javascript Logic -->
-  <script src="tarotDb.js"></script>
-  <script src="app.js"></script>
-
-  <!-- MEJORA 2: Share Toast -->
-  <div id="share-toast" class="share-toast" role="status" aria-live="polite">
-    📋 ¡Lectura copiada al portapapeles! Compártela donde quieras ✨
-  </div>
+  <script src="js/shared.js"></script>
+  <script src="js/index.js"></script>
 </body>
 </html>
