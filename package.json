@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "node compile.js"
+    "compile": "node compile.js"
   },
   "dependencies": {
     "@babel/core": "^7.29.0",
