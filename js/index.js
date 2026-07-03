@@ -157,11 +157,13 @@ const SectionHome = function SectionHome() {
 
 // --- COMPONENTE SECTIONCONTACT ---
 const SectionContact = function SectionContact() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const info = [{
     icon: /*#__PURE__*/React.createElement(Icons.Mail, null),
     label: 'Correo electrónico',
     value: 'iadaptato@gmail.com',
-    href: 'mailto:iadaptato@gmail.com'
+    href: '#',
+    onClick: (e) => { e.preventDefault(); setIsModalOpen(true); }
   }, {
     icon: /*#__PURE__*/React.createElement(Icons.Location, null),
     label: 'Localización',
@@ -176,9 +178,9 @@ const SectionContact = function SectionContact() {
     href: 'https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8',
     special: true
   }];
-  return /*#__PURE__*/React.createElement("section", {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("section", {
     id: "contact",
-    className: "pt-36 pb-24 px-4 bg-gradient-to-b from-brand-50 to-white"
+    className: "pt-36 pb-24 px-4 bg-gradient-to-b from-brand-50 to-white relative"
   }, /*#__PURE__*/React.createElement("div", {
     className: "max-w-6xl mx-auto"
   }, /*#__PURE__*/React.createElement("div", {
@@ -202,9 +204,10 @@ const SectionContact = function SectionContact() {
     className: `text-sm font-bold uppercase tracking-widest mb-0.5 ${item.special ? 'text-rose-400' : 'text-brand-400'}`
   }, item.label), item.href ? /*#__PURE__*/React.createElement("a", {
     href: item.href,
-    target: "_blank",
-    rel: "noopener noreferrer",
-    className: `text-xl font-semibold underline underline-offset-2 transition-colors ${item.special ? 'text-rose-700 hover:text-rose-900' : 'text-brand-800 hover:text-brand-600'}`
+    target: item.href === '#' ? undefined : "_blank",
+    rel: item.href === '#' ? undefined : "noopener noreferrer",
+    onClick: item.onClick,
+    className: `text-xl font-semibold underline underline-offset-2 transition-colors cursor-pointer ${item.special ? 'text-rose-700 hover:text-rose-900' : 'text-brand-800 hover:text-brand-600'}`
   }, item.value) : /*#__PURE__*/React.createElement("p", {
     className: "text-xl font-semibold text-brand-800"
   }, item.value)))), /*#__PURE__*/React.createElement("div", {
@@ -213,7 +216,59 @@ const SectionContact = function SectionContact() {
     src: "contact_ot.jpg",
     alt: "Consulta de Terapia Ocupacional - Intervenci\xF3n profesional",
     className: "w-full h-auto object-cover hover:scale-105 transition-transform duration-1000"
-  })))));
+  })))), isModalOpen && /*#__PURE__*/React.createElement("div", {
+    className: "fixed inset-0 z-[100] flex items-center justify-center bg-brand-900/40 backdrop-blur-sm p-4",
+    onClick: () => setIsModalOpen(false)
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-3xl shadow-2xl w-full max-w-lg p-8 relative",
+    onClick: e => e.stopPropagation()
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-brand-50 text-brand-600 font-bold rounded-full hover:bg-brand-100 transition-colors",
+    onClick: () => setIsModalOpen(false),
+    title: "Cerrar"
+  }, "\u2715"), /*#__PURE__*/React.createElement("form", {
+    action: "https://formsubmit.co/iadaptato@gmail.com",
+    method: "POST",
+    className: "space-y-4 mt-2"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "text-2xl font-bold text-brand-900 mb-4"
+  }, "Env\xEDanos un mensaje"), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_subject",
+    value: "Nuevo mensaje de contacto desde IAdapta (Index)"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_next",
+    value: "https://iadapta.vercel.app/"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_captcha",
+    value: "false"
+  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-sm font-medium text-gray-700 mb-1"
+  }, "Nombre"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    name: "name",
+    required: true,
+    className: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none"
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-sm font-medium text-gray-700 mb-1"
+  }, "Email"), /*#__PURE__*/React.createElement("input", {
+    type: "email",
+    name: "email",
+    required: true,
+    className: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none"
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-sm font-medium text-gray-700 mb-1"
+  }, "Mensaje"), /*#__PURE__*/React.createElement("textarea", {
+    name: "message",
+    required: true,
+    rows: "4",
+    className: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none"
+  })), /*#__PURE__*/React.createElement("button", {
+    type: "submit",
+    className: "w-full bg-brand-900 text-white font-bold py-3 px-4 rounded-xl hover:bg-brand-800 transition-colors mt-2"
+  }, "Enviar mensaje"))))));
 };
 
 // --- APLICACIÓN PRINCIPAL ---
