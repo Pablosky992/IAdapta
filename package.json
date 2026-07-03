@@ -6,16 +6,6 @@
     "build": "node compile.js"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.21.0",
-    "acorn": "^8.17.0",
-    "firebase": "^12.13.0",
-    "jsdom": "^29.1.1",
-    "puppeteer": "^25.3.0",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "web-push": "^3.6.7"
-  },
-  "devDependencies": {
     "@babel/core": "^7.29.0",
     "@babel/plugin-transform-react-jsx": "^7.28.6",
     "@babel/preset-react": "^7.28.5"
