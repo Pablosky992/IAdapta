@@ -17,7 +17,7 @@ const SectionContact = function SectionContact() {
     icon: /*#__PURE__*/React.createElement(Icons.Mail, null),
     label: 'Correo electrónico',
     value: 'iadaptato@gmail.com',
-    href: null
+    href: 'mailto:iadaptato@gmail.com'
   }, {
     icon: /*#__PURE__*/React.createElement(Icons.Location, null),
     label: 'Localización',
@@ -58,54 +58,12 @@ const SectionContact = function SectionContact() {
     className: `text-sm font-bold uppercase tracking-widest mb-0.5 ${item.special ? 'text-rose-400' : 'text-brand-400'}`
   }, item.label), item.href ? /*#__PURE__*/React.createElement("a", {
     href: item.href,
-    target: item.href.startsWith('mailto:') ? undefined : "_blank",
-    rel: item.href.startsWith('mailto:') ? undefined : "noopener noreferrer",
+    target: "_blank",
+    rel: "noopener noreferrer",
     className: `text-xl font-semibold underline underline-offset-2 transition-colors ${item.special ? 'text-rose-700 hover:text-rose-900' : 'text-brand-800 hover:text-brand-600'}`
   }, item.value) : /*#__PURE__*/React.createElement("p", {
     className: "text-xl font-semibold text-brand-800"
-  }, item.value)))), /*#__PURE__*/React.createElement("form", {
-    action: "https://formsubmit.co/iadaptato@gmail.com",
-    method: "POST",
-    className: "space-y-4 mt-10 bg-white p-8 rounded-3xl shadow-sm border border-brand-100"
-  }, /*#__PURE__*/React.createElement("h3", {
-    className: "text-2xl font-bold text-brand-900 mb-4"
-  }, "Env\xEDanos un mensaje"), /*#__PURE__*/React.createElement("input", {
-    type: "hidden",
-    name: "_subject",
-    value: "Nuevo mensaje de contacto desde IAdapta"
-  }), /*#__PURE__*/React.createElement("input", {
-    type: "hidden",
-    name: "_next",
-    value: "https://iadapta.vercel.app/contacto.html"
-  }), /*#__PURE__*/React.createElement("input", {
-    type: "hidden",
-    name: "_captcha",
-    value: "false"
-  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
-    className: "block text-sm font-medium text-gray-700 mb-1"
-  }, "Nombre"), /*#__PURE__*/React.createElement("input", {
-    type: "text",
-    name: "name",
-    required: true,
-    className: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none"
-  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
-    className: "block text-sm font-medium text-gray-700 mb-1"
-  }, "Email"), /*#__PURE__*/React.createElement("input", {
-    type: "email",
-    name: "email",
-    required: true,
-    className: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none"
-  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
-    className: "block text-sm font-medium text-gray-700 mb-1"
-  }, "Mensaje"), /*#__PURE__*/React.createElement("textarea", {
-    name: "message",
-    required: true,
-    rows: "4",
-    className: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none"
-  })), /*#__PURE__*/React.createElement("button", {
-    type: "submit",
-    className: "w-full bg-brand-900 text-white font-bold py-3 px-4 rounded-xl hover:bg-brand-800 transition-colors mt-2"
-  }, "Enviar mensaje")), /*#__PURE__*/React.createElement("div", {
+  }, item.value)))), /*#__PURE__*/React.createElement("div", {
     className: "rounded-3xl overflow-hidden shadow-2xl border border-brand-100 mt-10"
   }, /*#__PURE__*/React.createElement("img", {
     src: "contact_ot.jpg",

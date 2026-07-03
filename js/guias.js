@@ -66,6 +66,46 @@ const SectionGuides = function SectionGuides() {
     description: 'Prevención de úlceras por presión: Posicionamiento y cuidado.',
     image: 'assets/prevencion_escaras.png',
     link: 'guia-escaras.html'
+  }, {
+    id: 'cuidador',
+    title: 'Cuidado del Cuidador',
+    icon: '🤝',
+    color: 'bg-teal-100 text-teal-700',
+    description: 'Transferencias, ergonomía y prevención de lesiones.',
+    image: 'assets/guia_cuidador.png',
+    link: 'guia-cuidador.html'
+  }, {
+    id: 'vestido',
+    title: 'Vestido y Calzado',
+    icon: '👕',
+    color: 'bg-pink-100 text-pink-700',
+    description: 'Autonomía frente a limitaciones articulares y hemiplejia.',
+    image: 'assets/guia_vestido.png',
+    link: 'guia-vestido.html'
+  }, {
+    id: 'demencias',
+    title: 'Demencias',
+    icon: '🧩',
+    color: 'bg-indigo-100 text-indigo-700',
+    description: 'Adaptación del entorno y accesibilidad cognitiva para Alzheimer.',
+    image: 'assets/guia_demencias.png',
+    link: 'guia-demencias.html'
+  }, {
+    id: 'domotica',
+    title: 'Domótica',
+    icon: '📱',
+    color: 'bg-cyan-100 text-cyan-700',
+    description: 'Hogar inteligente, control por voz y teleasistencia.',
+    image: 'assets/guia_domotica.png',
+    link: 'guia-domotica.html'
+  }, {
+    id: 'ocio',
+    title: 'Ocio Adaptado',
+    icon: '🎨',
+    color: 'bg-orange-100 text-orange-700',
+    description: 'Pasatiempos, lectura y tiempo libre con productos de apoyo.',
+    image: 'assets/guia_ocio.png',
+    link: 'guia-ocio.html'
   }];
   return /*#__PURE__*/React.createElement("section", {
     id: "guides",
