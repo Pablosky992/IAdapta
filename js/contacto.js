@@ -58,8 +58,8 @@ const SectionContact = function SectionContact() {
     className: `text-sm font-bold uppercase tracking-widest mb-0.5 ${item.special ? 'text-rose-400' : 'text-brand-400'}`
   }, item.label), item.href ? /*#__PURE__*/React.createElement("a", {
     href: item.href,
-    target: "_blank",
-    rel: "noopener noreferrer",
+    target: item.href.startsWith('mailto:') ? undefined : "_blank",
+    rel: item.href.startsWith('mailto:') ? undefined : "noopener noreferrer",
     className: `text-xl font-semibold underline underline-offset-2 transition-colors ${item.special ? 'text-rose-700 hover:text-rose-900' : 'text-brand-800 hover:text-brand-600'}`
   }, item.value) : /*#__PURE__*/React.createElement("p", {
     className: "text-xl font-semibold text-brand-800"
