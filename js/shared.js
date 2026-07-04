@@ -1019,30 +1019,6 @@ const PRODUCT_CATALOG = {
 };
 
 // --- COMPONENTE ADSENSERBLOCK ---
-const AdSenseBlock = function AdSenseBlock({
-  slot,
-  minHeight = '90px'
-}) {
-  useEffect(() => {
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-      console.error("AdSense push failed", e);
-    }
-  }, []);
-  return /*#__PURE__*/React.createElement("ins", {
-    className: "adsbygoogle",
-    style: {
-      display: 'block',
-      minHeight
-    },
-    "data-ad-client": "ca-pub-9370167145239765",
-    "data-ad-slot": slot,
-    "data-ad-format": "auto",
-    "data-full-width-responsive": "true"
-  });
-};
-
 // --- COMPONENTE NAVBAR ---
 const Navbar = function Navbar({
   currentPage
@@ -1280,7 +1256,7 @@ const CookieBanner = function CookieBanner() {
 window.Icons = Icons;
 window.getAmazonLink = getAmazonLink;
 window.PRODUCT_CATALOG = PRODUCT_CATALOG;
-window.AdSenseBlock = AdSenseBlock;
+
 window.Navbar = Navbar;
 window.Footer = Footer;
 window.CookieBanner = CookieBanner;
