@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="IAdapta: Expertos en Terapia Ocupacional, Accesibilidad y Estimulación Cognitiva. Guías para la adaptación del hogar, recursos para profesionales y retos mentales diarios." />
+  <meta name="keywords" content="terapia ocupacional, accesibilidad, estimulacion cognitiva, adaptacion hogar, recursos para profesionales, juegos de memoria, autonomia personal, salud mental, productos de apoyo" />
+  <link rel="canonical" href="https://iadapta.es/" />
+  <meta name="google-adsense-account" content="ca-pub-9370167145239765">
+  <link rel="icon" type="image/png" href="assets/iadapta_logo.png" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9370167145239765"
+     crossorigin="anonymous"></script>
+  <title>IAdapta | Terapia Ocupacional y Accesibilidad</title>
+
+  <!-- Redirección Legacy para SPA / PWA -->
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const p = params.get('page');
+    if (p === 'games' || p === 'cognitive' || p === 'memory' || p === 'order' || p === 'wordsearch' || p === 'math' || p === 'visual' || p === 'intruder' || p === 'challenge' || p === 'sudoku') {
+      window.location.replace('estimulacion-cognitiva.html' + window.location.search);
+    } else if (p === 'resources') {
+      window.location.replace('recursos.html' + window.location.search);
+    } else if (p === 'guides') {
+      window.location.replace('guias.html' + window.location.search);
+    } else if (p === 'analyzer') {
+      window.location.replace('valoracion-estancia.html' + window.location.search);
+    } else if (p === 'cv') {
+      window.location.replace('cv.html' + window.location.search);
+    } else if (p === 'about') {
+      window.location.replace('index.html#about');
+    } else if (p === 'contact') {
+      window.location.replace('contacto.html');
+    } else if (p === 'legal') {
+      window.location.replace('aviso-legal.html');
+    }
+  </script>
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalBusiness",
+    "name": "IAdapta",
+    "alternateName": "IAdapta Terapia Ocupacional",
+    "description": "Plataforma de Terapia Ocupacional especializada en accesibilidad y estimulación cognitiva.",
+    "url": "https://iadapta.es",
+    "logo": "https://iadapta.es/assets/iadapta_logo.png",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "España"
+    },
+    "medicalSpecialty": ["OccupationalTherapy", "PhysicalTherapy", "Geriatrics"],
+    "offers": {
+      "@type": "Offer",
+      "name": "Recursos para Profesionales y Juegos Cognitivos"
+    }
+  }
+  </script>
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://iadapta.es/" />
+  <meta property="og:title" content="IAdapta | Autonomía y Mente Activa" />
+  <meta property="og:description" content="Entrena tu mente y mejora la accesibilidad de tu entorno con IAdapta." />
+  <meta property="og:image" content="https://iadapta.es/assets/iadapta_logo_social.jpg" />
+  <meta property="og:image:secure_url" content="https://iadapta.es/assets/iadapta_logo_social.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://iadapta.es/" />
+  <meta property="twitter:title" content="IAdapta | Autonomía y Mente Activa" />
+  <meta property="twitter:description" content="Supera retos diarios y mejora tu agudeza mental con Terapia Ocupacional." />
+  <meta property="twitter:image" content="https://iadapta.es/assets/iadapta_logo_social.jpg" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- React 18 CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+
+
+  <!-- Marked.js for Markdown parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    marked.setOptions({
+      breaks: true,
+      gfm: true,
+      headerIds: false,
+      mangle: false
+    });
+  </script>
+
+  <!-- Tailwind config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#1A3052',
+            },
+            accent: {
+              coral: '#E87D55',
+              cream: '#F2F0E9',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['"Playfair Display"', 'serif'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- PWA Manifest Selection -->
+
+  <link rel="apple-touch-icon" href="assets/iadapta_brand_icon.png">
+  <meta name="theme-color" content="#1A3052" />
+
+  <!-- Firebase SDK and Configuration -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js";
+
+     const firebaseConfig = {
+       apiKey: "AIza" + "SyA3teph1wXtdLCnW7ao132Z2atCSxQTEq0",
+       authDomain: "iadapta-1a0fb.firebaseapp.com",
+       databaseURL: "https://iadapta-1a0fb-default-rtdb.firebaseio.com",
+       projectId: "iadapta-1a0fb",
+       storageBucket: "iadapta-1a0fb.firebasestorage.app",
+       messagingSenderId: "997653142459",
+       appId: "1:997653142459:web:2017ed637e4d5e773b829e",
+       measurementId: "G-CBD6Q1S96V"
+     };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const analytics = getAnalytics(app);
+
+    window.firebaseDB = db;
+    window.firebaseAddDoc = addDoc;
+    window.firebaseCollection = collection;
+    console.log("Firebase Firestore initialized");
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('Service Worker registrado'))
+          .catch(err => console.log('Error registrando SW', err));
+      });
+    }
+  </script>
+</head>
+
+<body class="bg-white text-gray-900 antialiased">
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+  <div id="root">
+    <style>
+      /* Precarga de estilos para evitar parpadeo visual en carga inicial */
+      #root > header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 50 !important;
+        background-color: #F2F0E9 !important;
+        border-bottom: 1px solid rgba(26, 48, 82, 0.1) !important;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+      }
+      #main-content {
+        padding-top: 8rem !important; /* pt-32 = 8rem = 128px */
+      }
+    </style>
+    <!-- Contenido estático de respaldo para SEO, Accesibilidad y AdSense -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#F2F0E9] border-b border-brand-900/10 shadow-sm">
+      <div class="max-w-[1400px] mx-auto px-4 sm:px-8 flex items-center justify-between h-24 md:h-28">
+        <a href="index.html" class="flex items-center hover:scale-105 transition-transform">
+          <img src="assets/iadapta_logo.png" alt="IAdapta" class="h-16 md:h-20 object-contain" />
+        </a>
+        <nav class="hidden xl:flex items-center gap-1">
+          <a href="index.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Inicio</a>
+          <a href="valoracion-estancia.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Valoración de</span><span>la estancia</span>
+          </a>
+          <a href="guias.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Guías de</span><span>adaptación</span>
+          </a>
+          <a href="estimulacion-cognitiva.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Área</span><span>Cognitiva</span>
+          </a>
+          <a href="recursos.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+            <span>Recursos para</span><span>profesionales</span>
+          </a>
+          <a href="index.html#about" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Sobre Mí</a>
+          <a href="contacto.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Contacto</a>
+          <a href="cv.html" class="px-4 py-2.5 text-sm xl:text-base font-bold text-white bg-accent-coral hover:bg-white/50 border-2 border-accent-coral/10 rounded-xl transition-all ml-2">Mi CV</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content" class="pt-32 pb-12">
+      <!-- Hero Section -->
+      <section class="max-w-7xl mx-auto px-4 text-center py-16">
+        <h1 class="font-display text-5xl md:text-6xl font-bold text-brand-900 mb-6">
+          Tu bienestar y <span class="text-brand-500">autonomía</span>, primero
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
+          Evaluación experta de tu entorno y asesoramiento en productos de apoyo. 
+          <strong>"Te guío en la adaptación de tu casa para que vuelvas a moverte con seguridad y total confianza."</strong>
+        </p>
+      </section>
+
+      <!-- Servicios principales -->
+      <section class="max-w-7xl mx-auto px-4 py-12">
+        <h2 class="font-display text-3xl font-bold text-center text-brand-900 mb-12">Servicios y Herramientas</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8">
+            <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">Valoración de la estancia con IA</h3>
+            <p class="text-gray-600 mb-6">
+              Introduce las características de tu hogar o espacio y nuestra inteligencia artificial evaluará las barreras arquitectónicas existentes, sugiriendo las mejores adaptaciones.
+            </p>
+            <a href="valoracion-estancia.html" class="text-brand-600 font-bold hover:underline">Valorar estancia &rarr;</a>
+          </article>
+
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8">
+            <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">Guías de Adaptación</h3>
+            <p class="text-gray-600 mb-6">
+              Consejos prácticos, normativas y descripciones detalladas de productos de apoyo para adaptar el baño, cocina, dormitorio y zonas comunes del hogar, previniendo caídas.
+            </p>
+            <a href="guias.html" class="text-brand-600 font-bold hover:underline">Explorar guías &rarr;</a>
+          </article>
+
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8">
+            <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">Estimulación Cognitiva</h3>
+            <p class="text-gray-600 mb-6">
+              Ejercicios prácticos, retos diarios de memoria, cálculo numérico, sopas de letras y atención visual diseñados para fortalecer la agilidad mental y promover la autonomía personal.
+            </p>
+            <a href="estimulacion-cognitiva.html" class="text-brand-600 font-bold hover:underline">Entrenar mente &rarr;</a>
+          </article>
+        </div>
+      </section>
+
+      <!-- Sobre mí -->
+      <section id="about" class="max-w-6xl mx-auto px-4 py-16">
+        <div class="bg-gradient-to-br from-brand-50 to-sky-50 rounded-3xl border border-brand-100 p-8 md:p-12 flex flex-col md:flex-row gap-10 items-center">
+          <div class="shrink-0">
+            <img src="narciso_millan_portrait.jpg" alt="Pablo Narciso Millán - Terapeuta Ocupacional" class="w-48 h-48 rounded-full object-cover shadow-md border-4 border-white" />
+          </div>
+          <div>
+            <span class="inline-block bg-white text-brand-600 border border-brand-200 text-xs font-bold uppercase tracking-widest rounded-full px-3 py-1 mb-4 shadow-sm">Sobre Mí</span>
+            <h2 class="font-display text-3xl font-bold text-brand-900 mb-4">Pablo Narciso Millán</h2>
+            <div class="space-y-4 text-gray-700 text-lg leading-relaxed">
+              <p>
+                Soy Terapeuta Ocupacional graduado en 2015 con una amplia experiencia en el sector de la geriatría, la rehabilitación y la ortopedia. Mi enfoque terapéutico se centra en potenciar la autonomía del paciente mediante la adaptación de su entorno inmediato.
+              </p>
+              <p>
+                Aprovecho las últimas tecnologías, como el diseño y la impresión 3D, para confeccionar y promover el uso de adaptaciones funcionales y productos de apoyo de bajo coste, logrando que la tecnología sea accesible y suponga un impacto real en la calidad de vida y la independencia de las personas mayores o con diversidad funcional.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-2 mt-6">
+              <span class="bg-white border border-brand-200 text-brand-700 rounded-full px-3 py-1 text-xs font-semibold">Geriatría</span>
+              <span class="bg-white border border-brand-200 text-brand-700 rounded-full px-3 py-1 text-xs font-semibold">Ortopedia</span>
+              <span class="bg-white border border-brand-200 text-brand-700 rounded-full px-3 py-1 text-xs font-semibold">Impresión 3D</span>
+              <span class="bg-white border border-brand-200 text-brand-700 rounded-full px-3 py-1 text-xs font-semibold">Accesibilidad y Autonomía</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-brand-900 text-white py-12 mt-12">
+      <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div>
+          <h4 class="font-display text-xl font-bold">IAdapta Terapia Ocupacional</h4>
+          <p class="text-sm text-brand-300 mt-2">Promoviendo la autonomía personal y la estimulación cognitiva.</p>
+        </div>
+        <div class="flex gap-4">
+          <a href="index.html" class="hover:underline">Inicio</a>
+          <a href="estimulacion-cognitiva.html" class="hover:underline">Estimulación Cognitiva</a>
+          <a href="guias.html" class="hover:underline">Guías</a>
+          <a href="recursos.html" class="hover:underline">Recursos</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/shared.js"></script>
+  <script src="js/index.js"></script>
+</body>
+</html>
