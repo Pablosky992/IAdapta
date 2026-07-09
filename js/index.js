@@ -157,11 +157,16 @@ const SectionHome = function SectionHome() {
 
 // --- COMPONENTE SECTIONCONTACT ---
 const SectionContact = function SectionContact() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const info = [{
     icon: /*#__PURE__*/React.createElement(Icons.Mail, null),
     label: 'Correo electrónico',
     value: 'iadaptato@gmail.com',
-    href: 'mailto:iadaptato@gmail.com'
+    href: '#',
+    onClick: e => {
+      e.preventDefault();
+      setIsModalOpen(true);
+    }
   }, {
     icon: /*#__PURE__*/React.createElement(Icons.Instagram, null),
     label: 'Síguenos en Instagram',
@@ -183,7 +188,7 @@ const SectionContact = function SectionContact() {
   }];
   return /*#__PURE__*/React.createElement("section", {
     id: "contact",
-    className: "pt-36 pb-24 px-4 bg-gradient-to-b from-brand-50 to-white"
+    className: "pt-36 pb-24 px-4 bg-gradient-to-b from-brand-50 to-white relative"
   }, /*#__PURE__*/React.createElement("div", {
     className: "max-w-6xl mx-auto"
   }, /*#__PURE__*/React.createElement("div", {
@@ -203,8 +208,9 @@ const SectionContact = function SectionContact() {
     return /*#__PURE__*/React.createElement(CardElement, {
       key: i,
       href: item.href || undefined,
-      target: item.href && !item.href.startsWith('mailto:') ? "_blank" : undefined,
-      rel: item.href && !item.href.startsWith('mailto:') ? "noopener noreferrer" : undefined,
+      onClick: item.onClick || undefined,
+      target: item.href && !item.href.startsWith('#') && !item.href.startsWith('mailto:') ? "_blank" : undefined,
+      rel: item.href && !item.href.startsWith('#') && !item.href.startsWith('mailto:') ? "noopener noreferrer" : undefined,
       className: `flex items-center justify-between gap-5 border rounded-[2rem] p-6 shadow-sm hover:shadow-lg transition-all duration-300 group ${item.special ? 'bg-gradient-to-r from-rose-50 to-rose-100/30 border-rose-200 shadow-rose-50 hover:border-rose-300' : 'bg-white border-brand-100 hover:border-brand-300'} ${item.href ? 'cursor-pointer' : ''}`
     }, /*#__PURE__*/React.createElement("div", {
       className: "flex items-center gap-5"
@@ -233,7 +239,68 @@ const SectionContact = function SectionContact() {
     src: "contact_ot.jpg",
     alt: "Consulta de Terapia Ocupacional - Intervenci\xF3n profesional",
     className: "w-full h-auto object-cover hover:scale-105 transition-transform duration-1000"
-  })))));
+  })))), isModalOpen && /*#__PURE__*/React.createElement("div", {
+    className: "fixed inset-0 z-50 flex items-center justify-center p-4"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "absolute inset-0 bg-brand-950/40 backdrop-blur-sm transition-opacity",
+    onClick: () => setIsModalOpen(false)
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "relative bg-white rounded-[2.5rem] shadow-2xl border border-brand-100 w-full max-w-lg overflow-hidden transform transition-all p-8 sm:p-10 z-10"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => setIsModalOpen(false),
+    className: "absolute top-6 right-6 text-gray-400 hover:text-brand-800 transition-colors w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center hover:bg-brand-50"
+  }, /*#__PURE__*/React.createElement(Icons.Close, {
+    className: "w-5 h-5"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "text-center mb-6"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "font-display text-2xl font-bold text-brand-900 mb-2"
+  }, "Env\xEDanos un mensaje"), /*#__PURE__*/React.createElement("p", {
+    className: "text-gray-500 text-sm"
+  }, "Completa el formulario y te responder\xE9 lo antes posible.")), /*#__PURE__*/React.createElement("form", {
+    action: "https://formsubmit.co/iadaptato@gmail.com",
+    method: "POST",
+    className: "space-y-4"
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_subject",
+    value: "Nuevo mensaje de contacto desde IAdapta (Inicio)"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_next",
+    value: "https://iadapta.es/"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_captcha",
+    value: "false"
+  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-xs font-bold uppercase tracking-wider text-brand-400 mb-1.5"
+  }, "Nombre"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    name: "name",
+    required: true,
+    placeholder: "Tu nombre",
+    className: "w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-gray-700 transition-all text-base"
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-xs font-bold uppercase tracking-wider text-brand-400 mb-1.5"
+  }, "Email"), /*#__PURE__*/React.createElement("input", {
+    type: "email",
+    name: "email",
+    required: true,
+    placeholder: "tu@email.com",
+    className: "w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-gray-700 transition-all text-base"
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-xs font-bold uppercase tracking-wider text-brand-400 mb-1.5"
+  }, "Mensaje"), /*#__PURE__*/React.createElement("textarea", {
+    name: "message",
+    required: true,
+    rows: "4",
+    placeholder: "\xBFEn qu\xE9 puedo ayudarte?",
+    className: "w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-gray-700 transition-all resize-none text-base"
+  })), /*#__PURE__*/React.createElement("button", {
+    type: "submit",
+    className: "w-full bg-brand-900 text-white font-bold py-3.5 px-4 rounded-xl hover:bg-brand-800 transition-colors shadow-md hover:shadow-lg mt-2 text-base"
+  }, "Enviar mensaje")))));
 };
 
 // --- APLICACIÓN PRINCIPAL ---
