@@ -4,6 +4,7 @@ const {
   Navbar,
   Footer,
   CookieBanner,
+  AdSenseBlock,
   getAmazonLink
 } = window;
 const {
@@ -126,7 +127,13 @@ const GuiaCocina = function GuiaCocina() {
     className: "inline-flex items-center gap-1 text-[#FF9900] font-bold text-xs mt-1"
   }, "Ver en Amazon")))))), /*#__PURE__*/React.createElement("div", {
     className: "mt-6 p-4 bg-white rounded-xl border border-gray-100 text-xs text-gray-500 leading-relaxed shadow-sm"
-  }, "Las recomendaciones que ves en esta web han sido seleccionadas bajo criterio profesional de Terapia Ocupacional. Al comprar a trav\xE9s de estos enlaces, ayudas a mantener el proyecto IAdapta sin que a ti te cueste ni un c\xE9ntimo m\xE1s."))))));
+  }, "Las recomendaciones que ves en esta web han sido seleccionadas bajo criterio profesional de Terapia Ocupacional. Al comprar a trav\xE9s de estos enlaces, ayudas a mantener el proyecto IAdapta sin que a ti te cueste ni un c\xE9ntimo m\xE1s.")), /*#__PURE__*/React.createElement("div", {
+    className: "mt-16 overflow-hidden rounded-xl bg-gray-50/50 min-h-[100px] flex flex-col items-center justify-center"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-[10px] text-gray-400 uppercase tracking-widest mb-2"
+  }, "Publicidad"), /*#__PURE__*/React.createElement(AdSenseBlock, {
+    slot: "9272607554"
+  }))))));
 };
 function App() {
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Navbar, {

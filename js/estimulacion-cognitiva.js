@@ -3,7 +3,8 @@ const {
   Icons,
   Navbar,
   Footer,
-  CookieBanner
+  CookieBanner,
+  AdSenseBlock
 } = window;
 window.AppConfig = {
   AMAZON_AFFILIATE_ID: ""
@@ -1093,7 +1094,13 @@ const SectionCognitive = function SectionCognitive({
       className: "px-8 py-3 bg-brand-900 text-white rounded-xl font-bold flex items-center gap-2 group-hover:bg-accent-coral transition-colors shadow-lg"
     }, /*#__PURE__*/React.createElement("span", null, "Empezar Desaf\xEDo"), /*#__PURE__*/React.createElement(Icons.ArrowRight, {
       className: "w-5 h-5 group-hover:translate-x-1 transition-transform"
-    })))))), isStandalone && /*#__PURE__*/React.createElement("div", {
+    })))))), /*#__PURE__*/React.createElement("div", {
+      className: "mb-16 overflow-hidden rounded-xl bg-gray-50/50 min-h-[100px] flex flex-col items-center justify-center"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "text-[10px] text-gray-400 uppercase tracking-widest mb-2"
+    }, "Publicidad"), /*#__PURE__*/React.createElement(AdSenseBlock, {
+      slot: "9272607554"
+    })), isStandalone && /*#__PURE__*/React.createElement("div", {
       className: "mt-10 mb-16 pt-10 border-t border-brand-100 text-center flex flex-col items-center gap-4"
     }, /*#__PURE__*/React.createElement("p", {
       className: "text-gray-400 text-sm mb-2 font-medium uppercase tracking-widest"

@@ -129,6 +129,7 @@ const SectionHome = function SectionHome() {
 const SectionContact = function SectionContact() {
   const info = [
     { icon: <Icons.Mail />, label: 'Correo electrónico', value: 'iadaptato@gmail.com', href: 'mailto:iadaptato@gmail.com' },
+    { icon: <Icons.Instagram />, label: 'Síguenos en Instagram', value: '@iadapta', href: 'https://www.instagram.com/iadapta/' },
     { icon: <Icons.Location />, label: 'Localización', value: 'Barcelona, España', href: null },
     { icon: <Icons.Heart className="fill-red-500 text-red-500" />, label: 'Apoyo al proyecto', value: 'Realizar una donación', href: 'https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8', special: true },
   ];
@@ -146,28 +147,49 @@ const SectionContact = function SectionContact() {
         </div>
 
         <div className="max-w-xl mx-auto space-y-6">
-          {info.map((item, i) => (
-            <div key={i} className={`flex items-center gap-5 border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all ${item.special ? 'bg-rose-50 border-rose-200 shadow-rose-100' : 'bg-white border-brand-100'}`}>
-              <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${item.special ? 'bg-white text-red-600 shadow-sm' : 'bg-brand-100 text-brand-600'}`}>
-                {item.icon}
-              </div>
-              <div>
-                <p className={`text-sm font-bold uppercase tracking-widest mb-0.5 ${item.special ? 'text-rose-400' : 'text-brand-400'}`}>{item.label}</p>
-                {item.href ? (
-                  <a 
-                    href={item.href} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className={`text-xl font-semibold underline underline-offset-2 transition-colors ${item.special ? 'text-rose-700 hover:text-rose-900' : 'text-brand-800 hover:text-brand-600'}`}
-                  >
-                    {item.value}
-                  </a>
-                ) : (
-                  <p className="text-xl font-semibold text-brand-800">{item.value}</p>
+          {info.map((item, i) => {
+            const CardElement = item.href ? 'a' : 'div';
+            return (
+              <CardElement
+                key={i}
+                href={item.href || undefined}
+                target={item.href ? "_blank" : undefined}
+                rel={item.href ? "noopener noreferrer" : undefined}
+                className={`flex items-center justify-between gap-5 border rounded-[2rem] p-6 shadow-sm hover:shadow-lg transition-all duration-300 group ${
+                  item.special 
+                    ? 'bg-gradient-to-r from-rose-50 to-rose-100/30 border-rose-200 shadow-rose-50 hover:border-rose-300' 
+                    : 'bg-white border-brand-100 hover:border-brand-300'
+                } ${item.href ? 'cursor-pointer' : ''}`}
+              >
+                <div className="flex items-center gap-5">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110 ${
+                    item.special ? 'bg-white text-red-600 shadow-sm' : 'bg-brand-100 text-brand-600'
+                  }`}>
+                    {item.icon}
+                  </div>
+                  <div>
+                    <p className={`text-xs font-bold uppercase tracking-widest mb-1 ${item.special ? 'text-rose-400' : 'text-brand-400'}`}>
+                      {item.label}
+                    </p>
+                    <p className={`text-lg sm:text-xl font-semibold transition-colors ${
+                      item.special ? 'text-rose-800 group-hover:text-rose-950' : 'text-brand-800 group-hover:text-brand-600'
+                    }`}>
+                      {item.value}
+                    </p>
+                  </div>
+                </div>
+                {item.href && (
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 ${
+                    item.special ? 'text-rose-600 bg-white shadow-sm' : 'text-brand-600 bg-brand-50'
+                  }`}>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
                 )}
-              </div>
-            </div>
-          ))}
+              </CardElement>
+            );
+          })}
           <div className="rounded-3xl overflow-hidden shadow-2xl border border-brand-100 mt-10">
             <img src="contact_ot.jpg" alt="Consulta de Terapia Ocupacional - Intervención profesional" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-1000" />
           </div>

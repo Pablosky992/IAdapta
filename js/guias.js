@@ -3,7 +3,8 @@ const {
   Icons,
   Navbar,
   Footer,
-  CookieBanner
+  CookieBanner,
+  AdSenseBlock
 } = window;
 const {
   useState
@@ -155,7 +156,13 @@ const SectionGuides = function SectionGuides() {
     strokeLinejoin: "round",
     strokeWidth: "2",
     d: "M14 5l7 7m0 0l-7 7m7-7H3"
-  })))))))));
+  }))))))), /*#__PURE__*/React.createElement("div", {
+    className: "mt-16 overflow-hidden rounded-xl bg-gray-50/50 min-h-[100px] flex flex-col items-center justify-center"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-[10px] text-gray-400 uppercase tracking-widest mb-2"
+  }, "Publicidad"), /*#__PURE__*/React.createElement(AdSenseBlock, {
+    slot: "9272607554"
+  }))));
 };
 function App() {
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Navbar, {

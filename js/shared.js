@@ -574,6 +574,34 @@ const Icons = {
     strokeLinejoin: "round",
     d: "M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
   })),
+  Instagram: ({
+    className
+  }) => /*#__PURE__*/React.createElement("svg", {
+    className: className,
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "24",
+    height: "24",
+    fill: "none",
+    viewBox: "0 0 24 24",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("rect", {
+    x: "2",
+    y: "2",
+    width: "20",
+    height: "20",
+    rx: "5",
+    ry: "5"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "17.5",
+    y1: "6.5",
+    x2: "17.51",
+    y2: "6.5"
+  })),
   Location: ({
     className
   }) => /*#__PURE__*/React.createElement("svg", {
@@ -1019,6 +1047,30 @@ const PRODUCT_CATALOG = {
 };
 
 // --- COMPONENTE ADSENSERBLOCK ---
+const AdSenseBlock = function AdSenseBlock({
+  slot,
+  minHeight = '90px'
+}) {
+  useEffect(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.error("AdSense push failed", e);
+    }
+  }, []);
+  return /*#__PURE__*/React.createElement("ins", {
+    className: "adsbygoogle",
+    style: {
+      display: 'block',
+      minHeight
+    },
+    "data-ad-client": "ca-pub-9370167145239765",
+    "data-ad-slot": slot,
+    "data-ad-format": "auto",
+    "data-full-width-responsive": "true"
+  });
+};
+
 // --- COMPONENTE NAVBAR ---
 const Navbar = function Navbar({
   currentPage
@@ -1256,7 +1308,7 @@ const CookieBanner = function CookieBanner() {
 window.Icons = Icons;
 window.getAmazonLink = getAmazonLink;
 window.PRODUCT_CATALOG = PRODUCT_CATALOG;
-
+window.AdSenseBlock = AdSenseBlock;
 window.Navbar = Navbar;
 window.Footer = Footer;
 window.CookieBanner = CookieBanner;

@@ -4,6 +4,7 @@ const {
   Navbar,
   Footer,
   CookieBanner,
+  AdSenseBlock,
   getAmazonLink
 } = window;
 const {
@@ -84,7 +85,13 @@ const GuiaSillasRuedas = function GuiaSillasRuedas() {
     className: "font-bold text-emerald-800 uppercase tracking-wide text-base"
   }, "El Consejo del Terapeuta Ocupacional")), /*#__PURE__*/React.createElement("p", {
     className: "text-emerald-900 italic text-base leading-relaxed"
-  }, "\"La silla de ruedas no es un mueble, es una pr\xF3tesis de movilidad. Un error cr\xEDtico es no prestar atenci\xF3n al coj\xEDn antiescaras; de nada sirve la mejor silla el\xE9ctrica del mercado si la superficie de apoyo no gestiona correctamente las presiones. Asimismo, recuerda que una silla el\xE9ctrica multifunci\xF3n no es solo comodidad: la capacidad de elevar las piernas por encima del nivel del coraz\xF3n o cambiar el \xE1ngulo de apoyo es una intervenci\xF3n m\xE9dica constante que previene complicaciones graves y mejora el confort diario.\"")))))));
+  }, "\"La silla de ruedas no es un mueble, es una pr\xF3tesis de movilidad. Un error cr\xEDtico es no prestar atenci\xF3n al coj\xEDn antiescaras; de nada sirve la mejor silla el\xE9ctrica del mercado si la superficie de apoyo no gestiona correctamente las presiones. Asimismo, recuerda que una silla el\xE9ctrica multifunci\xF3n no es solo comodidad: la capacidad de elevar las piernas por encima del nivel del coraz\xF3n o cambiar el \xE1ngulo de apoyo es una intervenci\xF3n m\xE9dica constante que previene complicaciones graves y mejora el confort diario.\""))), /*#__PURE__*/React.createElement("div", {
+    className: "mt-16 overflow-hidden rounded-xl bg-gray-50/50 min-h-[100px] flex flex-col items-center justify-center"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-[10px] text-gray-400 uppercase tracking-widest mb-2"
+  }, "Publicidad"), /*#__PURE__*/React.createElement(AdSenseBlock, {
+    slot: "9272607554"
+  }))))));
 };
 function App() {
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Navbar, {
