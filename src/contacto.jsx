@@ -29,8 +29,8 @@ const SectionContact = function SectionContact() {
               <CardElement
                 key={i}
                 href={item.href || undefined}
-                target={item.href ? "_blank" : undefined}
-                rel={item.href ? "noopener noreferrer" : undefined}
+                target={item.href && !item.href.startsWith('mailto:') ? "_blank" : undefined}
+                rel={item.href && !item.href.startsWith('mailto:') ? "noopener noreferrer" : undefined}
                 className={`flex items-center justify-between gap-5 border rounded-[2rem] p-6 shadow-sm hover:shadow-lg transition-all duration-300 group ${
                   item.special 
                     ? 'bg-gradient-to-r from-rose-50 to-rose-100/30 border-rose-200 shadow-rose-50 hover:border-rose-300' 
