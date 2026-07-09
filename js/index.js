@@ -258,21 +258,21 @@ const SectionContact = function SectionContact() {
   }, "Env\xEDanos un mensaje"), /*#__PURE__*/React.createElement("p", {
     className: "text-gray-500 text-sm"
   }, "Completa el formulario y te responder\xE9 lo antes posible.")), /*#__PURE__*/React.createElement("form", {
-    action: "https://formsubmit.co/iadaptato@gmail.com",
+    action: "https://api.web3forms.com/submit",
     method: "POST",
     className: "space-y-4"
   }, /*#__PURE__*/React.createElement("input", {
     type: "hidden",
-    name: "_subject",
+    name: "access_key",
+    value: "17a9d1e2-5bc3-4d1e-856c-1e9873dd9cee"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "subject",
     value: "Nuevo mensaje de contacto desde IAdapta (Inicio)"
   }), /*#__PURE__*/React.createElement("input", {
     type: "hidden",
-    name: "_next",
+    name: "redirect",
     value: "https://iadapta.es/"
-  }), /*#__PURE__*/React.createElement("input", {
-    type: "hidden",
-    name: "_captcha",
-    value: "false"
   }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
     className: "block text-xs font-bold uppercase tracking-wider text-brand-400 mb-1.5"
   }, "Nombre"), /*#__PURE__*/React.createElement("input", {

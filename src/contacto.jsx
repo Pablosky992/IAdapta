@@ -104,13 +104,13 @@ const SectionContact = function SectionContact() {
             </div>
             
             <form 
-              action="https://formsubmit.co/iadaptato@gmail.com" 
+              action="https://api.web3forms.com/submit" 
               method="POST"
               className="space-y-4"
             >
-              <input type="hidden" name="_subject" value="Nuevo mensaje de contacto desde IAdapta" />
-              <input type="hidden" name="_next" value="https://iadapta.es/contacto.html" />
-              <input type="hidden" name="_captcha" value="false" />
+              <input type="hidden" name="access_key" value="17a9d1e2-5bc3-4d1e-856c-1e9873dd9cee" />
+              <input type="hidden" name="subject" value="Nuevo mensaje de contacto desde IAdapta" />
+              <input type="hidden" name="redirect" value="https://iadapta.es/contacto.html" />
               
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-brand-400 mb-1.5">Nombre</label>
