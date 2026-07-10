@@ -1259,6 +1259,11 @@ const Footer = function Footer({
     rel: "noopener noreferrer",
     className: "text-brand-200 hover:text-white transition-colors text-lg"
   }, "LinkedIn")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "https://www.instagram.com/iadapta/",
+    target: "_blank",
+    rel: "noopener noreferrer",
+    className: "text-brand-200 hover:text-white transition-colors text-lg"
+  }, "Instagram")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
     href: "https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8",
     target: "_blank",
     rel: "noopener noreferrer",

@@ -321,6 +321,7 @@ const Footer = function Footer({ currentPage }) {
             <h3 className="text-base font-bold uppercase tracking-widest text-brand-300 mb-4">Enlaces</h3>
             <ul className="space-y-3">
               <li><a href="https://www.linkedin.com/in/pablo-narciso-millan" target="_blank" rel="noopener noreferrer" className="text-brand-200 hover:text-white transition-colors text-lg">LinkedIn</a></li>
+              <li><a href="https://www.instagram.com/iadapta/" target="_blank" rel="noopener noreferrer" className="text-brand-200 hover:text-white transition-colors text-lg">Instagram</a></li>
               <li>
                 <a 
                   href="https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8" 
