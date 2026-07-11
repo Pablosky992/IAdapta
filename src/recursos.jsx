@@ -236,6 +236,22 @@ const ChatbotComponent = function ChatbotComponent() {
     setErrorMsg('');
   };
 
+  const renameSession = (id, e) => {
+    e.stopPropagation();
+    const session = sessions.find(s => s.id === id);
+    if (!session) return;
+    const newTitle = window.prompt('Editar título de la conversación:', session.title);
+    if (newTitle && newTitle.trim()) {
+      const updated = sessions.map(s => {
+        if (s.id === id) {
+          return { ...s, title: newTitle.trim() };
+        }
+        return s;
+      });
+      saveSessions(updated);
+    }
+  };
+
   const deleteSession = (id, e) => {
     e.stopPropagation();
     const updated = sessions.filter(s => s.id !== id);
@@ -250,6 +266,34 @@ const ChatbotComponent = function ChatbotComponent() {
     }
   };
 
+  const downloadConversation = () => {
+    if (!activeSession || activeSession.messages.length === 0) return;
+    
+    let content = `# Consulta de Terapia Ocupacional - IAdapta\n`;
+    content += `Título: ${activeSession.title}\n`;
+    content += `Fecha: ${activeSession.date}\n`;
+    content += `=========================================\n\n`;
+    
+    activeSession.messages.forEach((msg) => {
+      const role = msg.sender === 'user' ? 'Terapeuta Ocupacional' : 'Consultor Clínico IA';
+      content += `[${role}]:\n${msg.text}\n\n`;
+      content += `-----------------------------------------\n\n`;
+    });
+    
+    content += `Generado automáticamente por IAdapta (https://iadapta.es) - Consultor Clínico en Terapia Ocupacional.\n`;
+    
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    const filename = `consulta_to_${activeSession.title.toLowerCase().replace(/[^a-z0-9]/gi, '_')}.txt`;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   const activeSession = useMemo(() => {
     return sessions.find(s => s.id === activeSessionId) || null;
   }, [sessions, activeSessionId]);
@@ -257,6 +301,13 @@ const ChatbotComponent = function ChatbotComponent() {
   const messages = useMemo(() => {
     return activeSession ? activeSession.messages : [];
   }, [activeSession]);
+
+  const userQuestionsCount = useMemo(() => {
+    return messages.filter(m => m.sender === 'user').length;
+  }, [messages]);
+
+  const isLimitReached = userQuestionsCount >= 6;
+  const isLimitNear = userQuestionsCount === 5;
 
   // Scroll to bottom on new messages (internal chat container scroll only)
   useEffect(() => {
@@ -387,13 +438,22 @@ const ChatbotComponent = function ChatbotComponent() {
                   <p className="font-bold text-xs truncate leading-snug">{s.title}</p>
                   <span className="text-[10px] text-gray-400 block mt-1 font-medium">{s.date}</span>
                 </div>
-                <button
-                  onClick={(e) => deleteSession(s.id, e)}
-                  className="p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50/80 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 shrink-0"
-                  title="Eliminar conversación"
-                >
-                  <Icons.Trash className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100 shrink-0 transition-opacity">
+                  <button
+                    onClick={(e) => renameSession(s.id, e)}
+                    className="p-1.5 rounded-lg text-gray-300 hover:text-indigo-600 hover:bg-indigo-50/80 transition-all"
+                    title="Renombrar conversación"
+                  >
+                    <Icons.Edit className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={(e) => deleteSession(s.id, e)}
+                    className="p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50/80 transition-all"
+                    title="Eliminar conversación"
+                  >
+                    <Icons.Trash className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             );
           })}
@@ -431,8 +491,20 @@ const ChatbotComponent = function ChatbotComponent() {
               <p className="text-[10px] sm:text-xs text-gray-400 font-medium">Asistente Sanitario Técnico Especializado</p>
             </div>
           </div>
-          <div className="hidden sm:block text-right">
-            <span className="text-[10px] bg-brand-50 text-brand-600 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Beta Clínico</span>
+          <div className="flex items-center gap-3">
+            {messages.length > 0 && (
+              <button
+                onClick={downloadConversation}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 hover:text-indigo-900 border border-indigo-100 rounded-xl font-bold text-xs transition-all hover:scale-[1.02] active:scale-95 shadow-sm"
+                title="Descargar conversación en TXT"
+              >
+                <Icons.Download className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Descargar Chat</span>
+              </button>
+            )}
+            <div className="hidden sm:block text-right">
+              <span className="text-[10px] bg-brand-50 text-brand-600 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Beta Clínico</span>
+            </div>
           </div>
         </header>
 
@@ -542,38 +614,62 @@ const ChatbotComponent = function ChatbotComponent() {
 
         {/* Input Form Area */}
         <footer className="p-4 border-t border-brand-100 bg-white relative z-10 shrink-0">
-          <form 
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSendMessage();
-            }}
-            className="max-w-3xl mx-auto flex gap-3 items-end"
-          >
-            <div className="flex-1 relative bg-brand-50/40 border border-brand-100 rounded-2xl focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:border-indigo-500 transition-all">
-              <textarea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSendMessage();
-                  }
-                }}
-                rows="2"
-                placeholder="Escribe tu consulta sobre el caso clínico..."
-                disabled={isLoading}
-                className="w-full pl-4 pr-4 py-3 bg-transparent border-0 outline-none text-base text-gray-800 resize-none font-sans placeholder:text-gray-400 focus:ring-0 leading-relaxed max-h-32"
-              ></textarea>
+          {isLimitReached ? (
+            <div className="max-w-3xl mx-auto p-4 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center gap-3 text-indigo-950 text-xs sm:text-sm animate-fade-in text-left">
+              <span className="text-xl">💡</span>
+              <div className="flex-1 leading-relaxed">
+                <strong className="font-bold block text-indigo-900 mb-0.5">Límite de sesión alcanzado (6/6 consultas):</strong>
+                Para mantener la precisión clínica y evitar que se mezclen intervenciones, te aconsejamos iniciar una nueva conversación.
+              </div>
+              <button
+                onClick={() => createNewSession()}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl font-bold text-xs transition-all shrink-0 hover:scale-[1.02] active:scale-95 shadow-md shadow-indigo-600/10"
+              >
+                Nuevo Chat
+              </button>
             </div>
-            <button
-              type="submit"
-              disabled={isLoading || !input.trim()}
-              className="w-12 h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/10 hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100 transition-all shrink-0"
-              title="Enviar mensaje"
-            >
-              <Icons.Send className="w-5 h-5" />
-            </button>
-          </form>
+          ) : (
+            <>
+              {isLimitNear && (
+                <div className="max-w-3xl mx-auto mb-3 px-4 py-2 bg-amber-50 border border-amber-200 text-amber-900 text-[11px] font-bold rounded-xl flex items-center gap-2 animate-pulse text-left">
+                  <span>⚠️</span>
+                  <span>Te queda 1 última pregunta disponible para esta sesión.</span>
+                </div>
+              )}
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSendMessage();
+                }}
+                className="max-w-3xl mx-auto flex gap-3 items-end"
+              >
+                <div className="flex-1 relative bg-brand-50/40 border border-brand-100 rounded-2xl focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:border-indigo-500 transition-all">
+                  <textarea
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendMessage();
+                      }
+                    }}
+                    rows="2"
+                    placeholder="Escribe tu consulta sobre el caso clínico..."
+                    disabled={isLoading}
+                    className="w-full pl-4 pr-4 py-3 bg-transparent border-0 outline-none text-base text-gray-800 resize-none font-sans placeholder:text-gray-400 focus:ring-0 leading-relaxed max-h-32"
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  disabled={isLoading || !input.trim()}
+                  className="w-12 h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/10 hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100 transition-all shrink-0"
+                  title="Enviar mensaje"
+                >
+                  <Icons.Send className="w-5 h-5" />
+                </button>
+              </form>
+            </>
+          )}
           <p className="text-[10px] text-gray-400 text-center mt-2.5 max-w-lg mx-auto font-medium leading-normal">
             Ofrece soluciones formales de Terapia Ocupacional. El consultor te formulará preguntas de refinamiento.
           </p>
