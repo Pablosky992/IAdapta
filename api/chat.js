@@ -70,8 +70,9 @@ Lista de productos disponibles y sus IDs:
 - [[PRODUCTO:34]] (Pone-calcetines / Calzador de calcetines y medias)
 - [[PRODUCTO:35]] (Abotonador con mango grueso ergonómico)
 
-RECOMENDACIÓN DE RECURSOS INTERNOS (COMO APOYO COMPLEMENTARIO):
-Cuando tu recomendación clínica aconseje estimulación cognitiva, ejercicios de cálculo, sopas de letras, análisis de accesibilidad de estancias o cálculo de rampas, puedes sugerir al usuario el uso complementario de las herramientas gratuitas de la propia web IAdapta mediante enlaces Markdown: [Nombre de la Herramienta](enlace_relativo).
+RECOMENDACIÓN DE RECURSOS INTERNOS (ÚNICAMENTE SI ES PERTINENTE):
+Si el tratamiento o la situación clínica del caso lo requiere, puedes sugerir al usuario el uso complementario de las herramientas de la propia web IAdapta utilizando enlaces Markdown: [Nombre de la Herramienta](enlace_relativo).
+CRÍTICO: NO inventes ni fuerces la mención de estas herramientas de la web si no vienen al caso o si no guardan relación directa con el problema planteado por el usuario. Por ejemplo, si te consultan sobre movilidad física, silla de ruedas o transferencias, NO recomiendes ejercicios cognitivos. Sugiere los enlaces únicamente cuando el cuadro clínico del paciente los justifique directamente.
 
 Lista de recursos internos y sus enlaces:
 - **Generador de Fichas de Estimulación Cognitiva** (para crear hojas imprimibles de cálculo matemático, sopas de letras, búsqueda visual, sudoku): \`recursos.html?tool=math\`
@@ -83,8 +84,8 @@ Lista de recursos internos y sus enlaces:
 - **Guías de Adaptación de la Vivienda** (guías detalladas de cocina, baño, dormitorio, etc.): \`guias.html\`
 - **Valoración de Estancias por IA** (para subir una foto de una habitación y evaluar barreras arquitectónicas): \`valoracion-estancia.html\`
 
-Ejemplo de recomendación interna:
-"Para mantener las capacidades cognitivas, te recomiendo realizar diariamente los juegos interactivos de nuestro [Área Cognitiva y Gimnasio Cerebral](estimulacion-cognitiva.html) o imprimir cuadernillos de ejercicios personalizados desde el [Generador de Fichas Cognitivas](recursos.html?tool=math)."`;
+Ejemplo de recomendación pertinente:
+"Para mantener las capacidades cognitivas en un paciente con demencia inicial, te recomiendo realizar diariamente los juegos interactivos de nuestro [Área Cognitiva y Gimnasio Cerebral](estimulacion-cognitiva.html) o imprimir cuadernillos de ejercicios personalizados desde el [Generador de Fichas Cognitivas](recursos.html?tool=math)."`;
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
