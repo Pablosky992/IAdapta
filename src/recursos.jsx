@@ -121,7 +121,7 @@ const renderMessageText = (text) => {
       const isList = lines.every(line => line.trim().startsWith('* ') || line.trim().startsWith('- '));
       if (isList) {
         renderedElement = (
-          <ul className="list-disc pl-5 my-2 space-y-1 text-sm text-gray-700 leading-relaxed text-left">
+          <ul className="list-disc pl-5 my-2 space-y-1.5 text-base text-gray-850 leading-relaxed text-left">
             {lines.map((line, lIdx) => {
               const cleanLine = line.trim().replace(/^[\*\-]\s+/, '');
               return <li key={lIdx}>{parseInlineMarkdown(cleanLine)}</li>;
@@ -131,7 +131,7 @@ const renderMessageText = (text) => {
       } else {
         const subLines = cleanText.split('\n');
         renderedElement = (
-          <p className="text-sm text-gray-700 leading-relaxed mb-3 text-left">
+          <p className="text-base text-gray-850 leading-relaxed mb-3.5 text-left">
             {subLines.map((line, lIdx) => (
               <React.Fragment key={lIdx}>
                 {lIdx > 0 && <br />}
@@ -335,7 +335,7 @@ const ChatbotComponent = function ChatbotComponent() {
 
 
   return (
-    <div className="bg-white rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden flex flex-col md:flex-row h-[750px] relative anim-scale-in text-left">
+    <div className="bg-white rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden flex flex-col md:flex-row h-[850px] relative anim-scale-in text-left">
       
       {/* SIDEBAR - DESKTOP & MOBILE TRANSITION */}
       <aside className={`w-80 border-r border-brand-100 bg-brand-50/30 flex flex-col shrink-0 transition-transform duration-300 z-40 md:relative md:translate-x-0 absolute inset-y-0 left-0 bg-white
@@ -491,7 +491,7 @@ const ChatbotComponent = function ChatbotComponent() {
                           ? 'bg-brand-900 text-white border-brand-900/10 rounded-tr-none' 
                           : 'bg-white text-gray-850 border-gray-150 rounded-tl-none'}`}>
                         {isUser ? (
-                          <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.text}</p>
+                          <p className="text-base whitespace-pre-wrap leading-relaxed">{msg.text}</p>
                         ) : (
                           renderMessageText(msg.text)
                         )}
@@ -562,7 +562,7 @@ const ChatbotComponent = function ChatbotComponent() {
                 rows="2"
                 placeholder="Escribe tu consulta sobre el caso clínico..."
                 disabled={isLoading}
-                className="w-full pl-4 pr-4 py-3 bg-transparent border-0 outline-none text-sm text-gray-800 resize-none font-sans placeholder:text-gray-400 focus:ring-0 leading-relaxed max-h-32"
+                className="w-full pl-4 pr-4 py-3 bg-transparent border-0 outline-none text-base text-gray-800 resize-none font-sans placeholder:text-gray-400 focus:ring-0 leading-relaxed max-h-32"
               ></textarea>
             </div>
             <button
@@ -1221,7 +1221,7 @@ const SectionResources = function SectionResources({ navigateTo, isPWA, setShowI
 
   return (
     <section id="resources" className="pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen">
-      <div className="max-w-6xl mx-auto">
+      <div className={`${view === 'chatbot' ? 'max-w-7xl' : 'max-w-6xl'} mx-auto transition-all duration-300`}>
         
         {view !== 'menu' && (
           <ResourceSubNav currentView={view} onViewChange={updateView} />
