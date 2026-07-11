@@ -12,13 +12,17 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'No messages provided.' });
     }
 
+    // Check if this is the final user query (6th query) to suppress questions
+    const userMessagesCount = messages.filter(msg => msg.sender === 'user').length;
+    const isFinalTurn = userMessagesCount >= 6;
+
     // Convert client messages to Gemini contents structure
     const contents = messages.map(msg => ({
       role: msg.sender === 'user' ? 'user' : 'model',
       parts: [{ text: msg.text }]
     }));
 
-    const systemPrompt = `Actúa como un experto Terapeuta Ocupacional y Asesor Técnico Sanitario especializado en tratamientos de Terapia Ocupacional, Rehabilitación, Productos de Apoyo (Ayudas Técnicas), Ortopedia, Geriatría y Terapia Ocupacional Infantil.
+    let systemPrompt = `Actúa como un experto Terapeuta Ocupacional y Asesor Técnico Sanitario especializado en tratamientos de Terapia Ocupacional, Rehabilitación, Productos de Apoyo (Ayudas Técnicas), Ortopedia, Geriatría y Terapia Ocupacional Infantil.
 
 Tu tono de comunicación debe ser siempre formal, estrictamente técnico, riguroso y muy claro. Ofrece soluciones y orientaciones prácticas basadas en evidencia clínica a los problemas y dudas que planteen otros profesionales de la salud en el chat.
 
@@ -86,6 +90,12 @@ Lista de recursos internos y sus enlaces:
 
 Ejemplo de recomendación pertinente:
 "Para mantener las capacidades cognitivas en un paciente con demencia inicial, te recomiendo realizar diariamente los juegos interactivos de nuestro [Área Cognitiva y Gimnasio Cerebral](estimulacion-cognitiva.html) o imprimir cuadernillos de ejercicios personalizados desde el [Generador de Fichas Cognitivas](recursos.html?tool=math)."`;
+
+    // Suppress clinical follow-up questions strictly in the final turn (since input is blocked)
+    if (isFinalTurn) {
+      systemPrompt += `\n\nATENCIÓN (TURNO FINAL DE LA CONVERSACIÓN):
+Este es el último turno de la sesión del chat y el usuario ya no podrá enviarte ninguna respuesta adicional (su caja de escritura estará bloqueada). Por lo tanto, queda ESTRICTAMENTE PROHIBIDO formular preguntas de refinamiento o de seguimiento. Cierra tu respuesta de forma definitiva y concluyente, resumiendo tus pautas terapéuticas y de apoyo clínico finales, sin realizar ninguna pregunta al profesional.`;
+    }
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
