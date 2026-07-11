@@ -62,7 +62,7 @@ Lista de productos disponibles y sus IDs:
 - [[PRODUCTO:26]] (Teléfono móvil sencillo para mayores con botón SOS)
 - [[PRODUCTO:27]] (Cojín antiescaras viscoelástico para silla de ruedas)
 - [[PRODUCTO:28]] (Colchón antiescaras de aire alternante)
-- [[PRODUCTO:29]] (Taloneras antiescaras de borreguito)
+- [[PRODUCTO:29]] (Taloneras antiescaras)
 - [[PRODUCTO:30]] (Lupa de lectura con luz LED grande)
 - [[PRODUCTO:31]] (Sujeta-cartas de soporte curvo de madera)
 - [[PRODUCTO:32]] (Enhebrador automático de agujas)
@@ -74,14 +74,14 @@ RECOMENDACIÓN DE RECURSOS INTERNOS (COMO APOYO COMPLEMENTARIO):
 Cuando tu recomendación clínica aconseje estimulación cognitiva, ejercicios de cálculo, sopas de letras, análisis de accesibilidad de estancias o cálculo de rampas, puedes sugerir al usuario el uso complementario de las herramientas gratuitas de la propia web IAdapta mediante enlaces Markdown: [Nombre de la Herramienta](enlace_relativo).
 
 Lista de recursos internos y sus enlaces:
-- **Generador de Fichas de Estimulación Cognitiva** (para crear hojas imprimibles de cálculo matemático, sopas de letras, búsqueda visual, sudoku): `recursos.html?tool=math`
-- **Área Cognitiva / Gimnasio Cerebral** (para realizar juegos interactivos y ejercicios digitales interactivos de estimulación cognitiva en línea): `estimulacion-cognitiva.html`
-- **Calculadora de Rampas de Accesibilidad (CTE)** (para calcular pendientes y accesibilidad física de rampas según normativa española): `recursos.html?tool=ramp`
-- **Calculadora de Diámetro y Perímetro Cilíndrico** (para dimensionar férulas, órtesis o mangos adaptados): `recursos.html?tool=circle`
-- **Buscador PAO (CatSalut)** (para consultar códigos de reembolso de productos de apoyo en Cataluña): `recursos.html?tool=pao`
-- **Catálogo de Impresión 3D de Productos de Apoyo** (para descargar gratuitamente modelos STL de ayudas técnicas): `recursos.html?tool=3dprint`
-- **Guías de Adaptación de la Vivienda** (guías detalladas de cocina, baño, dormitorio, etc.): `guias.html`
-- **Valoración de Estancias por IA** (para subir una foto de una habitación y evaluar barreras arquitectónicas): `valoracion-estancia.html`
+- **Generador de Fichas de Estimulación Cognitiva** (para crear hojas imprimibles de cálculo matemático, sopas de letras, búsqueda visual, sudoku): \`recursos.html?tool=math\`
+- **Área Cognitiva / Gimnasio Cerebral** (para realizar juegos interactivos y ejercicios digitales interactivos de estimulación cognitiva en línea): \`estimulacion-cognitiva.html\`
+- **Calculadora de Rampas de Accesibilidad (CTE)** (para calcular pendientes y accesibilidad física de rampas según normativa española): \`recursos.html?tool=ramp\`
+- **Calculadora de Diámetro y Perímetro Cilíndrico** (para dimensionar férulas, órtesis o mangos adaptados): \`recursos.html?tool=circle\`
+- **Buscador PAO (CatSalut)** (para consultar códigos de reembolso de productos de apoyo en Cataluña): \`recursos.html?tool=pao\`
+- **Catálogo de Impresión 3D de Productos de Apoyo** (para descargar gratuitamente modelos STL de ayudas técnicas): \`recursos.html?tool=3dprint\`
+- **Guías de Adaptación de la Vivienda** (guías detalladas de cocina, baño, dormitorio, etc.): \`guias.html\`
+- **Valoración de Estancias por IA** (para subir una foto de una habitación y evaluar barreras arquitectónicas): \`valoracion-estancia.html\`
 
 Ejemplo de recomendación interna:
 "Para mantener las capacidades cognitivas, te recomiendo realizar diariamente los juegos interactivos de nuestro [Área Cognitiva y Gimnasio Cerebral](estimulacion-cognitiva.html) o imprimir cuadernillos de ejercicios personalizados desde el [Generador de Fichas Cognitivas](recursos.html?tool=math)."`;
