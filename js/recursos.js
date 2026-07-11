@@ -59,6 +59,14 @@ const ResourceSubNav = function ResourceSubNav({
       className: "w-4 h-4"
     }),
     color: 'bg-orange-500 border-orange-500'
+  }, {
+    id: 'chatbot',
+    title: 'Consultor de TO',
+    shortTitle: 'Chatbot',
+    icon: /*#__PURE__*/React.createElement(Icons.MessageSquare, {
+      className: "w-4 h-4"
+    }),
+    color: 'bg-indigo-600 border-indigo-600'
   }];
   return /*#__PURE__*/React.createElement("div", {
     className: "w-full max-w-6xl mx-auto mb-10"
@@ -86,6 +94,460 @@ const ResourceSubNav = function ResourceSubNav({
   }))));
 };
 
+// --- MARKDOWN PARSER HELPERS FOR CHATBOT ---
+const parseInlineMarkdown = text => {
+  if (!text) return '';
+  const regex = /(\[.*?\]\(.*?\))|(\*\*.*?\*\*)/g;
+  const parts = text.split(regex);
+  return parts.map((part, index) => {
+    if (!part) return null;
+    if (part.startsWith('[') && part.includes('](') && part.endsWith(')')) {
+      const linkText = part.substring(1, part.indexOf(']'));
+      const url = part.substring(part.indexOf('](') + 2, part.length - 1);
+      const isInternal = !url.startsWith('http') || url.includes('iadapta.es') || url.includes('localhost');
+      return /*#__PURE__*/React.createElement("a", {
+        key: index,
+        href: url,
+        target: isInternal ? "_self" : "_blank",
+        rel: "noopener noreferrer",
+        className: "text-indigo-600 font-bold hover:underline inline-flex items-center gap-0.5 bg-indigo-50/50 px-2 py-0.5 rounded-lg border border-indigo-100/40"
+      }, linkText, isInternal ? ' 🔗' : ' ↗️');
+    }
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return /*#__PURE__*/React.createElement("strong", {
+        key: index,
+        className: "font-bold text-brand-900"
+      }, part.slice(2, -2));
+    }
+    return part;
+  });
+};
+const renderMessageText = text => {
+  if (!text) return null;
+  const paragraphs = text.split('\n\n');
+  return paragraphs.map((paragraph, pIdx) => {
+    let content = paragraph.trim();
+    if (!content) return null;
+
+    // Detect and extract product codes [[PRODUCTO:ID]]
+    const productRegex = /\[\[PRODUCTO?[:\s]*(\d+)\]\]/gi;
+    const matches = [...content.matchAll(productRegex)];
+    const productIds = [...new Set(matches.map(m => m[1]))];
+    const cleanText = content.replace(productRegex, '').trim();
+    if (!cleanText && productIds.length > 0) {
+      return /*#__PURE__*/React.createElement("div", {
+        key: pIdx,
+        className: "mb-4"
+      }, renderProductCards(productIds));
+    }
+    let renderedElement = null;
+    if (cleanText.startsWith('### ')) {
+      renderedElement = /*#__PURE__*/React.createElement("h4", {
+        className: "font-display text-lg font-bold text-brand-900 mt-4 mb-2"
+      }, cleanText.replace('### ', ''));
+    } else if (cleanText.startsWith('## ')) {
+      renderedElement = /*#__PURE__*/React.createElement("h3", {
+        className: "font-display text-xl font-bold text-brand-900 mt-5 mb-3"
+      }, cleanText.replace('## ', ''));
+    } else {
+      const lines = cleanText.split('\n');
+      const isList = lines.every(line => line.trim().startsWith('* ') || line.trim().startsWith('- '));
+      if (isList) {
+        renderedElement = /*#__PURE__*/React.createElement("ul", {
+          className: "list-disc pl-5 my-2 space-y-1 text-sm text-gray-700 leading-relaxed text-left"
+        }, lines.map((line, lIdx) => {
+          const cleanLine = line.trim().replace(/^[\*\-]\s+/, '');
+          return /*#__PURE__*/React.createElement("li", {
+            key: lIdx
+          }, parseInlineMarkdown(cleanLine));
+        }));
+      } else {
+        const subLines = cleanText.split('\n');
+        renderedElement = /*#__PURE__*/React.createElement("p", {
+          className: "text-sm text-gray-700 leading-relaxed mb-3 text-left"
+        }, subLines.map((line, lIdx) => /*#__PURE__*/React.createElement(React.Fragment, {
+          key: lIdx
+        }, lIdx > 0 && /*#__PURE__*/React.createElement("br", null), parseInlineMarkdown(line))));
+      }
+    }
+    return /*#__PURE__*/React.createElement("div", {
+      key: pIdx,
+      className: "mb-4"
+    }, renderedElement, productIds.length > 0 && renderProductCards(productIds));
+  });
+};
+const renderProductCards = ids => {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-col gap-3 my-3"
+  }, ids.map(id => {
+    const p = window.PRODUCT_CATALOG[id];
+    if (!p) return null;
+    return /*#__PURE__*/React.createElement("div", {
+      key: id,
+      className: "bg-white border border-brand-100 rounded-2xl p-4 shadow-sm flex items-center gap-4 animate-scale-in text-left"
+    }, /*#__PURE__*/React.createElement("img", {
+      src: p.img,
+      alt: p.name,
+      className: "w-16 h-16 object-contain rounded-lg bg-brand-50 shrink-0"
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "flex-1 min-w-0"
+    }, /*#__PURE__*/React.createElement("h5", {
+      className: "font-bold text-brand-900 text-sm truncate"
+    }, p.name), /*#__PURE__*/React.createElement("p", {
+      className: "text-[10px] text-brand-500 mb-2 font-medium"
+    }, "Recomendado profesionalmente"), /*#__PURE__*/React.createElement("a", {
+      href: window.getAmazonLink(p.query, p.url),
+      target: "_blank",
+      rel: "noopener noreferrer",
+      className: "inline-flex items-center gap-1 bg-accent-coral hover:bg-opacity-90 text-white px-3 py-1.5 rounded-xl font-bold text-xs transition-all active:scale-95"
+    }, /*#__PURE__*/React.createElement("span", null, "Ver en Amazon"), /*#__PURE__*/React.createElement(Icons.ArrowRight, {
+      className: "w-3.5 h-3.5"
+    }))));
+  }));
+};
+
+// --- CHATBOT COMPONENT ---
+const ChatbotComponent = function ChatbotComponent() {
+  const [sessions, setSessions] = useState([]);
+  const [activeSessionId, setActiveSessionId] = useState(null);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [showSidebarMobile, setShowSidebarMobile] = useState(false);
+  const chatContainerRef = useRef(null);
+
+  // Load sessions from LocalStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('iadapta_chatbot_sessions');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        setSessions(parsed);
+        if (parsed.length > 0) {
+          setActiveSessionId(parsed[0].id);
+        } else {
+          createNewSession();
+        }
+      } catch (e) {
+        console.error("Error parsing sessions", e);
+        createNewSession();
+      }
+    } else {
+      createNewSession();
+    }
+  }, []);
+
+  // Save sessions to LocalStorage when changed
+  const saveSessions = updated => {
+    setSessions(updated);
+    localStorage.setItem('iadapta_chatbot_sessions', JSON.stringify(updated));
+  };
+  const createNewSession = () => {
+    const newSession = {
+      id: Date.now().toString(),
+      title: 'Nueva consulta...',
+      messages: [],
+      date: new Date().toLocaleDateString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    };
+    setSessions(prev => {
+      const updated = [newSession, ...prev];
+      localStorage.setItem('iadapta_chatbot_sessions', JSON.stringify(updated));
+      return updated;
+    });
+    setActiveSessionId(newSession.id);
+    setInput('');
+    setErrorMsg('');
+  };
+  const deleteSession = (id, e) => {
+    e.stopPropagation();
+    const updated = sessions.filter(s => s.id !== id);
+    saveSessions(updated);
+    if (activeSessionId === id) {
+      if (updated.length > 0) {
+        setActiveSessionId(updated[0].id);
+      } else {
+        createNewSession();
+      }
+    }
+  };
+  const activeSession = useMemo(() => {
+    return sessions.find(s => s.id === activeSessionId) || null;
+  }, [sessions, activeSessionId]);
+  const messages = useMemo(() => {
+    return activeSession ? activeSession.messages : [];
+  }, [activeSession]);
+
+  // Scroll to bottom on new messages (internal chat container scroll only)
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  }, [messages, isLoading]);
+  const handleSendMessage = async textToSend => {
+    const text = (textToSend || input).trim();
+    if (!text || isLoading) return;
+    setErrorMsg('');
+    if (!textToSend) setInput('');
+    const userMsg = {
+      sender: 'user',
+      text
+    };
+    let updatedSessions = sessions.map(session => {
+      if (session.id === activeSessionId) {
+        const newMessages = [...session.messages, userMsg];
+        let newTitle = session.title;
+        if (session.title === 'Nueva consulta...') {
+          newTitle = text.length > 28 ? text.substring(0, 28) + '...' : text;
+        }
+        return {
+          ...session,
+          title: newTitle,
+          messages: newMessages
+        };
+      }
+      return session;
+    });
+    saveSessions(updatedSessions);
+    setIsLoading(true);
+    const activeSessionMessages = updatedSessions.find(s => s.id === activeSessionId).messages;
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          messages: activeSessionMessages
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Error al comunicarse con el consultor.');
+      }
+      const botMsg = {
+        sender: 'bot',
+        text: data.text
+      };
+      updatedSessions = updatedSessions.map(session => {
+        if (session.id === activeSessionId) {
+          return {
+            ...session,
+            messages: [...session.messages, botMsg]
+          };
+        }
+        return session;
+      });
+      saveSessions(updatedSessions);
+    } catch (err) {
+      console.error(err);
+      setErrorMsg(err.message || 'No se pudo obtener una respuesta del servidor.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden flex flex-col md:flex-row h-[750px] relative anim-scale-in text-left"
+  }, /*#__PURE__*/React.createElement("aside", {
+    className: `w-80 border-r border-brand-100 bg-brand-50/30 flex flex-col shrink-0 transition-transform duration-300 z-40 md:relative md:translate-x-0 absolute inset-y-0 left-0 bg-white
+        ${showSidebarMobile ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'}`
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "p-6 border-b border-brand-100 flex items-center justify-between"
+  }, /*#__PURE__*/React.createElement("h4", {
+    className: "font-display text-lg font-bold text-brand-900"
+  }, "Historial de Chats"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setShowSidebarMobile(false),
+    className: "md:hidden p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+  }, /*#__PURE__*/React.createElement(Icons.X, {
+    className: "w-5 h-5"
+  }))), /*#__PURE__*/React.createElement("div", {
+    className: "p-4"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => {
+      createNewSession();
+      setShowSidebarMobile(false);
+    },
+    className: "w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold transition-all shadow-md shadow-indigo-600/10 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 text-sm"
+  }, /*#__PURE__*/React.createElement(Icons.Plus, {
+    className: "w-4 h-4"
+  }), "Nuevo Chat")), /*#__PURE__*/React.createElement("div", {
+    className: "flex-1 overflow-y-auto px-3 pb-4 space-y-1.5 custom-scrollbar"
+  }, sessions.map(s => {
+    const isActive = s.id === activeSessionId;
+    return /*#__PURE__*/React.createElement("div", {
+      key: s.id,
+      onClick: () => {
+        setActiveSessionId(s.id);
+        setErrorMsg('');
+        setShowSidebarMobile(false);
+      },
+      className: `group p-4 rounded-2xl cursor-pointer transition-all flex items-center justify-between border-2
+                  ${isActive ? 'bg-indigo-50/50 border-indigo-100 text-indigo-900' : 'bg-white border-transparent text-gray-600 hover:bg-brand-50/40 hover:text-brand-900'}`
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "flex-1 min-w-0 pr-2"
+    }, /*#__PURE__*/React.createElement("p", {
+      className: "font-bold text-xs truncate leading-snug"
+    }, s.title), /*#__PURE__*/React.createElement("span", {
+      className: "text-[10px] text-gray-400 block mt-1 font-medium"
+    }, s.date)), /*#__PURE__*/React.createElement("button", {
+      onClick: e => deleteSession(s.id, e),
+      className: "p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50/80 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 shrink-0",
+      title: "Eliminar conversaci\xF3n"
+    }, /*#__PURE__*/React.createElement(Icons.Trash, {
+      className: "w-4 h-4"
+    })));
+  }))), showSidebarMobile && /*#__PURE__*/React.createElement("div", {
+    onClick: () => setShowSidebarMobile(false),
+    className: "fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 md:hidden animate-fade-in"
+  }), /*#__PURE__*/React.createElement("section", {
+    className: "flex-1 flex flex-col h-full bg-white relative"
+  }, /*#__PURE__*/React.createElement("header", {
+    className: "px-6 py-4 border-b border-brand-100 flex items-center justify-between bg-white/80 backdrop-blur-sm relative z-10 shrink-0"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-3"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => setShowSidebarMobile(true),
+    className: "md:hidden p-2 text-gray-500 hover:text-gray-800 rounded-xl hover:bg-gray-100 shrink-0"
+  }, /*#__PURE__*/React.createElement(Icons.Menu, {
+    className: "w-6 h-6"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl shrink-0 font-bold"
+  }, "\uD83D\uDCAC"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-2"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "font-display font-bold text-brand-900 text-base sm:text-lg"
+  }, "Consultor en Terapia Ocupacional"), /*#__PURE__*/React.createElement("span", {
+    className: "w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse",
+    title: "Conectado"
+  })), /*#__PURE__*/React.createElement("p", {
+    className: "text-[10px] sm:text-xs text-gray-400 font-medium"
+  }, "Asistente Sanitario T\xE9cnico Especializado"))), /*#__PURE__*/React.createElement("div", {
+    className: "hidden sm:block text-right"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-[10px] bg-brand-50 text-brand-600 px-3 py-1 rounded-full font-bold uppercase tracking-wider"
+  }, "Beta Cl\xEDnico"))), /*#__PURE__*/React.createElement("div", {
+    ref: chatContainerRef,
+    className: "flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50/30 custom-scrollbar relative"
+  }, messages.length === 0 ?
+  /*#__PURE__*/
+  /* Welcome / Onboarding Screen */
+  React.createElement("div", {
+    className: "max-w-2xl mx-auto text-center py-8 sm:py-12 space-y-8 animate-fade-in flex flex-col items-center"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "inline-block p-6 bg-indigo-50 text-indigo-600 rounded-full text-4xl shadow-sm border border-indigo-100"
+  }, "\uD83C\uDFE5"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", {
+    className: "font-display text-2xl font-black text-brand-900 mb-3"
+  }, "Consultor Cl\xEDnico en Terapia Ocupacional"), /*#__PURE__*/React.createElement("p", {
+    className: "text-gray-500 text-sm leading-relaxed max-w-lg mx-auto text-center mb-6"
+  }, "Este chatbot est\xE1 dise\xF1ado como una herramienta de apoyo para terapeutas y profesionales sanitarios. Resuelve dudas cl\xEDnicas, propone tratamientos y aconseja sobre productos de apoyo de forma formal y t\xE9cnica."), /*#__PURE__*/React.createElement("div", {
+    className: "bg-slate-100/70 border border-slate-200 rounded-2xl p-5 text-left max-w-lg mx-auto text-xs leading-relaxed text-gray-600"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "font-bold text-[10px] text-indigo-600 uppercase tracking-wider block mb-2"
+  }, "Ejemplo de consulta t\xE9cnica:"), /*#__PURE__*/React.createElement("p", {
+    className: "italic font-medium text-gray-750"
+  }, "\"Paciente de 72 a\xF1os con hemiparesia izquierda tras sufrir un ictus hace 3 meses. Presenta dificultades en AVD de alimentaci\xF3n y vestido debido a rigidez en miembro superior. \xBFQu\xE9 pautas de tratamiento, principios de econom\xEDa articular y productos de apoyo me recomiendas para mejorar su autonom\xEDa?\""))), /*#__PURE__*/React.createElement("div", {
+    className: "bg-amber-50/70 border border-amber-200/80 rounded-2xl p-4 text-left max-w-lg mx-auto flex gap-3 text-amber-900 text-xs leading-relaxed"
+  }, /*#__PURE__*/React.createElement(Icons.Warning, {
+    className: "w-5 h-5 text-amber-600 shrink-0"
+  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("strong", {
+    className: "font-bold block mb-0.5"
+  }, "Uso Profesional Exclusivo:"), "Las respuestas son de car\xE1cter orientativo y basadas en IA. Deben ser contrastadas siempre bajo criterio profesional y juicio cl\xEDnico propio."))) :
+  /*#__PURE__*/
+  /* Render active conversation */
+  React.createElement("div", {
+    className: "max-w-3xl mx-auto space-y-6"
+  }, messages.map((msg, index) => {
+    const isUser = msg.sender === 'user';
+    return /*#__PURE__*/React.createElement("div", {
+      key: index,
+      className: `flex ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in`
+    }, /*#__PURE__*/React.createElement("div", {
+      className: `flex gap-3 max-w-[85%] ${isUser ? 'flex-row-reverse' : 'flex-row'}`
+    }, /*#__PURE__*/React.createElement("div", {
+      className: `w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-sm font-bold shadow-sm border
+                        ${isUser ? 'bg-brand-900 text-white border-brand-900/10' : 'bg-indigo-100 text-indigo-700 border-indigo-200/40'}`
+    }, isUser ? 'TO' : '🩺'), /*#__PURE__*/React.createElement("div", {
+      className: `p-4 sm:p-5 rounded-2xl shadow-sm border
+                        ${isUser ? 'bg-brand-900 text-white border-brand-900/10 rounded-tr-none' : 'bg-white text-gray-850 border-gray-150 rounded-tl-none'}`
+    }, isUser ? /*#__PURE__*/React.createElement("p", {
+      className: "text-sm whitespace-pre-wrap leading-relaxed"
+    }, msg.text) : renderMessageText(msg.text))));
+  }), isLoading && /*#__PURE__*/React.createElement("div", {
+    className: "flex justify-start animate-fade-in"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex gap-3 max-w-[85%] flex-row"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "w-8 h-8 rounded-full bg-indigo-100 border border-indigo-200/40 text-indigo-700 shrink-0 flex items-center justify-center text-sm font-bold shadow-sm"
+  }, "\uD83E\uDE7A"), /*#__PURE__*/React.createElement("div", {
+    className: "p-4 bg-white border border-gray-150 rounded-2xl rounded-tl-none shadow-sm flex items-center gap-3"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex gap-1"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "w-2 h-2 bg-indigo-500 rounded-full animate-bounce",
+    style: {
+      animationDelay: '0ms'
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "w-2 h-2 bg-indigo-500 rounded-full animate-bounce",
+    style: {
+      animationDelay: '150ms'
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "w-2 h-2 bg-indigo-500 rounded-full animate-bounce",
+    style: {
+      animationDelay: '300ms'
+    }
+  })), /*#__PURE__*/React.createElement("span", {
+    className: "text-xs text-gray-400 font-medium font-mono"
+  }, "El Consultor est\xE1 analizando el caso...")))), errorMsg && /*#__PURE__*/React.createElement("div", {
+    className: "max-w-lg mx-auto bg-red-50 border border-red-200 rounded-2xl p-4 text-red-900 text-xs flex gap-3 leading-relaxed animate-shake"
+  }, /*#__PURE__*/React.createElement(Icons.AlertCircle, {
+    className: "w-5 h-5 text-red-500 shrink-0"
+  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("strong", {
+    className: "font-bold block mb-0.5"
+  }, "Error de Conexi\xF3n:"), errorMsg, /*#__PURE__*/React.createElement("button", {
+    onClick: () => handleSendMessage(),
+    className: "mt-2 text-red-700 font-bold hover:underline block"
+  }, "Reintentar env\xEDo"))))), /*#__PURE__*/React.createElement("footer", {
+    className: "p-4 border-t border-brand-100 bg-white relative z-10 shrink-0"
+  }, /*#__PURE__*/React.createElement("form", {
+    onSubmit: e => {
+      e.preventDefault();
+      handleSendMessage();
+    },
+    className: "max-w-3xl mx-auto flex gap-3 items-end"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex-1 relative bg-brand-50/40 border border-brand-100 rounded-2xl focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:border-indigo-500 transition-all"
+  }, /*#__PURE__*/React.createElement("textarea", {
+    value: input,
+    onChange: e => setInput(e.target.value),
+    onKeyDown: e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSendMessage();
+      }
+    },
+    rows: "2",
+    placeholder: "Escribe tu consulta sobre el caso cl\xEDnico...",
+    disabled: isLoading,
+    className: "w-full pl-4 pr-4 py-3 bg-transparent border-0 outline-none text-sm text-gray-800 resize-none font-sans placeholder:text-gray-400 focus:ring-0 leading-relaxed max-h-32"
+  })), /*#__PURE__*/React.createElement("button", {
+    type: "submit",
+    disabled: isLoading || !input.trim(),
+    className: "w-12 h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/10 hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100 transition-all shrink-0",
+    title: "Enviar mensaje"
+  }, /*#__PURE__*/React.createElement(Icons.Send, {
+    className: "w-5 h-5"
+  }))), /*#__PURE__*/React.createElement("p", {
+    className: "text-[10px] text-gray-400 text-center mt-2.5 max-w-lg mx-auto font-medium leading-normal"
+  }, "Ofrece soluciones formales de Terapia Ocupacional. El consultor te formular\xE1 preguntas de refinamiento."))));
+};
+
 // --- SECTION RESOURCES ---
 const SectionResources = function SectionResources({
   navigateTo,
@@ -108,7 +570,7 @@ const SectionResources = function SectionResources({
     // Sincronizar vista con URL si existe parámetro 'tool'
     const params = new URLSearchParams(window.location.search);
     const tool = params.get('tool');
-    if (tool && ['math', 'pao', 'ramp', '3dprint', 'circle'].includes(tool)) {
+    if (tool && ['math', 'pao', 'ramp', '3dprint', 'circle', 'chatbot'].includes(tool)) {
       setView(tool);
     } else {
       setView('menu');
@@ -120,7 +582,7 @@ const SectionResources = function SectionResources({
     const handleToolSync = () => {
       const params = new URLSearchParams(window.location.search);
       const tool = params.get('tool');
-      if (tool && ['math', 'pao', 'ramp', '3dprint', 'circle'].includes(tool)) {
+      if (tool && ['math', 'pao', 'ramp', '3dprint', 'circle', 'chatbot'].includes(tool)) {
         setView(tool);
       } else {
         setView('menu');
@@ -787,6 +1249,14 @@ const SectionResources = function SectionResources({
     color: 'bg-orange-500 text-white',
     badge: 'Tecnología',
     image: '3d_printing_thumb.png'
+  }, {
+    id: 'chatbot',
+    title: 'Consultor de Terapia Ocupacional',
+    desc: 'Chatbot experto formal y técnico en tratamientos de TO, productos de apoyo, rehabilitación, geriatría e infantil.',
+    icon: /*#__PURE__*/React.createElement(Icons.MessageSquare, null),
+    color: 'bg-indigo-600 text-white',
+    badge: 'Asistente IA',
+    image: 'chatbot_to_thumbnail.jpg'
   }];
   const cte = getCTEStatus();
   return /*#__PURE__*/React.createElement("section", {
@@ -1480,7 +1950,9 @@ const SectionResources = function SectionResources({
     className: "w-5 h-5 group-hover:translate-x-1 transition-transform"
   })))))))), /*#__PURE__*/React.createElement(AdSenseBlock, {
     slot: "5026466122"
-  })) : null), selectedItem && /*#__PURE__*/React.createElement("div", {
+  })) : view === 'chatbot' ? /*#__PURE__*/React.createElement("div", {
+    className: "anim-scale-in"
+  }, /*#__PURE__*/React.createElement(ChatbotComponent, null)) : null), selectedItem && /*#__PURE__*/React.createElement("div", {
     className: "fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in",
     onClick: () => setSelectedItem(null)
   }, /*#__PURE__*/React.createElement("div", {
