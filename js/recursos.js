@@ -154,7 +154,7 @@ const renderMessageText = text => {
       const isList = lines.every(line => line.trim().startsWith('* ') || line.trim().startsWith('- '));
       if (isList) {
         renderedElement = /*#__PURE__*/React.createElement("ul", {
-          className: "list-disc pl-5 my-2 space-y-1 text-sm text-gray-700 leading-relaxed text-left"
+          className: "list-disc pl-5 my-2 space-y-1.5 text-base text-gray-850 leading-relaxed text-left"
         }, lines.map((line, lIdx) => {
           const cleanLine = line.trim().replace(/^[\*\-]\s+/, '');
           return /*#__PURE__*/React.createElement("li", {
@@ -164,7 +164,7 @@ const renderMessageText = text => {
       } else {
         const subLines = cleanText.split('\n');
         renderedElement = /*#__PURE__*/React.createElement("p", {
-          className: "text-sm text-gray-700 leading-relaxed mb-3 text-left"
+          className: "text-base text-gray-850 leading-relaxed mb-3.5 text-left"
         }, subLines.map((line, lIdx) => /*#__PURE__*/React.createElement(React.Fragment, {
           key: lIdx
         }, lIdx > 0 && /*#__PURE__*/React.createElement("br", null), parseInlineMarkdown(line))));
@@ -261,6 +261,24 @@ const ChatbotComponent = function ChatbotComponent() {
     setInput('');
     setErrorMsg('');
   };
+  const renameSession = (id, e) => {
+    e.stopPropagation();
+    const session = sessions.find(s => s.id === id);
+    if (!session) return;
+    const newTitle = window.prompt('Editar título de la conversación:', session.title);
+    if (newTitle && newTitle.trim()) {
+      const updated = sessions.map(s => {
+        if (s.id === id) {
+          return {
+            ...s,
+            title: newTitle.trim()
+          };
+        }
+        return s;
+      });
+      saveSessions(updated);
+    }
+  };
   const deleteSession = (id, e) => {
     e.stopPropagation();
     const updated = sessions.filter(s => s.id !== id);
@@ -273,12 +291,42 @@ const ChatbotComponent = function ChatbotComponent() {
       }
     }
   };
+  const downloadConversation = () => {
+    if (!activeSession || activeSession.messages.length === 0) return;
+    let content = `# Consulta de Terapia Ocupacional - IAdapta\n`;
+    content += `Título: ${activeSession.title}\n`;
+    content += `Fecha: ${activeSession.date}\n`;
+    content += `=========================================\n\n`;
+    activeSession.messages.forEach(msg => {
+      const role = msg.sender === 'user' ? 'Terapeuta Ocupacional' : 'Consultor Clínico IA';
+      content += `[${role}]:\n${msg.text}\n\n`;
+      content += `-----------------------------------------\n\n`;
+    });
+    content += `Generado automáticamente por IAdapta (https://iadapta.es) - Consultor Clínico en Terapia Ocupacional.\n`;
+    const blob = new Blob([content], {
+      type: 'text/plain;charset=utf-8'
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    const filename = `consulta_to_${activeSession.title.toLowerCase().replace(/[^a-z0-9]/gi, '_')}.txt`;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
   const activeSession = useMemo(() => {
     return sessions.find(s => s.id === activeSessionId) || null;
   }, [sessions, activeSessionId]);
   const messages = useMemo(() => {
     return activeSession ? activeSession.messages : [];
   }, [activeSession]);
+  const userQuestionsCount = useMemo(() => {
+    return messages.filter(m => m.sender === 'user').length;
+  }, [messages]);
+  const isLimitReached = userQuestionsCount >= 6;
+  const isLimitNear = userQuestionsCount === 5;
 
   // Scroll to bottom on new messages (internal chat container scroll only)
   useEffect(() => {
@@ -352,7 +400,7 @@ const ChatbotComponent = function ChatbotComponent() {
     }
   };
   return /*#__PURE__*/React.createElement("div", {
-    className: "bg-white rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden flex flex-col md:flex-row h-[750px] relative anim-scale-in text-left"
+    className: "bg-white rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden flex flex-col md:flex-row h-[850px] relative anim-scale-in text-left"
   }, /*#__PURE__*/React.createElement("aside", {
     className: `w-80 border-r border-brand-100 bg-brand-50/30 flex flex-col shrink-0 transition-transform duration-300 z-40 md:relative md:translate-x-0 absolute inset-y-0 left-0 bg-white
         ${showSidebarMobile ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'}`
@@ -394,13 +442,21 @@ const ChatbotComponent = function ChatbotComponent() {
       className: "font-bold text-xs truncate leading-snug"
     }, s.title), /*#__PURE__*/React.createElement("span", {
       className: "text-[10px] text-gray-400 block mt-1 font-medium"
-    }, s.date)), /*#__PURE__*/React.createElement("button", {
+    }, s.date)), /*#__PURE__*/React.createElement("div", {
+      className: "flex items-center gap-0.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100 shrink-0 transition-opacity"
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: e => renameSession(s.id, e),
+      className: "p-1.5 rounded-lg text-gray-300 hover:text-indigo-600 hover:bg-indigo-50/80 transition-all",
+      title: "Renombrar conversaci\xF3n"
+    }, /*#__PURE__*/React.createElement(Icons.Edit, {
+      className: "w-4 h-4"
+    })), /*#__PURE__*/React.createElement("button", {
       onClick: e => deleteSession(s.id, e),
-      className: "p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50/80 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 shrink-0",
+      className: "p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50/80 transition-all",
       title: "Eliminar conversaci\xF3n"
     }, /*#__PURE__*/React.createElement(Icons.Trash, {
       className: "w-4 h-4"
-    })));
+    }))));
   }))), showSidebarMobile && /*#__PURE__*/React.createElement("div", {
     onClick: () => setShowSidebarMobile(false),
     className: "fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 md:hidden animate-fade-in"
@@ -427,10 +483,20 @@ const ChatbotComponent = function ChatbotComponent() {
   })), /*#__PURE__*/React.createElement("p", {
     className: "text-[10px] sm:text-xs text-gray-400 font-medium"
   }, "Asistente Sanitario T\xE9cnico Especializado"))), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-3"
+  }, messages.length > 0 && /*#__PURE__*/React.createElement("button", {
+    onClick: downloadConversation,
+    className: "flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 hover:text-indigo-900 border border-indigo-100 rounded-xl font-bold text-xs transition-all hover:scale-[1.02] active:scale-95 shadow-sm",
+    title: "Descargar conversaci\xF3n en TXT"
+  }, /*#__PURE__*/React.createElement(Icons.Download, {
+    className: "w-3.5 h-3.5"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "hidden sm:inline"
+  }, "Descargar Chat")), /*#__PURE__*/React.createElement("div", {
     className: "hidden sm:block text-right"
   }, /*#__PURE__*/React.createElement("span", {
     className: "text-[10px] bg-brand-50 text-brand-600 px-3 py-1 rounded-full font-bold uppercase tracking-wider"
-  }, "Beta Cl\xEDnico"))), /*#__PURE__*/React.createElement("div", {
+  }, "Beta Cl\xEDnico")))), /*#__PURE__*/React.createElement("div", {
     ref: chatContainerRef,
     className: "flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50/30 custom-scrollbar relative"
   }, messages.length === 0 ?
@@ -475,7 +541,7 @@ const ChatbotComponent = function ChatbotComponent() {
       className: `p-4 sm:p-5 rounded-2xl shadow-sm border
                         ${isUser ? 'bg-brand-900 text-white border-brand-900/10 rounded-tr-none' : 'bg-white text-gray-850 border-gray-150 rounded-tl-none'}`
     }, isUser ? /*#__PURE__*/React.createElement("p", {
-      className: "text-sm whitespace-pre-wrap leading-relaxed"
+      className: "text-base whitespace-pre-wrap leading-relaxed"
     }, msg.text) : renderMessageText(msg.text))));
   }), isLoading && /*#__PURE__*/React.createElement("div", {
     className: "flex justify-start animate-fade-in"
@@ -515,7 +581,20 @@ const ChatbotComponent = function ChatbotComponent() {
     className: "mt-2 text-red-700 font-bold hover:underline block"
   }, "Reintentar env\xEDo"))))), /*#__PURE__*/React.createElement("footer", {
     className: "p-4 border-t border-brand-100 bg-white relative z-10 shrink-0"
-  }, /*#__PURE__*/React.createElement("form", {
+  }, isLimitReached ? /*#__PURE__*/React.createElement("div", {
+    className: "max-w-3xl mx-auto p-4 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center gap-3 text-indigo-950 text-xs sm:text-sm animate-fade-in text-left"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-xl"
+  }, "\uD83D\uDCA1"), /*#__PURE__*/React.createElement("div", {
+    className: "flex-1 leading-relaxed"
+  }, /*#__PURE__*/React.createElement("strong", {
+    className: "font-bold block text-indigo-900 mb-0.5"
+  }, "L\xEDmite de sesi\xF3n alcanzado (6/6 consultas):"), "Para mantener la precisi\xF3n cl\xEDnica y evitar que se mezclen intervenciones, te aconsejamos iniciar una nueva conversaci\xF3n."), /*#__PURE__*/React.createElement("button", {
+    onClick: () => createNewSession(),
+    className: "bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl font-bold text-xs transition-all shrink-0 hover:scale-[1.02] active:scale-95 shadow-md shadow-indigo-600/10"
+  }, "Nuevo Chat")) : /*#__PURE__*/React.createElement(React.Fragment, null, isLimitNear && /*#__PURE__*/React.createElement("div", {
+    className: "max-w-3xl mx-auto mb-3 px-4 py-2 bg-amber-50 border border-amber-200 text-amber-900 text-[11px] font-bold rounded-xl flex items-center gap-2 animate-pulse text-left"
+  }, /*#__PURE__*/React.createElement("span", null, "\u26A0\uFE0F"), /*#__PURE__*/React.createElement("span", null, "Te queda 1 \xFAltima pregunta disponible para esta sesi\xF3n.")), /*#__PURE__*/React.createElement("form", {
     onSubmit: e => {
       e.preventDefault();
       handleSendMessage();
@@ -535,7 +614,7 @@ const ChatbotComponent = function ChatbotComponent() {
     rows: "2",
     placeholder: "Escribe tu consulta sobre el caso cl\xEDnico...",
     disabled: isLoading,
-    className: "w-full pl-4 pr-4 py-3 bg-transparent border-0 outline-none text-sm text-gray-800 resize-none font-sans placeholder:text-gray-400 focus:ring-0 leading-relaxed max-h-32"
+    className: "w-full pl-4 pr-4 py-3 bg-transparent border-0 outline-none text-base text-gray-800 resize-none font-sans placeholder:text-gray-400 focus:ring-0 leading-relaxed max-h-32"
   })), /*#__PURE__*/React.createElement("button", {
     type: "submit",
     disabled: isLoading || !input.trim(),
@@ -543,7 +622,7 @@ const ChatbotComponent = function ChatbotComponent() {
     title: "Enviar mensaje"
   }, /*#__PURE__*/React.createElement(Icons.Send, {
     className: "w-5 h-5"
-  }))), /*#__PURE__*/React.createElement("p", {
+  })))), /*#__PURE__*/React.createElement("p", {
     className: "text-[10px] text-gray-400 text-center mt-2.5 max-w-lg mx-auto font-medium leading-normal"
   }, "Ofrece soluciones formales de Terapia Ocupacional. El consultor te formular\xE1 preguntas de refinamiento."))));
 };
@@ -1263,7 +1342,7 @@ const SectionResources = function SectionResources({
     id: "resources",
     className: "pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "max-w-6xl mx-auto"
+    className: `${view === 'chatbot' ? 'max-w-7xl' : 'max-w-6xl'} mx-auto transition-all duration-300`
   }, view !== 'menu' && /*#__PURE__*/React.createElement(ResourceSubNav, {
     currentView: view,
     onViewChange: updateView
