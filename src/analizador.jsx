@@ -263,6 +263,114 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
       });
     }
 
+    if (form.destrezaManos === 'fina' || form.destrezaManos === 'fuerza' || form.destrezaManos === 'temblor') {
+      const prod = PRODUCT_CATALOG['35'];
+      all.push({
+        cond: true, icon: '👕', prio: 'Media',
+        text: 'VESTIDO AUTÓNOMO: Para facilitar la tarea de abrochar botones pequeños con menor esfuerzo manual o temblores, un abotonador con mango engrosado te permitirá mantener tu independencia en el vestido.',
+        linkText: 'Ver abotonador recomendado', linkUrl: getAmazonLink(prod.query, prod.url)
+      });
+    }
+
+    if (form.destrezaManos === 'fina' || form.destrezaManos === 'temblor') {
+      const prod = PRODUCT_CATALOG['32'];
+      all.push({
+        cond: true, icon: '🪡', prio: 'Media',
+        text: 'ACTIVIDADES DE OCIO Y COSTURA: Si disfrutas cosiendo pero te resulta difícil enhebrar las agujas por falta de pulso o precisión visual, un enhebrador automático facilitará la tarea al instante.',
+        linkText: 'Ver enhebrador de agujas', linkUrl: getAmazonLink(prod.query, prod.url)
+      });
+    }
+
+    if (form.destrezaManos && form.destrezaManos !== 'funcional') {
+      const prodCartas = PRODUCT_CATALOG['31'];
+      all.push({
+        cond: true, icon: '🃏', prio: 'Media',
+        text: 'ACTIVIDAD SOCIAL Y OCIO: Si disfrutas de los juegos de mesa pero tienes dificultades para sostener las cartas debido a dolor o rigidez en las manos, un soporte sujeta-cartas curvado de madera te permitirá jugar cómodamente con manos libres.',
+        linkText: 'Ver sujeta-cartas de madera', linkUrl: getAmazonLink(prodCartas.query, prodCartas.url)
+      });
+    }
+
+    if (form.limitaciones && form.limitaciones.includes('vision')) {
+      const prod = PRODUCT_CATALOG['30'];
+      all.push({
+        cond: true, icon: '🔍', prio: 'Media',
+        text: 'APOYO VISUAL: Si presentas limitaciones en la visión, te recomendamos el uso de una lupa de lectura con luz LED integrada para facilitar la lectura de libros, cartas o documentos sin forzar la vista.',
+        linkText: 'Ver lupa de lectura recomendada', linkUrl: getAmazonLink(prod.query, prod.url)
+      });
+    }
+
+    if ((form.limitaciones && (form.limitaciones.includes('dolor') || form.limitaciones.includes('equilibrio'))) || parseInt(form.edad) >= 70) {
+      const prodCalcetin = PRODUCT_CATALOG['34'];
+      all.push({
+        cond: true, icon: '🧦', prio: 'Media',
+        text: 'FACILITADORES DEL VESTIDO: Para evitar agacharte y flexionar excesivamente la cadera o perder el equilibrio al calzarte, te recomendamos utilizar un calzador de mango largo y un pone-calcetines.',
+        linkText: 'Ver pone-calcetines recomendado', linkUrl: getAmazonLink(prodCalcetin.query, prodCalcetin.url)
+      });
+    }
+
+    if (form.convivencia === 'solo' || parseInt(form.edad) >= 75) {
+      const prodMovil = PRODUCT_CATALOG['26'];
+      all.push({
+        cond: true, icon: '📱', prio: 'Media',
+        text: 'COMUNICACIÓN DE EMERGENCIA: Te aconsejamos disponer de un teléfono móvil adaptado para personas mayores con números grandes, volumen amplificado y un botón SOS de emergencia en la parte trasera para avisar rápidamente a familiares.',
+        linkText: 'Ver teléfono móvil adaptado', linkUrl: getAmazonLink(prodMovil.query, prodMovil.url)
+      });
+    }
+
+    if (parseInt(form.edad) >= 80) {
+      const prodGps = PRODUCT_CATALOG['23'];
+      all.push({
+        cond: true, icon: '📍', prio: 'Media',
+        text: 'LOCALIZACIÓN Y SEGURIDAD: Para mayor tranquilidad fuera del hogar, un localizador GPS discreto con botón de pánico SOS permite a los familiares conocer la ubicación en tiempo real en caso de desorientación.',
+        linkText: 'Ver localizador GPS recomendado', linkUrl: getAmazonLink(prodGps.query, prodGps.url)
+      });
+    }
+
+    if (form.nivelMovilidad === 'encamado') {
+      const prodColchon = PRODUCT_CATALOG['28'];
+      all.push({
+        cond: true, icon: '🛏️', prio: 'Alta',
+        text: 'PREVENCIÓN DE ESCARAS EN CAMA: Al encontrarse en situación de encamado, es fundamental utilizar superficies de apoyo dinámicas. Un colchón de aire alternante y unas taloneras acolchadas son indispensables para prevenir úlceras por presión.',
+        linkText: 'Ver colchón antiescaras alternante', linkUrl: getAmazonLink(prodColchon.query, prodColchon.url)
+      });
+    }
+
+    if (form.nivelMovilidad === 'asistencia') {
+      const prodCojin = PRODUCT_CATALOG['27'];
+      all.push({
+        cond: true, icon: '🪑', prio: 'Alta',
+        text: 'MOVILIZACIÓN Y COMODIDAD: Para prevenir úlceras al pasar tiempo sentado y facilitar transferencias seguras, recomendamos el uso de un cojín antiescaras viscoelástico y un cinturón de transferencia para que tu cuidador pueda ayudarte sin lesionarse.',
+        linkText: 'Ver cojín antiescaras recomendado', linkUrl: getAmazonLink(prodCojin.query, prodCojin.url)
+      });
+    }
+
+    if (form.nivelMovilidad === 'asistencia' || form.nivelMovilidad === 'encamado') {
+      const prodDisco = PRODUCT_CATALOG['19'];
+      all.push({
+        cond: true, icon: '🔄', prio: 'Media',
+        text: 'TRANSFERENCIAS SEGURAS: Si necesitas ayuda para girar y ponerte en pie al pasar de la cama a la silla, un disco giratorio de transferencia minimiza el esfuerzo de torsión del cuidador y protege tus articulaciones.',
+        linkText: 'Ver disco de transferencia', linkUrl: getAmazonLink(prodDisco.query, prodDisco.url)
+      });
+    }
+
+    if ((form.limitaciones && form.limitaciones.includes('fatiga')) || form.nivelMovilidad === 'supervision' || form.nivelMovilidad === 'asistencia') {
+      const prodAlexa = PRODUCT_CATALOG['24'];
+      all.push({
+        cond: true, icon: '🗣️', prio: 'Media',
+        text: 'DOMÓTICA Y SIMPLIFICACIÓN: Para encender luces o electrodomésticos sin necesidad de desplazarte ni realizar esfuerzos cuando tienes fatiga, considera un controlador por voz inteligente (Alexa) junto con enchufes inteligentes.',
+        linkText: 'Ver controlador inteligente Alexa', linkUrl: getAmazonLink(prodAlexa.query, prodAlexa.url)
+      });
+    }
+
+    if (parseInt(form.edad) >= 75) {
+      const prodDetector = PRODUCT_CATALOG['22'];
+      all.push({
+        cond: true, icon: '🔥', prio: 'Media',
+        text: 'SEGURIDAD EN LA COCINA: Para prevenir riesgos ante descuidos u olvidos cotidianos con el fuego o los electrodomésticos, la instalación de un detector de humo y gas automático en la cocina aporta una tranquilidad crucial.',
+        linkText: 'Ver detector de humo recomendado', linkUrl: getAmazonLink(prodDetector.query, prodDetector.url)
+      });
+    }
+
     return all;
   };
 

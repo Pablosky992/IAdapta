@@ -1043,6 +1043,114 @@ const PRODUCT_CATALOG = {
     url: 'https://amzn.to/4dE2H6n',
     img: 'muletas_ergonomicas.png',
     query: 'muletas ergonomicas apoyo antebrazo'
+  },
+  '18': {
+    name: 'Cinturón de Transferencia',
+    url: 'https://amzn.to/4y4MAa2',
+    img: 'assets/cinturon_transferencia.png',
+    query: 'cinturon transferencia paciente'
+  },
+  '19': {
+    name: 'Disco Giratorio de Transferencia',
+    url: 'https://amzn.to/4wsSMY7',
+    img: 'assets/disco_giratorio.png',
+    query: 'disco giratorio transferencia'
+  },
+  '20': {
+    name: 'Sábana Deslizante Tubular',
+    url: 'https://amzn.to/4vLQmUg',
+    img: 'assets/sabana_deslizante.png',
+    query: 'sabana tubular deslizante'
+  },
+  '21': {
+    name: 'Reloj de Orientación (Calendario Digital)',
+    url: 'https://amzn.to/4wJVzML',
+    img: 'assets/reloj_orientacion.png',
+    query: 'reloj alzheimer calendario digital'
+  },
+  '22': {
+    name: 'Detector de Humo y Gas Automático',
+    url: 'https://amzn.to/44J1W6H',
+    img: 'assets/alarma_humo_gas.png',
+    query: 'detector humo gas cocina'
+  },
+  '23': {
+    name: 'Localizador GPS Personas Mayores',
+    url: 'https://amzn.to/4wu15TA',
+    img: 'assets/localizador_gps.png',
+    query: 'localizador gps mayores sos'
+  },
+  '24': {
+    name: 'Controlador Inteligente (Alexa)',
+    url: 'https://amzn.to/4eJQqy3',
+    img: 'assets/alexa_altavoz.png',
+    query: 'altavoz inteligente alexa echo'
+  },
+  '25': {
+    name: 'Enchufe Inteligente con Control Remoto',
+    url: 'https://amzn.to/3QWndGL',
+    img: 'assets/enchufe_inteligente.png',
+    query: 'enchufe inteligente wifi'
+  },
+  '26': {
+    name: 'Teléfono Móvil para Mayores',
+    url: 'https://amzn.to/4vQ7mZG',
+    img: 'assets/movil_mayores.png',
+    query: 'telefono movil mayores boton sos'
+  },
+  '27': {
+    name: 'Cojín Antiescaras Viscoelástico',
+    url: 'https://amzn.to/4fJLTwu',
+    img: 'cojin_antiescaras.png',
+    query: 'cojin antiescaras viscoelastico'
+  },
+  '28': {
+    name: 'Colchón de Aire Alternante',
+    url: 'https://amzn.to/43yPs1a',
+    img: 'colchon_aire.png',
+    query: 'colchon antiescaras aire alternante'
+  },
+  '29': {
+    name: 'Taloneras Antiescaras',
+    url: 'https://amzn.to/3S72kcn',
+    img: 'taloneras_antiescaras.png',
+    query: 'talonera antiescaras borreguito'
+  },
+  '30': {
+    name: 'Lupa de Lectura con Luz LED',
+    url: 'https://amzn.to/4p8zeWA',
+    img: 'assets/lupa_lectura.png',
+    query: 'lupa lectura luz led grande'
+  },
+  '31': {
+    name: 'Sujeta-cartas Curvo de Madera',
+    url: 'https://amzn.to/4gDQ9y3',
+    img: 'assets/sujeta_cartas.png',
+    query: 'sujeta cartas soporte madera'
+  },
+  '32': {
+    name: 'Enhebrador Automático de Agujas',
+    url: 'https://amzn.to/4wth44g',
+    img: 'assets/enhebrador_agujas.png',
+    query: 'enhebrador agujas automatico'
+  },
+  '33': {
+    name: 'Calzador de Mango Largo',
+    url: 'https://amzn.to/44ccKdr',
+    img: 'assets/calzador_largo.png',
+    query: 'calzador mango largo metalico'
+  },
+  '34': {
+    name: 'Pone-calcetines (Calcetinero)',
+    url: 'https://amzn.to/3QCeZDT',
+    img: 'assets/pone_calcetines.png',
+    query: 'pone calcetines medias'
+  },
+  '35': {
+    name: 'Abotonador con Mango Grueso',
+    url: 'https://amzn.to/4eXYry7',
+    img: 'assets/abotonador.png',
+    query: 'abotonador mango grueso artrosis'
   }
 };
 
