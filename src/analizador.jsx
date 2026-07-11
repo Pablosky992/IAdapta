@@ -17,6 +17,7 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
   const [aiError, setAiError] = useState('');
   const [savedReports, setSavedReports] = useState([]);
   const [limitacionesOpen, setLimitacionesOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   const resultRef = useRef(null);
   const topRef = useRef(null);
@@ -897,11 +898,78 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center no-print">
               <button onClick={reset} className="px-8 py-4 bg-white border-2 border-brand-300 text-brand-700 font-bold text-lg rounded-2xl hover:bg-brand-50 transition-all">Nuevo análisis</button>
-              <button onClick={() => window.location.href = 'mailto:iadaptato@gmail.com?subject=Solicitud%20de%20Evaluaci%C3%B3n%20Presencial'} className="px-8 py-4 bg-brand-600 text-white font-bold text-lg rounded-2xl hover:bg-brand-700 shadow-lg transition-all">Solicitar evaluación presencial</button>
+              <button onClick={() => setIsContactModalOpen(true)} className="px-8 py-4 bg-brand-600 text-white font-bold text-lg rounded-2xl hover:bg-brand-700 shadow-lg transition-all">Solicitar evaluación presencial</button>
             </div>
           </div>
         )}
       </div>
+
+      {isContactModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-brand-950/40 backdrop-blur-sm transition-opacity" onClick={() => setIsContactModalOpen(false)}></div>
+          <div className="relative bg-white rounded-[2.5rem] shadow-2xl border border-brand-100 w-full max-w-lg overflow-hidden transform transition-all p-8 sm:p-10 z-10 text-left">
+            <button
+              type="button"
+              onClick={() => setIsContactModalOpen(false)}
+              className="absolute top-6 right-6 text-gray-400 hover:text-brand-800 transition-colors w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center hover:bg-brand-50"
+            >
+              <Icons.Close className="w-5 h-5" />
+            </button>
+            <div className="text-center mb-6">
+              <h3 className="font-display text-2xl font-bold text-brand-900 mb-2">Solicitar Evaluación Presencial</h3>
+              <p className="text-gray-500 text-sm">Completa el formulario para coordinar una visita de valoración en tu domicilio.</p>
+            </div>
+            <form action="https://api.web3forms.com/submit" method="POST" className="space-y-4">
+              <input type="hidden" name="access_key" value="17a9d1e2-5bc3-4d1e-856c-1e9873dd9cee" />
+              <input type="hidden" name="subject" value="Solicitud de Evaluación Presencial - IAdapta" />
+              <input type="hidden" name="redirect" value="https://iadapta.es/valoracion-estancia.html" />
+              
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-brand-400 mb-1.5">Nombre</label>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  defaultValue={form.nombre}
+                  placeholder="Tu nombre"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-gray-700 transition-all text-base"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-brand-400 mb-1.5">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  defaultValue={form.email}
+                  placeholder="tu@email.com"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-gray-700 transition-all text-base"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-brand-400 mb-1.5">Mensaje</label>
+                <textarea
+                  name="message"
+                  required
+                  rows="4"
+                  defaultValue={`Hola, me gustaría solicitar una evaluación presencial para mi hogar. Acabo de realizar la valoración online y he obtenido una puntuación de accesibilidad de ${score}/100.`}
+                  placeholder="¿En qué puedo ayudarte?"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-gray-700 transition-all resize-none text-base"
+                />
+              </div>
+              
+              <button
+                type="submit"
+                className="w-full bg-brand-900 text-white font-bold py-3.5 px-4 rounded-xl hover:bg-brand-800 transition-colors shadow-md hover:shadow-lg mt-2 text-base"
+              >
+                Enviar solicitud
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
