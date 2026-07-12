@@ -1259,17 +1259,103 @@ const AdSenseBlock = function AdSenseBlock({
   });
 };
 
+// --- COMPONENTE DONATIONMODAL ---
+const DonationModal = function DonationModal({
+  onClose
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "fixed inset-0 z-[100] flex items-center justify-center p-4"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "absolute inset-0 bg-brand-950/60 backdrop-blur-md transition-opacity duration-300",
+    onClick: onClose
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "relative bg-gradient-to-b from-white to-brand-50/50 rounded-[2.5rem] shadow-2xl border border-brand-100 w-full max-w-xl overflow-hidden transform transition-all duration-300 p-8 sm:p-10 z-10 max-h-[90vh] overflow-y-auto"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: onClose,
+    className: "absolute top-6 right-6 text-gray-400 hover:text-brand-900 transition-colors w-8 h-8 rounded-full bg-gray-50 hover:bg-brand-50 flex items-center justify-center"
+  }, /*#__PURE__*/React.createElement(Icons.Close, {
+    className: "w-5 h-5"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "text-center mb-8"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "mx-auto w-16 h-16 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center mb-4 shadow-sm"
+  }, /*#__PURE__*/React.createElement(Icons.Heart, {
+    className: "w-8 h-8 fill-rose-500"
+  })), /*#__PURE__*/React.createElement("h3", {
+    className: "font-display text-3xl font-bold text-brand-900 mb-3"
+  }, "Apoyar a IAdapta"), /*#__PURE__*/React.createElement("p", {
+    className: "text-gray-500 text-sm font-semibold tracking-wide uppercase"
+  }, "Mantenimiento y Funcionalidades")), /*#__PURE__*/React.createElement("div", {
+    className: "space-y-4 text-gray-600 text-base leading-relaxed mb-8"
+  }, /*#__PURE__*/React.createElement("p", null, "\xA1Hola! Soy Pablo. IAdapta es un proyecto personal que cre\xE9 con la ilusi\xF3n de acercar la terapia ocupacional, la accesibilidad y la estimulaci\xF3n cognitiva a todas las personas."), /*#__PURE__*/React.createElement("p", null, "Para mantener la plataforma libre de publicidad invasiva, cubrir los costes de hosting, servidores y el uso de la Inteligencia Artificial (en herramientas como el valorador de estancias y el asistente conversacional), te invito a colaborar."), /*#__PURE__*/React.createElement("p", {
+    className: "font-semibold text-brand-900"
+  }, "Tu aportaci\xF3n ayuda directamente a mantener activa la web y todas sus funciones.")), /*#__PURE__*/React.createElement("div", {
+    className: "space-y-4"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8",
+    target: "_blank",
+    rel: "noopener noreferrer",
+    className: "flex items-center justify-between p-5 border border-brand-100 hover:border-brand-300 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all group cursor-pointer"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-4"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: "assets/paypal_tarjeta_new.png",
+    alt: "PayPal o tarjeta",
+    className: "w-14 h-14 rounded-xl object-contain bg-white border border-brand-100 shadow-sm p-1 flex-shrink-0"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "text-left"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "font-bold text-brand-900 group-hover:text-brand-600 transition-colors"
+  }, "PayPal o tarjeta"), /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-gray-400"
+  }, "Donaci\xF3n segura con tu cuenta o tarjeta"))), /*#__PURE__*/React.createElement("div", {
+    className: "w-8 h-8 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center group-hover:translate-x-1 transition-transform"
+  }, /*#__PURE__*/React.createElement(Icons.ArrowRight, {
+    className: "w-4 h-4"
+  }))), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center justify-between p-5 border border-dashed border-gray-200 bg-gray-50/50 rounded-2xl opacity-75 relative overflow-hidden"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-4"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: "assets/bizum_new.png",
+    alt: "Bizum",
+    className: "w-14 h-14 rounded-xl object-contain bg-white border border-brand-100 shadow-sm p-1 grayscale opacity-60 flex-shrink-0"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "text-left"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-2"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "font-bold text-gray-500"
+  }, "Bizum"), /*#__PURE__*/React.createElement("span", {
+    className: "text-[9px] bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider"
+  }, "Pr\xF3ximamente")), /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-gray-400"
+  }, "Disponible en futuras actualizaciones")))))));
+};
+
 // --- COMPONENTE NAVBAR ---
 const Navbar = function Navbar({
   currentPage
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [donateModalOpen, setDonateModalOpen] = useState(false);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    window.openDonationModal = (val = true) => {
+      setDonateModalOpen(val);
+    };
+    return () => {
+      window.openDonationModal = null;
+    };
+  }, []);
+
   const linksMain = [{
     id: 'home',
     label: 'Inicio',
@@ -1355,38 +1441,41 @@ const Navbar = function Navbar({
     className: `px-4 py-2.5 rounded-xl text-sm xl:text-base font-bold transition-all duration-200 whitespace-nowrap inline-block ${currentPage === 'cv' ? 'bg-accent-coral text-white shadow-md' : 'text-accent-coral hover:bg-white/50 border-2 border-accent-coral/10 ml-2'}`
   }, "Mi CV"))), /*#__PURE__*/React.createElement("div", {
     className: "h-8 w-px bg-brand-900/10 mx-2"
-  }), /*#__PURE__*/React.createElement("a", {
-    href: "https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8",
-    target: "_blank",
-    rel: "noopener noreferrer",
-    className: "px-6 py-2.5 rounded-xl text-base font-black transition-all duration-200 bg-brand-900 text-white shadow-lg hover:bg-brand-800 flex items-center gap-2 group whitespace-nowrap"
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setDonateModalOpen(true),
+    className: "px-5 py-2 rounded-xl transition-all duration-200 bg-brand-900 text-white shadow-lg hover:bg-brand-800 flex items-center gap-2.5 group"
   }, /*#__PURE__*/React.createElement(Icons.Heart, {
-    className: "group-hover:fill-red-500 group-hover:text-red-500 transition-all duration-300"
-  }), "Donar")), /*#__PURE__*/React.createElement("button", {
+    className: "group-hover:fill-red-500 group-hover:text-red-500 transition-all duration-300 w-5 h-5 flex-shrink-0"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "flex flex-col items-start text-xs xl:text-sm font-black leading-none text-left"
+  }, /*#__PURE__*/React.createElement("span", null, "Apoyar"), /*#__PURE__*/React.createElement("span", null, "proyecto")))), /*#__PURE__*/React.createElement("button", {
     className: "xl:hidden p-3 rounded-2xl bg-white/50 border border-brand-100 text-brand-900 shadow-sm transition-all active:scale-90",
     onClick: () => setMenuOpen(o => !o)
   }, menuOpen ? /*#__PURE__*/React.createElement(Icons.Close, {
     className: "w-7 h-7"
   }) : /*#__PURE__*/React.createElement(Icons.Menu, {
     className: "w-7 h-7"
-  })))), menuOpen && /*#__PURE__*/React.createElement("div", {
+  })), menuOpen && /*#__PURE__*/React.createElement("div", {
     className: "xl:hidden bg-white border-t border-brand-100 px-4 py-3 space-y-1 shadow-xl"
   }, linksMain.map(link => /*#__PURE__*/React.createElement("a", {
     key: link.id,
     href: link.href,
     onClick: e => handleLinkClick(e, link),
     className: "block w-full text-left px-4 py-3.5 rounded-xl text-lg font-semibold text-gray-700 hover:bg-brand-50"
-  }, Array.isArray(link.label) ? link.label.join(' ') : link.label)), /*#__PURE__*/React.createElement("a", {
-    href: "https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8",
-    target: "_blank",
-    rel: "noopener noreferrer",
+  }, Array.isArray(link.label) ? link.label.join(' ') : link.label)), /*#__PURE__*/React.createElement("button", {
+    onClick: () => {
+      setMenuOpen(false);
+      setDonateModalOpen(true);
+    },
     className: "w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-lg font-semibold text-brand-600 hover:bg-brand-50 group"
   }, /*#__PURE__*/React.createElement(Icons.Heart, {
     className: "group-hover:fill-red-500 group-hover:text-red-500 transition-all duration-300"
-  }), "Donar para el proyecto"), /*#__PURE__*/React.createElement("a", {
+  }), "Apoyar proyecto"), /*#__PURE__*/React.createElement("a", {
     href: "cv.html",
     className: "block w-full text-left px-4 py-3.5 rounded-xl text-lg font-semibold text-brand-600 bg-brand-50"
-  }, "Curriculum Vitae"))));
+  }, "Curriculum Vitae"))))), donateModalOpen && /*#__PURE__*/React.createElement(DonationModal, {
+    onClose: () => setDonateModalOpen(false)
+  }));
 };
 
 // --- COMPONENTE FOOTER ---
@@ -1452,9 +1541,11 @@ const Footer = function Footer({
     rel: "noopener noreferrer",
     className: "text-brand-200 hover:text-white transition-colors text-lg"
   }, "Instagram")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
-    href: "https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8",
-    target: "_blank",
-    rel: "noopener noreferrer",
+    href: "#",
+    onClick: e => {
+      e.preventDefault();
+      if (window.openDonationModal) window.openDonationModal(true);
+    },
     className: "text-brand-200 hover:text-white transition-colors text-lg flex items-center gap-2 group"
   }, /*#__PURE__*/React.createElement(Icons.Heart, {
     className: "group-hover:fill-red-500 group-hover:text-red-500 transition-all duration-300"

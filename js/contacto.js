@@ -39,7 +39,13 @@ const SectionContact = function SectionContact() {
     }),
     label: 'Apoyo al proyecto',
     value: 'Realizar una donación',
-    href: 'https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8',
+    href: '#',
+    onClick: e => {
+      e.preventDefault();
+      if (window.openDonationModal) {
+        window.openDonationModal(true);
+      }
+    },
     special: true
   }];
   return /*#__PURE__*/React.createElement("section", {
