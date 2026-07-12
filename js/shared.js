@@ -1455,8 +1455,8 @@ const Navbar = function Navbar({
     className: "w-7 h-7"
   }) : /*#__PURE__*/React.createElement(Icons.Menu, {
     className: "w-7 h-7"
-  })), menuOpen && /*#__PURE__*/React.createElement("div", {
-    className: "xl:hidden bg-white border-t border-brand-100 px-4 py-3 space-y-1 shadow-xl"
+  }))), menuOpen && /*#__PURE__*/React.createElement("div", {
+    className: "xl:hidden bg-white border-t border-brand-100 px-4 py-3 space-y-1 shadow-xl max-h-[calc(100vh-120px)] overflow-y-auto"
   }, linksMain.map(link => /*#__PURE__*/React.createElement("a", {
     key: link.id,
     href: link.href,
@@ -1473,7 +1473,7 @@ const Navbar = function Navbar({
   }), "Apoyar proyecto"), /*#__PURE__*/React.createElement("a", {
     href: "cv.html",
     className: "block w-full text-left px-4 py-3.5 rounded-xl text-lg font-semibold text-brand-600 bg-brand-50"
-  }, "Curriculum Vitae"))))), donateModalOpen && /*#__PURE__*/React.createElement(DonationModal, {
+  }, "Curriculum Vitae")))), donateModalOpen && /*#__PURE__*/React.createElement(DonationModal, {
     onClose: () => setDonateModalOpen(false)
   }));
 };
