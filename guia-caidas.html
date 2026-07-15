@@ -3,12 +3,28 @@
 
 <head>
   <meta charset="UTF-8" />
+  
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Aviso Legal y Política de Privacidad de IAdapta. Información sobre el responsable, protección de datos (RGPD) y descargo clínico." />
-  <meta name="keywords" content="aviso legal iadapta, politica privacidad iadapta, descargo clinico, cookies" />
-  <link rel="canonical" href="https://iadapta.es/aviso-legal.html" />
+  <meta name="description" content="IAdapta Guías: Guía de Terapia Ocupacional para prevenir caídas en el hogar y adaptar estancias seguras." />
+  <meta name="keywords" content="accesibilidad hogar, prevenir caidas, caidas mayores, asidero seguridad, detector movimiento, iadapta" />
+  <link rel="canonical" href="https://iadapta.es/guias.html" />
   <link rel="icon" type="image/png" href="assets/iadapta_logo.png" />
-  <title>IAdapta | Aviso Legal y Privacidad</title>
+  <title>IAdapta | Guía de Prevención de Caídas</title>
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://iadapta.es/guias.html" />
+  <meta property="og:title" content="IAdapta | Guía de Prevención de Caídas" />
+  <meta property="og:description" content="Guía de Terapia Ocupacional para prevenir caídas en el hogar y adaptar estancias seguras." />
+  <meta property="og:image" content="https://iadapta.es/assets/iadapta_logo_social.jpg" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://iadapta.es/guias.html" />
+  <meta property="twitter:title" content="IAdapta | Guía de Prevención de Caídas" />
+  <meta property="twitter:description" content="Guía de Terapia Ocupacional para prevenir caídas en el hogar y adaptar estancias seguras." />
+  <meta property="twitter:image" content="https://iadapta.es/assets/iadapta_logo_social.jpg" />
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -23,6 +39,17 @@
   <!-- React 18 CDN -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Marked.js for Markdown parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    marked.setOptions({
+      breaks: true,
+      gfm: true,
+      headerIds: false,
+      mangle: false
+    });
+  </script>
 
   <!-- Tailwind config -->
   <script>
@@ -60,14 +87,14 @@
   <link rel="stylesheet" href="css/styles.css" />
 
   <!-- PWA Manifest -->
-  <link rel="manifest" href="manifest_pro.json">
+
   <link rel="apple-touch-icon" href="assets/iadapta_brand_icon.png">
   <meta name="theme-color" content="#1A3052" />
 
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker-pro.js')
+        navigator.serviceWorker.register('service-worker.js')
           .then(reg => console.log('Service Worker registrado'))
           .catch(err => console.log('Error registrando SW', err));
       });
@@ -79,6 +106,7 @@
   <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
   <div id="root">
     <style>
+      /* Precarga de estilos para evitar parpadeo visual en carga inicial */
       #root > header {
         position: fixed !important;
         top: 0 !important;
@@ -90,10 +118,10 @@
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
       }
       #main-content {
-        padding-top: 9rem !important;
+        padding-top: 9rem !important; /* pt-36 = 9rem = 144px */
       }
     </style>
-    <!-- Contenido estático de respaldo para SEO y Accesibilidad -->
+    <!-- Contenido estático de respaldo para SEO y accesibilidad -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-[#F2F0E9] border-b border-brand-900/10 shadow-sm">
       <div class="max-w-[1400px] mx-auto px-4 sm:px-8 flex items-center justify-between h-24 md:h-28">
         <a href="index.html" class="flex items-center hover:scale-105 transition-transform">
@@ -120,66 +148,58 @@
       </div>
     </header>
 
-    <main id="main-content" class="pt-36 pb-20 px-4 bg-gray-50">
-      <div class="max-w-4xl mx-auto bg-white rounded-[3rem] border border-gray-100 shadow-2xl overflow-hidden">
-        <div class="p-8 sm:p-16 space-y-10 text-gray-700 leading-relaxed text-lg">
-          <div>
-            <h1 class="font-display text-4xl font-bold text-brand-900 mb-8">Política de Privacidad, Cookies y Aviso Legal</h1>
-            
-            <section class="mb-8">
-              <h2 class="text-2xl font-bold text-brand-800 mb-4">1. Datos del Responsable</h2>
-              <p>En cumplimiento de la normativa de servicios de la sociedad de la información, se exponen los siguientes datos del titular del sitio web:</p>
-              <ul class="mt-4 space-y-2 list-disc pl-6">
-                <li><strong>Titular:</strong> Pablo Narciso Millán (IAdapta)</li>
-                <li><strong>Actividad:</strong> Terapeuta Ocupacional & Especialista en Accesibilidad</li>
-                <li><strong>Email:</strong> iadaptato@gmail.com</li>
-                <li><strong>Sitio Web:</strong> iadapta.es</li>
-              </ul>
-            </section>
+    <main id="main-content" class="pt-36 pb-12">
+      <!-- Section Title & Intro -->
+      <section class="max-w-7xl mx-auto px-4 text-center py-12">
+        <span class="inline-block bg-brand-100 text-brand-700 rounded-full px-5 py-2 text-sm font-bold uppercase tracking-widest mb-4">Guías Prácticas</span>
+        <h1 class="font-display text-4xl md:text-5xl font-bold text-brand-900 mb-6">
+          Guías de Adaptación y Accesibilidad del Hogar
+        </h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          Descubre cómo hacer tu hogar más accesible, seguro y adaptado a tus necesidades diarias. Artículos redactados por terapeutas ocupacionales con recomendaciones de productos específicos.
+        </p>
+      </section>
 
-            <section class="mb-8">
-              <h2 class="text-2xl font-bold text-brand-800 mb-4">2. Finalidad del Sitio Web</h2>
-              <p>
-                IAdapta es una plataforma informativa dedicada a la difusión de conocimientos sobre adaptaciones de ortopedia, accesibilidad y recursos para profesionales de la salud. 
-                El sitio web incluye enlaces de afiliación de Amazon para su sostenibilidad.
-              </p>
-            </section>
-
-            <section class="mb-8">
-              <h2 class="text-2xl font-bold text-brand-800 mb-4">3. Exclusión de Responsabilidad (Descargo Clínico)</h2>
-              <p class="bg-brand-50 p-6 rounded-2xl border-l-4 border-brand-500 italic">
-                Todo el contenido, guías, análisis de IA y recursos publicados en este sitio web tienen carácter estrictamente orientativo e informativo. 
-                En ningún caso esta información sustituye la valoración clínica, el diagnóstico o el tratamiento realizado por un profesional sanitario colegiado en persona. 
-                IAdapta no se hace responsable de las decisiones tomadas por el usuario basadas únicamente en la información aquí expuesta.
-              </p>
-            </section>
-
-            <section class="mb-8">
-              <h2 class="text-2xl font-bold text-brand-800 mb-4">4. Protección de Datos (RGPD)</h2>
-              <p>IAdapta garantiza la protección de los datos de carácter personal que el usuario proporcione a través de los formularios de contacto o correos electrónicos, tratando dicha información con la máxima confidencialidad y únicamente para responder a las solicitudes de servicio.</p>
-            </section>
-
-            <section class="mb-8">
-              <h2 class="text-2xl font-bold text-brand-800 mb-4">5. Uso de Cookies</h2>
-              <p>Utilizamos cookies propias y de terceros para mejorar la experiencia de usuario y gestionar los enlaces de afiliación de Amazon:</p>
-              <ul class="mt-4 space-y-2 list-disc pl-6">
-                <li><strong>Cookies de Afiliación:</strong> Al clicar en productos recomendados, Amazon instala una cookie (24h) para identificar el origen de la compra.</li>
-                <li><strong>Cookies Técnicas:</strong> Necesarias para recordar tus preferencias (como la aceptación de este aviso).</li>
-              </ul>
-            </section>
-
-            <section class="mb-8">
-              <h2 class="text-2xl font-bold text-brand-800 mb-4">6. Valoración de la estancia (Gemini Vision)</h2>
-              <p>Cuando utilizas nuestra Valoración de la estancia, las imágenes enviadas se procesan de forma efímera a través de la API de Google Gemini para generar el informe de accesibilidad. <strong>No almacenamos, compartimos ni utilizamos tus imágenes</strong> para ningún otro fin comercial o de entrenamiento de modelos.</p>
-            </section>
-          </div>
-
-          <div class="pt-10 border-t border-gray-100 flex justify-between items-center text-sm text-gray-400">
-            <p>Última actualización: Mayo 2026</p>
-            <p>iadapta.es</p>
-          </div>
+      <!-- Articles list -->
+      <section class="max-w-7xl mx-auto px-4 py-6">
+        <div class="space-y-16">
+          <!-- Article: Prevencion de Caidas -->
+          <article class="border-b border-gray-100 pb-16">
+            <div class="flex flex-col lg:flex-row gap-10">
+              <div class="flex-1">
+                <h2 class="text-3xl font-display font-bold text-brand-900 mb-4">Prevención de Caídas en el Hogar</h2>
+                <div class="space-y-4 text-gray-700 text-lg leading-relaxed">
+                  <p>
+                    Las caídas son una de las principales causas de pérdida de autonomía en personas mayores. Adaptando la iluminación, asegurando los suelos y fijando puntos de apoyo estables en el baño y dormitorio, podemos crear un entorno libre de riesgos.
+                  </p>
+                  <h3 class="font-bold text-brand-900 text-xl mt-6">Aspectos de adaptación fundamentales:</h3>
+                  <ul class="list-disc pl-5 space-y-2">
+                    <li><strong>Iluminación nocturna:</strong> Sensores de movimiento led para evitar caminar a oscuras.</li>
+                    <li><strong>Suelos despejados:</strong> Fijación antideslizante de alfombras y guiado de cables de paso.</li>
+                    <li><strong>Apoyo en transferencias:</strong> Asas para incorporarse en la cama y barras de seguridad atornilladas en el aseo.</li>
+                  </ul>
+                </div>
+                <a href="guias.html" class="inline-block mt-6 px-6 py-2.5 bg-brand-100 text-brand-900 font-bold rounded-full text-sm hover:bg-brand-200 transition-colors">
+                  Ver guía detallada de Prevención de Caídas &rarr;
+                </a>
+              </div>
+              <div class="lg:w-1/3 bg-gray-50 rounded-2xl p-6 border border-brand-100 shadow-sm self-start">
+                <h4 class="font-bold text-brand-800 uppercase tracking-wide text-xs mb-4">Material recomendado</h4>
+                <ul class="space-y-3">
+                  <li class="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
+                    <span class="font-semibold block text-sm text-gray-900">Luces led con sensor</span>
+                    <span class="text-xs text-gray-500">Se activan al detectar paso nocturno.</span>
+                  </li>
+                  <li class="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
+                    <span class="font-semibold block text-sm text-gray-900">Barandilla incorporador cama</span>
+                    <span class="text-xs text-gray-500">Punto de apoyo para levantarse por la mañana.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </article>
         </div>
-      </div>
+      </section>
     </main>
 
     <footer class="bg-brand-900 text-white py-12">
@@ -198,9 +218,7 @@
     </footer>
   </div>
 
-  <!-- Load Compiled React Component -->
   <script src="js/shared.js"></script>
-  <script src="js/aviso-legal.js"></script>
+  <script src="js/guia-caidas.js"></script>
 </body>
-
 </html>
