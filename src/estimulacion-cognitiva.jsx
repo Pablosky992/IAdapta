@@ -1,4 +1,4 @@
-const { Icons, Navbar, Footer, CookieBanner, AdSenseBlock } = window;
+const { Icons, Navbar, Footer, CookieBanner } = window;
 
     window.AppConfig = {
       AMAZON_AFFILIATE_ID: ""
@@ -1057,11 +1057,7 @@ const { Icons, Navbar, Footer, CookieBanner, AdSenseBlock } = window;
                   </div>
                 </div>
 
-                {/* Bloque de anuncios - Entre Reto Diario y Juegos */}
-                <div className="mb-16 overflow-hidden rounded-xl bg-gray-50/50 min-h-[100px] flex flex-col items-center justify-center">
-                  <span className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Publicidad</span>
-                  <AdSenseBlock slot="9272607554" />
-                </div>
+
                 {isStandalone && (
                   <div className="mt-10 mb-16 pt-10 border-t border-brand-100 text-center flex flex-col items-center gap-4">
                     <p className="text-gray-400 text-sm mb-2 font-medium uppercase tracking-widest">¿Quieres ver más recursos?</p>

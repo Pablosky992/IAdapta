@@ -1,4 +1,4 @@
-const { Icons, Navbar, Footer, CookieBanner, AdSenseBlock, getAmazonLink } = window;
+const { Icons, Navbar, Footer, CookieBanner, getAmazonLink } = window;
 const { useState } = React;
 
 const GuiaEscaras = function GuiaEscaras() {
@@ -123,10 +123,7 @@ const GuiaEscaras = function GuiaEscaras() {
               </div>
             </div>
 
-            <div className="mt-16 overflow-hidden rounded-xl bg-gray-50/50 min-h-[100px] flex flex-col items-center justify-center">
-              <span className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Publicidad</span>
-              <AdSenseBlock slot="9272607554" />
-            </div>
+            
 
           </div>
         </div>

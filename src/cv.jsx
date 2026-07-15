@@ -25,7 +25,7 @@ const SectionCV = function SectionCV() {
   const skills = [
     { label: 'Geriatría, Rehabilitación y Autonomía', pct: 95 },
     { label: 'Evaluación y Ortopedia', pct: 90 },
-    { label: 'Gestión de Recursos y Stock', pct: 85 },
+    { label: 'Productos de Apoyo y Adaptación', pct: 85 },
     { label: 'Diseño e Impresión 3D', pct: 80 },
   ];
 

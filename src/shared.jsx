@@ -98,6 +98,30 @@ const Icons = {
   Plus: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>,
   Trash: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>,
   Edit: ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>,
+  LinkedIn: ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  ),
+  PayPalCard: ({ className }) => (
+    <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100" height="100" rx="24" fill="#F0F4F8" stroke="#E2E8F0" strokeWidth="2" />
+      <g transform="translate(21, 16) scale(4.7)">
+        <path d="M14.06 3.713c.12-1.071-.093-1.832-.702-2.526C12.628.356 11.312 0 9.626 0H4.734a.7.7 0 0 0-.691.59L2.005 13.509a.42.42 0 0 0 .415.486h2.756l-.202 1.28a.628.628 0 0 0 .62.726H8.14c.429 0 .793-.31.862-.731l.025-.13.48-3.043.03-.164.001-.007a.35.35 0 0 1 .348-.297h.38c1.266 0 2.425-.256 3.345-.91q.57-.403.993-1.005a4.94 4.94 0 0 0 .88-2.195c.242-1.246.13-2.356-.57-3.154a2.7 2.7 0 0 0-.76-.59l-.094-.061Z" fill="#003087" />
+        <path d="M6.543 8.82a.7.7 0 0 1 .321-.079H8.3c2.82 0 5.027-1.144 5.672-4.456l.003-.016q.326.186.548.438c.546.623.679 1.535.45 2.71-.272 1.397-.866 2.307-1.663 2.874-.802.57-1.842.815-3.043.815h-.38a.87.87 0 0 0-.863.734l-.03.164-.48 3.043-.024.13-.001.004a.35.35 0 0 1-.348.296H5.595a.106.106 0 0 1-.105-.123l.208-1.32z" fill="#0079C1" />
+      </g>
+    </svg>
+  ),
+  Bizum: ({ className }) => (
+    <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100" height="100" rx="24" fill="#00C4B4" />
+      <g transform="translate(25.7, 17.6) scale(1.8)">
+        <path d="M6.61567 12.8655c1.31327.9553 3.14387.6767 4.09893-.6368l3.4225-4.73643c.9551-1.31346.6765-3.14434-.6367-4.09959-1.3133-.95524-3.1439-.67663-4.09902.63683L5.93914 8.76593c-.9153 1.31347-.63673 3.14437.67653 4.09957ZM22.2952 6.17881c-1.3133-.95524-3.1439-.67663-4.099.63683L4.42685 25.7613c-.9551 1.3135-.67653 3.1444.63673 4.0996 1.31326.9553 3.14387.6767 4.09897-.6368L22.9319 10.2784c.9949-1.31345.6765-3.14434-.6367-4.09959ZM5.3024 4.66637c.9551-1.31346.67652-3.14435-.63674-4.099591C3.3524-.388466 1.52179-.109853.566693 1.20361c-.9551 1.31346-.676529 3.14435.636737 4.09959 1.31326.95525 3.14387.67663 4.09897-.63683ZM26.1952 30.6968c-1.3132-.9553-3.1438-.6766-4.0989.6368-.9551 1.3135-.6766 3.1444.6367 4.0996 1.3133.9553 3.1439.6766 4.099-.6368.9551-1.3135.6765-3.1444-.6368-4.0996Zm-5.3724-7.5226c-1.3132-.9552-3.1438-.6766-4.0989.6369l-3.4623 4.7364c-.9551 1.3134-.6765 3.1443.6367 4.0996 1.3133.9552 3.1439.6766 4.099-.6369l3.4623-4.7364c.9551-1.3134.6765-3.1443-.6368-4.0996Z" fill="white" />
+      </g>
+    </svg>
+  ),
 };
 
 // --- GET AMAZON LINK & PRODUCT CATALOG ---
@@ -146,26 +170,92 @@ const PRODUCT_CATALOG = {
   '32': { name: 'Enhebrador Automático de Agujas', url: 'https://amzn.to/4wth44g', img: 'assets/enhebrador_agujas.png', query: 'enhebrador agujas automatico' },
   '33': { name: 'Calzador de Mango Largo', url: 'https://amzn.to/44ccKdr', img: 'assets/calzador_largo.png', query: 'calzador mango largo metalico' },
   '34': { name: 'Pone-calcetines (Calcetinero)', url: 'https://amzn.to/3QCeZDT', img: 'assets/pone_calcetines.png', query: 'pone calcetines medias' },
-  '35': { name: 'Abotonador con Mango Grueso', url: 'https://amzn.to/4eXYry7', img: 'assets/abotonador.png', query: 'abotonador mango grueso artrosis' }
+  '35': { name: 'Abotonador con Mango Grueso', url: 'https://amzn.to/4eXYry7', img: 'assets/abotonador.png', query: 'abotonador mango grueso artrosis' },
+  '36': { name: 'Cubiertos con peso', url: 'https://amzn.to/4fwJvbH', img: 'assets/cubiertos_adaptados.jpg', query: 'cubiertos con peso parkinson' },
+  '37': { name: 'Elevador de inodoro con reposabrazos', url: 'https://amzn.to/3RwHjYy', img: 'alza_wc.png', query: 'elevador inodoro con reposabrazos parkinson' },
+  '38': { name: 'Calzador mango largo con gancho', url: 'https://amzn.to/4vtwynE', img: 'assets/calzador_largo.png', query: 'calzador mango largo con gancho' },
+  '39': { name: 'Tapete antideslizante', url: 'https://amzn.to/3SZLxsg', img: 'assets/tapete_antideslizante.jpg', query: 'tapete antideslizante silicona' },
+  '40': { name: 'Esponja de baño con mango largo', url: 'https://amzn.to/4wN3I30', img: 'assets/esponja_mango_largo.png', query: 'esponja mango largo baño' },
+  '41': { name: 'Abridor de tarros y botes ergonómico', url: 'https://amzn.to/3SZNDIE', img: 'assets/abridor_tarros.jpg', query: 'abridor de tarros ergonomico' },
+  '42': { name: 'Adaptador de llaves de gran palanca', url: 'https://amzn.to/458NnJP', img: 'assets/adaptador_llaves.png', query: 'adaptador llaves facilitar giro' },
+  '43': { name: 'Luces LED nocturnas con sensor de movimiento', url: 'https://amzn.to/4f2x4nP', img: 'assets/luces_sensor.png', query: 'luces led sensor movimiento enchufe' },
+  '44': { name: 'Cinta adhesiva antideslizante para alfombras', url: 'https://amzn.to/4aRELuy', img: 'assets/cinta_alfombras.jpg', query: 'cinta adhesiva doble cara alfombras antideslizante' },
+  '45': { name: 'Barra de apoyo antideslizante para baño', url: 'https://amzn.to/4fopvaa', img: 'assets/barra_apoyo.png', query: 'barra de apoyo seguridad ducha acero inoxidable' },
+  '46': { name: 'Trapecio incorporador para cama', url: 'https://amzn.to/4gE7KWw', img: 'assets/trapecio_cama.png', query: 'trapecio incorporador cama' }
 };
 
 // --- COMPONENTE ADSENSERBLOCK ---
-const AdSenseBlock = function AdSenseBlock({ slot, minHeight = '90px' }) {
-  useEffect(() => {
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-      console.error("AdSense push failed", e);
-    }
-  }, []);
+const AdSenseBlock = function AdSenseBlock() {
+  return null;
+};
+
+// --- COMPONENTE DONATEMODAL ---
+const DonateModal = function DonateModal({ isOpen, onClose }) {
+  const [copied, setCopied] = useState(false);
+
+  if (!isOpen) return null;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText("644616232");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
-    <ins className="adsbygoogle"
-         style={{ display: 'block', minHeight }}
-         data-ad-client="ca-pub-9370167145239765"
-         data-ad-slot={slot}
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-brand-950/80 backdrop-blur-xl transition-opacity duration-300" onClick={onClose} />
+      <div className="relative bg-gradient-to-b from-white to-brand-50 rounded-[2.5rem] shadow-2xl border border-brand-100 w-full max-w-xl overflow-hidden transform transition-all duration-300 p-8 sm:p-10 z-10 max-h-[90vh] overflow-y-auto">
+        <button onClick={onClose} className="absolute top-6 right-6 p-2 rounded-full hover:bg-brand-100 text-brand-900 transition-colors">
+          <Icons.X className="w-6 h-6" />
+        </button>
+        <div className="text-center mb-8">
+          <div className="mx-auto w-16 h-16 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center mb-4 shadow-sm">
+            <Icons.Heart className="w-8 h-8 fill-rose-500" />
+          </div>
+          <h3 className="font-display text-3xl font-bold text-brand-900 mb-3">Apoyar a IAdapta</h3>
+          <p className="text-gray-500 text-sm font-semibold tracking-wide uppercase">Mantenimiento y Funcionalidades</p>
+        </div>
+        <div className="space-y-4 text-gray-600 text-base leading-relaxed mb-8">
+          <p>¡Hola! Soy Pablo. IAdapta es un proyecto personal que creé con la ilusión de acercar la terapia ocupacional, la accesibilidad y la estimulación cognitiva a todas las personas.</p>
+          <p>Para mantener la plataforma libre de publicidad invasiva, cubrir los costes de hosting, servidores y el uso de la Inteligencia Artificial (en herramientas como el valorador de estancias y el asistente conversacional), te invito a colaborar.</p>
+          <p className="font-semibold text-brand-900">Tu aportación ayuda directamente a mantener activa la web y todas sus funciones.</p>
+        </div>
+        <div className="space-y-4">
+          <a href="https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8&locale.x=es_ES" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-5 border border-brand-100 hover:border-brand-300 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all group cursor-pointer">
+            <div className="flex items-center gap-4">
+              <Icons.PayPalCard className="w-14 h-14 flex-shrink-0" />
+              <div className="text-left">
+                <p className="font-bold text-brand-900 group-hover:text-brand-600 transition-colors">PayPal o Tarjeta</p>
+                <p className="text-xs text-gray-400">Donación segura con tu cuenta o tarjeta</p>
+              </div>
+            </div>
+            <div className="w-8 h-8 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center group-hover:translate-x-1 transition-transform">
+              <Icons.ArrowRight className="w-4 h-4" />
+            </div>
+          </a>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-5 border border-brand-100 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all gap-4">
+            <div className="flex items-center gap-4">
+              <Icons.Bizum className="w-14 h-14 flex-shrink-0" />
+              <div className="text-left">
+                <p className="font-bold text-brand-900">Bizum</p>
+                <div className="text-xs text-gray-500 mt-1 flex flex-col">
+                  <span>Envía tu aportación al número:</span>
+                  <strong className="text-lg sm:text-xl text-brand-900 font-bold font-mono tracking-wider mt-1">
+                    {["644", "616", "232"].join(" ")}
+                  </strong>
+                </div>
+              </div>
+            </div>
+            <button onClick={handleCopy} className="px-4 py-2 bg-brand-50 text-brand-700 hover:bg-brand-100 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 self-stretch sm:self-auto justify-center">
+              {copied ? "¡Copiado!" : "Copiar número"}
+            </button>
+          </div>
+          <p className="text-center text-base text-gray-600 mt-8 font-bold">
+            ¡Muchas gracias por tu apoyo y por hacer posible este proyecto! ❤️
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -173,11 +263,19 @@ const AdSenseBlock = function AdSenseBlock({ slot, minHeight = '90px' }) {
 const Navbar = function Navbar({ currentPage }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [donateModalOpen, setDonateModalOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    
+    const handleOpenModal = () => setDonateModalOpen(true);
+    window.addEventListener('open-donation-modal', handleOpenModal);
+    
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('open-donation-modal', handleOpenModal);
+    };
   }, []);
 
   const linksMain = [
@@ -258,15 +356,16 @@ const Navbar = function Navbar({ currentPage }) {
               
               <div className="h-8 w-px bg-brand-900/10 mx-2"></div>
               
-              <a 
-                href="https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="px-6 py-2.5 rounded-xl text-base font-black transition-all duration-200 bg-brand-900 text-white shadow-lg hover:bg-brand-800 flex items-center gap-2 group whitespace-nowrap"
+              <button 
+                onClick={() => setDonateModalOpen(true)}
+                className="px-5 py-2 rounded-xl transition-all duration-200 bg-brand-900 text-white shadow-lg hover:bg-brand-800 flex items-center gap-2.5 group"
               >
-                <Icons.Heart className="group-hover:fill-red-500 group-hover:text-red-500 transition-all duration-300" />
-                Donar
-              </a>
+                <Icons.Heart className="group-hover:fill-red-500 group-hover:text-red-500 transition-all duration-300 w-5 h-5 flex-shrink-0" />
+                <span className="flex flex-col items-start text-xs xl:text-sm font-black leading-none text-left">
+                  <span>Apoyar</span>
+                  <span>proyecto</span>
+                </span>
+              </button>
             </div>
 
             <button className="xl:hidden p-3 rounded-2xl bg-white/50 border border-brand-100 text-brand-900 shadow-sm transition-all active:scale-90" onClick={() => setMenuOpen(o => !o)}>
@@ -287,21 +386,23 @@ const Navbar = function Navbar({ currentPage }) {
                 {Array.isArray(link.label) ? link.label.join(' ') : link.label}
               </a>
             ))}
-            <a 
-              href="https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-lg font-semibold text-brand-600 hover:bg-brand-50 group"
+            <button 
+              onClick={() => {
+                setDonateModalOpen(true);
+                setMenuOpen(false);
+              }}
+              className="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-lg font-semibold text-brand-600 hover:bg-brand-50 group text-left"
             >
               <Icons.Heart className="group-hover:fill-red-500 group-hover:text-red-500 transition-all duration-300" />
-              Donar para el proyecto
-            </a>
+              Apoyar proyecto
+            </button>
             <a href="cv.html" className="block w-full text-left px-4 py-3.5 rounded-xl text-lg font-semibold text-brand-600 bg-brand-50">
               Curriculum Vitae
             </a>
           </div>
         )}
       </nav>
+      <DonateModal isOpen={donateModalOpen} onClose={() => setDonateModalOpen(false)} />
     </header>
   );
 };
@@ -347,9 +448,8 @@ const Footer = function Footer({ currentPage }) {
               <li><a href="https://www.instagram.com/iadapta/" target="_blank" rel="noopener noreferrer" className="text-brand-200 hover:text-white transition-colors text-lg">Instagram</a></li>
               <li>
                 <a 
-                  href="https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                  href="#" 
+                  onClick={(e) => { e.preventDefault(); window.dispatchEvent(new CustomEvent('open-donation-modal')); }}
                   className="text-brand-200 hover:text-white transition-colors text-lg flex items-center gap-2 group"
                 >
                   <Icons.Heart className="group-hover:fill-red-500 group-hover:text-red-500 transition-all duration-300" />
@@ -420,7 +520,7 @@ const CookieBanner = function CookieBanner() {
 window.Icons = Icons;
 window.getAmazonLink = getAmazonLink;
 window.PRODUCT_CATALOG = PRODUCT_CATALOG;
-window.AdSenseBlock = AdSenseBlock;
+
 window.Navbar = Navbar;
 window.Footer = Footer;
 window.CookieBanner = CookieBanner;

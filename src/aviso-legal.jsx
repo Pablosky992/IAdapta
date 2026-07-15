@@ -43,7 +43,7 @@ const SectionLegal = function SectionLegal() {
                 <h2 className="text-2xl font-bold text-brand-800 mb-4">2. Finalidad del Sitio Web</h2>
                 <p>
                   IAdapta es una plataforma informativa dedicada a la difusión de conocimientos sobre adaptaciones de ortopedia, accesibilidad y recursos para profesionales de la salud. 
-                  El sitio web incluye enlaces de afiliación de Amazon y espacios publicitarios para su sostenibilidad.
+                  El sitio web incluye enlaces de afiliación de Amazon para su sostenibilidad.
                 </p>
               </section>
 
@@ -75,25 +75,21 @@ const SectionLegal = function SectionLegal() {
               </section>
               <section>
                 <h2 className="text-2xl font-bold text-brand-800 mb-4">2. Uso de Cookies</h2>
-                <p>Utilizamos cookies propias y de terceros para mejorar la experiencia de usuario, gestionar los enlaces de afiliación y mostrar publicidad:</p>
-                <ul className="mt-4 space-y-2 list-disc pl-6 mb-4">
+                <p>Utilizamos cookies propias y de terceros para mejorar la experiencia de usuario y gestionar los enlaces de afiliación:</p>
+                <ul className="mt-4 space-y-2 list-disc pl-6">
                   <li><strong>Cookies de Afiliación:</strong> Al clicar en productos recomendados, Amazon instala una cookie (24h) para identificar el origen de la compra.</li>
                   <li><strong>Cookies Técnicas:</strong> Necesarias para recordar tus preferencias (como la aceptación de este aviso).</li>
                 </ul>
-                <h3 className="font-bold text-brand-700 mt-6 mb-2">Cookies Publicitarias de Google AdSense</h3>
-                <p className="mb-2 text-sm">
-                  Los proveedores de terceros, incluido Google, utilizan cookies para publicar anuncios basándose en las visitas anteriores de un usuario a nuestro sitio web o a otros sitios de Internet.
-                </p>
-                <p className="mb-2 text-sm">
-                  El uso de cookies de publicidad permite a Google y a sus socios publicar anuncios basados en las visitas que los usuarios realizan a este sitio web y a otros en Internet.
-                </p>
-                <p className="text-sm">
-                  Los usuarios pueden inhabilitar la publicidad personalizada. Para ello, pueden visitar la <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">Configuración de anuncios de Google</a>.
-                </p>
               </section>
               <section>
-                <h2 className="text-2xl font-bold text-brand-800 mb-4">3. Valoración de la estancia (Gemini Vision)</h2>
-                <p>Cuando utilizas nuestra Valoración de la estancia, las imágenes enviadas se procesan de forma efímera a través de la API de Google Gemini para generar el informe de accesibilidad. <strong>No almacenamos, compartimos ni utilizamos tus imágenes</strong> para ningún otro fin comercial o de entrenamiento de modelos.</p>
+                <h2 className="text-2xl font-bold text-brand-800 mb-4">3. Procesamiento de datos con Inteligencia Artificial (Chatbot y Valorador Visual)</h2>
+                <p>
+                  Nuestros servicios interactivos de Inteligencia Artificial (el Asistente Conversacional/Chatbot y la Valoración de la estancia) utilizan la API de Google Gemini para procesar las consultas del usuario:
+                </p>
+                <ul className="mt-4 space-y-2 list-disc pl-6">
+                  <li><strong>Asistente Conversacional:</strong> Las consultas y mensajes que envías al chat se transmiten temporalmente para generar las respuestas dinámicas. No guardamos, registramos ni almacenamos tus conversaciones en bases de datos de forma persistente. Se aconseja no introducir datos personales sensibles o de salud específicos que te puedan identificar directamente.</li>
+                  <li><strong>Valorador de Estancias:</strong> Las imágenes enviadas se procesan de forma efímera para generar el informe de accesibilidad. <strong>No almacenamos, compartimos ni guardamos tus imágenes</strong> en servidores externos, y se eliminan del sistema una vez completado el informe técnico de adaptaciones.</li>
+                </ul>
               </section>
             </>
           )}

@@ -1,4 +1,4 @@
-const { Icons, Navbar, Footer, CookieBanner, AdSenseBlock } = window;
+const { Icons, Navbar, Footer, CookieBanner } = window;
 
 const { useState, useEffect, useCallback, useRef, useMemo } = React;
 
@@ -1474,7 +1474,7 @@ const SectionResources = function SectionResources({ navigateTo, isPWA, setShowI
               </div>
             </div>
             
-            <AdSenseBlock slot="5026466122" />
+            
           </div>
         ) : view === 'ramp' ? (
           <div className="anim-scale-in max-w-5xl mx-auto">
@@ -1589,7 +1589,7 @@ const SectionResources = function SectionResources({ navigateTo, isPWA, setShowI
               </div>
             </div>
             
-            <AdSenseBlock slot="5026466122" />
+            
           </div>
         ) : view === 'circle' ? (
           <div className="anim-scale-in max-w-5xl mx-auto">
@@ -1724,7 +1724,7 @@ const SectionResources = function SectionResources({ navigateTo, isPWA, setShowI
               </div>
             </div>
             
-            <AdSenseBlock slot="5026466122" />
+            
           </div>
         ) : view === 'pao' ? (
           <div className="anim-scale-in">
@@ -1845,7 +1845,7 @@ const SectionResources = function SectionResources({ navigateTo, isPWA, setShowI
               )}
             </div>
             
-            <AdSenseBlock slot="5026466122" />
+            
           </div>
         ) : view === '3dprint' ? (
           <div className="anim-scale-in">
@@ -1975,7 +1975,7 @@ const SectionResources = function SectionResources({ navigateTo, isPWA, setShowI
               </div>
             </div>
             
-            <AdSenseBlock slot="5026466122" />
+            
           </div>
         ) : view === 'chatbot' ? (
           <div className="anim-scale-in">
