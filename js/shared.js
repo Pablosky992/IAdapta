@@ -1009,7 +1009,73 @@ const Icons = {
     strokeLinecap: "round",
     strokeLinejoin: "round",
     d: "M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-  }))
+  })),
+  LinkedIn: ({
+    className
+  }) => /*#__PURE__*/React.createElement("svg", {
+    className: className,
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "24",
+    height: "24",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.75",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "2",
+    y: "9",
+    width: "4",
+    height: "12"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "4",
+    cy: "4",
+    r: "2"
+  })),
+  PayPalCard: ({
+    className
+  }) => /*#__PURE__*/React.createElement("svg", {
+    className: className,
+    viewBox: "0 0 100 100",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /*#__PURE__*/React.createElement("rect", {
+    width: "100",
+    height: "100",
+    rx: "24",
+    fill: "#F0F4F8",
+    stroke: "#E2E8F0",
+    strokeWidth: "2"
+  }), /*#__PURE__*/React.createElement("g", {
+    transform: "translate(21, 16) scale(4.7)"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M14.06 3.713c.12-1.071-.093-1.832-.702-2.526C12.628.356 11.312 0 9.626 0H4.734a.7.7 0 0 0-.691.59L2.005 13.509a.42.42 0 0 0 .415.486h2.756l-.202 1.28a.628.628 0 0 0 .62.726H8.14c.429 0 .793-.31.862-.731l.025-.13.48-3.043.03-.164.001-.007a.35.35 0 0 1 .348-.297h.38c1.266 0 2.425-.256 3.345-.91q.57-.403.993-1.005a4.94 4.94 0 0 0 .88-2.195c.242-1.246.13-2.356-.57-3.154a2.7 2.7 0 0 0-.76-.59l-.094-.061Z",
+    fill: "#003087"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M6.543 8.82a.7.7 0 0 1 .321-.079H8.3c2.82 0 5.027-1.144 5.672-4.456l.003-.016q.326.186.548.438c.546.623.679 1.535.45 2.71-.272 1.397-.866 2.307-1.663 2.874-.802.57-1.842.815-3.043.815h-.38a.87.87 0 0 0-.863.734l-.03.164-.48 3.043-.024.13-.001.004a.35.35 0 0 1-.348.296H5.595a.106.106 0 0 1-.105-.123l.208-1.32z",
+    fill: "#0079C1"
+  }))),
+  Bizum: ({
+    className
+  }) => /*#__PURE__*/React.createElement("svg", {
+    className: className,
+    viewBox: "0 0 100 100",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /*#__PURE__*/React.createElement("rect", {
+    width: "100",
+    height: "100",
+    rx: "24",
+    fill: "#00C4B4"
+  }), /*#__PURE__*/React.createElement("g", {
+    transform: "translate(25.7, 17.6) scale(1.8)"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M6.61567 12.8655c1.31327.9553 3.14387.6767 4.09893-.6368l3.4225-4.73643c.9551-1.31346.6765-3.14434-.6367-4.09959-1.3133-.95524-3.1439-.67663-4.09902.63683L5.93914 8.76593c-.9153 1.31347-.63673 3.14437.67653 4.09957ZM22.2952 6.17881c-1.3133-.95524-3.1439-.67663-4.099.63683L4.42685 25.7613c-.9551 1.3135-.67653 3.1444.63673 4.0996 1.31326.9553 3.14387.6767 4.09897-.6368L22.9319 10.2784c.9949-1.31345.6765-3.14434-.6367-4.09959ZM5.3024 4.66637c.9551-1.31346.67652-3.14435-.63674-4.099591C3.3524-.388466 1.52179-.109853.566693 1.20361c-.9551 1.31346-.676529 3.14435.636737 4.09959 1.31326.95525 3.14387.67663 4.09897-.63683ZM26.1952 30.6968c-1.3132-.9553-3.1438-.6766-4.0989.6368-.9551 1.3135-.6766 3.1444.6367 4.0996 1.3133.9553 3.1439.6766 4.099-.6368.9551-1.3135.6765-3.1444-.6368-4.0996Zm-5.3724-7.5226c-1.3132-.9552-3.1438-.6766-4.0989.6369l-3.4623 4.7364c-.9551 1.3134-.6765 3.1443.6367 4.0996 1.3133.9552 3.1439.6766 4.099-.6369l3.4623-4.7364c.9551-1.3134.6765-3.1443-.6368-4.0996Z",
+    fill: "white"
+  })))
 };
 
 // --- GET AMAZON LINK & PRODUCT CATALOG ---
@@ -1231,50 +1297,104 @@ const PRODUCT_CATALOG = {
     url: 'https://amzn.to/4eXYry7',
     img: 'assets/abotonador.png',
     query: 'abotonador mango grueso artrosis'
+  },
+  '36': {
+    name: 'Cubiertos con peso',
+    url: 'https://amzn.to/4fwJvbH',
+    img: 'assets/cubiertos_adaptados.jpg',
+    query: 'cubiertos con peso parkinson'
+  },
+  '37': {
+    name: 'Elevador de inodoro con reposabrazos',
+    url: 'https://amzn.to/3RwHjYy',
+    img: 'alza_wc.png',
+    query: 'elevador inodoro con reposabrazos parkinson'
+  },
+  '38': {
+    name: 'Calzador mango largo con gancho',
+    url: 'https://amzn.to/4vtwynE',
+    img: 'assets/calzador_largo.png',
+    query: 'calzador mango largo con gancho'
+  },
+  '39': {
+    name: 'Tapete antideslizante',
+    url: 'https://amzn.to/3SZLxsg',
+    img: 'assets/tapete_antideslizante.jpg',
+    query: 'tapete antideslizante silicona'
+  },
+  '40': {
+    name: 'Esponja de baño con mango largo',
+    url: 'https://amzn.to/4wN3I30',
+    img: 'assets/esponja_mango_largo.png',
+    query: 'esponja mango largo baño'
+  },
+  '41': {
+    name: 'Abridor de tarros y botes ergonómico',
+    url: 'https://amzn.to/3SZNDIE',
+    img: 'assets/abridor_tarros.jpg',
+    query: 'abridor de tarros ergonomico'
+  },
+  '42': {
+    name: 'Adaptador de llaves de gran palanca',
+    url: 'https://amzn.to/458NnJP',
+    img: 'assets/adaptador_llaves.png',
+    query: 'adaptador llaves facilitar giro'
+  },
+  '43': {
+    name: 'Luces LED nocturnas con sensor de movimiento',
+    url: 'https://amzn.to/4f2x4nP',
+    img: 'assets/luces_sensor.png',
+    query: 'luces led sensor movimiento enchufe'
+  },
+  '44': {
+    name: 'Cinta adhesiva antideslizante para alfombras',
+    url: 'https://amzn.to/4aRELuy',
+    img: 'assets/cinta_alfombras.jpg',
+    query: 'cinta adhesiva doble cara alfombras antideslizante'
+  },
+  '45': {
+    name: 'Barra de apoyo antideslizante para baño',
+    url: 'https://amzn.to/4fopvaa',
+    img: 'assets/barra_apoyo.png',
+    query: 'barra de apoyo seguridad ducha acero inoxidable'
+  },
+  '46': {
+    name: 'Trapecio incorporador para cama',
+    url: 'https://amzn.to/4gE7KWw',
+    img: 'assets/trapecio_cama.png',
+    query: 'trapecio incorporador cama'
   }
 };
 
 // --- COMPONENTE ADSENSERBLOCK ---
-const AdSenseBlock = function AdSenseBlock({
-  slot,
-  minHeight = '90px'
-}) {
-  useEffect(() => {
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-      console.error("AdSense push failed", e);
-    }
-  }, []);
-  return /*#__PURE__*/React.createElement("ins", {
-    className: "adsbygoogle",
-    style: {
-      display: 'block',
-      minHeight
-    },
-    "data-ad-client": "ca-pub-9370167145239765",
-    "data-ad-slot": slot,
-    "data-ad-format": "auto",
-    "data-full-width-responsive": "true"
-  });
+const AdSenseBlock = function AdSenseBlock() {
+  return null;
 };
 
-// --- COMPONENTE DONATIONMODAL ---
-const DonationModal = function DonationModal({
+// --- COMPONENTE DONATEMODAL ---
+const DonateModal = function DonateModal({
+  isOpen,
   onClose
 }) {
+  const [copied, setCopied] = useState(false);
+  if (!isOpen) return null;
+  const handleCopy = () => {
+    navigator.clipboard.writeText("644616232");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
   return /*#__PURE__*/React.createElement("div", {
-    className: "fixed inset-0 z-[100] flex items-center justify-center p-4"
+    className: "fixed inset-0 z-50 flex items-center justify-center p-4"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "absolute inset-0 bg-brand-950/60 backdrop-blur-md transition-opacity duration-300",
+    className: "absolute inset-0 bg-brand-950/80 backdrop-blur-xl transition-opacity duration-300",
     onClick: onClose
   }), /*#__PURE__*/React.createElement("div", {
-    className: "relative bg-gradient-to-b from-white to-brand-50/50 rounded-[2.5rem] shadow-2xl border border-brand-100 w-full max-w-xl overflow-hidden transform transition-all duration-300 p-8 sm:p-10 z-10 max-h-[90vh] overflow-y-auto"
+    className: "relative bg-gradient-to-b from-white to-brand-50 rounded-[2.5rem] shadow-2xl border border-brand-100 w-full max-w-xl overflow-hidden transform transition-all duration-300 p-8 sm:p-10 z-10 max-h-[90vh] overflow-y-auto"
   }, /*#__PURE__*/React.createElement("button", {
     onClick: onClose,
-    className: "absolute top-6 right-6 text-gray-400 hover:text-brand-900 transition-colors w-8 h-8 rounded-full bg-gray-50 hover:bg-brand-50 flex items-center justify-center"
-  }, /*#__PURE__*/React.createElement(Icons.Close, {
-    className: "w-5 h-5"
+    className: "absolute top-6 right-6 p-2 rounded-full hover:bg-brand-100 text-brand-900 transition-colors"
+  }, /*#__PURE__*/React.createElement(Icons.X, {
+    className: "w-6 h-6"
   })), /*#__PURE__*/React.createElement("div", {
     className: "text-center mb-8"
   }, /*#__PURE__*/React.createElement("div", {
@@ -1292,45 +1412,44 @@ const DonationModal = function DonationModal({
   }, "Tu aportaci\xF3n ayuda directamente a mantener activa la web y todas sus funciones.")), /*#__PURE__*/React.createElement("div", {
     className: "space-y-4"
   }, /*#__PURE__*/React.createElement("a", {
-    href: "https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8",
+    href: "https://www.paypal.com/donate/?hosted_button_id=E8A34ZM4Q4YS8&locale.x=es_ES",
     target: "_blank",
     rel: "noopener noreferrer",
     className: "flex items-center justify-between p-5 border border-brand-100 hover:border-brand-300 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all group cursor-pointer"
   }, /*#__PURE__*/React.createElement("div", {
     className: "flex items-center gap-4"
-  }, /*#__PURE__*/React.createElement("img", {
-    src: "assets/paypal_tarjeta_new.png",
-    alt: "PayPal o tarjeta",
-    className: "w-14 h-14 rounded-xl object-contain bg-white border border-brand-100 shadow-sm p-1 flex-shrink-0"
+  }, /*#__PURE__*/React.createElement(Icons.PayPalCard, {
+    className: "w-14 h-14 flex-shrink-0"
   }), /*#__PURE__*/React.createElement("div", {
     className: "text-left"
   }, /*#__PURE__*/React.createElement("p", {
     className: "font-bold text-brand-900 group-hover:text-brand-600 transition-colors"
-  }, "PayPal o tarjeta"), /*#__PURE__*/React.createElement("p", {
+  }, "PayPal o Tarjeta"), /*#__PURE__*/React.createElement("p", {
     className: "text-xs text-gray-400"
   }, "Donaci\xF3n segura con tu cuenta o tarjeta"))), /*#__PURE__*/React.createElement("div", {
     className: "w-8 h-8 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center group-hover:translate-x-1 transition-transform"
   }, /*#__PURE__*/React.createElement(Icons.ArrowRight, {
     className: "w-4 h-4"
   }))), /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-between p-5 border border-dashed border-gray-200 bg-gray-50/50 rounded-2xl opacity-75 relative overflow-hidden"
+    className: "flex flex-col sm:flex-row items-start sm:items-center justify-between p-5 border border-brand-100 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all gap-4"
   }, /*#__PURE__*/React.createElement("div", {
     className: "flex items-center gap-4"
-  }, /*#__PURE__*/React.createElement("img", {
-    src: "assets/bizum_new.png",
-    alt: "Bizum",
-    className: "w-14 h-14 rounded-xl object-contain bg-white border border-brand-100 shadow-sm p-1 grayscale opacity-60 flex-shrink-0"
+  }, /*#__PURE__*/React.createElement(Icons.Bizum, {
+    className: "w-14 h-14 flex-shrink-0"
   }), /*#__PURE__*/React.createElement("div", {
     className: "text-left"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center gap-2"
   }, /*#__PURE__*/React.createElement("p", {
-    className: "font-bold text-gray-500"
-  }, "Bizum"), /*#__PURE__*/React.createElement("span", {
-    className: "text-[9px] bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider"
-  }, "Pr\xF3ximamente")), /*#__PURE__*/React.createElement("p", {
-    className: "text-xs text-gray-400"
-  }, "Disponible en futuras actualizaciones")))))));
+    className: "font-bold text-brand-900"
+  }, "Bizum"), /*#__PURE__*/React.createElement("div", {
+    className: "text-xs text-gray-500 mt-1 flex flex-col"
+  }, /*#__PURE__*/React.createElement("span", null, "Env\xEDa tu aportaci\xF3n al n\xFAmero:"), /*#__PURE__*/React.createElement("strong", {
+    className: "text-lg sm:text-xl text-brand-900 font-bold font-mono tracking-wider mt-1"
+  }, ["644", "616", "232"].join(" "))))), /*#__PURE__*/React.createElement("button", {
+    onClick: handleCopy,
+    className: "px-4 py-2 bg-brand-50 text-brand-700 hover:bg-brand-100 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 self-stretch sm:self-auto justify-center"
+  }, copied ? "¡Copiado!" : "Copiar número")), /*#__PURE__*/React.createElement("p", {
+    className: "text-center text-base text-gray-600 mt-8 font-bold"
+  }, "\xA1Muchas gracias por tu apoyo y por hacer posible este proyecto! \u2764\uFE0F"))));
 };
 
 // --- COMPONENTE NAVBAR ---
@@ -1340,22 +1459,16 @@ const Navbar = function Navbar({
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [donateModalOpen, setDonateModalOpen] = useState(false);
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  useEffect(() => {
-    window.openDonationModal = (val = true) => {
-      setDonateModalOpen(val);
-    };
+    const handleOpenModal = () => setDonateModalOpen(true);
+    window.addEventListener('open-donation-modal', handleOpenModal);
     return () => {
-      window.openDonationModal = null;
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('open-donation-modal', handleOpenModal);
     };
   }, []);
-
   const linksMain = [{
     id: 'home',
     label: 'Inicio',
@@ -1455,8 +1568,8 @@ const Navbar = function Navbar({
     className: "w-7 h-7"
   }) : /*#__PURE__*/React.createElement(Icons.Menu, {
     className: "w-7 h-7"
-  }))), menuOpen && /*#__PURE__*/React.createElement("div", {
-    className: "xl:hidden bg-white border-t border-brand-100 px-4 py-3 space-y-1 shadow-xl max-h-[calc(100vh-120px)] overflow-y-auto"
+  })))), menuOpen && /*#__PURE__*/React.createElement("div", {
+    className: "xl:hidden bg-white border-t border-brand-100 px-4 py-3 space-y-1 shadow-xl"
   }, linksMain.map(link => /*#__PURE__*/React.createElement("a", {
     key: link.id,
     href: link.href,
@@ -1464,16 +1577,17 @@ const Navbar = function Navbar({
     className: "block w-full text-left px-4 py-3.5 rounded-xl text-lg font-semibold text-gray-700 hover:bg-brand-50"
   }, Array.isArray(link.label) ? link.label.join(' ') : link.label)), /*#__PURE__*/React.createElement("button", {
     onClick: () => {
-      setMenuOpen(false);
       setDonateModalOpen(true);
+      setMenuOpen(false);
     },
-    className: "w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-lg font-semibold text-brand-600 hover:bg-brand-50 group"
+    className: "w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-lg font-semibold text-brand-600 hover:bg-brand-50 group text-left"
   }, /*#__PURE__*/React.createElement(Icons.Heart, {
     className: "group-hover:fill-red-500 group-hover:text-red-500 transition-all duration-300"
   }), "Apoyar proyecto"), /*#__PURE__*/React.createElement("a", {
     href: "cv.html",
     className: "block w-full text-left px-4 py-3.5 rounded-xl text-lg font-semibold text-brand-600 bg-brand-50"
-  }, "Curriculum Vitae")))), donateModalOpen && /*#__PURE__*/React.createElement(DonationModal, {
+  }, "Curriculum Vitae"))), /*#__PURE__*/React.createElement(DonateModal, {
+    isOpen: donateModalOpen,
     onClose: () => setDonateModalOpen(false)
   }));
 };
@@ -1544,7 +1658,7 @@ const Footer = function Footer({
     href: "#",
     onClick: e => {
       e.preventDefault();
-      if (window.openDonationModal) window.openDonationModal(true);
+      window.dispatchEvent(new CustomEvent('open-donation-modal'));
     },
     className: "text-brand-200 hover:text-white transition-colors text-lg flex items-center gap-2 group"
   }, /*#__PURE__*/React.createElement(Icons.Heart, {
@@ -1592,7 +1706,6 @@ const CookieBanner = function CookieBanner() {
 window.Icons = Icons;
 window.getAmazonLink = getAmazonLink;
 window.PRODUCT_CATALOG = PRODUCT_CATALOG;
-window.AdSenseBlock = AdSenseBlock;
 window.Navbar = Navbar;
 window.Footer = Footer;
 window.CookieBanner = CookieBanner;

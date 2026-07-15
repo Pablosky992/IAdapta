@@ -81,7 +81,7 @@ const SectionCV = function SectionCV() {
     label: 'Evaluación y Ortopedia',
     pct: 90
   }, {
-    label: 'Gestión de Recursos y Stock',
+    label: 'Productos de Apoyo y Adaptación',
     pct: 85
   }, {
     label: 'Diseño e Impresión 3D',

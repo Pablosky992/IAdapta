@@ -3,8 +3,7 @@ const {
   Icons,
   Navbar,
   Footer,
-  CookieBanner,
-  AdSenseBlock
+  CookieBanner
 } = window;
 const {
   useState,
@@ -1482,9 +1481,7 @@ const SectionResources = function SectionResources({
     className: "p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm"
   }, /*#__PURE__*/React.createElement("p", {
     className: "text-brand-200 italic text-lg leading-relaxed"
-  }, "\"Automatizar el material de apoyo nos permite centrar toda nuestra energ\xEDa en el paciente.\""))))), /*#__PURE__*/React.createElement(AdSenseBlock, {
-    slot: "5026466122"
-  })) : view === 'ramp' ? /*#__PURE__*/React.createElement("div", {
+  }, "\"Automatizar el material de apoyo nos permite centrar toda nuestra energ\xEDa en el paciente.\"")))))) : view === 'ramp' ? /*#__PURE__*/React.createElement("div", {
     className: "anim-scale-in max-w-5xl mx-auto"
   }, /*#__PURE__*/React.createElement("div", {
     className: "bg-white rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden"
@@ -1606,9 +1603,7 @@ const SectionResources = function SectionResources({
     className: "text-sm font-medium text-brand-100"
   }, /*#__PURE__*/React.createElement("strong", null, "Norma CTE DB-SUA:"), " Pendiente m\xE1x. 10% (L<300cm), 8% (L<600cm), 6% (Resto).")), /*#__PURE__*/React.createElement("div", {
     className: "text-xs text-brand-300 font-mono bg-black/20 px-4 py-2 rounded-lg border border-white/5"
-  }, "F\xF3rmula: (H / L) * 100")))), /*#__PURE__*/React.createElement(AdSenseBlock, {
-    slot: "5026466122"
-  })) : view === 'circle' ? /*#__PURE__*/React.createElement("div", {
+  }, "F\xF3rmula: (H / L) * 100"))))) : view === 'circle' ? /*#__PURE__*/React.createElement("div", {
     className: "anim-scale-in max-w-5xl mx-auto"
   }, /*#__PURE__*/React.createElement("div", {
     className: "bg-white rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden"
@@ -1756,9 +1751,7 @@ const SectionResources = function SectionResources({
     className: "text-sm font-medium text-brand-100"
   }, /*#__PURE__*/React.createElement("strong", null, "Utilidad de Dise\xF1o:"), " Ideal para dimensionar adaptadores de llaves, engrosadores de cubiertos o cualquier f\xE9rula circular bas\xE1ndose en la medici\xF3n de su contorno.")), /*#__PURE__*/React.createElement("div", {
     className: "text-xs text-brand-300 font-mono bg-black/20 px-4 py-2 rounded-lg border border-white/5 whitespace-nowrap"
-  }, "F\xF3rmulas: P = \u03C0 \xB7 D  |  D = P / \u03C0")))), /*#__PURE__*/React.createElement(AdSenseBlock, {
-    slot: "5026466122"
-  })) : view === 'pao' ? /*#__PURE__*/React.createElement("div", {
+  }, "F\xF3rmulas: P = \u03C0 \xB7 D  |  D = P / \u03C0"))))) : view === 'pao' ? /*#__PURE__*/React.createElement("div", {
     className: "anim-scale-in"
   }, /*#__PURE__*/React.createElement("div", {
     className: "bg-white rounded-[3rem] p-8 sm:p-12 shadow-xl border border-brand-50"
@@ -1874,9 +1867,7 @@ const SectionResources = function SectionResources({
     className: "text-5xl mb-4 text-blue-200"
   }, "\u2328\uFE0F"), /*#__PURE__*/React.createElement("p", {
     className: "text-xl text-blue-900/60 font-medium"
-  }, "Escribe al menos 4 caracteres para buscar"))), /*#__PURE__*/React.createElement(AdSenseBlock, {
-    slot: "5026466122"
-  })) : view === '3dprint' ? /*#__PURE__*/React.createElement("div", {
+  }, "Escribe al menos 4 caracteres para buscar")))) : view === '3dprint' ? /*#__PURE__*/React.createElement("div", {
     className: "anim-scale-in"
   }, /*#__PURE__*/React.createElement("div", {
     className: "bg-white rounded-[3rem] p-8 sm:p-12 shadow-xl border border-brand-50 mb-16"
@@ -2027,9 +2018,7 @@ const SectionResources = function SectionResources({
     className: "inline-flex items-center justify-center gap-2 bg-brand-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-800 transition-all shadow-md group-hover:shadow-lg w-full sm:w-auto"
   }, "Ver producto en Amazon", /*#__PURE__*/React.createElement(Icons.ArrowRight, {
     className: "w-5 h-5 group-hover:translate-x-1 transition-transform"
-  })))))))), /*#__PURE__*/React.createElement(AdSenseBlock, {
-    slot: "5026466122"
-  })) : view === 'chatbot' ? /*#__PURE__*/React.createElement("div", {
+  }))))))))) : view === 'chatbot' ? /*#__PURE__*/React.createElement("div", {
     className: "anim-scale-in"
   }, /*#__PURE__*/React.createElement(ChatbotComponent, null)) : null), selectedItem && /*#__PURE__*/React.createElement("div", {
     className: "fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in",

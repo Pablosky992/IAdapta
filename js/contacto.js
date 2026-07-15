@@ -15,24 +15,53 @@ const {
 const SectionContact = function SectionContact() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const info = [{
-    icon: /*#__PURE__*/React.createElement(Icons.Mail, null),
+    icon: /*#__PURE__*/React.createElement(Icons.Mail, {
+      className: "w-7 h-7 text-white"
+    }),
     label: 'Correo electrónico',
     value: 'iadaptato@gmail.com',
     href: '#',
     onClick: e => {
       e.preventDefault();
       setIsModalOpen(true);
-    }
+    },
+    iconBg: 'bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-md shadow-indigo-100',
+    cardBorder: 'hover:border-indigo-400 hover:shadow-indigo-50/50'
   }, {
-    icon: /*#__PURE__*/React.createElement(Icons.Instagram, null),
+    icon: /*#__PURE__*/React.createElement(Icons.WhatsApp, {
+      className: "w-7 h-7 text-white"
+    }),
+    label: 'WhatsApp',
+    value: ['+34', '644', '61', '62', '32'].join(' '),
+    href: '#',
+    onClick: e => {
+      e.preventDefault();
+      const p1 = '34';
+      const p2 = '644';
+      const p3 = '616';
+      const p4 = '232';
+      window.open(`https://wa.me/${p1}${p2}${p3}${p4}?text=Hola,%20tengo%20una%20consulta%20sobre%20IAdapta`, '_blank', 'noopener,noreferrer');
+    },
+    iconBg: 'bg-[#25d366] text-white shadow-md shadow-green-100',
+    cardBorder: 'hover:border-green-400 hover:shadow-green-50/50'
+  }, {
+    icon: /*#__PURE__*/React.createElement(Icons.Instagram, {
+      className: "w-7 h-7 text-white"
+    }),
     label: 'Síguenos en Instagram',
     value: '@iadapta',
-    href: 'https://www.instagram.com/iadapta/'
+    href: 'https://www.instagram.com/iadapta/',
+    iconBg: 'bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white shadow-md shadow-pink-100',
+    cardBorder: 'hover:border-pink-300 hover:shadow-pink-50/50'
   }, {
-    icon: /*#__PURE__*/React.createElement(Icons.Location, null),
-    label: 'Localización',
-    value: 'Barcelona, España',
-    href: null
+    icon: /*#__PURE__*/React.createElement(Icons.LinkedIn, {
+      className: "w-7 h-7 text-white"
+    }),
+    label: 'LinkedIn',
+    value: 'Pablo Narciso Millán',
+    href: 'https://www.linkedin.com/in/pablo-narciso-millan',
+    iconBg: 'bg-[#0077b5] text-white shadow-md shadow-blue-100',
+    cardBorder: 'hover:border-blue-400 hover:shadow-blue-50/50'
   }, {
     icon: /*#__PURE__*/React.createElement(Icons.Heart, {
       className: "fill-red-500 text-red-500"
@@ -42,9 +71,7 @@ const SectionContact = function SectionContact() {
     href: '#',
     onClick: e => {
       e.preventDefault();
-      if (window.openDonationModal) {
-        window.openDonationModal(true);
-      }
+      window.dispatchEvent(new CustomEvent('open-donation-modal'));
     },
     special: true
   }];
@@ -73,11 +100,11 @@ const SectionContact = function SectionContact() {
       onClick: item.onClick || undefined,
       target: item.href && !item.href.startsWith('#') && !item.href.startsWith('mailto:') ? "_blank" : undefined,
       rel: item.href && !item.href.startsWith('#') && !item.href.startsWith('mailto:') ? "noopener noreferrer" : undefined,
-      className: `flex items-center justify-between gap-5 border rounded-[2rem] p-6 shadow-sm hover:shadow-lg transition-all duration-300 group ${item.special ? 'bg-gradient-to-r from-rose-50 to-rose-100/30 border-rose-200 shadow-rose-50 hover:border-rose-300' : 'bg-white border-brand-100 hover:border-brand-300'} ${item.href ? 'cursor-pointer' : ''}`
+      className: `flex items-center justify-between gap-5 border rounded-[2rem] p-6 shadow-sm hover:shadow-lg transition-all duration-300 group ${item.special ? 'bg-gradient-to-r from-rose-50 to-rose-100/30 border-rose-200 shadow-rose-50 hover:border-rose-300' : item.cardBorder || 'bg-white border-brand-100 hover:border-brand-300'} ${item.href ? 'cursor-pointer' : ''}`
     }, /*#__PURE__*/React.createElement("div", {
       className: "flex items-center gap-5"
     }, /*#__PURE__*/React.createElement("div", {
-      className: `w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110 ${item.special ? 'bg-white text-red-600 shadow-sm' : 'bg-brand-100 text-brand-600'}`
+      className: `w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110 ${item.special ? 'bg-white text-red-600 shadow-sm' : item.iconBg || 'bg-brand-100 text-brand-600'}`
     }, item.icon), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
       className: `text-xs font-bold uppercase tracking-widest mb-1 ${item.special ? 'text-rose-400' : 'text-brand-400'}`
     }, item.label), /*#__PURE__*/React.createElement("p", {
