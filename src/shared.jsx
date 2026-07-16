@@ -181,7 +181,13 @@ const PRODUCT_CATALOG = {
   '43': { name: 'Luces LED nocturnas con sensor de movimiento', url: 'https://amzn.to/4f2x4nP', img: 'assets/luces_sensor.png', query: 'luces led sensor movimiento enchufe' },
   '44': { name: 'Cinta adhesiva antideslizante para alfombras', url: 'https://amzn.to/4aRELuy', img: 'assets/cinta_alfombras.jpg', query: 'cinta adhesiva doble cara alfombras antideslizante' },
   '45': { name: 'Barra de apoyo antideslizante para baño', url: 'https://amzn.to/4fopvaa', img: 'assets/barra_apoyo.png', query: 'barra de apoyo seguridad ducha acero inoxidable' },
-  '46': { name: 'Trapecio incorporador para cama', url: 'https://amzn.to/4gE7KWw', img: 'assets/trapecio_cama.png', query: 'trapecio incorporador cama' }
+  '46': { name: 'Trapecio incorporador para cama', url: 'https://amzn.to/4gE7KWw', img: 'assets/trapecio_cama.png', query: 'trapecio incorporador cama' },
+  '47': { name: 'Pelota para ejercitar las manos', url: 'https://amzn.to/4wHv7TF', img: 'assets/pelota_manos.png', query: 'pelota ejercitar manos rehabilitacion' },
+  '48': { name: 'Bandas elásticas de resistencia', url: 'https://amzn.to/4aZ54z1', img: 'assets/bandas_elasticas.png', query: 'bandas elasticas musculacion estiramientos' },
+  '49': { name: 'Pedalier para brazos y piernas', url: 'https://amzn.to/4bMWuUh', img: 'assets/pedalier.png', query: 'pedalier ejercicio brazos piernas mayores' },
+  '50': { name: 'Simulador pasivo de la marcha', url: 'https://amzn.to/4waslqk', img: 'assets/simulador_marcha.png', query: 'simulador de marcha pasivo ejercitador piernas' },
+  '51': { name: 'Libro de pasatiempos variados para adultos', url: 'https://amzn.to/3Rhlo7G', img: 'assets/pasatiempos.png', query: 'libro pasatiempos adultos sopa letras crucigramas' },
+  '52': { name: 'Libro de ejercicios mentales y memoria', url: 'https://amzn.to/4prQqWX', img: 'assets/ejercicios_mentales.png', query: 'libro ejercicios memoria estimulacion cognitiva adultos' }
 };
 
 // --- COMPONENTE ADSENSERBLOCK ---

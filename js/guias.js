@@ -171,6 +171,26 @@ const SectionGuides = function SectionGuides() {
     link: 'guia-ocio.html',
     category: 'autonomia',
     tags: ['leer', 'jugar', 'cartas', 'viajar', 'tiempo libre', 'entretenimiento', 'ocio']
+  }, {
+    id: 'ejercicios-mayores',
+    title: 'Ejercicios Físicos',
+    icon: '🏃‍♂️',
+    color: 'bg-emerald-100 text-emerald-700',
+    description: 'Actividad física adaptada: Fuerza, equilibrio, flexibilidad y movilidad.',
+    image: 'assets/guia_ejercicios.png',
+    link: 'guia-ejercicios.html',
+    category: 'autonomia',
+    tags: ['ejercicio', 'gimnasia', 'fuerza', 'equilibrio', 'flexibilidad', 'movilidad', 'salud', 'deporte', 'entrenar']
+  }, {
+    id: 'ejercicios-cognitivos',
+    title: 'Ejercicios Cognitivos',
+    icon: '🧠',
+    color: 'bg-indigo-100 text-indigo-700',
+    description: 'Gimnasia cerebral: Ejercicios prácticos para la memoria, atención y lenguaje.',
+    image: 'assets/guia_cognitivos.png',
+    link: 'guia-cognitivos.html',
+    category: 'autonomia',
+    tags: ['memoria', 'atencion', 'lenguaje', 'calculo', 'cerebro', 'cognitivo', 'juegos', 'rompecabezas', 'entrenamiento']
   }];
   const filterTabs = [{
     id: 'todas',

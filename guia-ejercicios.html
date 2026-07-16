@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="IAdapta Guías: Ejercicios físicos y movilidad adaptada en la tercera edad para fomentar el envejecimiento activo." />
+  <meta name="keywords" content="ejercicio personas mayores, gimnasia sentada, fortalecimiento muscular mayores, equilibrio tercera edad, prevenir caidas, iadapta" />
+  <link rel="canonical" href="https://iadapta.es/guia-ejercicios.html" />
+  <link rel="icon" type="image/png" href="assets/iadapta_logo.png" />
+  <title>IAdapta | Ejercicios Físicos y Movilidad en la Tercera Edad</title>
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://iadapta.es/guia-ejercicios.html" />
+  <meta property="og:title" content="IAdapta | Ejercicios Físicos y Movilidad en la Tercera Edad" />
+  <meta property="og:description" content="Ejercicios físicos y movilidad adaptada en la tercera edad para fomentar el envejecimiento activo." />
+  <meta property="og:image" content="https://iadapta.es/assets/iadapta_logo_social.jpg" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://iadapta.es/guia-ejercicios.html" />
+  <meta property="twitter:title" content="IAdapta | Ejercicios Físicos y Movilidad en la Tercera Edad" />
+  <meta property="twitter:description" content="Ejercicios físicos y movilidad adaptada en la tercera edad para fomentar el envejecimiento activo." />
+  <meta property="twitter:image" content="https://iadapta.es/assets/iadapta_logo_social.jpg" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- React 18 CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Marked.js for Markdown parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    marked.setOptions({
+      breaks: true,
+      gfm: true,
+      headerIds: false,
+      mangle: false
+    });
+  </script>
+
+  <!-- Tailwind config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#1A3052',
+            },
+            accent: {
+              coral: '#E87D55',
+              cream: '#F2F0E9',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['"Playfair Display"', 'serif'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Apple touch icon and theme color -->
+  <link rel="apple-touch-icon" href="assets/iadapta_brand_icon.png">
+  <meta name="theme-color" content="#1A3052" />
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('Service Worker registrado'))
+          .catch(err => console.log('Error registrando SW', err));
+      });
+    }
+  </script>
+</head>
+
+<body class="bg-white text-gray-900 antialiased">
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+  <div id="root">
+    <!-- Contenido estático de respaldo para SEO y accesibilidad -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#F2F0E9] border-b border-brand-900/10 shadow-sm">
+      <div class="max-w-[1400px] mx-auto px-4 sm:px-8 flex items-center justify-between h-24 md:h-28">
+        <a href="index.html" class="flex items-center hover:scale-105 transition-transform">
+          <img src="assets/iadapta_logo.png" alt="IAdapta" class="h-16 md:h-20 object-contain" />
+        </a>
+      </div>
+    </header>
+
+    <main id="main-content" class="pt-36 pb-12">
+      <section class="max-w-4xl mx-auto px-4 py-12">
+        <h1 class="font-display text-4xl font-bold text-brand-900 mb-6">Ejercicios Físicos y Movilidad en la Tercera Edad</h1>
+        <p class="text-xl text-gray-600 leading-relaxed">
+          Guía de envejecimiento activo, gimnasia adaptada en silla y fortalecimiento para la autonomía diaria de las personas mayores.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/shared.js"></script>
+  <script src="js/guia-ejercicios.js"></script>
+</body>
+
+</html>
