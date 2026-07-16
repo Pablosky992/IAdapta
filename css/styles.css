@@ -188,18 +188,24 @@ body {
    =================================================== */
 @media print {
   @page {
-    margin: 2cm;
+    margin: 1cm;
     size: A4;
   }
   
-  /* Ocultar todo lo que no sea el informe */
-  body * { visibility: hidden; }
-  .no-print, .no-print * { display: none !important; }
+  /* Ocultar elementos globales innecesarios en la impresión */
+  header, footer, nav, .no-print, .cookie-banner, button {
+    display: none !important;
+  }
   
-  /* Mostrar el informe */
-  #analyzer-full, #analyzer-full * { visibility: visible; }
-  
-  #analyzer-full {
+  /* --- CASO 1: VALORADOR DE ESTANCIAS (si existe #analyzer-full) --- */
+  body:has(#analyzer-full) * {
+    visibility: hidden;
+  }
+  body:has(#analyzer-full) #analyzer-full, 
+  body:has(#analyzer-full) #analyzer-full * {
+    visibility: visible;
+  }
+  body:has(#analyzer-full) #analyzer-full {
     position: absolute;
     left: 0;
     top: 0;
@@ -210,18 +216,123 @@ body {
     box-shadow: none !important;
     border: none !important;
   }
-
-  .bg-gradient-to-br { background: white !important; }
-  .rounded-3xl, .rounded-2xl { border-radius: 0 !important; }
-  
-  .ai-report-content {
+  body:has(#analyzer-full) .bg-gradient-to-br {
+    background: white !important;
+  }
+  body:has(#analyzer-full) .rounded-3xl, 
+  body:has(#analyzer-full) .rounded-2xl {
+    border-radius: 0 !important;
+  }
+  body:has(#analyzer-full) .ai-report-content {
     font-size: 11pt;
     line-height: 1.6;
     color: black;
   }
+  body:has(#analyzer-full) .ai-report-content p {
+    margin-bottom: 12pt;
+  }
+  body:has(#analyzer-full) .ai-report-content h3 {
+    margin-top: 20pt;
+    color: #1A3052 !important;
+  }
+
+  /* --- CASO 2: CV Y OTRAS SECCIONES (si no existe #analyzer-full) --- */
+  body:not(:has(#analyzer-full)) {
+    background: white !important;
+    color: black !important;
+    font-size: 9pt !important; /* Compact font size for A4 print */
+  }
+  body:not(:has(#analyzer-full)) #main-content {
+    padding-top: 0 !important;
+  }
+  body:not(:has(#analyzer-full)) .min-h-screen {
+    min-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    background: white !important;
+  }
+  body:not(:has(#analyzer-full)) .max-w-6xl {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
   
-  .ai-report-content p { margin-bottom: 12pt; }
-  .ai-report-content h3 { margin-top: 20pt; color: #1A3052 !important; }
+  /* Reducir tamaño de títulos en la cabecera */
+  body:not(:has(#analyzer-full)) h1 {
+    font-size: 22pt !important;
+    margin-bottom: 2px !important;
+  }
+  body:not(:has(#analyzer-full)) h3 {
+    font-size: 14pt !important;
+    margin-bottom: 0.5rem !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+  
+  /* Mantener el diseño a dos columnas en el PDF */
+  body:not(:has(#analyzer-full)) .grid.lg\:grid-cols-12 {
+    display: grid !important;
+    grid-template-columns: 7fr 5fr !important;
+    gap: 1rem !important;
+    align-items: start !important;
+  }
+  
+  /* Reducir espacio vertical entre secciones */
+  body:not(:has(#analyzer-full)) .space-y-10 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.75rem !important;
+  }
+  body:not(:has(#analyzer-full)) .space-y-8 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.75rem !important;
+  }
+  body:not(:has(#analyzer-full)) .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.5rem !important;
+  }
+  
+  /* Hacer la cabecera horizontal y muy compacta */
+  body:not(:has(#analyzer-full)) .rounded-\[3rem\] {
+    border-radius: 1rem !important;
+    padding: 1rem !important;
+    margin-bottom: 1rem !important;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 1.25rem !important;
+    align-items: center !important;
+    box-shadow: none !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+  
+  /* Hacer el avatar del perfil más pequeño en impresión */
+  body:not(:has(#analyzer-full)) .rounded-\[3rem\] img {
+    width: 100px !important;
+    height: 100px !important;
+  }
+  
+  body:not(:has(#analyzer-full)) .bg-white {
+    box-shadow: none !important;
+    border: none !important;
+  }
+  
+  
+  /* Evitar cortes a la mitad en tarjetas de experiencia, bloques enteros de la columna derecha y apartados internos */
+  body:not(:has(#analyzer-full)) ol > li,
+  body:not(:has(#analyzer-full)) ul > li,
+  body:not(:has(#analyzer-full)) .lg\:col-span-5 > div,
+  body:not(:has(#analyzer-full)) .space-y-5 > div {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  body:not(:has(#analyzer-full)) a[href*="linkedin"],
+  body:not(:has(#analyzer-full)) a[href*="#"] {
+    display: none !important;
+  }
+  body:not(:has(#analyzer-full)) .bg-brand-50\/50 {
+    background: #f8fafc !important;
+  }
+  body:not(:has(#analyzer-full)) .timeline-line {
+    border-color: #cbd5e1 !important;
+  }
 }
 
 /* ===================================================
