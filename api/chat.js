@@ -88,6 +88,14 @@ Lista de productos disponibles y sus IDs:
 - [[PRODUCTO:44]] (Cinta adhesiva antideslizante para alfombras)
 - [[PRODUCTO:45]] (Barra de apoyo antideslizante para baño)
 - [[PRODUCTO:46]] (Trapecio incorporador para cama)
+- [[PRODUCTO:47]] (Pelota para ejercitar las manos)
+- [[PRODUCTO:48]] (Bandas elásticas de resistencia)
+- [[PRODUCTO:49]] (Pedalier para brazos y piernas)
+- [[PRODUCTO:50]] (Simulador pasivo de la marcha)
+- [[PRODUCTO:51]] (Libro de pasatiempos variados para adultos)
+- [[PRODUCTO:52]] (Libro de ejercicios mentales y memoria)
+
+
 
 RECOMENDACIÓN DE RECURSOS INTERNOS (ÚNICAMENTE SI ES PERTINENTE):
 Si el tratamiento o la situación clínica del caso lo requiere, puedes sugerir al usuario el uso complementario de las herramientas de la propia web IAdapta utilizando enlaces Markdown: [Nombre de la Herramienta](enlace_relativo).
