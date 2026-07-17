@@ -10,12 +10,7 @@ const {
   useEffect
 } = React;
 const SectionCV = function SectionCV() {
-  const [mailHref, setMailHref] = useState('#');
-  useEffect(() => {
-    const u = "pnarciso92";
-    const d = "gmail.com";
-    setMailHref(`mailto:${u}@${d}`);
-  }, []);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const experience = [{
     period: '06/2026 – Actualidad',
     role: 'Terapeuta Ocupacional',
@@ -98,7 +93,7 @@ const SectionCV = function SectionCV() {
     label: 'Diseño e Impresión 3D en Salud',
     icon: '🖨️'
   }];
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "min-h-screen pt-32 pb-20 bg-gray-50/50"
   }, /*#__PURE__*/React.createElement("div", {
     className: "max-w-6xl mx-auto px-4"
@@ -139,10 +134,10 @@ const SectionCV = function SectionCV() {
     className: "inline-flex items-center gap-2 px-5 py-2.5 bg-[#0077b5] text-white font-bold rounded-xl text-sm shadow-md hover:bg-[#006396] hover:shadow-lg transition-all active:scale-95 no-print"
   }, /*#__PURE__*/React.createElement(Icons.LinkedIn, {
     className: "w-5 h-5 text-white"
-  }), "LinkedIn"), /*#__PURE__*/React.createElement("a", {
-    href: mailHref,
+  }), "LinkedIn"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setIsModalOpen(true),
     className: "inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold rounded-xl text-sm shadow-md hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg transition-all active:scale-95 no-print",
-    title: "Haga clic para enviar un correo electr\xF3nico"
+    title: "Haga clic para enviar un mensaje"
   }, /*#__PURE__*/React.createElement(Icons.Mail, {
     className: "w-5 h-5 text-white"
   }), "Enviar Correo"), /*#__PURE__*/React.createElement("a", {
@@ -286,7 +281,68 @@ const SectionCV = function SectionCV() {
     className: "flex items-center gap-2"
   }, /*#__PURE__*/React.createElement("span", {
     className: "w-1.5 h-1.5 bg-indigo-500 rounded-full"
-  }), "Microsoft Office Avanzado"))))))))));
+  }), "Microsoft Office Avanzado")))))))))), isModalOpen && /*#__PURE__*/React.createElement("div", {
+    className: "fixed inset-0 z-50 flex items-center justify-center p-4"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "absolute inset-0 bg-brand-950/40 backdrop-blur-sm transition-opacity",
+    onClick: () => setIsModalOpen(false)
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "relative bg-white rounded-[2.5rem] shadow-2xl border border-brand-100 w-full max-w-lg overflow-hidden transform transition-all p-8 sm:p-10 z-10"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => setIsModalOpen(false),
+    className: "absolute top-6 right-6 text-gray-400 hover:text-brand-800 transition-colors w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center hover:bg-brand-50"
+  }, /*#__PURE__*/React.createElement(Icons.Close, {
+    className: "w-5 h-5"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "text-center mb-6"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "font-display text-2xl font-bold text-brand-900 mb-2"
+  }, "Env\xEDanos un mensaje"), /*#__PURE__*/React.createElement("p", {
+    className: "text-gray-500 text-sm"
+  }, "Completa el formulario y te responder\xE9 lo antes posible.")), /*#__PURE__*/React.createElement("form", {
+    action: "https://api.web3forms.com/submit",
+    method: "POST",
+    className: "space-y-4"
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "access_key",
+    value: "17a9d1e2-5bc3-4d1e-856c-1e9873dd9cee"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "subject",
+    value: "Nuevo mensaje de contacto desde el CV de IAdapta"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "redirect",
+    value: "https://iadapta.es/cv.html"
+  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-xs font-bold uppercase tracking-wider text-brand-400 mb-1.5"
+  }, "Nombre"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    name: "name",
+    required: true,
+    placeholder: "Tu nombre",
+    className: "w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-gray-700 transition-all text-base"
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-xs font-bold uppercase tracking-wider text-brand-400 mb-1.5"
+  }, "Email"), /*#__PURE__*/React.createElement("input", {
+    type: "email",
+    name: "email",
+    required: true,
+    placeholder: "tu@email.com",
+    className: "w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-gray-700 transition-all text-base"
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-xs font-bold uppercase tracking-wider text-brand-400 mb-1.5"
+  }, "Mensaje"), /*#__PURE__*/React.createElement("textarea", {
+    name: "message",
+    required: true,
+    rows: "4",
+    placeholder: "\xBFEn qu\xE9 puedo ayudarte?",
+    className: "w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-gray-700 transition-all resize-none text-base"
+  })), /*#__PURE__*/React.createElement("button", {
+    type: "submit",
+    className: "w-full bg-brand-900 text-white font-bold py-3.5 px-4 rounded-xl hover:bg-brand-800 transition-colors shadow-md hover:shadow-lg mt-2 text-base"
+  }, "Enviar mensaje")))));
 };
 function App() {
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Navbar, {
