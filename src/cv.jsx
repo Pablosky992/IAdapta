@@ -138,7 +138,7 @@ const SectionCV = function SectionCV() {
                 Enviar Correo
               </button>
               <a 
-                href="curriculumvitae.pdf" 
+                href="curriculumvitae.pdf?v=1.0.1" 
                 download="curriculumvitae.pdf" 
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-900 text-white font-bold rounded-xl text-sm shadow-md hover:bg-brand-950 hover:shadow-lg transition-all active:scale-95 no-print"
               >
