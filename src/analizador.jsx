@@ -5,8 +5,10 @@ const { useState, useEffect, useRef } = React;
 const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
   const [step, setStep] = useState('form');
   const [score, setScore] = useState(0);
+  const [subScores, setSubScores] = useState({ funcional: 100, banyo: 100, entorno: 100, destreza: 100, seguridad: 100 });
+  const [activeCategoryFilter, setActiveCategoryFilter] = useState('all');
   const [ringOffset, setRingOffset] = useState(283);
-  const [form, setForm] = useState({ nombre: '', email: '', edad: '', tipo: '', ascensor: '', anchoAscensor: '', largoAscensor: '', tipoBanyo: '', barras: '', alzaWC: '', iluminacion: '', puertas: '', movilidad: '', nivelMovilidad: '', destrezaManos: '', caidas: '', percepcionSeguridad: 5, convivencia: '', limitaciones: [], notas: '' });
+  const [form, setForm] = useState({ nombre: '', email: '', edad: '', tipo: '', ascensor: '', anchoAscensor: '', largoAscensor: '', tipoBanyo: '', iluminacion: '', puertas: '', movilidad: '', nivelMovilidad: '', destrezaManos: '', caidas: '', percepcionSeguridad: 5, convivencia: '', limitaciones: [], notas: '', dificultadCama: '', dificultadCocina: '', escaleras: '' });
 
   // New States for AI Image Analysis
   const [file, setFile] = useState(null);
@@ -143,21 +145,63 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     setFile(null); setPreview(null); setBase64(null);
   };
 
-  const calcScore = () => {
-    let pts = 60;
-    if (form.tipoBanyo === 'ducha') pts += 10;
-    if (form.iluminacion === 'buena') pts += 10; else if (form.iluminacion === 'media') pts += 5;
-    if (form.puertas === 'ancha') pts += 10; else if (form.puertas === 'estandar') pts += 5;
+  const calcScores = () => {
+    // 1. Seguridad Funcional
+    let scoreFuncional = 100;
+    if (form.caidas === 'si') scoreFuncional -= 30;
+    if (form.nivelMovilidad === 'asistencia' || form.nivelMovilidad === 'encamado') scoreFuncional -= 30;
+    else if (form.nivelMovilidad === 'supervision') scoreFuncional -= 15;
+    if (form.percepcionSeguridad && parseInt(form.percepcionSeguridad) < 5) scoreFuncional -= 15;
+    if (form.dificultadCama === 'dificultad') scoreFuncional -= 15;
+    else if (form.dificultadCama === 'encamado') scoreFuncional -= 30;
+    scoreFuncional = Math.max(0, Math.min(scoreFuncional, 100));
 
-    if (form.ascensor === 'no') pts -= 10;
-    if (form.anchoAscensor === 'estrecha' || form.puertas === 'estrecha') pts -= 15;
+    // 2. Higiene y Baño
+    let scoreBanyo = 100;
+    if (form.tipoBanyo === 'banera') scoreBanyo -= 50;
+    const banyoRisk = (form.nivelMovilidad !== 'independiente') || 
+                      (form.limitaciones && (form.limitaciones.includes('equilibrio') || form.limitaciones.includes('dolor') || form.limitaciones.includes('debilidad')));
+    if (banyoRisk) scoreBanyo -= 25;
+    scoreBanyo = Math.max(0, Math.min(scoreBanyo, 100));
 
-    if (form.nivelMovilidad === 'asistencia' || form.nivelMovilidad === 'encamado') pts -= 15;
-    if (form.destrezaManos === 'temblor' || form.destrezaManos === 'no-funcional') pts -= 5;
-    if (form.caidas === 'si') pts -= 15;
-    if (form.percepcionSeguridad && parseInt(form.percepcionSeguridad) < 5) pts -= 10;
+    // 3. Accesibilidad del Entorno
+    let scoreEntorno = 100;
+    if (form.ascensor === 'no') scoreEntorno -= 30;
+    if (form.anchoAscensor === 'estrecha') scoreEntorno -= 15;
+    if (form.puertas === 'estrecha') scoreEntorno -= 15;
+    if (form.escaleras === 'desniveles') scoreEntorno -= 15;
+    else if (form.escaleras === 'tramo') scoreEntorno -= 30;
+    scoreEntorno = Math.max(0, Math.min(scoreEntorno, 100));
 
-    return Math.max(0, Math.min(pts, 100));
+    // 4. Destreza y AVD
+    let scoreDestreza = 100;
+    if (form.destrezaManos === 'temblor' || form.destrezaManos === 'no-funcional') scoreDestreza -= 30;
+    else if (form.destrezaManos === 'fina' || form.destrezaManos === 'fuerza') scoreDestreza -= 15;
+    if (form.limitaciones && form.limitaciones.includes('dolor')) scoreDestreza -= 15;
+    if (form.limitaciones && form.limitaciones.includes('vision')) scoreDestreza -= 15;
+    if (form.dificultadCocina === 'fatiga') scoreDestreza -= 15;
+    scoreDestreza = Math.max(0, Math.min(scoreDestreza, 100));
+
+    // 5. Tecnología y Seguridad
+    let scoreSeguridad = 100;
+    if (form.convivencia === 'solo' && form.caidas === 'si') scoreSeguridad -= 30;
+    if (parseInt(form.edad) >= 80) scoreSeguridad -= 20;
+    if (form.iluminacion === 'mala') scoreSeguridad -= 20;
+    else if (form.iluminacion === 'media') scoreSeguridad -= 10;
+    if (form.dificultadCocina === 'seguridad') scoreSeguridad -= 25;
+    scoreSeguridad = Math.max(0, Math.min(scoreSeguridad, 100));
+
+    // Promedio global
+    const scoreGlobal = Math.round((scoreFuncional + scoreBanyo + scoreEntorno + scoreDestreza + scoreSeguridad) / 5);
+
+    return {
+      global: scoreGlobal,
+      funcional: scoreFuncional,
+      banyo: scoreBanyo,
+      entorno: scoreEntorno,
+      destreza: scoreDestreza,
+      seguridad: scoreSeguridad
+    };
   };
 
   const getRecommendations = (sc) => {
@@ -166,7 +210,7 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     // Lógica de Espacios Críticos
     if (form.puertas === 'estrecha' || (form.ascensor === 'si' && form.anchoAscensor === 'estrecha')) {
       all.push({
-        cond: true, icon: '⚠️', prio: 'Alta',
+        cond: true, icon: '⚠️', prio: 'Alta', category: 'entorno',
         text: 'AVISO DE ACCESIBILIDAD PRIORITARIO: Tus pasos de puerta o el acceso al ascensor son reducidos (≤ 60 cm). Antes de comprar cualquier silla o andador, asegúrate de que el ancho total del producto no supere los 55 cm para garantizar un paso seguro y sin colisiones.',
       });
     }
@@ -177,7 +221,7 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
       let link = { text: 'Ver ayudas a la marcha', id: '15' };
       
       if (fear <= 3) {
-        mobilityAdvice = ' Dada la frecuencia de caídas y tu baja seguridad, es fundamental valorar el uso de un andador (rollator) que proporcione una base de apoyo estable.';
+        mobilityAdvice = ' Dada la frecuencia de caídas y tu baja seguridad, es fundamental valorar el uso de un andador (rollator) que preocione una base de apoyo estable.';
         link = { text: 'Ver andadores recomendados', id: '15' };
       } else {
         mobilityAdvice = ' Debido a los tropiezos recientes, el uso de unas muletas ergonómicas con apoyo de antebrazo te proporcionará el apoyo extra necesario sin sobrecargar tus muñecas.';
@@ -186,7 +230,7 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
 
       const prod = PRODUCT_CATALOG[link.id];
       all.push({
-        cond: true, icon: '🚨', prio: 'Alta',
+        cond: true, icon: '🚨', prio: 'Alta', category: 'funcional',
         text: `ALERTA DE SEGURIDAD: Al haber sufrido caídas recientemente, el riesgo de recidiva es muy alto. Es URGENTE eliminar alfombras y mejorar la iluminación.${mobilityAdvice}`,
         linkText: link.text, linkUrl: getAmazonLink(prod.query, prod.url)
       });
@@ -194,28 +238,28 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
 
     if (form.percepcionSeguridad && parseInt(form.percepcionSeguridad) < 5) {
       all.push({
-        cond: true, icon: '😟', prio: 'Media',
+        cond: true, icon: '😟', prio: 'Media', category: 'funcional',
         text: 'ATENCIÓN MULTIDISCIPLINAR: Una baja percepción de seguridad (miedo a caer) provoca una reducción de la actividad que debilita los músculos y aumenta el riesgo real de caída. Te recomendamos consultar con un equipo de profesionales (Terapeuta Ocupacional, Fisioterapeuta y Psicólogo) para realizar un entrenamiento integral de equilibrio, fuerza y gestión del miedo.',
       });
     }
 
     if (form.convivencia === 'solo' && form.caidas === 'si') {
       all.push({
-        cond: true, icon: '🏠', prio: 'Alta',
+        cond: true, icon: '🏠', prio: 'Alta', category: 'funcional',
         text: 'SEGURIDAD DOMICILIARIA: Al vivir solo y haber tenido caídas, es IMPRESCINDIBLE contar con un sistema de teleasistencia o un dispositivo de detección de caídas. Esto garantiza que, en caso de incidente, el aviso a los servicios de emergencia o familiares sea automático e inmediato.',
       });
     }
 
     if (form.limitaciones && form.limitaciones.includes('fatiga')) {
       all.push({
-        cond: true, icon: '🫁', prio: 'Media',
+        cond: true, icon: '🔋', prio: 'Media', category: 'funcional',
         text: 'GESTIÓN DE LA ENERGÍA: Al identificar la fatiga como limitación principal, es vital aplicar técnicas de simplificación de tareas. Realiza las actividades sentado (higiene, cocina) y planifica periodos de descanso breves pero frecuentes para evitar el agotamiento que aumenta el riesgo de caídas.',
       });
     }
 
     if (form.ascensor === 'no') {
       all.push({
-        cond: true, icon: '🏢', prio: 'Alta',
+        cond: true, icon: '🏢', prio: 'Alta', category: 'entorno',
         text: 'Al no disponer de ascensor, la accesibilidad exterior es crítica. Te recomendamos valorar con la comunidad de vecinos o propietarios la instalación de soluciones como un ascensor, salvaescaleras o rampas normativas para garantizar una entrada y salida del hogar segura y sin barreras.',
       });
     }
@@ -224,23 +268,47 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     if (form.tipoBanyo === 'banera') {
       const prod = PRODUCT_CATALOG['1'];
       all.push({
-        cond: true, icon: '🚿', prio: 'Alta',
+        cond: true, icon: '🚿', prio: 'Alta', category: 'banyo',
         text: 'Al disponer de bañera, el riesgo de caída al intentar salvar el borde es elevado. Te recomendamos el uso de una Tabla de Bañera. Este dispositivo permite realizar la entrada y salida sentado, eliminando la necesidad de mantener el equilibrio a una sola pierna mientras se supera el obstáculo.',
         linkText: 'Ver tabla de bañera recomendada', linkUrl: getAmazonLink(prod.query, prod.url)
       });
     } else if (form.tipoBanyo === 'ducha') {
       const prod = PRODUCT_CATALOG['2'];
       all.push({
-        cond: true, icon: '🚿', prio: 'Media',
+        cond: true, icon: '🚿', prio: 'Media', category: 'banyo',
         text: 'Contar con ducha es un gran paso, pero para una higiene segura y sin fatiga, es fundamental realizarla en sedestación. Un asiento o banqueta de ducha te proporcionará la estabilidad necesaria y evitará resbalones por cansancio durante el aseo.',
         linkText: 'Ver asiento de ducha', linkUrl: getAmazonLink(prod.query, prod.url)
+      });
+    }
+
+    const banyoNeed = (form.nivelMovilidad !== 'independiente') || 
+                      (form.limitaciones && (form.limitaciones.includes('equilibrio') || form.limitaciones.includes('dolor') || form.limitaciones.includes('debilidad'))) ||
+                      (parseInt(form.edad) >= 65);
+
+    if (banyoNeed) {
+      const prod = PRODUCT_CATALOG['3']; // Barras de apoyo
+      all.push({
+        cond: true, icon: '🧱', prio: 'Alta', category: 'banyo',
+        text: 'BARRAS DE SEGURIDAD: Para prevenir resbalones y caídas en el cuarto de baño, es altamente recomendable contar con asideros o barras de apoyo firmes cerca de la ducha/bañera y del inodoro. Instalar barras de acero inoxidable o con ventosas de alta seguridad te aportará un punto de sujeción fiable.',
+        linkText: 'Ver barras de apoyo recomendadas', linkUrl: getAmazonLink(prod.query, prod.url)
+      });
+    }
+
+    const alzaNeed = (form.nivelMovilidad === 'asistencia' || form.nivelMovilidad === 'supervision' || parseInt(form.edad) >= 75 || (form.limitaciones && (form.limitaciones.includes('dolor') || form.limitaciones.includes('debilidad'))));
+    
+    if (alzaNeed) {
+      const prod = PRODUCT_CATALOG['4']; // Alza de WC
+      all.push({
+        cond: true, icon: '🚽', prio: 'Media', category: 'banyo',
+        text: 'ELEVACIÓN DE INODORO: Sentarse y levantarse de un inodoro estándar exige un gran esfuerzo y sobrecarga las rodillas cuando existe debilidad o dolor articular. Instalar un alza de WC con reposabrazos te permitirá realizar las transferencias con menor esfuerzo y mayor seguridad.',
+        linkText: 'Ver alza de inodoro recomendada', linkUrl: getAmazonLink(prod.query, prod.url)
       });
     }
 
     // Otras recomendaciones
     if (form.iluminacion !== 'buena' && form.iluminacion !== '') {
       all.push({
-        cond: true, icon: '💡', prio: 'Media',
+        cond: true, icon: '💡', prio: 'Media', category: 'entorno',
         text: 'Consejo Técnico: Una iluminación deficiente es precursora de tropiezos. Instala luces automáticas con sensor de movimiento cerca del suelo en los trayectos nocturnos para asegurar una visibilidad clara sin necesidad de buscar interruptores.'
       });
     }
@@ -248,7 +316,7 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     if (form.movilidad === 'baston' || form.movilidad === 'andador') {
       const prod = PRODUCT_CATALOG['16'];
       all.push({
-        cond: true, icon: '🦯', prio: 'Alta',
+        cond: true, icon: '🦯', prio: 'Alta', category: 'funcional',
         text: 'Seguridad en la Marcha: Es vital retirar todas las alfombras y obstáculos. Verifica que las conteras de tu ayuda técnica no estén gastadas; sustituirlas por modelos antideslizantes de base ancha mejorará drásticamente tu estabilidad.',
         linkText: 'Ver conteras antideslizantes', linkUrl: getAmazonLink(prod.query, prod.url)
       });
@@ -257,7 +325,7 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     if (form.destrezaManos === 'fina' || form.destrezaManos === 'fuerza' || form.destrezaManos === 'temblor') {
       const prod = PRODUCT_CATALOG['9'];
       all.push({
-        cond: true, icon: '🍴', prio: 'Media',
+        cond: true, icon: '🍴', prio: 'Media', category: 'destreza',
         text: 'AUTONOMÍA EN ALIMENTACIÓN: Al detectar dificultades en la destreza manual, el uso de cubiertos con mango engrosado y platos con reborde facilitará tu independencia durante las comidas, reduciendo el esfuerzo y la frustración.',
         linkText: 'Ver cubiertos adaptados', linkUrl: getAmazonLink(prod.query, prod.url)
       });
@@ -266,7 +334,7 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     if (form.destrezaManos === 'fina' || form.destrezaManos === 'fuerza' || form.destrezaManos === 'temblor') {
       const prod = PRODUCT_CATALOG['35'];
       all.push({
-        cond: true, icon: '👕', prio: 'Media',
+        cond: true, icon: '👕', prio: 'Media', category: 'destreza',
         text: 'VESTIDO AUTÓNOMO: Para facilitar la tarea de abrochar botones pequeños con menor esfuerzo manual o temblores, un abotonador con mango engrosado te permitirá mantener tu independencia en el vestido.',
         linkText: 'Ver abotonador recomendado', linkUrl: getAmazonLink(prod.query, prod.url)
       });
@@ -275,7 +343,7 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     if (form.destrezaManos === 'fina' || form.destrezaManos === 'temblor') {
       const prod = PRODUCT_CATALOG['32'];
       all.push({
-        cond: true, icon: '🪡', prio: 'Media',
+        cond: true, icon: '🎨', prio: 'Media', category: 'destreza',
         text: 'ACTIVIDADES DE OCIO Y COSTURA: Si disfrutas cosiendo pero te resulta difícil enhebrar las agujas por falta de pulso o precisión visual, un enhebrador automático facilitará la tarea al instante.',
         linkText: 'Ver enhebrador de agujas', linkUrl: getAmazonLink(prod.query, prod.url)
       });
@@ -284,7 +352,7 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     if (form.destrezaManos && form.destrezaManos !== 'funcional') {
       const prodCartas = PRODUCT_CATALOG['31'];
       all.push({
-        cond: true, icon: '🃏', prio: 'Media',
+        cond: true, icon: '🃏', prio: 'Media', category: 'destreza',
         text: 'ACTIVIDAD SOCIAL Y OCIO: Si disfrutas de los juegos de mesa pero tienes dificultades para sostener las cartas debido a dolor o rigidez en las manos, un soporte sujeta-cartas curvado de madera te permitirá jugar cómodamente con manos libres.',
         linkText: 'Ver sujeta-cartas de madera', linkUrl: getAmazonLink(prodCartas.query, prodCartas.url)
       });
@@ -293,7 +361,7 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     if (form.limitaciones && form.limitaciones.includes('vision')) {
       const prod = PRODUCT_CATALOG['30'];
       all.push({
-        cond: true, icon: '🔍', prio: 'Media',
+        cond: true, icon: '🔍', prio: 'Media', category: 'destreza',
         text: 'APOYO VISUAL: Si presentas limitaciones en la visión, te recomendamos el uso de una lupa de lectura con luz LED integrada para facilitar la lectura de libros, cartas o documentos sin forzar la vista.',
         linkText: 'Ver lupa de lectura recomendada', linkUrl: getAmazonLink(prod.query, prod.url)
       });
@@ -302,7 +370,7 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     if ((form.limitaciones && (form.limitaciones.includes('dolor') || form.limitaciones.includes('equilibrio'))) || parseInt(form.edad) >= 70) {
       const prodCalcetin = PRODUCT_CATALOG['34'];
       all.push({
-        cond: true, icon: '🧦', prio: 'Media',
+        cond: true, icon: '🧦', prio: 'Media', category: 'destreza',
         text: 'FACILITADORES DEL VESTIDO: Para evitar agacharte y flexionar excesivamente la cadera o perder el equilibrio al calzarte, te recomendamos utilizar un calzador de mango largo y un pone-calcetines.',
         linkText: 'Ver pone-calcetines recomendado', linkUrl: getAmazonLink(prodCalcetin.query, prodCalcetin.url)
       });
@@ -311,7 +379,7 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     if (form.convivencia === 'solo' || parseInt(form.edad) >= 75) {
       const prodMovil = PRODUCT_CATALOG['26'];
       all.push({
-        cond: true, icon: '📱', prio: 'Media',
+        cond: true, icon: '📱', prio: 'Media', category: 'seguridad',
         text: 'COMUNICACIÓN DE EMERGENCIA: Te aconsejamos disponer de un teléfono móvil adaptado para personas mayores con números grandes, volumen amplificado y un botón SOS de emergencia en la parte trasera para avisar rápidamente a familiares.',
         linkText: 'Ver teléfono móvil adaptado', linkUrl: getAmazonLink(prodMovil.query, prodMovil.url)
       });
@@ -320,7 +388,7 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     if (parseInt(form.edad) >= 80) {
       const prodGps = PRODUCT_CATALOG['23'];
       all.push({
-        cond: true, icon: '📍', prio: 'Media',
+        cond: true, icon: '📍', prio: 'Media', category: 'seguridad',
         text: 'LOCALIZACIÓN Y SEGURIDAD: Para mayor tranquilidad fuera del hogar, un localizador GPS discreto con botón de pánico SOS permite a los familiares conocer la ubicación en tiempo real en caso de desorientación.',
         linkText: 'Ver localizador GPS recomendado', linkUrl: getAmazonLink(prodGps.query, prodGps.url)
       });
@@ -329,7 +397,7 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     if (form.nivelMovilidad === 'encamado') {
       const prodColchon = PRODUCT_CATALOG['28'];
       all.push({
-        cond: true, icon: '🛏️', prio: 'Alta',
+        cond: true, icon: '🛏️', prio: 'Alta', category: 'funcional',
         text: 'PREVENCIÓN DE ESCARAS EN CAMA: Al encontrarse en situación de encamado, es fundamental utilizar superficies de apoyo dinámicas. Un colchón de aire alternante y unas taloneras acolchadas son indispensables para prevenir úlceras por presión.',
         linkText: 'Ver colchón antiescaras alternante', linkUrl: getAmazonLink(prodColchon.query, prodColchon.url)
       });
@@ -338,7 +406,7 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     if (form.nivelMovilidad === 'asistencia') {
       const prodCojin = PRODUCT_CATALOG['27'];
       all.push({
-        cond: true, icon: '🪑', prio: 'Alta',
+        cond: true, icon: '🪑', prio: 'Alta', category: 'funcional',
         text: 'MOVILIZACIÓN Y COMODIDAD: Para prevenir úlceras al pasar tiempo sentado y facilitar transferencias seguras, recomendamos el uso de un cojín antiescaras viscoelástico y un cinturón de transferencia para que tu cuidador pueda ayudarte sin lesionarse.',
         linkText: 'Ver cojín antiescaras recomendado', linkUrl: getAmazonLink(prodCojin.query, prodCojin.url)
       });
@@ -347,7 +415,7 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     if (form.nivelMovilidad === 'asistencia' || form.nivelMovilidad === 'encamado') {
       const prodDisco = PRODUCT_CATALOG['19'];
       all.push({
-        cond: true, icon: '🔄', prio: 'Media',
+        cond: true, icon: '🔄', prio: 'Media', category: 'funcional',
         text: 'TRANSFERENCIAS SEGURAS: Si necesitas ayuda para girar y ponerte en pie al pasar de la cama a la silla, un disco giratorio de transferencia minimiza el esfuerzo de torsión del cuidador y protege tus articulaciones.',
         linkText: 'Ver disco de transferencia', linkUrl: getAmazonLink(prodDisco.query, prodDisco.url)
       });
@@ -356,18 +424,54 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     if ((form.limitaciones && form.limitaciones.includes('fatiga')) || form.nivelMovilidad === 'supervision' || form.nivelMovilidad === 'asistencia') {
       const prodAlexa = PRODUCT_CATALOG['24'];
       all.push({
-        cond: true, icon: '🗣️', prio: 'Media',
+        cond: true, icon: '🗣️', prio: 'Media', category: 'seguridad',
         text: 'DOMÓTICA Y SIMPLIFICACIÓN: Para encender luces o electrodomésticos sin necesidad de desplazarte ni realizar esfuerzos cuando tienes fatiga, considera un controlador por voz inteligente (Alexa) junto con enchufes inteligentes.',
         linkText: 'Ver controlador inteligente Alexa', linkUrl: getAmazonLink(prodAlexa.query, prodAlexa.url)
       });
     }
 
-    if (parseInt(form.edad) >= 75) {
+    if (parseInt(form.edad) >= 75 || form.dificultadCocina === 'seguridad') {
       const prodDetector = PRODUCT_CATALOG['22'];
       all.push({
-        cond: true, icon: '🔥', prio: 'Media',
+        cond: true, icon: '🔥', prio: 'Media', category: 'seguridad',
         text: 'SEGURIDAD EN LA COCINA: Para prevenir riesgos ante descuidos u olvidos cotidianos con el fuego o los electrodomésticos, la instalación de un detector de humo y gas automático en la cocina aporta una tranquilidad crucial.',
         linkText: 'Ver detector de humo recomendado', linkUrl: getAmazonLink(prodDetector.query, prodDetector.url)
+      });
+    }
+
+    if (form.dificultadCama === 'dificultad') {
+      const prodBarandilla = PRODUCT_CATALOG['6'];
+      all.push({
+        cond: true, icon: '🛏️', prio: 'Alta', category: 'funcional',
+        text: 'DORMITORIO Y TRANSFERENCIAS: Si te cuesta levantarte o acostarte, una barandilla abatible para la cama te servirá de apoyo firme para impulsarte y evitará posibles caídas durante la noche.',
+        linkText: 'Ver barandilla de cama recomendada', linkUrl: getAmazonLink(prodBarandilla.query, prodBarandilla.url)
+      });
+    } else if (form.dificultadCama === 'encamado' && form.nivelMovilidad !== 'encamado') {
+      // Si está en cama pero no tenía nivelMovilidad encamado para evitar duplicar
+      const prodColchon = PRODUCT_CATALOG['28'];
+      all.push({
+        cond: true, icon: '🛏️', prio: 'Alta', category: 'funcional',
+        text: 'CUIDADO Y PREVENCIÓN EN CAMA: Al pasar la mayor parte del tiempo acostado, un colchón de aire alternante y unas taloneras antiescaras son indispensables para prevenir la aparición de dolorosas úlceras por presión.',
+        linkText: 'Ver colchón antiescaras recomendado', linkUrl: getAmazonLink(prodColchon.query, prodColchon.url)
+      });
+    }
+
+    if (form.dificultadCocina === 'fatiga') {
+      all.push({
+        cond: true, icon: '🍳', prio: 'Media', category: 'destreza',
+        text: 'APOYO ERGONÓMICO EN COCINA: Sentir cansancio o dolor al estar de pie cocinando o fregando aumenta el riesgo de caídas. Te aconsejamos incorporar un taburete o silla ergonómica de apoyo para realizar estas tareas sentado.',
+      });
+    }
+
+    if (form.escaleras === 'desniveles') {
+      all.push({
+        cond: true, icon: '♿', prio: 'Media', category: 'entorno',
+        text: 'ELIMINACIÓN DE DESNIVELES: La existencia de pequeños escalones aislados en la entrada o pasillos representa un riesgo importante de tropiezos. Te aconsejamos colocar rampas portátiles de umbral (de goma o aluminio) para suavizar el paso.',
+      });
+    } else if (form.escaleras === 'tramo') {
+      all.push({
+        cond: true, icon: '🏢', prio: 'Alta', category: 'entorno',
+        text: 'BARRERAS ARQUITECTÓNICAS (ESCALERAS): Subir y bajar un tramo completo de escaleras es un obstáculo crítico si existe inestabilidad. Se recomienda la instalación de un salvaescaleras mecánico o, como mínimo, añadir pasamanos dobles a ambos lados.',
       });
     }
 
@@ -384,11 +488,16 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
   };
 
   const isQuestionnaireComplete = () => {
-    const requiredFields = ['nombre', 'email', 'edad', 'tipo', 'ascensor', 'tipoBanyo', 'iluminacion', 'puertas', 'movilidad', 'nivelMovilidad', 'destrezaManos', 'caidas', 'percepcionSeguridad', 'convivencia'];
+    const requiredFields = ['nombre', 'email', 'edad', 'tipo', 'ascensor', 'tipoBanyo', 'iluminacion', 'puertas', 'movilidad', 'nivelMovilidad', 'destrezaManos', 'caidas', 'percepcionSeguridad', 'convivencia', 'dificultadCama', 'dificultadCocina', 'escaleras'];
     const basicComplete = requiredFields.every(field => form[field] !== '');
     const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email || '');
     const limitationsComplete = form.limitaciones && form.limitaciones.length > 0;
-    return basicComplete && emailValid && limitationsComplete;
+    
+    // Validar edad realista para el informe
+    const ageNum = parseInt(form.edad) || 0;
+    const ageValid = ageNum >= 1 && ageNum <= 115;
+    
+    return basicComplete && emailValid && limitationsComplete && ageValid;
   };
 
   const prioBadge = { Alta: 'bg-red-100 text-red-700', Media: 'bg-amber-100 text-amber-700', Info: 'bg-brand-100 text-brand-700' };
@@ -406,7 +515,9 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
     setAiError('');
     setAiResponse('');
 
-    const sc = calcScore();
+    const scores = calcScores();
+    const sc = scores.global;
+    setSubScores(scores);
 
     // Guardar automáticamente todas las respuestas y el email en Firebase Firestore
     if (window.firebaseDB && window.firebaseAddDoc && window.firebaseCollection) {
@@ -497,7 +608,9 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
 
   const reset = () => {
     setStep('form'); setScore(0); setRingOffset(283);
-    const emptyForm = { nombre: '', email: '', edad: '', tipo: '', ascensor: '', anchoAscensor: '', largoAscensor: '', tipoBanyo: '', iluminacion: '', puertas: '', movilidad: '', nivelMovilidad: '', destrezaManos: '', caidas: '', percepcionSeguridad: 5, convivencia: '', limitaciones: [], notas: '' };
+    setSubScores({ funcional: 100, banyo: 100, entorno: 100 });
+    setActiveCategoryFilter('all');
+    const emptyForm = { nombre: '', email: '', edad: '', tipo: '', ascensor: '', anchoAscensor: '', largoAscensor: '', tipoBanyo: '', barras: '', alzaWC: '', iluminacion: '', puertas: '', movilidad: '', nivelMovilidad: '', destrezaManos: '', caidas: '', percepcionSeguridad: 5, convivencia: '', limitaciones: [], notas: '' };
     setForm(emptyForm);
     localStorage.removeItem('iadapta_draft');
     setFile(null); setPreview(null); setBase64(null); setAiResponse(''); setAiError('');
@@ -562,12 +675,16 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
 
                 {!file ? (
                   <div
-                    className={`border-3 border-dashed rounded-2xl p-10 text-center transition-all ${isDragging ? 'border-brand-500 bg-brand-50' : 'border-gray-300 hover:border-brand-400 bg-gray-50'}`}
+                    className={`border-3 border-dashed rounded-2xl p-10 text-center transition-all cursor-pointer ${
+                      isDragging 
+                      ? 'border-brand-500 bg-brand-50/80 scale-[1.01] shadow-inner' 
+                      : 'border-brand-200 hover:border-brand-400 bg-gray-50/60 hover:bg-gray-50'
+                    }`}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
                   >
-                    <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <svg className="w-12 h-12 text-brand-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     <p className="text-lg font-semibold text-gray-700 mb-2">Arrastra aquí una foto de tu estancia</p>
                     <p className="text-sm text-gray-500 mb-4">o pulsa para seleccionarla desde tu dispositivo</p>
                     <div className="flex flex-wrap justify-center gap-4">
@@ -584,12 +701,55 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
                     </div>
                   </div>
                 ) : (
-                  <div className="relative border border-brand-200 rounded-2xl p-4 bg-brand-50 flex flex-col items-center">
+                  <div className="relative border border-brand-200 rounded-2xl p-6 bg-brand-50 flex flex-col items-center shadow-inner">
                     <img src={preview} alt="Vista previa" className="max-h-64 rounded-xl shadow-md mb-4 object-contain" />
-                    <p className="font-semibold text-brand-800">{file.name}</p>
-                    <button type="button" onClick={removeFile} className="mt-2 text-red-600 hover:text-red-800 text-sm font-bold underline">Quitar imagen</button>
+                    <p className="font-bold text-brand-900 text-base">{file.name}</p>
+                    <p className="text-xs text-gray-500 mb-3">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                    <button type="button" onClick={removeFile} className="mt-2 flex items-center gap-1.5 px-4 py-2 border border-red-200 bg-white text-red-650 hover:bg-red-50 rounded-xl text-sm font-bold shadow-sm transition-all">
+                      ❌ Cambiar o quitar imagen
+                    </button>
                   </div>
                 )}
+
+                {/* PHOTO GUIDE (Good vs Bad) */}
+                <div className="mt-5 bg-sky-50/50 border border-sky-100 rounded-2xl p-5 shadow-sm">
+                  <details className="group" open>
+                    <summary className="font-bold text-brand-850 cursor-pointer flex items-center justify-between list-none">
+                      <span className="flex items-center gap-2 text-sm text-sky-850 font-extrabold hover:text-sky-900 transition-colors">
+                        💡 ¿Cómo hacer la foto de la estancia para analizarla correctamente?
+                      </span>
+                      <span className="text-xs text-sky-600 font-bold group-open:hidden">Mostrar consejos</span>
+                      <span className="text-xs text-sky-600 font-bold hidden group-open:inline">Ocultar consejos</span>
+                    </summary>
+                    <div className="mt-4 grid sm:grid-cols-2 gap-4 text-xs leading-relaxed border-t border-sky-100/50 pt-4">
+                      {/* Foto Recomendada */}
+                      <div className="bg-emerald-50/50 border border-emerald-100 rounded-xl p-4">
+                        <h4 className="font-bold text-emerald-855 mb-2 flex items-center gap-1.5 text-sm">
+                          ✅ Foto Recomendada
+                        </h4>
+                        <img src="foto_correcta_ejemplo.png" alt="Ejemplo de foto correcta" className="w-full h-32 object-cover rounded-lg mb-3 border border-emerald-250" />
+                        <ul className="space-y-2 text-emerald-800 font-medium">
+                          <li>• <strong>Ángulo Amplio:</strong> Toma la foto desde la entrada para captar el suelo, espacios de giro y accesos completos.</li>
+                          <li>• <strong>Buena Iluminación:</strong> Enciende la luz artificial o abre persianas; evita sombras densas u oscuridad.</li>
+                          <li>• <strong>Distribución General:</strong> Debe mostrarse cómo se relacionan los muebles o sanitarios.</li>
+                        </ul>
+                      </div>
+
+                      {/* Foto Incorrecta */}
+                      <div className="bg-rose-50/50 border border-rose-100 rounded-xl p-4">
+                        <h4 className="font-bold text-rose-855 mb-2 flex items-center gap-1.5 text-sm">
+                          ❌ Evita estas Fotos
+                        </h4>
+                        <img src="foto_incorrecta_ejemplo.png" alt="Ejemplo de foto incorrecta" className="w-full h-32 object-cover rounded-lg mb-3 border border-rose-250" />
+                        <ul className="space-y-2 text-rose-850 font-medium">
+                          <li>• <strong>Planos Cerrados:</strong> Evita enfocar únicamente el grifo, la manivela o un pequeño azulejo.</li>
+                          <li>• <strong>Falta de nitidez o contraluces:</strong> Fotos oscuras o borrosas impiden evaluar desniveles o riesgos.</li>
+                          <li>• <strong>Imágenes no reales:</strong> No subas fotos de folletos o descargas de internet de otros hogares.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </details>
+                </div>
               </div>
 
               <hr className="my-10 border-brand-100" />
@@ -640,9 +800,14 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
                     value={form.edad} 
                     onChange={handleChange} 
                     placeholder="Ej: 75"
-                    className={fieldClass} 
+                    min="1"
+                    max="115"
+                    className={`${fieldClass} ${form.edad && (parseInt(form.edad) < 1 || parseInt(form.edad) > 115) ? 'border-red-400 focus:border-red-500' : ''}`}
                     required 
                   />
+                  {form.edad && (parseInt(form.edad) < 1 || parseInt(form.edad) > 115) && (
+                    <p className="text-red-500 text-[11px] font-bold mt-1 leading-tight">Introduce una edad válida (1 a 115 años).</p>
+                  )}
                 </div>
 
                 <div>
@@ -695,6 +860,8 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
                   </select>
                 </div>
 
+
+
                 <div>
                   <label className={labelClass}>Ancho de puertas de la casa</label>
                   <select name="puertas" value={form.puertas} onChange={handleChange} className={fieldClass}>
@@ -714,6 +881,37 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
                     <option value="mala">Insuficiente / deficiente</option>
                   </select>
                 </div>
+                <div>
+                  <label className={labelClass}>Dificultad en cama / dormitorio</label>
+                  <select name="dificultadCama" value={form.dificultadCama} onChange={handleChange} className={fieldClass} required>
+                    <option value="">— Selecciona —</option>
+                    <option value="no">No, me levanto e ingreso a la cama con facilidad</option>
+                    <option value="dificultad">Sí, me cuesta incorporarme o ponerme de pie</option>
+                    <option value="encamado">Sí, paso la mayor parte del tiempo en cama (encamado)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className={labelClass}>Dificultad en cocina / alimentación</label>
+                  <select name="dificultadCocina" value={form.dificultadCocina} onChange={handleChange} className={fieldClass} required>
+                    <option value="">— Selecciona —</option>
+                    <option value="no">Cocino y limpio de forma autónoma</option>
+                    <option value="fatiga">Sí, me canso o siento dolor al estar de pie cocinando</option>
+                    <option value="seguridad">Sí, tengo problemas de seguridad (olvidos de fuegos, caídas)</option>
+                    <option value="no-cocina">No cocino, me preparan la comida</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className={labelClass}>Escaleras en la vivienda</label>
+                  <select name="escaleras" value={form.escaleras} onChange={handleChange} className={fieldClass} required>
+                    <option value="">— Selecciona —</option>
+                    <option value="no">No, todo está en un mismo plano y sin escaleras</option>
+                    <option value="desniveles">Sí, tengo pequeños escalones o desniveles aislados</option>
+                    <option value="tramo">Sí, tengo un tramo de escaleras completo</option>
+                  </select>
+                </div>
+
                 <div>
                   <label className={labelClass}>Ayuda técnica que usas</label>
                   <select name="movilidad" value={form.movilidad} onChange={handleChange} className={fieldClass}>
@@ -941,24 +1139,181 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
               </div>
             )}
 
-            <div className="bg-white rounded-3xl border border-brand-100 shadow-xl p-8 md:p-12 mb-8 text-center">
-              <h3 className="font-display text-2xl font-bold text-brand-900 mb-8">Puntuación del Cuestionario</h3>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-10">
-                <div className="relative w-44 h-44">
-                  <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                    <circle cx="50" cy="50" r="45" fill="none" stroke="#dbeafe" strokeWidth="8" />
-                    <circle cx="50" cy="50" r="45" fill="none" stroke={scoreColor} strokeWidth="8" strokeLinecap="round" strokeDasharray="283" strokeDashoffset={ringOffset} style={{ transition: 'stroke-dashoffset 1.6s ease' }} />
-                  </svg>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-4xl font-bold" style={{ color: scoreColor }}>{score}</span>
-                    <span className="text-sm font-semibold text-gray-500">/ 100</span>
+            <div className="bg-white rounded-3xl border border-brand-100 shadow-xl p-8 md:p-12 mb-8">
+              <h3 className="font-display text-2xl font-bold text-brand-900 mb-8 text-center sm:text-left">Puntuación del Cuestionario</h3>
+              <div className="grid md:grid-cols-12 gap-10 items-center">
+                {/* Dial de Puntuación Global */}
+                <div className="md:col-span-5 flex flex-col items-center border-b md:border-b-0 md:border-r border-gray-100 pb-8 md:pb-0 md:pr-8 text-center">
+                  <div className="relative w-44 h-44 mb-4">
+                    <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                      <circle cx="50" cy="50" r="45" fill="none" stroke="#dbeafe" strokeWidth="8" />
+                      <circle cx="50" cy="50" r="45" fill="none" stroke={scoreColor} strokeWidth="8" strokeLinecap="round" strokeDasharray="283" strokeDashoffset={ringOffset} style={{ transition: 'stroke-dashoffset 1.6s ease' }} />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-4xl font-bold" style={{ color: scoreColor }}>{score}</span>
+                      <span className="text-sm font-semibold text-gray-500">/ 100</span>
+                    </div>
                   </div>
-                </div>
-                <div className="text-left">
                   <p className="text-2xl font-bold mb-2" style={{ color: scoreColor }}>{scoreLabel}</p>
-                  <p className="text-lg text-gray-600 max-w-sm leading-relaxed">
-                    {score >= 75 ? 'Tu hogar tiene una buena base de accesibilidad. Revisa las recomendaciones para optimizarlo.' : score >= 45 ? 'Hay áreas de mejora importantes. Abordar las prioridades altas reducirá el riesgo de caídas significativamente.' : 'El hogar presenta barreras relevantes. Te recomendamos una evaluación presencial con terapeuta ocupacional.'}
+                  <p className="text-sm text-gray-500 max-w-xs leading-relaxed">
+                    {score >= 75 ? 'Buena base de accesibilidad general.' : score >= 45 ? 'Existen áreas de mejora importantes.' : 'Presenta barreras de accesibilidad relevantes.'}
                   </p>
+                </div>
+
+                {/* Sub-Puntuaciones Desglosadas */}
+                <div className="md:col-span-7 space-y-4">
+                  <h4 className="text-xs font-black text-brand-400 uppercase tracking-widest mb-2">Desglose por Áreas de Autonomía</h4>
+                  
+                  {/* Seguridad Funcional */}
+                  <div 
+                    onClick={() => setActiveCategoryFilter(activeCategoryFilter === 'funcional' ? 'all' : 'funcional')}
+                    className={`p-3.5 rounded-2xl border transition-all cursor-pointer ${activeCategoryFilter === 'funcional' ? 'border-brand-500 bg-brand-50/50 shadow-sm' : 'border-gray-100 hover:border-brand-200 hover:bg-gray-50/30'}`}
+                  >
+                    <div className="flex justify-between items-center mb-1.5">
+                      <span className="text-sm font-bold text-brand-900 flex items-center gap-1.5">
+                        🩺 Seguridad Funcional
+                      </span>
+                      <span className="text-sm font-extrabold text-brand-800">{subScores.funcional}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden mb-1.5">
+                      <div 
+                        className="h-full rounded-full transition-all duration-1000" 
+                        style={{ 
+                          width: `${subScores.funcional}%`, 
+                          backgroundColor: subScores.funcional >= 75 ? '#22c55e' : subScores.funcional >= 45 ? '#f59e0b' : '#ef4444' 
+                        }}
+                      />
+                    </div>
+                    <div className="flex justify-between items-center text-[10px] font-bold">
+                      <span className="text-brand-500 underline">
+                        {activeCategoryFilter === 'funcional' ? '🔴 Quitar filtro' : '🔍 Filtrar recomendaciones'}
+                      </span>
+                      <a href="guia-ejercicios.html" target="_blank" rel="noopener noreferrer" className="text-indigo-650 hover:text-indigo-800 transition-colors flex items-center gap-1 no-print" onClick={e => e.stopPropagation()}>
+                        📖 Ver Guía Física
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Higiene y Baño */}
+                  <div 
+                    onClick={() => setActiveCategoryFilter(activeCategoryFilter === 'banyo' ? 'all' : 'banyo')}
+                    className={`p-3.5 rounded-2xl border transition-all cursor-pointer ${activeCategoryFilter === 'banyo' ? 'border-brand-500 bg-brand-50/50 shadow-sm' : 'border-gray-100 hover:border-brand-200 hover:bg-gray-50/30'}`}
+                  >
+                    <div className="flex justify-between items-center mb-1.5">
+                      <span className="text-sm font-bold text-brand-900 flex items-center gap-1.5">
+                        🚿 Higiene y Baño
+                      </span>
+                      <span className="text-sm font-extrabold text-brand-800">{subScores.banyo}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden mb-1.5">
+                      <div 
+                        className="h-full rounded-full transition-all duration-1000" 
+                        style={{ 
+                          width: `${subScores.banyo}%`, 
+                          backgroundColor: subScores.banyo >= 75 ? '#22c55e' : subScores.banyo >= 45 ? '#f59e0b' : '#ef4444' 
+                        }}
+                      />
+                    </div>
+                    <div className="flex justify-between items-center text-[10px] font-bold">
+                      <span className="text-brand-500 underline">
+                        {activeCategoryFilter === 'banyo' ? '🔴 Quitar filtro' : '🔍 Filtrar recomendaciones'}
+                      </span>
+                      <a href="guia-bano.html" target="_blank" rel="noopener noreferrer" className="text-indigo-650 hover:text-indigo-800 transition-colors flex items-center gap-1 no-print" onClick={e => e.stopPropagation()}>
+                        📖 Ver Guía de Baño
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Accesibilidad del Entorno */}
+                  <div 
+                    onClick={() => setActiveCategoryFilter(activeCategoryFilter === 'entorno' ? 'all' : 'entorno')}
+                    className={`p-3.5 rounded-2xl border transition-all cursor-pointer ${activeCategoryFilter === 'entorno' ? 'border-brand-500 bg-brand-50/50 shadow-sm' : 'border-gray-100 hover:border-brand-200 hover:bg-gray-50/30'}`}
+                  >
+                    <div className="flex justify-between items-center mb-1.5">
+                      <span className="text-sm font-bold text-brand-900 flex items-center gap-1.5">
+                        🚪 Accesibilidad del Entorno
+                      </span>
+                      <span className="text-sm font-extrabold text-brand-800">{subScores.entorno}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden mb-1.5">
+                      <div 
+                        className="h-full rounded-full transition-all duration-1000" 
+                        style={{ 
+                          width: `${subScores.entorno}%`, 
+                          backgroundColor: subScores.entorno >= 75 ? '#22c55e' : subScores.entorno >= 45 ? '#f59e0b' : '#ef4444' 
+                        }}
+                      />
+                    </div>
+                    <div className="flex justify-between items-center text-[10px] font-bold">
+                      <span className="text-brand-500 underline">
+                        {activeCategoryFilter === 'entorno' ? '🔴 Quitar filtro' : '🔍 Filtrar recomendaciones'}
+                      </span>
+                      <a href="guia-movilidad.html" target="_blank" rel="noopener noreferrer" className="text-indigo-650 hover:text-indigo-800 transition-colors flex items-center gap-1 no-print" onClick={e => e.stopPropagation()}>
+                        📖 Ver Guía de Movilidad
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Destreza y AVD */}
+                  <div 
+                    onClick={() => setActiveCategoryFilter(activeCategoryFilter === 'destreza' ? 'all' : 'destreza')}
+                    className={`p-3.5 rounded-2xl border transition-all cursor-pointer ${activeCategoryFilter === 'destreza' ? 'border-brand-500 bg-brand-50/50 shadow-sm' : 'border-gray-100 hover:border-brand-200 hover:bg-gray-50/30'}`}
+                  >
+                    <div className="flex justify-between items-center mb-1.5">
+                      <span className="text-sm font-bold text-brand-900 flex items-center gap-1.5">
+                        🛠️ Destreza y AVD
+                      </span>
+                      <span className="text-sm font-extrabold text-brand-800">{subScores.destreza}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden mb-1.5">
+                      <div 
+                        className="h-full rounded-full transition-all duration-1000" 
+                        style={{ 
+                          width: `${subScores.destreza}%`, 
+                          backgroundColor: subScores.destreza >= 75 ? '#22c55e' : subScores.destreza >= 45 ? '#f59e0b' : '#ef4444' 
+                        }}
+                      />
+                    </div>
+                    <div className="flex justify-between items-center text-[10px] font-bold">
+                      <span className="text-brand-500 underline">
+                        {activeCategoryFilter === 'destreza' ? '🔴 Quitar filtro' : '🔍 Filtrar recomendaciones'}
+                      </span>
+                      <a href="guia-vestido.html" target="_blank" rel="noopener noreferrer" className="text-indigo-650 hover:text-indigo-800 transition-colors flex items-center gap-1 no-print" onClick={e => e.stopPropagation()}>
+                        📖 Ver Guía de Vestido
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Tecnología y Seguridad */}
+                  <div 
+                    onClick={() => setActiveCategoryFilter(activeCategoryFilter === 'seguridad' ? 'all' : 'seguridad')}
+                    className={`p-3.5 rounded-2xl border transition-all cursor-pointer ${activeCategoryFilter === 'seguridad' ? 'border-brand-500 bg-brand-50/50 shadow-sm' : 'border-gray-100 hover:border-brand-200 hover:bg-gray-50/30'}`}
+                  >
+                    <div className="flex justify-between items-center mb-1.5">
+                      <span className="text-sm font-bold text-brand-900 flex items-center gap-1.5">
+                        🚨 Tecnología y Seguridad
+                      </span>
+                      <span className="text-sm font-extrabold text-brand-800">{subScores.seguridad}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden mb-1.5">
+                      <div 
+                        className="h-full rounded-full transition-all duration-1000" 
+                        style={{ 
+                          width: `${subScores.seguridad}%`, 
+                          backgroundColor: subScores.seguridad >= 75 ? '#22c55e' : subScores.seguridad >= 45 ? '#f59e0b' : '#ef4444' 
+                        }}
+                      />
+                    </div>
+                    <div className="flex justify-between items-center text-[10px] font-bold">
+                      <span className="text-brand-500 underline">
+                        {activeCategoryFilter === 'seguridad' ? '🔴 Quitar filtro' : '🔍 Filtrar recomendaciones'}
+                      </span>
+                      <a href="guia-domotica.html" target="_blank" rel="noopener noreferrer" className="text-indigo-650 hover:text-indigo-800 transition-colors flex items-center gap-1 no-print" onClick={e => e.stopPropagation()}>
+                        📖 Ver Guía de Domótica
+                      </a>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -980,28 +1335,49 @@ const SectionAnalyzer = function SectionAnalyzer({ isTeaser, isStandalone }) {
             </div>
 
             <div className="bg-white rounded-3xl border border-brand-100 shadow-xl p-8 md:p-10 mb-8">
-              <h3 className="font-display text-2xl font-bold text-brand-900 mb-6">Recomendaciones del cuestionario</h3>
-              {getRecommendations(score).length === 0 ? (
-                <p className="text-lg text-green-700 font-semibold">¡Excelente! No se detectaron barreras significativas.</p>
-              ) : (
-                <ul className="space-y-4">
-                  {getRecommendations(score).map((r, i) => (
-                    <li key={i} className="flex gap-4 p-4 sm:p-6 rounded-2xl bg-gray-50 border border-gray-100">
-                      <span className="text-2xl shrink-0 mt-1">{r.icon}</span>
-                      <div>
-                        <span className={`inline-block text-xs font-bold uppercase tracking-widest rounded-full px-3 py-1 mb-2 ${prioBadge[r.prio]}`}>Prioridad {r.prio}</span>
-                        <p className="text-gray-800 text-base leading-relaxed">{r.text}</p>
-                        {r.linkUrl && (
-                          <a href={r.linkUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 mt-3 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-brand-50 px-3 py-1.5 rounded-lg border border-brand-100">
-                            Ver producto recomendado
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                          </a>
-                        )}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="font-display text-2xl font-bold text-brand-900">Recomendaciones del cuestionario</h3>
+                {activeCategoryFilter !== 'all' && (
+                  <button 
+                    onClick={() => setActiveCategoryFilter('all')} 
+                    className="text-xs font-bold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 px-3 py-1.5 rounded-lg border border-indigo-100 no-print"
+                  >
+                    Ver todas
+                  </button>
+                )}
+              </div>
+
+              {(() => {
+                const recs = getRecommendations(score).filter(r => activeCategoryFilter === 'all' ? true : r.category === activeCategoryFilter);
+                if (recs.length === 0) {
+                  return (
+                    <p className="text-lg text-brand-700 font-semibold italic">
+                      {activeCategoryFilter === 'all' 
+                        ? '¡Excelente! No se detectaron barreras significativas.' 
+                        : 'No hay recomendaciones pendientes en esta categoría.'}
+                    </p>
+                  );
+                }
+                return (
+                  <ul className="space-y-4">
+                    {recs.map((r, i) => (
+                      <li key={i} className="flex gap-4 p-4 sm:p-6 rounded-2xl bg-gray-50 border border-gray-100">
+                        <span className="text-2xl shrink-0 mt-1">{r.icon}</span>
+                        <div>
+                          <span className={`inline-block text-xs font-bold uppercase tracking-widest rounded-full px-3 py-1 mb-2 ${prioBadge[r.prio]}`}>Prioridad {r.prio}</span>
+                          <p className="text-gray-800 text-base leading-relaxed">{r.text}</p>
+                          {r.linkUrl && (
+                            <a href={r.linkUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 mt-3 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-brand-50 px-3 py-1.5 rounded-lg border border-brand-100">
+                              Ver producto recomendado
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            </a>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                );
+              })()}
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center no-print">
