@@ -673,12 +673,9 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
     }
   };
   return /*#__PURE__*/React.createElement("div", {
-    className: "bg-white rounded-[2rem] md:rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden flex flex-col md:flex-row h-[550px] md:h-[700px] lg:h-[750px] relative anim-scale-in text-left"
-  }, showSidebarMobile && /*#__PURE__*/React.createElement("div", {
-    className: "md:hidden absolute inset-0 bg-black/50 z-30 transition-opacity",
-    onClick: () => setShowSidebarMobile(false)
-  }), /*#__PURE__*/React.createElement("aside", {
-    className: `w-72 border-r border-brand-100 bg-white flex flex-col shrink-0 transition-transform duration-300 z-45 md:relative md:translate-x-0 absolute inset-y-0 left-0
+    className: "bg-white rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden flex flex-col md:flex-row h-[750px] relative anim-scale-in text-left"
+  }, /*#__PURE__*/React.createElement("aside", {
+    className: `w-80 border-r border-brand-100 bg-brand-50/30 flex flex-col shrink-0 transition-transform duration-300 z-40 md:relative md:translate-x-0 absolute inset-y-0 left-0 bg-white
         ${showSidebarMobile ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'}`
   }, /*#__PURE__*/React.createElement("div", {
     className: "p-6 border-b border-brand-100 flex items-center justify-between"
@@ -687,7 +684,9 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
   }, "Historial de Consultas"), /*#__PURE__*/React.createElement("button", {
     onClick: () => setShowSidebarMobile(false),
     className: "md:hidden p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 cursor-pointer"
-  }, "\u274C")), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement(Icons.X, {
+    className: "w-5 h-5"
+  }))), /*#__PURE__*/React.createElement("div", {
     className: "p-4"
   }, /*#__PURE__*/React.createElement("button", {
     onClick: () => {
@@ -695,8 +694,10 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
       setShowSidebarMobile(false);
     },
     className: "w-full py-4 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-bold transition-all shadow-md flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 text-sm cursor-pointer"
-  }, "\u2795 Nueva Consulta")), /*#__PURE__*/React.createElement("div", {
-    className: "flex-1 overflow-y-auto px-3 pb-4 space-y-1.5 no-scrollbar"
+  }, /*#__PURE__*/React.createElement(Icons.Plus, {
+    className: "w-4 h-4"
+  }), "Nueva Consulta")), /*#__PURE__*/React.createElement("div", {
+    className: "flex-1 overflow-y-auto px-3 pb-4 space-y-1.5 custom-scrollbar"
   }, sessions.map(s => {
     const isActive = s.id === activeSessionId;
     return /*#__PURE__*/React.createElement("div", {
@@ -715,109 +716,159 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
     }, s.title), /*#__PURE__*/React.createElement("span", {
       className: "text-[10px] text-gray-400 block mt-1 font-medium"
     }, s.date)), /*#__PURE__*/React.createElement("div", {
-      className: "flex items-center gap-0.5 opacity-0 group-hover:opacity-100 shrink-0 transition-opacity"
+      className: "flex items-center gap-0.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100 shrink-0 transition-opacity"
     }, /*#__PURE__*/React.createElement("button", {
       onClick: e => renameSession(s.id, e),
       className: "p-1.5 rounded-lg text-gray-300 hover:text-teal-600 hover:bg-teal-50/80 transition-all cursor-pointer",
       title: "Renombrar consulta"
-    }, "\u270F\uFE0F"), /*#__PURE__*/React.createElement("button", {
+    }, /*#__PURE__*/React.createElement(Icons.Edit, {
+      className: "w-4 h-4"
+    })), /*#__PURE__*/React.createElement("button", {
       onClick: e => deleteSession(s.id, e),
-      className: "p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer",
+      className: "p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50/80 transition-all cursor-pointer",
       title: "Eliminar consulta"
-    }, "\uD83D\uDDD1\uFE0F")));
-  }))), /*#__PURE__*/React.createElement("div", {
-    className: "flex-1 flex flex-col justify-between bg-white relative min-w-0"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "p-4 md:p-6 border-b border-brand-100 flex items-center justify-between bg-brand-50/10 shrink-0"
+    }, /*#__PURE__*/React.createElement(Icons.Trash, {
+      className: "w-4 h-4"
+    }))));
+  }))), showSidebarMobile && /*#__PURE__*/React.createElement("div", {
+    onClick: () => setShowSidebarMobile(false),
+    className: "fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 md:hidden animate-fade-in"
+  }), /*#__PURE__*/React.createElement("section", {
+    className: "flex-1 flex flex-col h-full bg-white relative min-w-0"
+  }, /*#__PURE__*/React.createElement("header", {
+    className: "px-6 py-4 border-b border-brand-100 flex items-center justify-between bg-white/80 backdrop-blur-sm relative z-10 shrink-0"
   }, /*#__PURE__*/React.createElement("div", {
     className: "flex items-center gap-3"
   }, /*#__PURE__*/React.createElement("button", {
-    onClick: () => setShowSidebarMobile(o => !o),
-    className: "md:hidden p-2 text-brand-900 hover:bg-brand-50 rounded-xl transition-all cursor-pointer"
-  }, "\u2630"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", {
-    className: "font-display text-lg font-bold text-brand-900 flex items-center gap-2"
-  }, /*#__PURE__*/React.createElement("span", null, "\uD83D\uDCAC"), " Asistente del Cuidador"), /*#__PURE__*/React.createElement("p", {
-    className: "text-xs text-gray-500 font-medium"
-  }, "L\xEDmite de 5 preguntas por sesi\xF3n \u2022 Respuestas sencillas y comprensibles"))), /*#__PURE__*/React.createElement("span", {
-    className: "bg-teal-50 text-teal-700 font-bold text-xs px-3 py-1.5 rounded-xl border border-teal-100"
-  }, "Preguntas: ", userQuestionsCount, " / 5")), /*#__PURE__*/React.createElement("div", {
-    ref: chatContainerRef,
-    className: "flex-1 p-4 md:p-6 overflow-y-auto space-y-4 md:space-y-6 bg-slate-50/30 no-scrollbar"
-  }, messages.length === 0 ? /*#__PURE__*/React.createElement("div", {
-    className: "h-full flex flex-col items-center justify-center text-center max-w-md mx-auto py-4 md:py-12"
+    onClick: () => setShowSidebarMobile(true),
+    className: "md:hidden p-2 text-gray-500 hover:text-gray-800 rounded-xl hover:bg-gray-100 shrink-0"
+  }, /*#__PURE__*/React.createElement(Icons.Menu, {
+    className: "w-6 h-6"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "w-10 h-10 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center text-xl shrink-0 font-bold"
+  }, "\uD83D\uDCAC"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-2"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "font-display font-bold text-brand-900 text-base sm:text-lg"
+  }, "Asistente del Cuidador"), /*#__PURE__*/React.createElement("span", {
+    className: "w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse",
+    title: "Conectado"
+  })), /*#__PURE__*/React.createElement("p", {
+    className: "text-[10px] sm:text-xs text-gray-400 font-medium"
+  }, "Asistente de Apoyo y Gu\xEDa T\xE9cnica"))), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-3"
   }, /*#__PURE__*/React.createElement("span", {
-    className: "text-3xl md:text-5xl mb-2 md:mb-4 animate-bounce"
-  }, "\uD83D\uDC4B"), /*#__PURE__*/React.createElement("h5", {
-    className: "font-display text-lg md:text-xl font-bold text-brand-900 mb-1 md:mb-2"
+    className: "bg-teal-50 text-teal-700 font-bold text-xs px-3 py-1.5 rounded-xl border border-teal-100/60 shadow-sm"
+  }, "Preguntas: ", userQuestionsCount, " / 5"))), /*#__PURE__*/React.createElement("div", {
+    ref: chatContainerRef,
+    className: "flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50/30 custom-scrollbar relative"
+  }, messages.length === 0 ?
+  /*#__PURE__*/
+  /* Welcome / Onboarding Screen */
+  React.createElement("div", {
+    className: "max-w-2xl mx-auto text-center py-8 sm:py-12 space-y-8 animate-fade-in flex flex-col items-center"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "inline-block p-6 bg-teal-50 text-teal-600 rounded-full text-4xl shadow-sm border border-teal-100 animate-bounce"
+  }, "\uD83D\uDC4B"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", {
+    className: "font-display text-2xl font-black text-brand-900 mb-3"
   }, "\xA1Hola! Soy tu asistente de apoyo"), /*#__PURE__*/React.createElement("p", {
-    className: "text-gray-555 text-xs md:text-base leading-relaxed mb-4 md:mb-6"
+    className: "text-gray-550 text-sm leading-relaxed max-w-lg mx-auto text-center mb-6"
   }, "Estoy aqu\xED para orientarte en tus dudas diarias sobre el cuidado de tu familiar. Puedes preguntarme sobre t\xE9cnicas de movilizaci\xF3n sencillas, ayudas para el ba\xF1o o simplemente buscar apoyo."), /*#__PURE__*/React.createElement("div", {
-    className: "flex flex-col sm:flex-row gap-2 justify-center mb-4 md:mb-8 w-full max-w-xs sm:max-w-none"
+    className: "flex flex-col sm:flex-row gap-2.5 justify-center mb-6 w-full max-w-md"
   }, /*#__PURE__*/React.createElement("button", {
     onClick: () => handleSendMessage('¿Cómo puedo levantar de la cama a mi familiar sin hacerme daño en la espalda?'),
-    className: "bg-white border border-brand-100 hover:border-teal-200 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm hover:bg-brand-50/20 cursor-pointer text-left sm:text-center"
+    className: "bg-white border border-brand-100 hover:border-teal-200 text-gray-700 text-xs font-bold px-4 py-3 rounded-xl transition-all shadow-sm hover:bg-brand-50/20 cursor-pointer text-left sm:text-center"
   }, "\uD83D\uDEB6 Pauta para levantar de la cama"), /*#__PURE__*/React.createElement("button", {
     onClick: () => handleSendMessage('¿Qué adaptaciones o productos me recomiendas para duchar a mi familiar con seguridad?'),
-    className: "bg-white border border-brand-100 hover:border-teal-200 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm hover:bg-brand-50/20 cursor-pointer text-left sm:text-center"
-  }, "\uD83D\uDEC1 Adaptar el aseo")), /*#__PURE__*/React.createElement("div", {
-    className: "bg-amber-50/60 border border-amber-250/50 rounded-2xl p-3 text-left w-full flex gap-2.5 text-amber-900 text-[10px] md:text-[11px] leading-relaxed"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "text-sm shrink-0 select-none"
-  }, "\u26A0\uFE0F"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("strong", {
+    className: "bg-white border border-brand-100 hover:border-teal-200 text-gray-700 text-xs font-bold px-4 py-3 rounded-xl transition-all shadow-sm hover:bg-brand-50/20 cursor-pointer text-left sm:text-center"
+  }, "\uD83D\uDEC1 Adaptar el aseo"))), /*#__PURE__*/React.createElement("div", {
+    className: "bg-amber-50/70 border border-amber-250/50 rounded-2xl p-4 text-left max-w-lg mx-auto flex gap-3 text-amber-900 text-xs leading-relaxed"
+  }, /*#__PURE__*/React.createElement(Icons.Warning, {
+    className: "w-5 h-5 text-amber-600 shrink-0"
+  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("strong", {
     className: "font-bold block mb-0.5"
-  }, "Nota de orientaci\xF3n:"), "Las respuestas son generadas por Inteligencia Artificial con fines \xFAnicamente informativos y divulgativos. Consulta siempre con tu m\xE9dico o terapeuta ocupacional antes de movilizaciones f\xEDsicas o cambios de rutinas."))) : messages.map((msg, idx) => {
+  }, "Nota de orientaci\xF3n:"), "Las respuestas son generadas por Inteligencia Artificial con fines \xFAnicamente informativos y divulgativos. Consulta siempre con tu m\xE9dico o terapeuta ocupacional antes de realizar movilizaciones f\xEDsicas o aplicar cambios en las rutinas de tu familiar."))) :
+  /*#__PURE__*/
+  /* Render active conversation */
+  React.createElement("div", {
+    className: "max-w-3xl mx-auto space-y-6"
+  }, messages.map((msg, index) => {
     const isUser = msg.sender === 'user';
     return /*#__PURE__*/React.createElement("div", {
-      key: idx,
-      className: `flex gap-3.5 max-w-3xl ${isUser ? 'ml-auto flex-row-reverse' : 'mr-auto'}`
+      key: index,
+      className: `flex ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in`
     }, /*#__PURE__*/React.createElement("div", {
-      className: `w-9 h-9 rounded-full shrink-0 flex items-center justify-center font-bold text-sm shadow-sm
-                    ${isUser ? 'bg-brand-900 text-white' : 'bg-teal-600 text-white'}`
+      className: `flex gap-3 max-w-[85%] ${isUser ? 'flex-row-reverse' : 'flex-row'}`
+    }, /*#__PURE__*/React.createElement("div", {
+      className: `w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-sm font-bold shadow-sm border
+                        ${isUser ? 'bg-brand-900 text-white border-brand-900/10' : 'bg-teal-100 text-teal-700 border-teal-200/40'}`
     }, isUser ? '👤' : '🤖'), /*#__PURE__*/React.createElement("div", {
-      className: `p-5 rounded-3xl text-base md:text-lg leading-relaxed border shadow-sm
-                    ${isUser ? 'bg-brand-900 text-white border-transparent rounded-tr-none' : 'bg-white text-gray-800 border-brand-50 rounded-tl-none'}`
+      className: `p-4 sm:p-5 rounded-2xl shadow-sm border
+                        ${isUser ? 'bg-brand-900 text-white border-brand-900/10 rounded-tr-none' : 'bg-white text-gray-855 border-gray-150 rounded-tl-none'}`
     }, isUser ? /*#__PURE__*/React.createElement("p", {
-      className: "whitespace-pre-wrap"
-    }, msg.text) : renderMessageText(msg.text)));
+      className: "text-base whitespace-pre-wrap leading-relaxed"
+    }, msg.text) : renderMessageText(msg.text))));
   }), isLoading && /*#__PURE__*/React.createElement("div", {
-    className: "flex gap-3.5 mr-auto"
+    className: "flex justify-start animate-fade-in"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "w-9 h-9 rounded-full bg-teal-600 text-white shrink-0 flex items-center justify-center font-bold text-sm shadow-sm"
+    className: "flex gap-3 max-w-[85%] flex-row"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "w-8 h-8 rounded-full bg-teal-100 border border-teal-200/40 text-teal-700 shrink-0 flex items-center justify-center text-sm font-bold shadow-sm"
   }, "\uD83E\uDD16"), /*#__PURE__*/React.createElement("div", {
-    className: "bg-white border border-brand-50 p-5 rounded-3xl rounded-tl-none flex items-center gap-2 shadow-sm"
+    className: "p-4 bg-white border border-gray-150 rounded-2xl rounded-tl-none shadow-sm flex items-center gap-3"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex gap-1"
   }, /*#__PURE__*/React.createElement("span", {
-    className: "w-2.5 h-2.5 bg-teal-500 rounded-full animate-bounce"
+    className: "w-2 h-2 bg-teal-500 rounded-full animate-bounce",
+    style: {
+      animationDelay: '0ms'
+    }
   }), /*#__PURE__*/React.createElement("span", {
-    className: "w-2.5 h-2.5 bg-teal-500 rounded-full animate-bounce [animation-delay:0.2s]"
+    className: "w-2 h-2 bg-teal-500 rounded-full animate-bounce",
+    style: {
+      animationDelay: '150ms'
+    }
   }), /*#__PURE__*/React.createElement("span", {
-    className: "w-2.5 h-2.5 bg-teal-500 rounded-full animate-bounce [animation-delay:0.4s]"
-  }))), errorMsg && /*#__PURE__*/React.createElement("div", {
-    className: "bg-red-50 border-2 border-red-200 p-4 rounded-2xl text-red-700 text-xs font-bold flex items-center gap-2"
-  }, /*#__PURE__*/React.createElement("span", null, "\u26A0\uFE0F Error: ", errorMsg))), /*#__PURE__*/React.createElement("div", {
-    className: "p-3 md:p-6 border-t border-brand-100 bg-white shrink-0"
+    className: "w-2 h-2 bg-teal-500 rounded-full animate-bounce",
+    style: {
+      animationDelay: '300ms'
+    }
+  })), /*#__PURE__*/React.createElement("span", {
+    className: "text-xs text-gray-400 font-medium font-mono"
+  }, "El Asistente est\xE1 analizando la consulta...")))), errorMsg && /*#__PURE__*/React.createElement("div", {
+    className: "max-w-lg mx-auto bg-red-50 border border-red-200 rounded-2xl p-4 text-red-900 text-xs flex gap-3 leading-relaxed animate-shake"
+  }, /*#__PURE__*/React.createElement(Icons.AlertCircle, {
+    className: "w-5 h-5 text-red-500 shrink-0"
+  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("strong", {
+    className: "font-bold block mb-0.5"
+  }, "Error de Conexi\xF3n:"), /*#__PURE__*/React.createElement("span", null, errorMsg))))), /*#__PURE__*/React.createElement("footer", {
+    className: "p-4 md:p-6 border-t border-brand-100 bg-white relative z-10 shrink-0"
   }, isLimitReached ? /*#__PURE__*/React.createElement("div", {
-    className: "bg-amber-50 border border-amber-200 p-4 rounded-2xl text-amber-800 text-xs font-bold text-center leading-relaxed"
+    className: "bg-amber-50 border border-amber-250/70 p-4 rounded-2xl text-amber-900 text-xs font-semibold text-center leading-relaxed"
   }, "\uD83D\uDD12 Has alcanzado el l\xEDmite de 5 consultas en esta sesi\xF3n para evitar la sobrecarga del servicio.", /*#__PURE__*/React.createElement("br", null), "Para seguir chateando, por favor haz clic en ", /*#__PURE__*/React.createElement("button", {
     onClick: createNewSession,
-    className: "text-teal-600 underline font-black cursor-pointer hover:text-teal-800"
+    className: "text-teal-600 underline font-bold cursor-pointer hover:text-teal-800"
   }, "Nueva Consulta"), " e inicia una nueva sesi\xF3n.") : /*#__PURE__*/React.createElement("form", {
     onSubmit: e => {
       e.preventDefault();
       handleSendMessage();
     },
-    className: "flex gap-3"
+    className: "flex gap-3 relative"
   }, /*#__PURE__*/React.createElement("input", {
     type: "text",
     placeholder: isLimitNear ? "Última pregunta de tu sesión..." : "Escribe tu consulta aquí...",
     value: input,
     onChange: e => setInput(e.target.value),
     disabled: isLoading,
-    className: "flex-1 bg-gray-50 border border-gray-250 focus:border-teal-500 focus:bg-white rounded-2xl px-4 py-3 md:px-5 md:py-4 text-sm md:text-base outline-none text-gray-700 transition-all font-medium"
+    className: "w-full bg-slate-50 border border-gray-250 focus:border-teal-500 focus:bg-white rounded-2xl pl-5 pr-14 py-4 text-sm md:text-base outline-none text-gray-700 font-medium transition-all shadow-sm"
   }), /*#__PURE__*/React.createElement("button", {
     type: "submit",
     disabled: !input.trim() || isLoading,
-    className: "px-4 py-3 md:px-6 md:py-4 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-bold transition-all shadow-md flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-sm"
-  }, /*#__PURE__*/React.createElement("span", null, "Enviar"), /*#__PURE__*/React.createElement("span", null, "\u2794"))), /*#__PURE__*/React.createElement("p", {
+    className: "absolute right-2.5 top-1/2 -translate-y-1/2 w-11 h-11 bg-teal-600 hover:bg-teal-700 text-white rounded-xl flex items-center justify-center transition-all shadow-md disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer",
+    title: "Enviar mensaje"
+  }, /*#__PURE__*/React.createElement(Icons.Send, {
+    className: "w-5 h-5"
+  }))), /*#__PURE__*/React.createElement("p", {
     className: "text-[10px] text-gray-400 text-center mt-3 max-w-lg mx-auto font-medium leading-normal"
   }, "Las respuestas de esta IA son meramente orientativas. Consulta siempre con un profesional sanitario o terapeuta ocupacional especialista antes de proceder con transferencias f\xEDsicas o pautas m\xE9dicas."))));
 };
