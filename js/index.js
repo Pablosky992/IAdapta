@@ -100,6 +100,18 @@ const SectionHome = function SectionHome() {
     img: 'resources_bg.png',
     href: 'recursos.html'
   }, {
+    id: 'caregiver_resources',
+    icon: /*#__PURE__*/React.createElement(Icons.Heart, {
+      className: "fill-rose-500 text-rose-500 w-6 h-6"
+    }),
+    color: 'bg-rose-50 text-rose-600',
+    badge: 'Área del Cuidador',
+    title: 'Recursos para el Cuidador',
+    desc: 'Pautas prácticas, manuales ergonómicos, infografías de autocuidado y herramientas de apoyo diario diseñados para familiares y cuidadores.',
+    cta: 'Ver recursos',
+    img: 'recursos_cuidador_thumbnail.png',
+    href: 'recursos-cuidador.html'
+  }, {
     id: 'cv',
     icon: /*#__PURE__*/React.createElement(Icons.FileText, null),
     color: 'bg-blue-100 text-blue-600',

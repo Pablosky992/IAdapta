@@ -1526,9 +1526,9 @@ const Navbar = function Navbar({
     label: ['Recursos para', 'profesionales'],
     href: 'recursos.html'
   }, {
-    id: 'about',
-    label: 'Sobre Mí',
-    href: 'index.html#about'
+    id: 'caregiver_resources',
+    label: ['Recursos para', 'el cuidador'],
+    href: 'recursos-cuidador.html'
   }, {
     id: 'contact',
     label: 'Contacto',
@@ -1555,6 +1555,7 @@ const Navbar = function Navbar({
     if (linkId === 'guides' && currentPage === 'guides') return true;
     if (linkId === 'cognitive' && currentPage === 'cognitive') return true;
     if (linkId === 'resources' && currentPage === 'resources') return true;
+    if (linkId === 'caregiver_resources' && currentPage === 'caregiver_resources') return true;
     if (linkId === 'contact' && currentPage === 'contact') return true;
     return false;
   };
@@ -1588,7 +1589,7 @@ const Navbar = function Navbar({
   }, /*#__PURE__*/React.createElement("span", null, link.label[0]), /*#__PURE__*/React.createElement("span", null, link.label[1])) : link.label))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
     href: "cv.html",
     className: `px-4 py-2.5 rounded-xl text-sm xl:text-base font-bold transition-all duration-200 whitespace-nowrap inline-block ${currentPage === 'cv' ? 'bg-accent-coral text-white shadow-md' : 'text-accent-coral hover:bg-white/50 border-2 border-accent-coral/10 ml-2'}`
-  }, "Mi CV"))), /*#__PURE__*/React.createElement("div", {
+  }, "Sobre m\xED"))), /*#__PURE__*/React.createElement("div", {
     className: "h-8 w-px bg-brand-900/10 mx-2"
   }), /*#__PURE__*/React.createElement("button", {
     onClick: () => setDonateModalOpen(true),
@@ -1622,7 +1623,7 @@ const Navbar = function Navbar({
   }), "Apoyar proyecto"), /*#__PURE__*/React.createElement("a", {
     href: "cv.html",
     className: "block w-full text-left px-4 py-3.5 rounded-xl text-lg font-semibold text-brand-600 bg-brand-50"
-  }, "Curriculum Vitae"))), /*#__PURE__*/React.createElement(DonateModal, {
+  }, "Sobre m\xED"))), /*#__PURE__*/React.createElement(DonateModal, {
     isOpen: donateModalOpen,
     onClose: () => setDonateModalOpen(false)
   }));
@@ -1668,6 +1669,9 @@ const Footer = function Footer({
   }, {
     label: 'Área Cognitiva',
     href: 'estimulacion-cognitiva.html'
+  }, {
+    label: 'Recursos para el cuidador',
+    href: 'recursos-cuidador.html'
   }, {
     label: 'Contacto',
     href: 'contacto.html'

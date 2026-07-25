@@ -73,6 +73,12 @@ const SectionHome = function SectionHome() {
       href: 'recursos.html'
     },
     {
+      id: 'caregiver_resources', icon: <Icons.Heart className="fill-rose-500 text-rose-500 w-6 h-6" />, color: 'bg-rose-50 text-rose-600', badge: 'Área del Cuidador',
+      title: 'Recursos para el Cuidador', desc: 'Pautas prácticas, manuales ergonómicos, infografías de autocuidado y herramientas de apoyo diario diseñados para familiares y cuidadores.', cta: 'Ver recursos',
+      img: 'recursos_cuidador_thumbnail.png',
+      href: 'recursos-cuidador.html'
+    },
+    {
       id: 'cv', icon: <Icons.FileText />, color: 'bg-blue-100 text-blue-600', badge: 'Perfil Profesional',
       title: 'Mi Trayectoria', desc: 'Conoce mi formación, experiencia clínica en geriatría y ortopedia, y competencias avanzadas en impresión 3D.', cta: 'Saber más',
       img: 'cv_trayectoria_thumbnail_ot_v2.png',
