@@ -822,6 +822,7 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
   // Estados del Test de Zarit
   const [zaritAnswers, setZaritAnswers] = useState(Array(22).fill(null));
   const [zaritPage, setZaritPage] = useState(0);
+  const [showZaritError, setShowZaritError] = useState(false);
   const QUESTIONS_PER_PAGE = 6;
 
   // Sincronizar catálogo
@@ -860,6 +861,7 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
 
   // Lógica del Test de Zarit
   const handleZaritAnswer = (questionIndex, val) => {
+    setShowZaritError(false);
     setZaritAnswers(prev => {
       const updated = [...prev];
       updated[questionIndex] = val;
@@ -907,6 +909,7 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
   const resetZarit = () => {
     setZaritAnswers(Array(22).fill(null));
     setZaritPage(0);
+    setShowZaritError(false);
   };
 
   // VISTA 1: MENÚ PRINCIPAL
@@ -1091,6 +1094,7 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
     const totalPages = Math.ceil(ZARIT_QUESTIONS.length / QUESTIONS_PER_PAGE);
     const answeredCount = zaritAnswers.filter(a => a !== null).length;
     const progressPercent = Math.round(answeredCount / ZARIT_QUESTIONS.length * 100);
+    const isCurrentPageComplete = pageQuestions.every((q, idx) => zaritAnswers[startIndex + idx] !== null);
     return /*#__PURE__*/React.createElement("section", {
       className: "max-w-4xl mx-auto px-4 py-8"
     }, /*#__PURE__*/React.createElement(CaregiverSubNav, {
@@ -1141,16 +1145,28 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
           className: "text-xs sm:text-sm md:text-base opacity-90"
         }, opt.value === 0 ? '0️⃣' : opt.value === 1 ? '1️⃣' : opt.value === 2 ? '2️⃣' : opt.value === 3 ? '3️⃣' : '4️⃣'), /*#__PURE__*/React.createElement("span", null, opt.label));
       })));
-    })), /*#__PURE__*/React.createElement("div", {
+    })), showZaritError && /*#__PURE__*/React.createElement("div", {
+      className: "mb-6 p-4 bg-red-50 border-2 border-red-150 text-red-800 rounded-2xl text-sm font-bold text-center animate-pulse flex items-center justify-center gap-2"
+    }, /*#__PURE__*/React.createElement("span", null, "\u26A0\uFE0F"), /*#__PURE__*/React.createElement("span", null, "Por favor, responde a todas las preguntas de esta p\xE1gina antes de continuar.")), /*#__PURE__*/React.createElement("div", {
       className: "flex justify-between items-center pt-6 border-t border-brand-50"
     }, /*#__PURE__*/React.createElement("button", {
-      onClick: () => setZaritPage(p => Math.max(0, p - 1)),
+      onClick: () => {
+        setZaritPage(p => Math.max(0, p - 1));
+        setShowZaritError(false);
+      },
       disabled: zaritPage === 0,
       className: "px-5 py-3 border border-brand-100 hover:border-brand-200 text-brand-700 font-bold rounded-xl disabled:opacity-30 disabled:cursor-not-allowed hover:bg-brand-50 transition-colors cursor-pointer text-sm"
     }, "\u2190 Anterior"), /*#__PURE__*/React.createElement("span", {
       className: "text-xs font-bold text-brand-500"
     }, "P\xE1gina ", zaritPage + 1, " de ", totalPages), zaritPage < totalPages - 1 ? /*#__PURE__*/React.createElement("button", {
-      onClick: () => setZaritPage(p => p + 1),
+      onClick: () => {
+        if (isCurrentPageComplete) {
+          setZaritPage(p => p + 1);
+          setShowZaritError(false);
+        } else {
+          setShowZaritError(true);
+        }
+      },
       className: "px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg active:scale-95 cursor-pointer text-sm"
     }, "Siguiente \u2192") : /*#__PURE__*/React.createElement("div", {
       className: "text-xs text-brand-400 font-semibold italic"

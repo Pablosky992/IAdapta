@@ -671,6 +671,7 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
   // Estados del Test de Zarit
   const [zaritAnswers, setZaritAnswers] = useState(Array(22).fill(null));
   const [zaritPage, setZaritPage] = useState(0); 
+  const [showZaritError, setShowZaritError] = useState(false);
   const QUESTIONS_PER_PAGE = 6;
 
   // Sincronizar catálogo
@@ -709,6 +710,7 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
 
   // Lógica del Test de Zarit
   const handleZaritAnswer = (questionIndex, val) => {
+    setShowZaritError(false);
     setZaritAnswers(prev => {
       const updated = [...prev];
       updated[questionIndex] = val;
@@ -760,6 +762,7 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
   const resetZarit = () => {
     setZaritAnswers(Array(22).fill(null));
     setZaritPage(0);
+    setShowZaritError(false);
   };
 
   // VISTA 1: MENÚ PRINCIPAL
@@ -1000,6 +1003,7 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
 
     const answeredCount = zaritAnswers.filter(a => a !== null).length;
     const progressPercent = Math.round((answeredCount / ZARIT_QUESTIONS.length) * 100);
+    const isCurrentPageComplete = pageQuestions.every((q, idx) => zaritAnswers[startIndex + idx] !== null);
 
     return (
       <section className="max-w-4xl mx-auto px-4 py-8">
@@ -1078,10 +1082,20 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
               })}
             </div>
 
+            {showZaritError && (
+              <div className="mb-6 p-4 bg-red-50 border-2 border-red-150 text-red-800 rounded-2xl text-sm font-bold text-center animate-pulse flex items-center justify-center gap-2">
+                <span>⚠️</span>
+                <span>Por favor, responde a todas las preguntas de esta página antes de continuar.</span>
+              </div>
+            )}
+
             {/* Paginator Controls */}
             <div className="flex justify-between items-center pt-6 border-t border-brand-50">
               <button
-                onClick={() => setZaritPage(p => Math.max(0, p - 1))}
+                onClick={() => {
+                  setZaritPage(p => Math.max(0, p - 1));
+                  setShowZaritError(false);
+                }}
                 disabled={zaritPage === 0}
                 className="px-5 py-3 border border-brand-100 hover:border-brand-200 text-brand-700 font-bold rounded-xl disabled:opacity-30 disabled:cursor-not-allowed hover:bg-brand-50 transition-colors cursor-pointer text-sm"
               >
@@ -1094,7 +1108,14 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
 
               {zaritPage < totalPages - 1 ? (
                 <button
-                  onClick={() => setZaritPage(p => p + 1)}
+                  onClick={() => {
+                    if (isCurrentPageComplete) {
+                      setZaritPage(p => p + 1);
+                      setShowZaritError(false);
+                    } else {
+                      setShowZaritError(true);
+                    }
+                  }}
                   className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg active:scale-95 cursor-pointer text-sm"
                 >
                   Siguiente &rarr;
