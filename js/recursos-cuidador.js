@@ -674,8 +674,11 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
   };
   return /*#__PURE__*/React.createElement("div", {
     className: "bg-white rounded-[2rem] md:rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden flex flex-col md:flex-row h-[550px] md:h-[700px] lg:h-[750px] relative anim-scale-in text-left"
-  }, /*#__PURE__*/React.createElement("aside", {
-    className: `w-80 border-r border-brand-100 bg-brand-50/30 flex flex-col shrink-0 transition-transform duration-300 z-40 md:relative md:translate-x-0 absolute inset-y-0 left-0 bg-white
+  }, showSidebarMobile && /*#__PURE__*/React.createElement("div", {
+    className: "md:hidden absolute inset-0 bg-black/50 z-30 transition-opacity",
+    onClick: () => setShowSidebarMobile(false)
+  }), /*#__PURE__*/React.createElement("aside", {
+    className: `w-72 border-r border-brand-100 bg-white flex flex-col shrink-0 transition-transform duration-300 z-45 md:relative md:translate-x-0 absolute inset-y-0 left-0
         ${showSidebarMobile ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'}`
   }, /*#__PURE__*/React.createElement("div", {
     className: "p-6 border-b border-brand-100 flex items-center justify-between"
