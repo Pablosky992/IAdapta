@@ -107,6 +107,7 @@ const CaregiverSubNav = function CaregiverSubNav({ currentView, onViewChange }) 
   const tabs = [
     { id: 'products', title: 'Productos Recomendados', shortTitle: 'Productos', icon: '🛒', color: 'bg-accent-coral border-accent-coral' },
     { id: 'zarit', title: 'Test de Sobrecarga Zarit', shortTitle: 'Test Zarit', icon: '📋', color: 'bg-indigo-600 border-indigo-600' },
+    { id: 'log', title: 'Diario de Registro', shortTitle: 'Diario', icon: '📝', color: 'bg-amber-600 border-amber-600' },
     { id: 'chat', title: 'Asistente del Cuidador', shortTitle: 'Asistente IA', icon: '💬', color: 'bg-teal-600 border-teal-600' }
   ];
 
@@ -662,9 +663,1008 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
   );
 };
 
+// --- DIARIO DE REGISTRO DE CUIDADOS COMPONENT ---
+const CareLogComponent = function CareLogComponent() {
+  const getFoodLabel = (f) => {
+    switch (f) {
+      case 'good': return '🟢 Buena';
+      case 'regular': return '🟡 Regular';
+      case 'bad': return '🔴 Mala';
+      default: return '🟢 Buena';
+    }
+  };
+  const [entries, setEntries] = useState([]);
+  
+  // Form states
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  
+  // Meds (Morning/Afternoon/Night)
+  const [medsMorning, setMedsMorning] = useState(true);
+  const [medsAfternoon, setMedsAfternoon] = useState(true);
+  const [medsNight, setMedsNight] = useState(true);
+  
+  // Nutrition & Hydration
+  const [waterIntake, setWaterIntake] = useState(4);
+  const [foodStatus, setFoodStatus] = useState('good');
+  
+  // Hygiene metrics
+  const [showerDone, setShowerDone] = useState(false);
+  const [washDone, setWashDone] = useState(true);
+  const [teethWashCount, setTeethWashCount] = useState(2);
+  const [diaperChangeCount, setDiaperChangeCount] = useState(0);
+
+  // Elimination metrics
+  const [urineCount, setUrineCount] = useState(4);
+  const [stoolCount, setStoolCount] = useState(1);
+  const [stoolType, setStoolType] = useState('normal'); // 'normal', 'constipation', 'diarrhea'
+
+  // Mood states
+  const [moodCalm, setMoodCalm] = useState(true);
+  const [moodCooperative, setMoodCooperative] = useState(true);
+  const [moodAnxious, setMoodAnxious] = useState(false);
+  const [moodSad, setMoodSad] = useState(false);
+  const [moodConfused, setMoodConfused] = useState(false);
+  const [moodAgitated, setMoodAgitated] = useState(false);
+
+  // Sleep
+  const [sleepHours, setSleepHours] = useState(7);
+  const [nightWakings, setNightWakings] = useState(0);
+  
+  // Text Notes
+  const [notes, setNotes] = useState('');
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // Screen History Preset Filter State
+  const [viewPreset, setViewPreset] = useState('all'); // 'all', '7d', '15d', '30d'
+
+  const filteredEntries = useMemo(() => {
+    if (viewPreset === 'all') return entries;
+    const now = new Date();
+    let days = 7;
+    if (viewPreset === '15d') days = 15;
+    else if (viewPreset === '30d') days = 30;
+    
+    const limitDate = new Date();
+    limitDate.setDate(now.getDate() - days);
+    const limitDateStr = limitDate.toISOString().split('T')[0];
+    
+    return entries.filter(item => item.date >= limitDateStr);
+  }, [entries, viewPreset]);
+
+  // Modal and PDF Export states
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [exportPreset, setExportPreset] = useState('all'); // 'all', '7d', '15d', '30d', 'custom'
+  const [exportStartDate, setExportStartDate] = useState('');
+  const [exportEndDate, setExportEndDate] = useState('');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('iadapta_caregiver_logs');
+    if (saved) {
+      try {
+        setEntries(JSON.parse(saved));
+      } catch (e) {
+        console.error("Error reading log entries", e);
+      }
+    }
+  }, []);
+
+  const saveEntries = (updated) => {
+    setEntries(updated);
+    localStorage.setItem('iadapta_caregiver_logs', JSON.stringify(updated));
+  };
+
+  const handleSaveEntry = (e) => {
+    e.preventDefault();
+    const newEntry = {
+      id: Date.now().toString(),
+      date,
+      medsMorning,
+      medsAfternoon,
+      medsNight,
+      waterIntake,
+      foodStatus,
+      showerDone,
+      washDone,
+      teethWashCount: parseInt(teethWashCount) || 0,
+      diaperChangeCount: parseInt(diaperChangeCount) || 0,
+      urineCount: parseInt(urineCount) || 0,
+      stoolCount: parseInt(stoolCount) || 0,
+      stoolType,
+      moodCalm,
+      moodCooperative,
+      moodAnxious,
+      moodSad,
+      moodConfused,
+      moodAgitated,
+      sleepHours: parseFloat(sleepHours) || 0,
+      nightWakings: parseInt(nightWakings) || 0,
+      notes: notes.trim()
+    };
+
+    let updated;
+    const existingIndex = entries.findIndex(item => item.date === date);
+    if (existingIndex > -1) {
+      if (!window.confirm("Ya existe un registro para esta fecha. ¿Quieres sobrescribirlo con los datos actuales?")) {
+        return;
+      }
+      updated = [...entries];
+      updated[existingIndex] = newEntry;
+    } else {
+      updated = [newEntry, ...entries];
+    }
+
+    updated.sort((a, b) => b.date.localeCompare(a.date));
+    
+    saveEntries(updated);
+    setSaveSuccess(true);
+    setNotes('');
+    
+    // Reset counters to defaults for next entry
+    setShowerDone(false);
+    setWashDone(true);
+    setTeethWashCount(2);
+    setDiaperChangeCount(0);
+    setUrineCount(4);
+    setStoolCount(1);
+    setStoolType('normal');
+    setNightWakings(0);
+    
+    setTimeout(() => {
+      setSaveSuccess(false);
+    }, 3000);
+  };
+
+  const handleDeleteEntry = (id) => {
+    if (window.confirm("¿Seguro que quieres eliminar este registro de cuidados?")) {
+      const updated = entries.filter(item => item.id !== id);
+      saveEntries(updated);
+    }
+  };
+
+  const generatePDFReport = (targetsToExport) => {
+    const list = targetsToExport || entries;
+    if (list.length === 0) {
+      alert("No hay registros en el período seleccionado para exportar.");
+      return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('landscape');
+    
+    const drawPageHeader = (pageNum) => {
+      // Top navy colored header band
+      doc.setFillColor(26, 48, 82);
+      doc.rect(20, 12, 257, 16, 'F');
+      
+      doc.setTextColor(255, 255, 255);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(16);
+      doc.text("IAdapta", 25, 22);
+      
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+      doc.text("DIARIO DE REGISTRO DE CUIDADOS", 272, 22, { align: "right" });
+      
+      // Clinical Metadata Card
+      doc.setFillColor(242, 240, 233); // Brand cream background
+      doc.rect(20, 28, 257, 10, 'F');
+      
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8.5);
+      doc.setTextColor(26, 48, 82);
+      
+      const firstDate = new Date(list[list.length - 1].date).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      const lastDate = new Date(list[0].date).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      const metaText = `REPORTE DE SEGUIMIENTO DOMÉSTICO  |  Período: ${firstDate} al ${lastDate}  |  Días Registrados: ${list.length}  |  Pág. ${pageNum}`;
+      doc.text(metaText, 25, 34.5);
+    };
+
+    const drawTableHeaders = (startY) => {
+      // Table Header Row background
+      doc.setFillColor(40, 56, 85);
+      doc.rect(20, startY, 257, 9, 'F');
+      
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9);
+      doc.setTextColor(255, 255, 255);
+      
+      let currentX = 20;
+      cols.forEach(col => {
+        doc.text(col.name, currentX + 3, startY + 6);
+        currentX += col.w;
+      });
+    };
+
+    const cols = [
+      { name: "Fecha", w: 25 },
+      { name: "Medicación", w: 32 },
+      { name: "Higiene / Aseo", w: 42 },
+      { name: "Nutrición", w: 30 },
+      { name: "Eliminación", w: 34 },
+      { name: "Estado de Ánimo", w: 42 },
+      { name: "Sueño", w: 20 },
+      { name: "Observaciones", w: 32 }
+    ];
+
+    let pageNum = 1;
+    drawPageHeader(pageNum);
+    
+    let tableStartY = 42;
+    drawTableHeaders(tableStartY);
+    
+    let currentY = tableStartY + 9;
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(50, 50, 50);
+    doc.setFontSize(8.5);
+    
+    list.forEach((item, index) => {
+      // Calculate wrapped lines for Observations cell to handle height dynamically
+      const noteLines = doc.splitTextToSize(item.notes || "-", cols[7].w - 4);
+      
+      // Determine height of this row based on content length
+      const rowHeight = Math.max(18, noteLines.length * 4.5 + 4);
+      
+      // Page break check (Landscape height is 210mm, margins at 200mm)
+      if (currentY + rowHeight > 192) {
+        doc.addPage('landscape');
+        pageNum++;
+        drawPageHeader(pageNum);
+        drawTableHeaders(42);
+        currentY = 51;
+      }
+      
+      // Alternate row backgrounds
+      if (index % 2 === 0) {
+        doc.setFillColor(248, 250, 252);
+        doc.rect(20, currentY, 257, rowHeight, 'F');
+      }
+      
+      // Draw bottom row line
+      doc.setDrawColor(226, 232, 240);
+      doc.line(20, currentY + rowHeight, 277, currentY + rowHeight);
+      
+      // Col 0: Fecha
+      const weekday = new Date(item.date).toLocaleDateString('es-ES', { weekday: 'short' });
+      const dateStr = new Date(item.date).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(26, 48, 82);
+      doc.text(`${weekday.toUpperCase()}`, 23, currentY + 6);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(100, 110, 130);
+      doc.text(dateStr, 23, currentY + 11);
+      
+      // Col 1: Medicación
+      doc.setTextColor(50, 50, 50);
+      doc.text(`Mañ: ${item.medsMorning ? 'Sí' : 'No'}`, 48, currentY + 5.5);
+      doc.text(`Tar:  ${item.medsAfternoon ? 'Sí' : 'No'}`, 48, currentY + 10);
+      doc.text(`Noc: ${item.medsNight ? 'Sí' : 'No'}`, 48, currentY + 14.5);
+      
+      // Col 2: Higiene
+      doc.text(`Ducha: ${item.showerDone ? 'Sí' : 'No'}`, 80, currentY + 5.5);
+      doc.text(`Lavado: ${item.washDone ? 'Sí' : 'No'}`, 80, currentY + 10);
+      doc.text(`Dientes: ${item.teethWashCount}v / Pañal: ${item.diaperChangeCount}v`, 80, currentY + 14.5);
+      
+      // Col 3: Nutrición
+      const foodLabel = item.foodStatus === 'good' ? "Buena" : item.foodStatus === 'regular' ? "Regular" : "Mala";
+      if (item.foodStatus === 'good') doc.setTextColor(30, 130, 76);
+      else if (item.foodStatus === 'regular') doc.setTextColor(190, 90, 10);
+      else doc.setTextColor(219, 10, 10);
+      doc.setFont("helvetica", "bold");
+      doc.text(foodLabel, 122, currentY + 6);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(50, 50, 50);
+      doc.text(`${item.waterIntake} vasos agua`, 122, currentY + 12);
+      
+      // Col 4: Eliminación
+      doc.text(`Micciones: ${item.urineCount}v`, 152, currentY + 6);
+      const stoolTypeLabel = item.stoolType === 'normal' ? 'Norm' : item.stoolType === 'constipation' ? 'Estreñ' : 'Diarrea';
+      doc.text(`Deposic.: ${item.stoolCount}v`, 152, currentY + 11);
+      if (item.stoolCount > 0) {
+        doc.setFont("helvetica", "oblique");
+        doc.text(`(${stoolTypeLabel})`, 152, currentY + 15.5);
+        doc.setFont("helvetica", "normal");
+      }
+      
+      // Col 5: Estado de Ánimo
+      const moods = [];
+      if (item.moodCalm) moods.push("Tranquilo");
+      if (item.moodCooperative) moods.push("Cooperativo");
+      if (item.moodAnxious) moods.push("Ansioso");
+      if (item.moodSad) moods.push("Decaído");
+      if (item.moodConfused) moods.push("Confuso");
+      if (item.moodAgitated) moods.push("Agitado");
+      
+      const moodLines = doc.splitTextToSize(moods.join(", "), cols[5].w - 4);
+      doc.text(moodLines, 186, currentY + 5.5);
+      
+      // Col 6: Sueño
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(79, 70, 229);
+      doc.text(`${item.sleepHours}h`, 230, currentY + 7);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(100, 110, 130);
+      doc.text(`${item.nightWakings} desp.`, 229, currentY + 13);
+      
+      // Col 7: Observaciones
+      doc.setTextColor(50, 50, 50);
+      doc.text(noteLines, 249, currentY + 5.5);
+      
+      // Draw grid vertical column separators for alignment
+      doc.setDrawColor(226, 232, 240);
+      let gridX = 20;
+      doc.line(gridX, currentY, gridX, currentY + rowHeight); // Left border
+      
+      cols.forEach(col => {
+        gridX += col.w;
+        doc.line(gridX, currentY, gridX, currentY + rowHeight); // Column separator
+      });
+      
+      currentY += rowHeight;
+    });
+    
+    // Bottom document notice
+    doc.setFontSize(7.5);
+    doc.setTextColor(150, 150, 150);
+    doc.text("Este diario de registro es confidencial y ha sido generado para uso clínico y terapéutico de IAdapta (iadapta.es).", 148, 199, { align: "center" });
+    
+    doc.save(`Diario_Registro_Cuidados_IAdapta.pdf`);
+  };
+
+  return (
+    <div className="anim-scale-in">
+      <div className="grid lg:grid-cols-3 gap-8">
+        
+        {/* FORMULARIO DE ENTRADA */}
+        <div className="lg:col-span-1 bg-white rounded-3xl border border-brand-100 shadow-xl p-6 md:p-8 flex flex-col h-fit">
+          <div className="flex items-center gap-3.5 mb-6 pb-4 border-b border-brand-50">
+            <span className="text-3xl">📝</span>
+            <div className="text-left">
+              <h4 className="font-display text-xl font-bold text-brand-900">Registrar Día</h4>
+              <p className="text-xs text-gray-500 font-medium">Añade o edita una ficha de cuidado</p>
+            </div>
+          </div>
+
+          {saveSuccess && (
+            <div className="bg-emerald-50 border border-emerald-250 text-emerald-800 p-4 rounded-xl text-xs font-bold mb-6 text-center animate-fade-in flex items-center justify-center gap-2">
+              <span>✅</span>
+              <span>¡Registro guardado correctamente!</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSaveEntry} className="space-y-5 text-left">
+            <div>
+              <label className="block text-xs font-black text-brand-900 uppercase tracking-wider mb-2">Fecha del Registro</label>
+              <input 
+                type="date" 
+                value={date} 
+                onChange={(e) => setDate(e.target.value)} 
+                required
+                className="w-full bg-gray-50 border border-gray-250 focus:border-amber-600 focus:bg-white rounded-xl px-4 py-3 text-sm outline-none text-gray-700 font-medium transition-all"
+              />
+            </div>
+
+            {/* Medicación por horario */}
+            <div className="bg-brand-50/20 p-4 rounded-2xl border border-brand-100/50 space-y-3">
+              <span className="block text-xs font-black text-brand-900 uppercase tracking-wider">Toma de Medicamentos</span>
+              <div className="flex flex-col gap-2.5">
+                <label className="flex items-center gap-3 text-xs font-bold text-gray-700 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors select-none">
+                  <input
+                    type="checkbox"
+                    checked={medsMorning}
+                    onChange={(e) => setMedsMorning(e.target.checked)}
+                    className="w-4.5 h-4.5 rounded border-gray-300 text-brand-900 focus:ring-brand-500 cursor-pointer animate-none"
+                  />
+                  <span className="flex items-center gap-2">☀️ Mañana</span>
+                </label>
+                <label className="flex items-center gap-3 text-xs font-bold text-gray-700 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors select-none">
+                  <input
+                    type="checkbox"
+                    checked={medsAfternoon}
+                    onChange={(e) => setMedsAfternoon(e.target.checked)}
+                    className="w-4.5 h-4.5 rounded border-gray-300 text-brand-900 focus:ring-brand-500 cursor-pointer animate-none"
+                  />
+                  <span className="flex items-center gap-2">🌤️ Tarde</span>
+                </label>
+                <label className="flex items-center gap-3 text-xs font-bold text-gray-700 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors select-none">
+                  <input
+                    type="checkbox"
+                    checked={medsNight}
+                    onChange={(e) => setMedsNight(e.target.checked)}
+                    className="w-4.5 h-4.5 rounded border-gray-300 text-brand-900 focus:ring-brand-500 cursor-pointer animate-none"
+                  />
+                  <span className="flex items-center gap-2">🌙 Noche</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Higiene Completa y Frecuencia */}
+            <div className="bg-sky-50/25 p-4 rounded-2xl border border-sky-100/60 space-y-4">
+              <span className="block text-xs font-black text-sky-950 uppercase tracking-wider">Higiene y Aseo diario</span>
+              
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2 text-xs font-bold text-gray-700 cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    checked={showerDone} 
+                    onChange={(e) => setShowerDone(e.target.checked)}
+                    className="w-4.5 h-4.5 rounded border-gray-300 text-sky-600 focus:ring-sky-500 cursor-pointer"
+                  />
+                  <span>🛁 Ducha/Baño completo</span>
+                </label>
+                <label className="flex items-center gap-2 text-xs font-bold text-gray-700 cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    checked={washDone} 
+                    onChange={(e) => setWashDone(e.target.checked)}
+                    className="w-4.5 h-4.5 rounded border-gray-300 text-sky-600 focus:ring-sky-500 cursor-pointer"
+                  />
+                  <span>🧼 Lavado esponja/parcial</span>
+                </label>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-sky-100/50">
+                <div>
+                  <label className="block text-[10px] font-black text-sky-900 uppercase tracking-wider mb-1.5">🪥 Lavado Dientes</label>
+                  <div className="flex items-center bg-white border border-gray-200 rounded-xl px-2 py-0.5">
+                    <button 
+                      type="button" 
+                      onClick={() => setTeethWashCount(c => Math.max(0, c - 1))}
+                      className="w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+                    >
+                      -
+                    </button>
+                    <span className="flex-1 text-center font-bold text-xs text-brand-900">{teethWashCount}</span>
+                    <button 
+                      type="button" 
+                      onClick={() => setTeethWashCount(c => Math.min(5, c + 1))}
+                      className="w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black text-sky-900 uppercase tracking-wider mb-1.5">🧻 Cambios Pañal</label>
+                  <div className="flex items-center bg-white border border-gray-200 rounded-xl px-2 py-0.5">
+                    <button 
+                      type="button" 
+                      onClick={() => setDiaperChangeCount(c => Math.max(0, c - 1))}
+                      className="w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+                    >
+                      -
+                    </button>
+                    <span className="flex-1 text-center font-bold text-xs text-brand-900">{diaperChangeCount}</span>
+                    <button 
+                      type="button" 
+                      onClick={() => setDiaperChangeCount(c => Math.min(10, c + 1))}
+                      className="w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Eliminación / Fisiológico */}
+            <div className="bg-emerald-50/20 p-4 rounded-2xl border border-emerald-100/50 space-y-4">
+              <span className="block text-xs font-black text-emerald-950 uppercase tracking-wider">Eliminación y Deposiciones</span>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-black text-emerald-900 uppercase tracking-wider mb-1.5">💧 Micciones (Orina)</label>
+                  <div className="flex items-center bg-white border border-gray-200 rounded-xl px-2 py-0.5">
+                    <button 
+                      type="button" 
+                      onClick={() => setUrineCount(u => Math.max(0, u - 1))}
+                      className="w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+                    >
+                      -
+                    </button>
+                    <span className="flex-1 text-center font-bold text-xs text-brand-900">{urineCount}</span>
+                    <button 
+                      type="button" 
+                      onClick={() => setUrineCount(u => Math.min(15, u + 1))}
+                      className="w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black text-emerald-900 uppercase tracking-wider mb-1.5">💩 Heces (Deposición)</label>
+                  <div className="flex items-center bg-white border border-gray-200 rounded-xl px-2 py-0.5">
+                    <button 
+                      type="button" 
+                      onClick={() => setStoolCount(s => Math.max(0, s - 1))}
+                      className="w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+                    >
+                      -
+                    </button>
+                    <span className="flex-1 text-center font-bold text-xs text-brand-900">{stoolCount}</span>
+                    <button 
+                      type="button" 
+                      onClick={() => setStoolCount(s => Math.min(8, s + 1))}
+                      className="w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {stoolCount > 0 && (
+                <div>
+                  <label className="block text-[10px] font-black text-emerald-900 uppercase tracking-wider mb-1.5">Consistencia Heces</label>
+                  <select 
+                    value={stoolType}
+                    onChange={(e) => setStoolType(e.target.value)}
+                    className="w-full bg-white border border-gray-200 focus:border-emerald-500 rounded-xl px-3 py-2 text-xs outline-none text-gray-700 font-medium transition-all"
+                  >
+                    <option value="normal">🟢 Normales / Blandas</option>
+                    <option value="constipation">🟡 Estreñimiento (Duras/secas)</option>
+                    <option value="diarrhea">🔴 Diarrea (Líquidas)</option>
+                  </select>
+                </div>
+              )}
+            </div>
+
+            {/* Alimentación y Vasos */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-black text-brand-900 uppercase tracking-wider mb-2">Alimentación</label>
+                <select 
+                  value={foodStatus} 
+                  onChange={(e) => setFoodStatus(e.target.value)}
+                  className="w-full bg-gray-50 border border-gray-250 focus:border-amber-600 focus:bg-white rounded-xl px-3 py-2.5 text-xs outline-none text-gray-700 font-medium transition-all"
+                >
+                  <option value="good">🟢 Buena (Todo)</option>
+                  <option value="regular">🟡 Regular (Mitad)</option>
+                  <option value="bad">🔴 Mala (Poco/Nada)</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-black text-brand-900 uppercase tracking-wider mb-2">Agua (Vasos 🥛)</label>
+                <div className="flex items-center bg-gray-50 border border-gray-250 rounded-xl px-3 py-1 bg-white">
+                  <button 
+                    type="button" 
+                    onClick={() => setWaterIntake(w => Math.max(0, w - 1))}
+                    className="w-8 h-8 font-black text-gray-500 hover:text-brand-900 hover:bg-gray-200/50 rounded-lg text-lg flex items-center justify-center cursor-pointer"
+                  >
+                    -
+                  </button>
+                  <span className="flex-1 text-center font-bold text-xs text-brand-900">{waterIntake}</span>
+                  <button 
+                    type="button" 
+                    onClick={() => setWaterIntake(w => Math.min(15, w + 1))}
+                    className="w-8 h-8 font-black text-gray-500 hover:text-brand-900 hover:bg-gray-200/50 rounded-lg text-lg flex items-center justify-center cursor-pointer"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Estado de Ánimo y Conducta */}
+            <div className="bg-brand-50/10 p-4 rounded-2xl border border-brand-100/50">
+              <span className="block text-xs font-black text-brand-900 uppercase tracking-wider mb-2.5">Ánimo y Conducta (Múltiple)</span>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { id: 'calm', label: '😊 Tranquilo', state: moodCalm, setter: setMoodCalm },
+                  { id: 'cooperative', label: '🤝 Cooperativo', state: moodCooperative, setter: setMoodCooperative },
+                  { id: 'anxious', label: '😰 Ansioso', state: moodAnxious, setter: setMoodAnxious },
+                  { id: 'sad', label: '😢 Decaído', state: moodSad, setter: setMoodSad },
+                  { id: 'confused', label: '😕 Confuso', state: moodConfused, setter: setMoodConfused },
+                  { id: 'agitated', label: '😡 Agitado', state: moodAgitated, setter: setMoodAgitated }
+                ].map(item => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => item.setter(s => !s)}
+                    className={`py-1.5 px-2.5 rounded-lg text-xs font-bold border transition-all cursor-pointer
+                      ${item.state 
+                        ? 'bg-brand-900 text-white border-transparent shadow-sm' 
+                        : 'bg-white border-gray-150 text-gray-600 hover:bg-gray-50'}`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Descanso */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-black text-brand-900 uppercase tracking-wider mb-2">Horas de Sueño</label>
+                <div className="flex items-center bg-gray-50 border border-gray-250 rounded-xl px-2 py-0.5">
+                  <button 
+                    type="button" 
+                    onClick={() => setSleepHours(s => Math.max(0, s - 0.5))}
+                    className="w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+                  >
+                    -
+                  </button>
+                  <span className="flex-1 text-center font-bold text-xs text-brand-900">{sleepHours}h</span>
+                  <button 
+                    type="button" 
+                    onClick={() => setSleepHours(s => Math.min(24, s + 0.5))}
+                    className="w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-black text-brand-900 uppercase tracking-wider mb-2">Despertares Noct.</label>
+                <div className="flex items-center bg-gray-50 border border-gray-250 rounded-xl px-2 py-0.5">
+                  <button 
+                    type="button" 
+                    onClick={() => setNightWakings(w => Math.max(0, w - 1))}
+                    className="w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+                  >
+                    -
+                  </button>
+                  <span className="flex-1 text-center font-bold text-xs text-brand-900">{nightWakings}</span>
+                  <button 
+                    type="button" 
+                    onClick={() => setNightWakings(w => Math.min(10, w + 1))}
+                    className="w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-black text-brand-900 uppercase tracking-wider mb-2">Notas / Observaciones</label>
+              <textarea 
+                rows="3" 
+                placeholder="Escribe dolores detectados, citas médicas, comportamiento reseñable..."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                className="w-full bg-gray-50 border border-gray-250 focus:border-amber-600 focus:bg-white rounded-xl px-4 py-3 text-sm outline-none text-gray-700 font-medium transition-all resize-none"
+              ></textarea>
+            </div>
+
+            <button 
+              type="submit" 
+              className="w-full py-4 bg-amber-600 hover:bg-amber-700 text-white rounded-2xl font-bold transition-all shadow-md hover:scale-[1.02] active:scale-95 text-sm cursor-pointer"
+            >
+              💾 Guardar Registro Diario
+            </button>
+          </form>
+        </div>
+
+        {/* HISTORIAL Y REPORTES */}
+        <div className="lg:col-span-2 flex flex-col gap-6">
+          <div className="bg-white rounded-3xl border border-brand-100 shadow-xl p-6 md:p-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-brand-50">
+              <div className="text-left">
+                <h4 className="font-display text-xl font-bold text-brand-900">Historial de Cuidados</h4>
+                <p className="text-xs text-gray-550 font-medium">Revisa y descarga la evolución del cuidado diario</p>
+              </div>
+              <button 
+                onClick={() => setShowExportModal(true)}
+                disabled={entries.length === 0}
+                className="px-5 py-3 bg-brand-900 hover:bg-brand-955 text-white font-bold rounded-xl text-sm transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                <span>📥</span> Descargar Reporte PDF
+              </button>
+            </div>
+
+            {/* Selector de período visual en pantalla */}
+            {entries.length > 0 && (
+              <div className="bg-brand-50/45 p-5 rounded-3xl border border-brand-100/70 mb-6 text-left">
+                <span className="block text-xs font-black text-brand-900 uppercase tracking-wider mb-3">
+                  🔎 Mostrar en el historial:
+                </span>
+                <div className="flex flex-wrap gap-2.5">
+                  {[
+                    { id: 'all', label: '📋 Todos los registros' },
+                    { id: '7d', label: '📅 Última semana' },
+                    { id: '15d', label: '📅 Últimos 15 días' },
+                    { id: '30d', label: '📅 Último mes' }
+                  ].map(p => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => setViewPreset(p.id)}
+                      className={`px-4 py-2.5 rounded-xl font-bold text-xs border-2 transition-all cursor-pointer shadow-sm
+                        ${viewPreset === p.id 
+                          ? 'bg-amber-600 border-transparent text-white scale-[1.02] shadow-md' 
+                          : 'bg-white border-gray-150 text-gray-600 hover:border-gray-300 hover:bg-gray-50'}`}
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {entries.length === 0 ? (
+              <div className="text-center py-16 px-4 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
+                <span className="text-4xl mb-3 block">🗓️</span>
+                <p className="text-gray-500 font-bold text-sm">No hay registros guardados todavía</p>
+                <p className="text-xs text-gray-400 mt-1 max-w-sm mx-auto leading-relaxed">Rellena el formulario de la izquierda para empezar a registrar el diario de cuidados de tu familiar.</p>
+              </div>
+            ) : filteredEntries.length === 0 ? (
+              <div className="text-center py-16 px-4 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
+                <span className="text-4xl mb-3 block">🔍</span>
+                <p className="text-gray-500 font-bold text-sm">Ninguna ficha coincide con el período</p>
+                <p className="text-xs text-gray-400 mt-1 max-w-sm mx-auto leading-relaxed">Modifica el rango de fechas "Desde" y "Hasta" para visualizar las fichas diarias de ese intervalo.</p>
+              </div>
+            ) : (
+              <div className="space-y-4 max-h-[1250px] overflow-y-auto pr-1 no-scrollbar text-left">
+                {filteredEntries.map(item => {
+                  const displayDate = new Date(item.date).toLocaleDateString('es-ES', { 
+                    weekday: 'long', 
+                    day: 'numeric', 
+                    month: 'long', 
+                    year: 'numeric' 
+                  });
+                  return (
+                    <div key={item.id} className="bg-white border border-brand-100 rounded-2xl p-5 hover:border-amber-250 hover:shadow-md transition-all relative group">
+                      <button 
+                        onClick={() => handleDeleteEntry(item.id)}
+                        className="absolute top-4 right-4 p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer opacity-0 group-hover:opacity-100"
+                        title="Eliminar registro"
+                      >
+                        🗑️
+                      </button>
+                      
+                      <div className="mb-4">
+                        <span className="bg-amber-50 text-amber-900 font-bold text-[10px] px-2.5 py-1 rounded-lg uppercase tracking-wider mb-1 inline-block">
+                          Ficha Diaria
+                        </span>
+                        <h5 className="font-display text-sm font-bold text-brand-900 capitalize">
+                          {displayDate}
+                        </h5>
+                      </div>
+
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-gray-50/50 rounded-xl p-4 border border-gray-100 mb-3.5 text-xs">
+                        {/* Medicación */}
+                        <div className="flex flex-col">
+                          <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Medicamentos</span>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {item.medsMorning && <span className="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded font-black">Mañ</span>}
+                            {item.medsAfternoon && <span className="bg-orange-100 text-orange-850 text-[10px] px-1.5 py-0.5 rounded font-black">Tar</span>}
+                            {item.medsNight && <span className="bg-indigo-100 text-indigo-900 text-[10px] px-1.5 py-0.5 rounded font-black">Noc</span>}
+                            {!item.medsMorning && !item.medsAfternoon && !item.medsNight && <span className="text-gray-400 font-semibold">Ninguna</span>}
+                          </div>
+                        </div>
+
+                        {/* Alimentación e Hidratación */}
+                        <div className="flex flex-col">
+                          <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Nutrición</span>
+                          <span className="font-bold text-brand-900 mt-1">
+                            {getFoodLabel(item.foodStatus)} / 🥛 {item.waterIntake}v
+                          </span>
+                        </div>
+
+                        {/* Higiene diaria */}
+                        <div className="flex flex-col">
+                          <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Higiene realizada</span>
+                          <span className="font-semibold text-gray-700 mt-1 leading-snug">
+                            {item.showerDone && '🛁 Ducha completo. '}
+                            {item.washDone && '🧼 Aseo parcial. '}
+                            {item.teethWashCount > 0 && `🪥 Dientes: ${item.teethWashCount}v. `}
+                            {item.diaperChangeCount > 0 && `🧻 Pañal: ${item.diaperChangeCount}v.`}
+                            {!item.showerDone && !item.washDone && item.teethWashCount === 0 && item.diaperChangeCount === 0 && 'Ninguno'}
+                          </span>
+                        </div>
+
+                        {/* Eliminación */}
+                        <div className="flex flex-col">
+                          <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Eliminación</span>
+                          <span className="font-semibold text-emerald-800 mt-1 leading-snug">
+                            💧 Micciones: {item.urineCount}v
+                            <br />
+                            💩 Deposición: {item.stoolCount}v {item.stoolCount > 0 && `(${item.stoolType === 'normal' ? 'Normal' : item.stoolType === 'constipation' ? 'Estreñido' : 'Diarrea'})`}
+                          </span>
+                        </div>
+
+                        {/* Sueño y descanso */}
+                        <div className="flex flex-col pt-2 border-t border-gray-100 sm:border-0 sm:pt-0">
+                          <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Sueño y Descanso</span>
+                          <span className="font-bold text-indigo-700 mt-1">
+                            😴 {item.sleepHours}h / {item.nightWakings} desp.
+                          </span>
+                        </div>
+
+                        {/* Ánimo y Conducta */}
+                        <div className="flex flex-col pt-2 border-t border-gray-100 sm:border-0 sm:pt-0 col-span-3">
+                          <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Estado de Ánimo</span>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {item.moodCalm && <span className="bg-brand-50 text-brand-900 text-[10px] px-1.5 py-0.5 rounded font-bold">Tranquilo</span>}
+                            {item.moodCooperative && <span className="bg-emerald-50 text-emerald-800 text-[10px] px-1.5 py-0.5 rounded font-bold">Cooperativo</span>}
+                            {item.moodAnxious && <span className="bg-amber-50 text-amber-800 text-[10px] px-1.5 py-0.5 rounded font-bold">Ansioso</span>}
+                            {item.moodSad && <span className="bg-blue-50 text-blue-800 text-[10px] px-1.5 py-0.5 rounded font-bold">Decaído</span>}
+                            {item.moodConfused && <span className="bg-indigo-50 text-indigo-800 text-[10px] px-1.5 py-0.5 rounded font-bold">Confuso</span>}
+                            {item.moodAgitated && <span className="bg-red-50 text-red-800 text-[10px] px-1.5 py-0.5 rounded font-bold">Agitado</span>}
+                          </div>
+                        </div>
+                      </div>
+
+                      {item.notes ? (
+                        <div className="bg-amber-50/20 p-3 rounded-lg border border-amber-500/10 text-xs text-gray-700 italic">
+                          <strong>Observaciones:</strong> {item.notes}
+                        </div>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+
+      </div>
+
+      {/* MODAL DE EXPORTACIÓN A PDF CON PORTAL */}
+      {showExportModal && ReactDOM.createPortal(
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 99999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            backdropFilter: 'blur(5px)',
+            padding: '1rem'
+          }}
+        >
+          <div className="bg-white rounded-[2.5rem] p-6 md:p-8 max-w-xl w-full shadow-2xl border border-brand-100 text-left relative z-[100000] animate-[scaleIn_0.2s_ease-out]">
+            <div className="flex items-center justify-between pb-4 border-b border-gray-100 mb-6">
+              <h3 className="font-display text-2xl font-bold text-brand-900 flex items-center gap-2">
+                📥 Descargar Reporte PDF
+              </h3>
+              <button 
+                onClick={() => setShowExportModal(false)}
+                className="w-10 h-10 hover:bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 hover:text-brand-900 transition-colors cursor-pointer text-xl font-bold"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <p className="text-sm text-gray-500 mb-6 font-medium leading-relaxed">
+              Selecciona el rango de fechas de los cuidados que deseas incluir en el reporte para tu médico o especialista:
+            </p>
+            
+            <div className="space-y-4 mb-8">
+              {[
+                { id: 'all', label: '📋 Todo el historial registrado' },
+                { id: '7d', label: '📅 Última semana (últimos 7 días)' },
+                { id: '15d', label: '📅 Últimos 15 días' },
+                { id: '30d', label: '📅 Último mes (últimos 30 días)' },
+                { id: 'custom', label: '🗓️ Período personalizado (seleccionar fechas)' }
+              ].map(opt => (
+                <label 
+                  key={opt.id} 
+                  className={`flex items-center gap-3.5 p-4 rounded-2xl border-2 transition-all cursor-pointer select-none
+                    ${exportPreset === opt.id 
+                      ? 'border-amber-600 bg-amber-50/10 font-bold text-brand-900 shadow-sm' 
+                      : 'border-gray-150 hover:border-gray-250 bg-white text-gray-600'}`}
+                >
+                  <input
+                    type="radio"
+                    name="exportPreset"
+                    checked={exportPreset === opt.id}
+                    onChange={() => setExportPreset(opt.id)}
+                    className="w-5 h-5 border-gray-300 text-amber-600 focus:ring-amber-500 cursor-pointer"
+                  />
+                  <span className="text-sm font-semibold">{opt.label}</span>
+                </label>
+              ))}
+              
+              {exportPreset === 'custom' && (
+                <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-200">
+                  <div>
+                    <label className="block text-[10px] font-black text-brand-900 uppercase tracking-wider mb-2">Fecha Desde</label>
+                    <input
+                      type="date"
+                      value={exportStartDate}
+                      onChange={(e) => setExportStartDate(e.target.value)}
+                      required
+                      className="w-full bg-white border border-gray-250 focus:border-amber-600 rounded-xl px-3 py-2 text-xs outline-none text-gray-700 font-medium"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black text-brand-900 uppercase tracking-wider mb-2">Fecha Hasta</label>
+                    <input
+                      type="date"
+                      value={exportEndDate}
+                      onChange={(e) => setExportEndDate(e.target.value)}
+                      required
+                      className="w-full bg-white border border-gray-250 focus:border-amber-600 rounded-xl px-3 py-2 text-xs outline-none text-gray-700 font-medium"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <div className="flex gap-4">
+              <button
+                onClick={() => {
+                  let targets = [];
+                  if (exportPreset === 'all') {
+                    targets = entries;
+                  } else if (exportPreset === 'custom') {
+                    targets = entries.filter(item => {
+                      if (exportStartDate && item.date < exportStartDate) return false;
+                      if (exportEndDate && item.date > exportEndDate) return false;
+                      return true;
+                    });
+                  } else {
+                    const now = new Date();
+                    let days = 7;
+                    if (exportPreset === '15d') days = 15;
+                    else if (exportPreset === '30d') days = 30;
+                    
+                    const limitDate = new Date();
+                    limitDate.setDate(now.getDate() - days);
+                    const limitStr = limitDate.toISOString().split('T')[0];
+                    targets = entries.filter(item => item.date >= limitStr);
+                  }
+                  
+                  if (targets.length === 0) {
+                    alert("No se encontraron registros de cuidado en el intervalo seleccionado.");
+                    return;
+                  }
+                  
+                  generatePDFReport(targets);
+                  setShowExportModal(false);
+                }}
+                className="flex-1 py-4 bg-brand-900 hover:bg-brand-955 text-white rounded-2xl font-bold transition-all shadow-md active:scale-95 text-center text-sm cursor-pointer"
+              >
+                📥 Descargar Reporte PDF
+              </button>
+              <button
+                onClick={() => setShowExportModal(false)}
+                className="py-4 px-6 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-2xl font-bold transition-all text-sm cursor-pointer"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+    </div>
+  );
+};
+
 // --- CONTENEDOR PRINCIPAL DE RECURSOS ---
 const SectionCaregiverResources = function SectionCaregiverResources() {
-  const [currentView, setCurrentView] = useState('menu');
+  const [currentView, setCurrentView] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tool = params.get('tool') || params.get('section');
+    if (['products', 'zarit', 'log', 'chat'].includes(tool)) {
+      return tool;
+    }
+    return 'menu';
+  });
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (currentView === 'menu') {
+      params.delete('tool');
+      params.delete('section');
+    } else {
+      params.set('tool', currentView);
+    }
+    const newSearch = params.toString();
+    const newUrl = window.location.pathname + (newSearch ? `?${newSearch}` : '');
+    window.history.replaceState({ path: newUrl }, '', newUrl);
+  }, [currentView]);
+
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -877,6 +1877,37 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
               </div>
             </div>
           </article>
+
+          {/* Apartado 4: Diario de Registro (Activo) */}
+          <article 
+            onClick={() => setCurrentView('log')}
+            className="bg-white rounded-[2.5rem] overflow-hidden border border-brand-100 shadow-xl hover:shadow-2xl transition-all cursor-pointer group flex flex-col justify-between"
+          >
+            <div className="h-48 overflow-hidden relative">
+              <img src="caregiver_log_thumbnail.png" className="w-full h-full object-cover transition-transform duration-750 group-hover:scale-110" alt="Diario de Registro" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent"></div>
+              <div className="absolute top-4 right-4 w-12 h-12 bg-amber-650 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-6 transition-transform text-xl">
+                📝
+              </div>
+            </div>
+            <div className="p-8 flex flex-col flex-1 justify-between text-center">
+              <div>
+                <span className="text-brand-400 font-bold uppercase tracking-widest text-[10px] mb-3 block">Seguimiento</span>
+                <h3 className="font-display text-xl font-bold text-brand-900 mb-4 group-hover:text-brand-650 transition-colors">Diario de Registro</h3>
+                <p className="text-gray-500 text-sm leading-relaxed mb-6">
+                  Registra de forma interactiva la toma de medicación, horas de sueño, hidratación y estado de ánimo de tu familiar para no pasar por alto ningún detalle de salud.
+                </p>
+                <ul className="list-disc pl-5 mb-6 text-xs text-gray-400 text-left space-y-1">
+                  <li>Formulario de métricas y constantes básicas</li>
+                  <li>Persistencia local en el dispositivo del cuidador</li>
+                  <li>Generación instantánea de reporte PDF para el médico</li>
+                </ul>
+              </div>
+              <div className="inline-flex items-center justify-center gap-2 text-amber-600 font-bold group-hover:gap-3 transition-all text-sm pt-4 border-t border-gray-100">
+                Ver Diario de Registro &rarr;
+              </div>
+            </div>
+          </article>
         </div>
       </section>
     );
@@ -1006,11 +2037,12 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
     const isCurrentPageComplete = pageQuestions.every((q, idx) => zaritAnswers[startIndex + idx] !== null);
 
     return (
-      <section className="max-w-4xl mx-auto px-4 py-8">
+      <section className="max-w-7xl mx-auto px-4 py-8">
         <CaregiverSubNav currentView="zarit" onViewChange={setCurrentView} />
 
-        {!isZaritComplete ? (
-          <div className="bg-white rounded-3xl border border-brand-100 shadow-xl p-8 md:p-10 anim-scale-in">
+        <div className="max-w-4xl mx-auto">
+          {!isZaritComplete ? (
+            <div className="bg-white rounded-3xl border border-brand-100 shadow-xl p-8 md:p-10 anim-scale-in">
             {/* Cabecera del Test */}
             <div className="mb-8 border-b border-brand-50 pb-6">
               <span className="bg-indigo-50 text-indigo-700 font-bold text-xs px-3 py-1.5 rounded-xl uppercase tracking-wider mb-3 inline-block">
@@ -1237,26 +2269,52 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
             </div>
           </div>
         )}
-      </section>
+      </div>
+    </section>
     );
   }
 
   // VISTA 4: CHATBOT PARA CUIDADORES
   if (currentView === 'chat') {
     return (
-      <section className="max-w-6xl mx-auto px-4 py-8">
+      <section className="max-w-7xl mx-auto px-4 py-8">
         <CaregiverSubNav currentView="chat" onViewChange={setCurrentView} />
         
-        <div className="mb-8 text-center">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-8 text-center">
+            <h2 className="font-display text-3xl font-bold text-brand-900 mb-2">
+              Asistente del Cuidador
+            </h2>
+            <p className="text-gray-555 max-w-2xl mx-auto text-base">
+              Pregunta de forma sencilla tus dudas cotidianas sobre el cuidado en casa, la movilidad del paciente o las adaptaciones. Límite de 5 preguntas por sesión.
+            </p>
+          </div>
+
+          <CaregiverChatbotComponent />
+        </div>
+      </section>
+    );
+  }
+
+  // VISTA 5: DIARIO DE REGISTRO DE CUIDADOS
+  if (currentView === 'log') {
+    return (
+      <section className="max-w-7xl mx-auto px-4 py-8">
+        <CaregiverSubNav currentView="log" onViewChange={setCurrentView} />
+        
+        <div className="mb-10 text-center">
+          <span className="inline-block bg-amber-50 text-amber-800 font-bold text-xs px-3.5 py-1.5 rounded-xl uppercase tracking-wider mb-3">
+            Seguimiento de Salud Doméstica
+          </span>
           <h2 className="font-display text-3xl font-bold text-brand-900 mb-2">
-            Asistente del Cuidador
+            Diario de Registro de Cuidados
           </h2>
-          <p className="text-gray-550 max-w-2xl mx-auto text-base">
-            Pregunta de forma sencilla tus dudas cotidianas sobre el cuidado en casa, la movilidad del paciente o las adaptaciones. Límite de 5 preguntas por sesión.
+          <p className="text-gray-555 max-w-3xl mx-auto text-base mb-4 leading-relaxed font-medium">
+            Lleva un control detallado del día a día de tu familiar. Anota tomas de medicamentos, descanso, alimentación y observaciones. Al final de la semana, genera un reporte clínico en PDF listo para imprimir o compartir en consultas médicas.
           </p>
         </div>
 
-        <CaregiverChatbotComponent />
+        <CareLogComponent />
       </section>
     );
   }

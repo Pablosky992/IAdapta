@@ -366,6 +366,12 @@ const CaregiverSubNav = function CaregiverSubNav({
     icon: '📋',
     color: 'bg-indigo-600 border-indigo-600'
   }, {
+    id: 'log',
+    title: 'Diario de Registro',
+    shortTitle: 'Diario',
+    icon: '📝',
+    color: 'bg-amber-600 border-amber-600'
+  }, {
     id: 'chat',
     title: 'Asistente del Cuidador',
     shortTitle: 'Asistente IA',
@@ -813,9 +819,900 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
   }, "Las respuestas de esta IA son meramente orientativas. Consulta siempre con un profesional sanitario o terapeuta ocupacional especialista antes de proceder con transferencias f\xEDsicas o pautas m\xE9dicas."))));
 };
 
+// --- DIARIO DE REGISTRO DE CUIDADOS COMPONENT ---
+const CareLogComponent = function CareLogComponent() {
+  const getFoodLabel = f => {
+    switch (f) {
+      case 'good':
+        return '🟢 Buena';
+      case 'regular':
+        return '🟡 Regular';
+      case 'bad':
+        return '🔴 Mala';
+      default:
+        return '🟢 Buena';
+    }
+  };
+  const [entries, setEntries] = useState([]);
+
+  // Form states
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+
+  // Meds (Morning/Afternoon/Night)
+  const [medsMorning, setMedsMorning] = useState(true);
+  const [medsAfternoon, setMedsAfternoon] = useState(true);
+  const [medsNight, setMedsNight] = useState(true);
+
+  // Nutrition & Hydration
+  const [waterIntake, setWaterIntake] = useState(4);
+  const [foodStatus, setFoodStatus] = useState('good');
+
+  // Hygiene metrics
+  const [showerDone, setShowerDone] = useState(false);
+  const [washDone, setWashDone] = useState(true);
+  const [teethWashCount, setTeethWashCount] = useState(2);
+  const [diaperChangeCount, setDiaperChangeCount] = useState(0);
+
+  // Elimination metrics
+  const [urineCount, setUrineCount] = useState(4);
+  const [stoolCount, setStoolCount] = useState(1);
+  const [stoolType, setStoolType] = useState('normal'); // 'normal', 'constipation', 'diarrhea'
+
+  // Mood states
+  const [moodCalm, setMoodCalm] = useState(true);
+  const [moodCooperative, setMoodCooperative] = useState(true);
+  const [moodAnxious, setMoodAnxious] = useState(false);
+  const [moodSad, setMoodSad] = useState(false);
+  const [moodConfused, setMoodConfused] = useState(false);
+  const [moodAgitated, setMoodAgitated] = useState(false);
+
+  // Sleep
+  const [sleepHours, setSleepHours] = useState(7);
+  const [nightWakings, setNightWakings] = useState(0);
+
+  // Text Notes
+  const [notes, setNotes] = useState('');
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // Screen History Preset Filter State
+  const [viewPreset, setViewPreset] = useState('all'); // 'all', '7d', '15d', '30d'
+
+  const filteredEntries = useMemo(() => {
+    if (viewPreset === 'all') return entries;
+    const now = new Date();
+    let days = 7;
+    if (viewPreset === '15d') days = 15;else if (viewPreset === '30d') days = 30;
+    const limitDate = new Date();
+    limitDate.setDate(now.getDate() - days);
+    const limitDateStr = limitDate.toISOString().split('T')[0];
+    return entries.filter(item => item.date >= limitDateStr);
+  }, [entries, viewPreset]);
+
+  // Modal and PDF Export states
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [exportPreset, setExportPreset] = useState('all'); // 'all', '7d', '15d', '30d', 'custom'
+  const [exportStartDate, setExportStartDate] = useState('');
+  const [exportEndDate, setExportEndDate] = useState('');
+  useEffect(() => {
+    const saved = localStorage.getItem('iadapta_caregiver_logs');
+    if (saved) {
+      try {
+        setEntries(JSON.parse(saved));
+      } catch (e) {
+        console.error("Error reading log entries", e);
+      }
+    }
+  }, []);
+  const saveEntries = updated => {
+    setEntries(updated);
+    localStorage.setItem('iadapta_caregiver_logs', JSON.stringify(updated));
+  };
+  const handleSaveEntry = e => {
+    e.preventDefault();
+    const newEntry = {
+      id: Date.now().toString(),
+      date,
+      medsMorning,
+      medsAfternoon,
+      medsNight,
+      waterIntake,
+      foodStatus,
+      showerDone,
+      washDone,
+      teethWashCount: parseInt(teethWashCount) || 0,
+      diaperChangeCount: parseInt(diaperChangeCount) || 0,
+      urineCount: parseInt(urineCount) || 0,
+      stoolCount: parseInt(stoolCount) || 0,
+      stoolType,
+      moodCalm,
+      moodCooperative,
+      moodAnxious,
+      moodSad,
+      moodConfused,
+      moodAgitated,
+      sleepHours: parseFloat(sleepHours) || 0,
+      nightWakings: parseInt(nightWakings) || 0,
+      notes: notes.trim()
+    };
+    let updated;
+    const existingIndex = entries.findIndex(item => item.date === date);
+    if (existingIndex > -1) {
+      if (!window.confirm("Ya existe un registro para esta fecha. ¿Quieres sobrescribirlo con los datos actuales?")) {
+        return;
+      }
+      updated = [...entries];
+      updated[existingIndex] = newEntry;
+    } else {
+      updated = [newEntry, ...entries];
+    }
+    updated.sort((a, b) => b.date.localeCompare(a.date));
+    saveEntries(updated);
+    setSaveSuccess(true);
+    setNotes('');
+
+    // Reset counters to defaults for next entry
+    setShowerDone(false);
+    setWashDone(true);
+    setTeethWashCount(2);
+    setDiaperChangeCount(0);
+    setUrineCount(4);
+    setStoolCount(1);
+    setStoolType('normal');
+    setNightWakings(0);
+    setTimeout(() => {
+      setSaveSuccess(false);
+    }, 3000);
+  };
+  const handleDeleteEntry = id => {
+    if (window.confirm("¿Seguro que quieres eliminar este registro de cuidados?")) {
+      const updated = entries.filter(item => item.id !== id);
+      saveEntries(updated);
+    }
+  };
+  const generatePDFReport = targetsToExport => {
+    const list = targetsToExport || entries;
+    if (list.length === 0) {
+      alert("No hay registros en el período seleccionado para exportar.");
+      return;
+    }
+    const {
+      jsPDF
+    } = window.jspdf;
+    const doc = new jsPDF('landscape');
+    const drawPageHeader = pageNum => {
+      // Top navy colored header band
+      doc.setFillColor(26, 48, 82);
+      doc.rect(20, 12, 257, 16, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(16);
+      doc.text("IAdapta", 25, 22);
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+      doc.text("DIARIO DE REGISTRO DE CUIDADOS", 272, 22, {
+        align: "right"
+      });
+
+      // Clinical Metadata Card
+      doc.setFillColor(242, 240, 233); // Brand cream background
+      doc.rect(20, 28, 257, 10, 'F');
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8.5);
+      doc.setTextColor(26, 48, 82);
+      const firstDate = new Date(list[list.length - 1].date).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+      const lastDate = new Date(list[0].date).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+      const metaText = `REPORTE DE SEGUIMIENTO DOMÉSTICO  |  Período: ${firstDate} al ${lastDate}  |  Días Registrados: ${list.length}  |  Pág. ${pageNum}`;
+      doc.text(metaText, 25, 34.5);
+    };
+    const drawTableHeaders = startY => {
+      // Table Header Row background
+      doc.setFillColor(40, 56, 85);
+      doc.rect(20, startY, 257, 9, 'F');
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9);
+      doc.setTextColor(255, 255, 255);
+      let currentX = 20;
+      cols.forEach(col => {
+        doc.text(col.name, currentX + 3, startY + 6);
+        currentX += col.w;
+      });
+    };
+    const cols = [{
+      name: "Fecha",
+      w: 25
+    }, {
+      name: "Medicación",
+      w: 32
+    }, {
+      name: "Higiene / Aseo",
+      w: 42
+    }, {
+      name: "Nutrición",
+      w: 30
+    }, {
+      name: "Eliminación",
+      w: 34
+    }, {
+      name: "Estado de Ánimo",
+      w: 42
+    }, {
+      name: "Sueño",
+      w: 20
+    }, {
+      name: "Observaciones",
+      w: 32
+    }];
+    let pageNum = 1;
+    drawPageHeader(pageNum);
+    let tableStartY = 42;
+    drawTableHeaders(tableStartY);
+    let currentY = tableStartY + 9;
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(50, 50, 50);
+    doc.setFontSize(8.5);
+    list.forEach((item, index) => {
+      // Calculate wrapped lines for Observations cell to handle height dynamically
+      const noteLines = doc.splitTextToSize(item.notes || "-", cols[7].w - 4);
+
+      // Determine height of this row based on content length
+      const rowHeight = Math.max(18, noteLines.length * 4.5 + 4);
+
+      // Page break check (Landscape height is 210mm, margins at 200mm)
+      if (currentY + rowHeight > 192) {
+        doc.addPage('landscape');
+        pageNum++;
+        drawPageHeader(pageNum);
+        drawTableHeaders(42);
+        currentY = 51;
+      }
+
+      // Alternate row backgrounds
+      if (index % 2 === 0) {
+        doc.setFillColor(248, 250, 252);
+        doc.rect(20, currentY, 257, rowHeight, 'F');
+      }
+
+      // Draw bottom row line
+      doc.setDrawColor(226, 232, 240);
+      doc.line(20, currentY + rowHeight, 277, currentY + rowHeight);
+
+      // Col 0: Fecha
+      const weekday = new Date(item.date).toLocaleDateString('es-ES', {
+        weekday: 'short'
+      });
+      const dateStr = new Date(item.date).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit'
+      });
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(26, 48, 82);
+      doc.text(`${weekday.toUpperCase()}`, 23, currentY + 6);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(100, 110, 130);
+      doc.text(dateStr, 23, currentY + 11);
+
+      // Col 1: Medicación
+      doc.setTextColor(50, 50, 50);
+      doc.text(`Mañ: ${item.medsMorning ? 'Sí' : 'No'}`, 48, currentY + 5.5);
+      doc.text(`Tar:  ${item.medsAfternoon ? 'Sí' : 'No'}`, 48, currentY + 10);
+      doc.text(`Noc: ${item.medsNight ? 'Sí' : 'No'}`, 48, currentY + 14.5);
+
+      // Col 2: Higiene
+      doc.text(`Ducha: ${item.showerDone ? 'Sí' : 'No'}`, 80, currentY + 5.5);
+      doc.text(`Lavado: ${item.washDone ? 'Sí' : 'No'}`, 80, currentY + 10);
+      doc.text(`Dientes: ${item.teethWashCount}v / Pañal: ${item.diaperChangeCount}v`, 80, currentY + 14.5);
+
+      // Col 3: Nutrición
+      const foodLabel = item.foodStatus === 'good' ? "Buena" : item.foodStatus === 'regular' ? "Regular" : "Mala";
+      if (item.foodStatus === 'good') doc.setTextColor(30, 130, 76);else if (item.foodStatus === 'regular') doc.setTextColor(190, 90, 10);else doc.setTextColor(219, 10, 10);
+      doc.setFont("helvetica", "bold");
+      doc.text(foodLabel, 122, currentY + 6);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(50, 50, 50);
+      doc.text(`${item.waterIntake} vasos agua`, 122, currentY + 12);
+
+      // Col 4: Eliminación
+      doc.text(`Micciones: ${item.urineCount}v`, 152, currentY + 6);
+      const stoolTypeLabel = item.stoolType === 'normal' ? 'Norm' : item.stoolType === 'constipation' ? 'Estreñ' : 'Diarrea';
+      doc.text(`Deposic.: ${item.stoolCount}v`, 152, currentY + 11);
+      if (item.stoolCount > 0) {
+        doc.setFont("helvetica", "oblique");
+        doc.text(`(${stoolTypeLabel})`, 152, currentY + 15.5);
+        doc.setFont("helvetica", "normal");
+      }
+
+      // Col 5: Estado de Ánimo
+      const moods = [];
+      if (item.moodCalm) moods.push("Tranquilo");
+      if (item.moodCooperative) moods.push("Cooperativo");
+      if (item.moodAnxious) moods.push("Ansioso");
+      if (item.moodSad) moods.push("Decaído");
+      if (item.moodConfused) moods.push("Confuso");
+      if (item.moodAgitated) moods.push("Agitado");
+      const moodLines = doc.splitTextToSize(moods.join(", "), cols[5].w - 4);
+      doc.text(moodLines, 186, currentY + 5.5);
+
+      // Col 6: Sueño
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(79, 70, 229);
+      doc.text(`${item.sleepHours}h`, 230, currentY + 7);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(100, 110, 130);
+      doc.text(`${item.nightWakings} desp.`, 229, currentY + 13);
+
+      // Col 7: Observaciones
+      doc.setTextColor(50, 50, 50);
+      doc.text(noteLines, 249, currentY + 5.5);
+
+      // Draw grid vertical column separators for alignment
+      doc.setDrawColor(226, 232, 240);
+      let gridX = 20;
+      doc.line(gridX, currentY, gridX, currentY + rowHeight); // Left border
+
+      cols.forEach(col => {
+        gridX += col.w;
+        doc.line(gridX, currentY, gridX, currentY + rowHeight); // Column separator
+      });
+      currentY += rowHeight;
+    });
+
+    // Bottom document notice
+    doc.setFontSize(7.5);
+    doc.setTextColor(150, 150, 150);
+    doc.text("Este diario de registro es confidencial y ha sido generado para uso clínico y terapéutico de IAdapta (iadapta.es).", 148, 199, {
+      align: "center"
+    });
+    doc.save(`Diario_Registro_Cuidados_IAdapta.pdf`);
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: "anim-scale-in"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "grid lg:grid-cols-3 gap-8"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "lg:col-span-1 bg-white rounded-3xl border border-brand-100 shadow-xl p-6 md:p-8 flex flex-col h-fit"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-3.5 mb-6 pb-4 border-b border-brand-50"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-3xl"
+  }, "\uD83D\uDCDD"), /*#__PURE__*/React.createElement("div", {
+    className: "text-left"
+  }, /*#__PURE__*/React.createElement("h4", {
+    className: "font-display text-xl font-bold text-brand-900"
+  }, "Registrar D\xEDa"), /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-gray-500 font-medium"
+  }, "A\xF1ade o edita una ficha de cuidado"))), saveSuccess && /*#__PURE__*/React.createElement("div", {
+    className: "bg-emerald-50 border border-emerald-250 text-emerald-800 p-4 rounded-xl text-xs font-bold mb-6 text-center animate-fade-in flex items-center justify-center gap-2"
+  }, /*#__PURE__*/React.createElement("span", null, "\u2705"), /*#__PURE__*/React.createElement("span", null, "\xA1Registro guardado correctamente!")), /*#__PURE__*/React.createElement("form", {
+    onSubmit: handleSaveEntry,
+    className: "space-y-5 text-left"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-xs font-black text-brand-900 uppercase tracking-wider mb-2"
+  }, "Fecha del Registro"), /*#__PURE__*/React.createElement("input", {
+    type: "date",
+    value: date,
+    onChange: e => setDate(e.target.value),
+    required: true,
+    className: "w-full bg-gray-50 border border-gray-250 focus:border-amber-600 focus:bg-white rounded-xl px-4 py-3 text-sm outline-none text-gray-700 font-medium transition-all"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "bg-brand-50/20 p-4 rounded-2xl border border-brand-100/50 space-y-3"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "block text-xs font-black text-brand-900 uppercase tracking-wider"
+  }, "Toma de Medicamentos"), /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-col gap-2.5"
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "flex items-center gap-3 text-xs font-bold text-gray-700 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors select-none"
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "checkbox",
+    checked: medsMorning,
+    onChange: e => setMedsMorning(e.target.checked),
+    className: "w-4.5 h-4.5 rounded border-gray-300 text-brand-900 focus:ring-brand-500 cursor-pointer animate-none"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "flex items-center gap-2"
+  }, "\u2600\uFE0F Ma\xF1ana")), /*#__PURE__*/React.createElement("label", {
+    className: "flex items-center gap-3 text-xs font-bold text-gray-700 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors select-none"
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "checkbox",
+    checked: medsAfternoon,
+    onChange: e => setMedsAfternoon(e.target.checked),
+    className: "w-4.5 h-4.5 rounded border-gray-300 text-brand-900 focus:ring-brand-500 cursor-pointer animate-none"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "flex items-center gap-2"
+  }, "\uD83C\uDF24\uFE0F Tarde")), /*#__PURE__*/React.createElement("label", {
+    className: "flex items-center gap-3 text-xs font-bold text-gray-700 cursor-pointer bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors select-none"
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "checkbox",
+    checked: medsNight,
+    onChange: e => setMedsNight(e.target.checked),
+    className: "w-4.5 h-4.5 rounded border-gray-300 text-brand-900 focus:ring-brand-500 cursor-pointer animate-none"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "flex items-center gap-2"
+  }, "\uD83C\uDF19 Noche")))), /*#__PURE__*/React.createElement("div", {
+    className: "bg-sky-50/25 p-4 rounded-2xl border border-sky-100/60 space-y-4"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "block text-xs font-black text-sky-950 uppercase tracking-wider"
+  }, "Higiene y Aseo diario"), /*#__PURE__*/React.createElement("div", {
+    className: "flex gap-4"
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "flex items-center gap-2 text-xs font-bold text-gray-700 cursor-pointer"
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "checkbox",
+    checked: showerDone,
+    onChange: e => setShowerDone(e.target.checked),
+    className: "w-4.5 h-4.5 rounded border-gray-300 text-sky-600 focus:ring-sky-500 cursor-pointer"
+  }), /*#__PURE__*/React.createElement("span", null, "\uD83D\uDEC1 Ducha/Ba\xF1o completo")), /*#__PURE__*/React.createElement("label", {
+    className: "flex items-center gap-2 text-xs font-bold text-gray-700 cursor-pointer"
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "checkbox",
+    checked: washDone,
+    onChange: e => setWashDone(e.target.checked),
+    className: "w-4.5 h-4.5 rounded border-gray-300 text-sky-600 focus:ring-sky-500 cursor-pointer"
+  }), /*#__PURE__*/React.createElement("span", null, "\uD83E\uDDFC Lavado esponja/parcial"))), /*#__PURE__*/React.createElement("div", {
+    className: "grid grid-cols-2 gap-4 pt-2 border-t border-sky-100/50"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-[10px] font-black text-sky-900 uppercase tracking-wider mb-1.5"
+  }, "\uD83E\uDEA5 Lavado Dientes"), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center bg-white border border-gray-200 rounded-xl px-2 py-0.5"
+  }, /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    onClick: () => setTeethWashCount(c => Math.max(0, c - 1)),
+    className: "w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+  }, "-"), /*#__PURE__*/React.createElement("span", {
+    className: "flex-1 text-center font-bold text-xs text-brand-900"
+  }, teethWashCount), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    onClick: () => setTeethWashCount(c => Math.min(5, c + 1)),
+    className: "w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+  }, "+"))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-[10px] font-black text-sky-900 uppercase tracking-wider mb-1.5"
+  }, "\uD83E\uDDFB Cambios Pa\xF1al"), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center bg-white border border-gray-200 rounded-xl px-2 py-0.5"
+  }, /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    onClick: () => setDiaperChangeCount(c => Math.max(0, c - 1)),
+    className: "w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+  }, "-"), /*#__PURE__*/React.createElement("span", {
+    className: "flex-1 text-center font-bold text-xs text-brand-900"
+  }, diaperChangeCount), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    onClick: () => setDiaperChangeCount(c => Math.min(10, c + 1)),
+    className: "w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+  }, "+"))))), /*#__PURE__*/React.createElement("div", {
+    className: "bg-emerald-50/20 p-4 rounded-2xl border border-emerald-100/50 space-y-4"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "block text-xs font-black text-emerald-950 uppercase tracking-wider"
+  }, "Eliminaci\xF3n y Deposiciones"), /*#__PURE__*/React.createElement("div", {
+    className: "grid grid-cols-2 gap-4"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-[10px] font-black text-emerald-900 uppercase tracking-wider mb-1.5"
+  }, "\uD83D\uDCA7 Micciones (Orina)"), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center bg-white border border-gray-200 rounded-xl px-2 py-0.5"
+  }, /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    onClick: () => setUrineCount(u => Math.max(0, u - 1)),
+    className: "w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+  }, "-"), /*#__PURE__*/React.createElement("span", {
+    className: "flex-1 text-center font-bold text-xs text-brand-900"
+  }, urineCount), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    onClick: () => setUrineCount(u => Math.min(15, u + 1)),
+    className: "w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+  }, "+"))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-[10px] font-black text-emerald-900 uppercase tracking-wider mb-1.5"
+  }, "\uD83D\uDCA9 Heces (Deposici\xF3n)"), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center bg-white border border-gray-200 rounded-xl px-2 py-0.5"
+  }, /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    onClick: () => setStoolCount(s => Math.max(0, s - 1)),
+    className: "w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+  }, "-"), /*#__PURE__*/React.createElement("span", {
+    className: "flex-1 text-center font-bold text-xs text-brand-900"
+  }, stoolCount), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    onClick: () => setStoolCount(s => Math.min(8, s + 1)),
+    className: "w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+  }, "+")))), stoolCount > 0 && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-[10px] font-black text-emerald-900 uppercase tracking-wider mb-1.5"
+  }, "Consistencia Heces"), /*#__PURE__*/React.createElement("select", {
+    value: stoolType,
+    onChange: e => setStoolType(e.target.value),
+    className: "w-full bg-white border border-gray-200 focus:border-emerald-500 rounded-xl px-3 py-2 text-xs outline-none text-gray-700 font-medium transition-all"
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "normal"
+  }, "\uD83D\uDFE2 Normales / Blandas"), /*#__PURE__*/React.createElement("option", {
+    value: "constipation"
+  }, "\uD83D\uDFE1 Estre\xF1imiento (Duras/secas)"), /*#__PURE__*/React.createElement("option", {
+    value: "diarrhea"
+  }, "\uD83D\uDD34 Diarrea (L\xEDquidas)")))), /*#__PURE__*/React.createElement("div", {
+    className: "grid grid-cols-2 gap-4"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-xs font-black text-brand-900 uppercase tracking-wider mb-2"
+  }, "Alimentaci\xF3n"), /*#__PURE__*/React.createElement("select", {
+    value: foodStatus,
+    onChange: e => setFoodStatus(e.target.value),
+    className: "w-full bg-gray-50 border border-gray-250 focus:border-amber-600 focus:bg-white rounded-xl px-3 py-2.5 text-xs outline-none text-gray-700 font-medium transition-all"
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "good"
+  }, "\uD83D\uDFE2 Buena (Todo)"), /*#__PURE__*/React.createElement("option", {
+    value: "regular"
+  }, "\uD83D\uDFE1 Regular (Mitad)"), /*#__PURE__*/React.createElement("option", {
+    value: "bad"
+  }, "\uD83D\uDD34 Mala (Poco/Nada)"))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-xs font-black text-brand-900 uppercase tracking-wider mb-2"
+  }, "Agua (Vasos \uD83E\uDD5B)"), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center bg-gray-50 border border-gray-250 rounded-xl px-3 py-1 bg-white"
+  }, /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    onClick: () => setWaterIntake(w => Math.max(0, w - 1)),
+    className: "w-8 h-8 font-black text-gray-500 hover:text-brand-900 hover:bg-gray-200/50 rounded-lg text-lg flex items-center justify-center cursor-pointer"
+  }, "-"), /*#__PURE__*/React.createElement("span", {
+    className: "flex-1 text-center font-bold text-xs text-brand-900"
+  }, waterIntake), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    onClick: () => setWaterIntake(w => Math.min(15, w + 1)),
+    className: "w-8 h-8 font-black text-gray-500 hover:text-brand-900 hover:bg-gray-200/50 rounded-lg text-lg flex items-center justify-center cursor-pointer"
+  }, "+")))), /*#__PURE__*/React.createElement("div", {
+    className: "bg-brand-50/10 p-4 rounded-2xl border border-brand-100/50"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "block text-xs font-black text-brand-900 uppercase tracking-wider mb-2.5"
+  }, "\xC1nimo y Conducta (M\xFAltiple)"), /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-wrap gap-2"
+  }, [{
+    id: 'calm',
+    label: '😊 Tranquilo',
+    state: moodCalm,
+    setter: setMoodCalm
+  }, {
+    id: 'cooperative',
+    label: '🤝 Cooperativo',
+    state: moodCooperative,
+    setter: setMoodCooperative
+  }, {
+    id: 'anxious',
+    label: '😰 Ansioso',
+    state: moodAnxious,
+    setter: setMoodAnxious
+  }, {
+    id: 'sad',
+    label: '😢 Decaído',
+    state: moodSad,
+    setter: setMoodSad
+  }, {
+    id: 'confused',
+    label: '😕 Confuso',
+    state: moodConfused,
+    setter: setMoodConfused
+  }, {
+    id: 'agitated',
+    label: '😡 Agitado',
+    state: moodAgitated,
+    setter: setMoodAgitated
+  }].map(item => /*#__PURE__*/React.createElement("button", {
+    key: item.id,
+    type: "button",
+    onClick: () => item.setter(s => !s),
+    className: `py-1.5 px-2.5 rounded-lg text-xs font-bold border transition-all cursor-pointer
+                      ${item.state ? 'bg-brand-900 text-white border-transparent shadow-sm' : 'bg-white border-gray-150 text-gray-600 hover:bg-gray-50'}`
+  }, item.label)))), /*#__PURE__*/React.createElement("div", {
+    className: "grid grid-cols-2 gap-4"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-xs font-black text-brand-900 uppercase tracking-wider mb-2"
+  }, "Horas de Sue\xF1o"), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center bg-gray-50 border border-gray-250 rounded-xl px-2 py-0.5"
+  }, /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    onClick: () => setSleepHours(s => Math.max(0, s - 0.5)),
+    className: "w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+  }, "-"), /*#__PURE__*/React.createElement("span", {
+    className: "flex-1 text-center font-bold text-xs text-brand-900"
+  }, sleepHours, "h"), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    onClick: () => setSleepHours(s => Math.min(24, s + 0.5)),
+    className: "w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+  }, "+"))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-xs font-black text-brand-900 uppercase tracking-wider mb-2"
+  }, "Despertares Noct."), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center bg-gray-50 border border-gray-250 rounded-xl px-2 py-0.5"
+  }, /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    onClick: () => setNightWakings(w => Math.max(0, w - 1)),
+    className: "w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+  }, "-"), /*#__PURE__*/React.createElement("span", {
+    className: "flex-1 text-center font-bold text-xs text-brand-900"
+  }, nightWakings), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    onClick: () => setNightWakings(w => Math.min(10, w + 1)),
+    className: "w-7 h-7 font-black text-gray-400 hover:text-brand-900 hover:bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+  }, "+")))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-xs font-black text-brand-900 uppercase tracking-wider mb-2"
+  }, "Notas / Observaciones"), /*#__PURE__*/React.createElement("textarea", {
+    rows: "3",
+    placeholder: "Escribe dolores detectados, citas m\xE9dicas, comportamiento rese\xF1able...",
+    value: notes,
+    onChange: e => setNotes(e.target.value),
+    className: "w-full bg-gray-50 border border-gray-250 focus:border-amber-600 focus:bg-white rounded-xl px-4 py-3 text-sm outline-none text-gray-700 font-medium transition-all resize-none"
+  })), /*#__PURE__*/React.createElement("button", {
+    type: "submit",
+    className: "w-full py-4 bg-amber-600 hover:bg-amber-700 text-white rounded-2xl font-bold transition-all shadow-md hover:scale-[1.02] active:scale-95 text-sm cursor-pointer"
+  }, "\uD83D\uDCBE Guardar Registro Diario"))), /*#__PURE__*/React.createElement("div", {
+    className: "lg:col-span-2 flex flex-col gap-6"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-3xl border border-brand-100 shadow-xl p-6 md:p-8"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-brand-50"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-left"
+  }, /*#__PURE__*/React.createElement("h4", {
+    className: "font-display text-xl font-bold text-brand-900"
+  }, "Historial de Cuidados"), /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-gray-550 font-medium"
+  }, "Revisa y descarga la evoluci\xF3n del cuidado diario")), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setShowExportModal(true),
+    disabled: entries.length === 0,
+    className: "px-5 py-3 bg-brand-900 hover:bg-brand-955 text-white font-bold rounded-xl text-sm transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+  }, /*#__PURE__*/React.createElement("span", null, "\uD83D\uDCE5"), " Descargar Reporte PDF")), entries.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "bg-brand-50/45 p-5 rounded-3xl border border-brand-100/70 mb-6 text-left"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "block text-xs font-black text-brand-900 uppercase tracking-wider mb-3"
+  }, "\uD83D\uDD0E Mostrar en el historial:"), /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-wrap gap-2.5"
+  }, [{
+    id: 'all',
+    label: '📋 Todos los registros'
+  }, {
+    id: '7d',
+    label: '📅 Última semana'
+  }, {
+    id: '15d',
+    label: '📅 Últimos 15 días'
+  }, {
+    id: '30d',
+    label: '📅 Último mes'
+  }].map(p => /*#__PURE__*/React.createElement("button", {
+    key: p.id,
+    type: "button",
+    onClick: () => setViewPreset(p.id),
+    className: `px-4 py-2.5 rounded-xl font-bold text-xs border-2 transition-all cursor-pointer shadow-sm
+                        ${viewPreset === p.id ? 'bg-amber-600 border-transparent text-white scale-[1.02] shadow-md' : 'bg-white border-gray-150 text-gray-600 hover:border-gray-300 hover:bg-gray-50'}`
+  }, p.label)))), entries.length === 0 ? /*#__PURE__*/React.createElement("div", {
+    className: "text-center py-16 px-4 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-4xl mb-3 block"
+  }, "\uD83D\uDDD3\uFE0F"), /*#__PURE__*/React.createElement("p", {
+    className: "text-gray-500 font-bold text-sm"
+  }, "No hay registros guardados todav\xEDa"), /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-gray-400 mt-1 max-w-sm mx-auto leading-relaxed"
+  }, "Rellena el formulario de la izquierda para empezar a registrar el diario de cuidados de tu familiar.")) : filteredEntries.length === 0 ? /*#__PURE__*/React.createElement("div", {
+    className: "text-center py-16 px-4 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-4xl mb-3 block"
+  }, "\uD83D\uDD0D"), /*#__PURE__*/React.createElement("p", {
+    className: "text-gray-500 font-bold text-sm"
+  }, "Ninguna ficha coincide con el per\xEDodo"), /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-gray-400 mt-1 max-w-sm mx-auto leading-relaxed"
+  }, "Modifica el rango de fechas \"Desde\" y \"Hasta\" para visualizar las fichas diarias de ese intervalo.")) : /*#__PURE__*/React.createElement("div", {
+    className: "space-y-4 max-h-[1250px] overflow-y-auto pr-1 no-scrollbar text-left"
+  }, filteredEntries.map(item => {
+    const displayDate = new Date(item.date).toLocaleDateString('es-ES', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    return /*#__PURE__*/React.createElement("div", {
+      key: item.id,
+      className: "bg-white border border-brand-100 rounded-2xl p-5 hover:border-amber-250 hover:shadow-md transition-all relative group"
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: () => handleDeleteEntry(item.id),
+      className: "absolute top-4 right-4 p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer opacity-0 group-hover:opacity-100",
+      title: "Eliminar registro"
+    }, "\uD83D\uDDD1\uFE0F"), /*#__PURE__*/React.createElement("div", {
+      className: "mb-4"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "bg-amber-50 text-amber-900 font-bold text-[10px] px-2.5 py-1 rounded-lg uppercase tracking-wider mb-1 inline-block"
+    }, "Ficha Diaria"), /*#__PURE__*/React.createElement("h5", {
+      className: "font-display text-sm font-bold text-brand-900 capitalize"
+    }, displayDate)), /*#__PURE__*/React.createElement("div", {
+      className: "grid grid-cols-2 sm:grid-cols-4 gap-3 bg-gray-50/50 rounded-xl p-4 border border-gray-100 mb-3.5 text-xs"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "flex flex-col"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "text-[10px] uppercase font-bold text-gray-400 tracking-wider"
+    }, "Medicamentos"), /*#__PURE__*/React.createElement("div", {
+      className: "flex flex-wrap gap-1 mt-1"
+    }, item.medsMorning && /*#__PURE__*/React.createElement("span", {
+      className: "bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded font-black"
+    }, "Ma\xF1"), item.medsAfternoon && /*#__PURE__*/React.createElement("span", {
+      className: "bg-orange-100 text-orange-850 text-[10px] px-1.5 py-0.5 rounded font-black"
+    }, "Tar"), item.medsNight && /*#__PURE__*/React.createElement("span", {
+      className: "bg-indigo-100 text-indigo-900 text-[10px] px-1.5 py-0.5 rounded font-black"
+    }, "Noc"), !item.medsMorning && !item.medsAfternoon && !item.medsNight && /*#__PURE__*/React.createElement("span", {
+      className: "text-gray-400 font-semibold"
+    }, "Ninguna"))), /*#__PURE__*/React.createElement("div", {
+      className: "flex flex-col"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "text-[10px] uppercase font-bold text-gray-400 tracking-wider"
+    }, "Nutrici\xF3n"), /*#__PURE__*/React.createElement("span", {
+      className: "font-bold text-brand-900 mt-1"
+    }, getFoodLabel(item.foodStatus), " / \uD83E\uDD5B ", item.waterIntake, "v")), /*#__PURE__*/React.createElement("div", {
+      className: "flex flex-col"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "text-[10px] uppercase font-bold text-gray-400 tracking-wider"
+    }, "Higiene realizada"), /*#__PURE__*/React.createElement("span", {
+      className: "font-semibold text-gray-700 mt-1 leading-snug"
+    }, item.showerDone && '🛁 Ducha completo. ', item.washDone && '🧼 Aseo parcial. ', item.teethWashCount > 0 && `🪥 Dientes: ${item.teethWashCount}v. `, item.diaperChangeCount > 0 && `🧻 Pañal: ${item.diaperChangeCount}v.`, !item.showerDone && !item.washDone && item.teethWashCount === 0 && item.diaperChangeCount === 0 && 'Ninguno')), /*#__PURE__*/React.createElement("div", {
+      className: "flex flex-col"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "text-[10px] uppercase font-bold text-gray-400 tracking-wider"
+    }, "Eliminaci\xF3n"), /*#__PURE__*/React.createElement("span", {
+      className: "font-semibold text-emerald-800 mt-1 leading-snug"
+    }, "\uD83D\uDCA7 Micciones: ", item.urineCount, "v", /*#__PURE__*/React.createElement("br", null), "\uD83D\uDCA9 Deposici\xF3n: ", item.stoolCount, "v ", item.stoolCount > 0 && `(${item.stoolType === 'normal' ? 'Normal' : item.stoolType === 'constipation' ? 'Estreñido' : 'Diarrea'})`)), /*#__PURE__*/React.createElement("div", {
+      className: "flex flex-col pt-2 border-t border-gray-100 sm:border-0 sm:pt-0"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "text-[10px] uppercase font-bold text-gray-400 tracking-wider"
+    }, "Sue\xF1o y Descanso"), /*#__PURE__*/React.createElement("span", {
+      className: "font-bold text-indigo-700 mt-1"
+    }, "\uD83D\uDE34 ", item.sleepHours, "h / ", item.nightWakings, " desp.")), /*#__PURE__*/React.createElement("div", {
+      className: "flex flex-col pt-2 border-t border-gray-100 sm:border-0 sm:pt-0 col-span-3"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "text-[10px] uppercase font-bold text-gray-400 tracking-wider"
+    }, "Estado de \xC1nimo"), /*#__PURE__*/React.createElement("div", {
+      className: "flex flex-wrap gap-1 mt-1"
+    }, item.moodCalm && /*#__PURE__*/React.createElement("span", {
+      className: "bg-brand-50 text-brand-900 text-[10px] px-1.5 py-0.5 rounded font-bold"
+    }, "Tranquilo"), item.moodCooperative && /*#__PURE__*/React.createElement("span", {
+      className: "bg-emerald-50 text-emerald-800 text-[10px] px-1.5 py-0.5 rounded font-bold"
+    }, "Cooperativo"), item.moodAnxious && /*#__PURE__*/React.createElement("span", {
+      className: "bg-amber-50 text-amber-800 text-[10px] px-1.5 py-0.5 rounded font-bold"
+    }, "Ansioso"), item.moodSad && /*#__PURE__*/React.createElement("span", {
+      className: "bg-blue-50 text-blue-800 text-[10px] px-1.5 py-0.5 rounded font-bold"
+    }, "Deca\xEDdo"), item.moodConfused && /*#__PURE__*/React.createElement("span", {
+      className: "bg-indigo-50 text-indigo-800 text-[10px] px-1.5 py-0.5 rounded font-bold"
+    }, "Confuso"), item.moodAgitated && /*#__PURE__*/React.createElement("span", {
+      className: "bg-red-50 text-red-800 text-[10px] px-1.5 py-0.5 rounded font-bold"
+    }, "Agitado")))), item.notes ? /*#__PURE__*/React.createElement("div", {
+      className: "bg-amber-50/20 p-3 rounded-lg border border-amber-500/10 text-xs text-gray-700 italic"
+    }, /*#__PURE__*/React.createElement("strong", null, "Observaciones:"), " ", item.notes) : null);
+  }))))), showExportModal && ReactDOM.createPortal(/*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 99999,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      backdropFilter: 'blur(5px)',
+      padding: '1rem'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-[2.5rem] p-6 md:p-8 max-w-xl w-full shadow-2xl border border-brand-100 text-left relative z-[100000] animate-[scaleIn_0.2s_ease-out]"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center justify-between pb-4 border-b border-gray-100 mb-6"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "font-display text-2xl font-bold text-brand-900 flex items-center gap-2"
+  }, "\uD83D\uDCE5 Descargar Reporte PDF"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setShowExportModal(false),
+    className: "w-10 h-10 hover:bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 hover:text-brand-900 transition-colors cursor-pointer text-xl font-bold"
+  }, "\u2715")), /*#__PURE__*/React.createElement("p", {
+    className: "text-sm text-gray-500 mb-6 font-medium leading-relaxed"
+  }, "Selecciona el rango de fechas de los cuidados que deseas incluir en el reporte para tu m\xE9dico o especialista:"), /*#__PURE__*/React.createElement("div", {
+    className: "space-y-4 mb-8"
+  }, [{
+    id: 'all',
+    label: '📋 Todo el historial registrado'
+  }, {
+    id: '7d',
+    label: '📅 Última semana (últimos 7 días)'
+  }, {
+    id: '15d',
+    label: '📅 Últimos 15 días'
+  }, {
+    id: '30d',
+    label: '📅 Último mes (últimos 30 días)'
+  }, {
+    id: 'custom',
+    label: '🗓️ Período personalizado (seleccionar fechas)'
+  }].map(opt => /*#__PURE__*/React.createElement("label", {
+    key: opt.id,
+    className: `flex items-center gap-3.5 p-4 rounded-2xl border-2 transition-all cursor-pointer select-none
+                    ${exportPreset === opt.id ? 'border-amber-600 bg-amber-50/10 font-bold text-brand-900 shadow-sm' : 'border-gray-150 hover:border-gray-250 bg-white text-gray-600'}`
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "radio",
+    name: "exportPreset",
+    checked: exportPreset === opt.id,
+    onChange: () => setExportPreset(opt.id),
+    className: "w-5 h-5 border-gray-300 text-amber-600 focus:ring-amber-500 cursor-pointer"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "text-sm font-semibold"
+  }, opt.label))), exportPreset === 'custom' && /*#__PURE__*/React.createElement("div", {
+    className: "grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-200"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-[10px] font-black text-brand-900 uppercase tracking-wider mb-2"
+  }, "Fecha Desde"), /*#__PURE__*/React.createElement("input", {
+    type: "date",
+    value: exportStartDate,
+    onChange: e => setExportStartDate(e.target.value),
+    required: true,
+    className: "w-full bg-white border border-gray-250 focus:border-amber-600 rounded-xl px-3 py-2 text-xs outline-none text-gray-700 font-medium"
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-[10px] font-black text-brand-900 uppercase tracking-wider mb-2"
+  }, "Fecha Hasta"), /*#__PURE__*/React.createElement("input", {
+    type: "date",
+    value: exportEndDate,
+    onChange: e => setExportEndDate(e.target.value),
+    required: true,
+    className: "w-full bg-white border border-gray-250 focus:border-amber-600 rounded-xl px-3 py-2 text-xs outline-none text-gray-700 font-medium"
+  })))), /*#__PURE__*/React.createElement("div", {
+    className: "flex gap-4"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => {
+      let targets = [];
+      if (exportPreset === 'all') {
+        targets = entries;
+      } else if (exportPreset === 'custom') {
+        targets = entries.filter(item => {
+          if (exportStartDate && item.date < exportStartDate) return false;
+          if (exportEndDate && item.date > exportEndDate) return false;
+          return true;
+        });
+      } else {
+        const now = new Date();
+        let days = 7;
+        if (exportPreset === '15d') days = 15;else if (exportPreset === '30d') days = 30;
+        const limitDate = new Date();
+        limitDate.setDate(now.getDate() - days);
+        const limitStr = limitDate.toISOString().split('T')[0];
+        targets = entries.filter(item => item.date >= limitStr);
+      }
+      if (targets.length === 0) {
+        alert("No se encontraron registros de cuidado en el intervalo seleccionado.");
+        return;
+      }
+      generatePDFReport(targets);
+      setShowExportModal(false);
+    },
+    className: "flex-1 py-4 bg-brand-900 hover:bg-brand-955 text-white rounded-2xl font-bold transition-all shadow-md active:scale-95 text-center text-sm cursor-pointer"
+  }, "\uD83D\uDCE5 Descargar Reporte PDF"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setShowExportModal(false),
+    className: "py-4 px-6 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-2xl font-bold transition-all text-sm cursor-pointer"
+  }, "Cancelar")))), document.body));
+};
+
 // --- CONTENEDOR PRINCIPAL DE RECURSOS ---
 const SectionCaregiverResources = function SectionCaregiverResources() {
-  const [currentView, setCurrentView] = useState('menu');
+  const [currentView, setCurrentView] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tool = params.get('tool') || params.get('section');
+    if (['products', 'zarit', 'log', 'chat'].includes(tool)) {
+      return tool;
+    }
+    return 'menu';
+  });
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (currentView === 'menu') {
+      params.delete('tool');
+      params.delete('section');
+    } else {
+      params.set('tool', currentView);
+    }
+    const newSearch = params.toString();
+    const newUrl = window.location.pathname + (newSearch ? `?${newSearch}` : '');
+    window.history.replaceState({
+      path: newUrl
+    }, '', newUrl);
+  }, [currentView]);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -1003,7 +1900,32 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
       className: "list-disc pl-5 mb-6 text-xs text-gray-400 text-left space-y-1"
     }, /*#__PURE__*/React.createElement("li", null, "Respuestas sencillas, directas y sin tecnicismos"), /*#__PURE__*/React.createElement("li", null, "Sugerencias de productos y enlaces de la web"), /*#__PURE__*/React.createElement("li", null, "L\xEDmite de 5 preguntas por sesi\xF3n de consulta"))), /*#__PURE__*/React.createElement("div", {
       className: "inline-flex items-center justify-center gap-2 text-teal-600 font-bold group-hover:gap-3 transition-all text-sm pt-4 border-t border-gray-100"
-    }, "Consultar al Asistente \u2192")))));
+    }, "Consultar al Asistente \u2192"))), /*#__PURE__*/React.createElement("article", {
+      onClick: () => setCurrentView('log'),
+      className: "bg-white rounded-[2.5rem] overflow-hidden border border-brand-100 shadow-xl hover:shadow-2xl transition-all cursor-pointer group flex flex-col justify-between"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "h-48 overflow-hidden relative"
+    }, /*#__PURE__*/React.createElement("img", {
+      src: "caregiver_log_thumbnail.png",
+      className: "w-full h-full object-cover transition-transform duration-750 group-hover:scale-110",
+      alt: "Diario de Registro"
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "absolute inset-0 bg-gradient-to-t from-black/25 to-transparent"
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "absolute top-4 right-4 w-12 h-12 bg-amber-650 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-6 transition-transform text-xl"
+    }, "\uD83D\uDCDD")), /*#__PURE__*/React.createElement("div", {
+      className: "p-8 flex flex-col flex-1 justify-between text-center"
+    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
+      className: "text-brand-400 font-bold uppercase tracking-widest text-[10px] mb-3 block"
+    }, "Seguimiento"), /*#__PURE__*/React.createElement("h3", {
+      className: "font-display text-xl font-bold text-brand-900 mb-4 group-hover:text-brand-650 transition-colors"
+    }, "Diario de Registro"), /*#__PURE__*/React.createElement("p", {
+      className: "text-gray-500 text-sm leading-relaxed mb-6"
+    }, "Registra de forma interactiva la toma de medicaci\xF3n, horas de sue\xF1o, hidrataci\xF3n y estado de \xE1nimo de tu familiar para no pasar por alto ning\xFAn detalle de salud."), /*#__PURE__*/React.createElement("ul", {
+      className: "list-disc pl-5 mb-6 text-xs text-gray-400 text-left space-y-1"
+    }, /*#__PURE__*/React.createElement("li", null, "Formulario de m\xE9tricas y constantes b\xE1sicas"), /*#__PURE__*/React.createElement("li", null, "Persistencia local en el dispositivo del cuidador"), /*#__PURE__*/React.createElement("li", null, "Generaci\xF3n instant\xE1nea de reporte PDF para el m\xE9dico"))), /*#__PURE__*/React.createElement("div", {
+      className: "inline-flex items-center justify-center gap-2 text-amber-600 font-bold group-hover:gap-3 transition-all text-sm pt-4 border-t border-gray-100"
+    }, "Ver Diario de Registro \u2192")))));
   }
 
   // VISTA 2: CATÁLOGO DE PRODUCTOS RECOMENDADOS
@@ -1096,11 +2018,13 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
     const progressPercent = Math.round(answeredCount / ZARIT_QUESTIONS.length * 100);
     const isCurrentPageComplete = pageQuestions.every((q, idx) => zaritAnswers[startIndex + idx] !== null);
     return /*#__PURE__*/React.createElement("section", {
-      className: "max-w-4xl mx-auto px-4 py-8"
+      className: "max-w-7xl mx-auto px-4 py-8"
     }, /*#__PURE__*/React.createElement(CaregiverSubNav, {
       currentView: "zarit",
       onViewChange: setCurrentView
-    }), !isZaritComplete ? /*#__PURE__*/React.createElement("div", {
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "max-w-4xl mx-auto"
+    }, !isZaritComplete ? /*#__PURE__*/React.createElement("div", {
       className: "bg-white rounded-3xl border border-brand-100 shadow-xl p-8 md:p-10 anim-scale-in"
     }, /*#__PURE__*/React.createElement("div", {
       className: "mb-8 border-b border-brand-50 pb-6"
@@ -1262,23 +2186,43 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
     }, "\uD83D\uDD04 Reiniciar el Test"), /*#__PURE__*/React.createElement("button", {
       onClick: () => setCurrentView('menu'),
       className: "px-6 py-4 bg-white border-2 border-brand-100 hover:border-brand-200 text-brand-700 font-bold rounded-2xl transition-colors cursor-pointer text-sm"
-    }, "Volver a Recursos"))));
+    }, "Volver a Recursos")))));
   }
 
   // VISTA 4: CHATBOT PARA CUIDADORES
   if (currentView === 'chat') {
     return /*#__PURE__*/React.createElement("section", {
-      className: "max-w-6xl mx-auto px-4 py-8"
+      className: "max-w-7xl mx-auto px-4 py-8"
     }, /*#__PURE__*/React.createElement(CaregiverSubNav, {
       currentView: "chat",
       onViewChange: setCurrentView
     }), /*#__PURE__*/React.createElement("div", {
+      className: "max-w-6xl mx-auto"
+    }, /*#__PURE__*/React.createElement("div", {
       className: "mb-8 text-center"
     }, /*#__PURE__*/React.createElement("h2", {
       className: "font-display text-3xl font-bold text-brand-900 mb-2"
     }, "Asistente del Cuidador"), /*#__PURE__*/React.createElement("p", {
-      className: "text-gray-550 max-w-2xl mx-auto text-base"
-    }, "Pregunta de forma sencilla tus dudas cotidianas sobre el cuidado en casa, la movilidad del paciente o las adaptaciones. L\xEDmite de 5 preguntas por sesi\xF3n.")), /*#__PURE__*/React.createElement(CaregiverChatbotComponent, null));
+      className: "text-gray-555 max-w-2xl mx-auto text-base"
+    }, "Pregunta de forma sencilla tus dudas cotidianas sobre el cuidado en casa, la movilidad del paciente o las adaptaciones. L\xEDmite de 5 preguntas por sesi\xF3n.")), /*#__PURE__*/React.createElement(CaregiverChatbotComponent, null)));
+  }
+
+  // VISTA 5: DIARIO DE REGISTRO DE CUIDADOS
+  if (currentView === 'log') {
+    return /*#__PURE__*/React.createElement("section", {
+      className: "max-w-7xl mx-auto px-4 py-8"
+    }, /*#__PURE__*/React.createElement(CaregiverSubNav, {
+      currentView: "log",
+      onViewChange: setCurrentView
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "mb-10 text-center"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "inline-block bg-amber-50 text-amber-800 font-bold text-xs px-3.5 py-1.5 rounded-xl uppercase tracking-wider mb-3"
+    }, "Seguimiento de Salud Dom\xE9stica"), /*#__PURE__*/React.createElement("h2", {
+      className: "font-display text-3xl font-bold text-brand-900 mb-2"
+    }, "Diario de Registro de Cuidados"), /*#__PURE__*/React.createElement("p", {
+      className: "text-gray-555 max-w-3xl mx-auto text-base mb-4 leading-relaxed font-medium"
+    }, "Lleva un control detallado del d\xEDa a d\xEDa de tu familiar. Anota tomas de medicamentos, descanso, alimentaci\xF3n y observaciones. Al final de la semana, genera un reporte cl\xEDnico en PDF listo para imprimir o compartir en consultas m\xE9dicas.")), /*#__PURE__*/React.createElement(CareLogComponent, null));
   }
 };
 function App() {
