@@ -449,7 +449,7 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
   };
 
   return (
-    <div className="bg-white rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden flex flex-col md:flex-row h-[750px] relative anim-scale-in text-left">
+    <div className="bg-white rounded-[2rem] md:rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden flex flex-col md:flex-row h-[550px] md:h-[700px] lg:h-[750px] relative anim-scale-in text-left">
       
       {/* SIDEBAR */}
       <aside className={`w-80 border-r border-brand-100 bg-brand-50/30 flex flex-col shrink-0 transition-transform duration-300 z-40 md:relative md:translate-x-0 absolute inset-y-0 left-0 bg-white
@@ -520,9 +520,9 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
       </aside>
 
       {/* CHAT AREA */}
-      <div className="flex-1 flex flex-col justify-between bg-white relative">
+      <div className="flex-1 flex flex-col justify-between bg-white relative min-w-0">
         {/* Chat Header */}
-        <div className="p-6 border-b border-brand-100 flex items-center justify-between bg-brand-50/10">
+        <div className="p-4 md:p-6 border-b border-brand-100 flex items-center justify-between bg-brand-50/10 shrink-0">
           <div className="flex items-center gap-3">
             <button 
               onClick={() => setShowSidebarMobile(o => !o)}
@@ -545,36 +545,36 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
         {/* Message Thread */}
         <div 
           ref={chatContainerRef}
-          className="flex-1 p-6 overflow-y-auto space-y-6 bg-slate-50/30 no-scrollbar"
+          className="flex-1 p-4 md:p-6 overflow-y-auto space-y-4 md:space-y-6 bg-slate-50/30 no-scrollbar"
         >
           {messages.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-center max-w-md mx-auto py-12">
-              <span className="text-5xl mb-4 animate-bounce">👋</span>
-              <h5 className="font-display text-xl font-bold text-brand-900 mb-2">¡Hola! Soy tu asistente de apoyo</h5>
-              <p className="text-gray-555 text-base leading-relaxed mb-6">
+            <div className="h-full flex flex-col items-center justify-center text-center max-w-md mx-auto py-4 md:py-12">
+              <span className="text-3xl md:text-5xl mb-2 md:mb-4 animate-bounce">👋</span>
+              <h5 className="font-display text-lg md:text-xl font-bold text-brand-900 mb-1 md:mb-2">¡Hola! Soy tu asistente de apoyo</h5>
+              <p className="text-gray-555 text-xs md:text-base leading-relaxed mb-4 md:mb-6">
                 Estoy aquí para orientarte en tus dudas diarias sobre el cuidado de tu familiar. Puedes preguntarme sobre técnicas de movilización sencillas, ayudas para el baño o simplemente buscar apoyo.
               </p>
-              <div className="flex flex-wrap gap-2.5 justify-center mb-8">
+              <div className="flex flex-col sm:flex-row gap-2 justify-center mb-4 md:mb-8 w-full max-w-xs sm:max-w-none">
                 <button 
                   onClick={() => handleSendMessage('¿Cómo puedo levantar de la cama a mi familiar sin hacerme daño en la espalda?')}
-                  className="bg-white border border-brand-100 hover:border-teal-200 text-gray-700 text-sm font-bold px-5 py-3 rounded-xl transition-all shadow-sm hover:bg-brand-50/20 cursor-pointer"
+                  className="bg-white border border-brand-100 hover:border-teal-200 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm hover:bg-brand-50/20 cursor-pointer text-left sm:text-center"
                 >
                   🚶 Pauta para levantar de la cama
                 </button>
                 <button 
                   onClick={() => handleSendMessage('¿Qué adaptaciones o productos me recomiendas para duchar a mi familiar con seguridad?')}
-                  className="bg-white border border-brand-100 hover:border-teal-200 text-gray-700 text-sm font-bold px-5 py-3 rounded-xl transition-all shadow-sm hover:bg-brand-50/20 cursor-pointer"
+                  className="bg-white border border-brand-100 hover:border-teal-200 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm hover:bg-brand-50/20 cursor-pointer text-left sm:text-center"
                 >
                   🛁 Adaptar el aseo
                 </button>
               </div>
 
               {/* Warning Alert */}
-              <div className="bg-amber-50/60 border border-amber-250/50 rounded-2xl p-4 text-left w-full flex gap-3 text-amber-900 text-[11px] leading-relaxed">
-                <span className="text-base shrink-0 select-none">⚠️</span>
+              <div className="bg-amber-50/60 border border-amber-250/50 rounded-2xl p-3 text-left w-full flex gap-2.5 text-amber-900 text-[10px] md:text-[11px] leading-relaxed">
+                <span className="text-sm shrink-0 select-none">⚠️</span>
                 <div>
                   <strong className="font-bold block mb-0.5">Nota de orientación:</strong>
-                  Las respuestas son generadas por Inteligencia Artificial con fines únicamente informativos y divulgativos. Consulta siempre con tu médico o terapeuta ocupacional especialista antes de realizar movilizaciones físicas complejas o aplicar cambios en las rutinas de tu familiar.
+                  Las respuestas son generadas por Inteligencia Artificial con fines únicamente informativos y divulgativos. Consulta siempre con tu médico o terapeuta ocupacional antes de movilizaciones físicas o cambios de rutinas.
                 </div>
               </div>
             </div>
@@ -621,7 +621,7 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
         </div>
 
         {/* Chat Input */}
-        <div className="p-6 border-t border-brand-100 bg-white">
+        <div className="p-3 md:p-6 border-t border-brand-100 bg-white shrink-0">
           {isLimitReached ? (
             <div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl text-amber-800 text-xs font-bold text-center leading-relaxed">
               🔒 Has alcanzado el límite de 5 consultas en esta sesión para evitar la sobrecarga del servicio. 
@@ -638,16 +638,16 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
             >
               <input
                 type="text"
-                placeholder={isLimitNear ? "Última pregunta de tu sesión..." : "Escribe tu consulta aquí de forma sencilla..."}
+                placeholder={isLimitNear ? "Última pregunta de tu sesión..." : "Escribe tu consulta aquí..."}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 disabled={isLoading}
-                className="flex-1 bg-gray-50 border border-gray-250 focus:border-teal-500 focus:bg-white rounded-2xl px-5 py-4 text-base outline-none text-gray-700 transition-all font-medium"
+                className="flex-1 bg-gray-50 border border-gray-250 focus:border-teal-500 focus:bg-white rounded-2xl px-4 py-3 md:px-5 md:py-4 text-sm md:text-base outline-none text-gray-700 transition-all font-medium"
               />
               <button 
                 type="submit"
                 disabled={!input.trim() || isLoading}
-                className="px-6 py-4 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-bold transition-all shadow-md flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="px-4 py-3 md:px-6 md:py-4 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-bold transition-all shadow-md flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-sm"
               >
                 <span>Enviar</span>
                 <span>➔</span>

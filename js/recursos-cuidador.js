@@ -673,7 +673,7 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
     }
   };
   return /*#__PURE__*/React.createElement("div", {
-    className: "bg-white rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden flex flex-col md:flex-row h-[750px] relative anim-scale-in text-left"
+    className: "bg-white rounded-[2rem] md:rounded-[3rem] shadow-2xl border border-brand-100 overflow-hidden flex flex-col md:flex-row h-[550px] md:h-[700px] lg:h-[750px] relative anim-scale-in text-left"
   }, /*#__PURE__*/React.createElement("aside", {
     className: `w-80 border-r border-brand-100 bg-brand-50/30 flex flex-col shrink-0 transition-transform duration-300 z-40 md:relative md:translate-x-0 absolute inset-y-0 left-0 bg-white
         ${showSidebarMobile ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'}`
@@ -723,9 +723,9 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
       title: "Eliminar consulta"
     }, "\uD83D\uDDD1\uFE0F")));
   }))), /*#__PURE__*/React.createElement("div", {
-    className: "flex-1 flex flex-col justify-between bg-white relative"
+    className: "flex-1 flex flex-col justify-between bg-white relative min-w-0"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "p-6 border-b border-brand-100 flex items-center justify-between bg-brand-50/10"
+    className: "p-4 md:p-6 border-b border-brand-100 flex items-center justify-between bg-brand-50/10 shrink-0"
   }, /*#__PURE__*/React.createElement("div", {
     className: "flex items-center gap-3"
   }, /*#__PURE__*/React.createElement("button", {
@@ -739,30 +739,30 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
     className: "bg-teal-50 text-teal-700 font-bold text-xs px-3 py-1.5 rounded-xl border border-teal-100"
   }, "Preguntas: ", userQuestionsCount, " / 5")), /*#__PURE__*/React.createElement("div", {
     ref: chatContainerRef,
-    className: "flex-1 p-6 overflow-y-auto space-y-6 bg-slate-50/30 no-scrollbar"
+    className: "flex-1 p-4 md:p-6 overflow-y-auto space-y-4 md:space-y-6 bg-slate-50/30 no-scrollbar"
   }, messages.length === 0 ? /*#__PURE__*/React.createElement("div", {
-    className: "h-full flex flex-col items-center justify-center text-center max-w-md mx-auto py-12"
+    className: "h-full flex flex-col items-center justify-center text-center max-w-md mx-auto py-4 md:py-12"
   }, /*#__PURE__*/React.createElement("span", {
-    className: "text-5xl mb-4 animate-bounce"
+    className: "text-3xl md:text-5xl mb-2 md:mb-4 animate-bounce"
   }, "\uD83D\uDC4B"), /*#__PURE__*/React.createElement("h5", {
-    className: "font-display text-xl font-bold text-brand-900 mb-2"
+    className: "font-display text-lg md:text-xl font-bold text-brand-900 mb-1 md:mb-2"
   }, "\xA1Hola! Soy tu asistente de apoyo"), /*#__PURE__*/React.createElement("p", {
-    className: "text-gray-555 text-base leading-relaxed mb-6"
+    className: "text-gray-555 text-xs md:text-base leading-relaxed mb-4 md:mb-6"
   }, "Estoy aqu\xED para orientarte en tus dudas diarias sobre el cuidado de tu familiar. Puedes preguntarme sobre t\xE9cnicas de movilizaci\xF3n sencillas, ayudas para el ba\xF1o o simplemente buscar apoyo."), /*#__PURE__*/React.createElement("div", {
-    className: "flex flex-wrap gap-2.5 justify-center mb-8"
+    className: "flex flex-col sm:flex-row gap-2 justify-center mb-4 md:mb-8 w-full max-w-xs sm:max-w-none"
   }, /*#__PURE__*/React.createElement("button", {
     onClick: () => handleSendMessage('¿Cómo puedo levantar de la cama a mi familiar sin hacerme daño en la espalda?'),
-    className: "bg-white border border-brand-100 hover:border-teal-200 text-gray-700 text-sm font-bold px-5 py-3 rounded-xl transition-all shadow-sm hover:bg-brand-50/20 cursor-pointer"
+    className: "bg-white border border-brand-100 hover:border-teal-200 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm hover:bg-brand-50/20 cursor-pointer text-left sm:text-center"
   }, "\uD83D\uDEB6 Pauta para levantar de la cama"), /*#__PURE__*/React.createElement("button", {
     onClick: () => handleSendMessage('¿Qué adaptaciones o productos me recomiendas para duchar a mi familiar con seguridad?'),
-    className: "bg-white border border-brand-100 hover:border-teal-200 text-gray-700 text-sm font-bold px-5 py-3 rounded-xl transition-all shadow-sm hover:bg-brand-50/20 cursor-pointer"
+    className: "bg-white border border-brand-100 hover:border-teal-200 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm hover:bg-brand-50/20 cursor-pointer text-left sm:text-center"
   }, "\uD83D\uDEC1 Adaptar el aseo")), /*#__PURE__*/React.createElement("div", {
-    className: "bg-amber-50/60 border border-amber-250/50 rounded-2xl p-4 text-left w-full flex gap-3 text-amber-900 text-[11px] leading-relaxed"
+    className: "bg-amber-50/60 border border-amber-250/50 rounded-2xl p-3 text-left w-full flex gap-2.5 text-amber-900 text-[10px] md:text-[11px] leading-relaxed"
   }, /*#__PURE__*/React.createElement("span", {
-    className: "text-base shrink-0 select-none"
+    className: "text-sm shrink-0 select-none"
   }, "\u26A0\uFE0F"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("strong", {
     className: "font-bold block mb-0.5"
-  }, "Nota de orientaci\xF3n:"), "Las respuestas son generadas por Inteligencia Artificial con fines \xFAnicamente informativos y divulgativos. Consulta siempre con tu m\xE9dico o terapeuta ocupacional especialista antes de realizar movilizaciones f\xEDsicas complejas o aplicar cambios en las rutinas de tu familiar."))) : messages.map((msg, idx) => {
+  }, "Nota de orientaci\xF3n:"), "Las respuestas son generadas por Inteligencia Artificial con fines \xFAnicamente informativos y divulgativos. Consulta siempre con tu m\xE9dico o terapeuta ocupacional antes de movilizaciones f\xEDsicas o cambios de rutinas."))) : messages.map((msg, idx) => {
     const isUser = msg.sender === 'user';
     return /*#__PURE__*/React.createElement("div", {
       key: idx,
@@ -791,7 +791,7 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
   }))), errorMsg && /*#__PURE__*/React.createElement("div", {
     className: "bg-red-50 border-2 border-red-200 p-4 rounded-2xl text-red-700 text-xs font-bold flex items-center gap-2"
   }, /*#__PURE__*/React.createElement("span", null, "\u26A0\uFE0F Error: ", errorMsg))), /*#__PURE__*/React.createElement("div", {
-    className: "p-6 border-t border-brand-100 bg-white"
+    className: "p-3 md:p-6 border-t border-brand-100 bg-white shrink-0"
   }, isLimitReached ? /*#__PURE__*/React.createElement("div", {
     className: "bg-amber-50 border border-amber-200 p-4 rounded-2xl text-amber-800 text-xs font-bold text-center leading-relaxed"
   }, "\uD83D\uDD12 Has alcanzado el l\xEDmite de 5 consultas en esta sesi\xF3n para evitar la sobrecarga del servicio.", /*#__PURE__*/React.createElement("br", null), "Para seguir chateando, por favor haz clic en ", /*#__PURE__*/React.createElement("button", {
@@ -805,15 +805,15 @@ const CaregiverChatbotComponent = function CaregiverChatbotComponent() {
     className: "flex gap-3"
   }, /*#__PURE__*/React.createElement("input", {
     type: "text",
-    placeholder: isLimitNear ? "Última pregunta de tu sesión..." : "Escribe tu consulta aquí de forma sencilla...",
+    placeholder: isLimitNear ? "Última pregunta de tu sesión..." : "Escribe tu consulta aquí...",
     value: input,
     onChange: e => setInput(e.target.value),
     disabled: isLoading,
-    className: "flex-1 bg-gray-50 border border-gray-250 focus:border-teal-500 focus:bg-white rounded-2xl px-5 py-4 text-base outline-none text-gray-700 transition-all font-medium"
+    className: "flex-1 bg-gray-50 border border-gray-250 focus:border-teal-500 focus:bg-white rounded-2xl px-4 py-3 md:px-5 md:py-4 text-sm md:text-base outline-none text-gray-700 transition-all font-medium"
   }), /*#__PURE__*/React.createElement("button", {
     type: "submit",
     disabled: !input.trim() || isLoading,
-    className: "px-6 py-4 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-bold transition-all shadow-md flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+    className: "px-4 py-3 md:px-6 md:py-4 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-bold transition-all shadow-md flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-sm"
   }, /*#__PURE__*/React.createElement("span", null, "Enviar"), /*#__PURE__*/React.createElement("span", null, "\u2794"))), /*#__PURE__*/React.createElement("p", {
     className: "text-[10px] text-gray-400 text-center mt-3 max-w-lg mx-auto font-medium leading-normal"
   }, "Las respuestas de esta IA son meramente orientativas. Consulta siempre con un profesional sanitario o terapeuta ocupacional especialista antes de proceder con transferencias f\xEDsicas o pautas m\xE9dicas."))));
