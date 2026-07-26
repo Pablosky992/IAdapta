@@ -1308,6 +1308,31 @@ const SectionCognitive = function SectionCognitive({
       className: "text-gray-600 text-lg mb-8 flex-1 leading-relaxed"
     }, "Ordena las letras desordenadas para descubrir la palabra secreta. Entrena la memoria sem\xE1ntica y el acceso al l\xE9xico."), /*#__PURE__*/React.createElement("button", {
       className: "w-full py-4 bg-amber-900 text-white rounded-2xl font-bold text-lg group-hover:bg-amber-800 transition-all flex items-center justify-center gap-3 shadow-lg shadow-amber-900/20"
+    }, "Jugar ahora", /*#__PURE__*/React.createElement(Icons.ArrowRight, null)))), /*#__PURE__*/React.createElement("div", {
+      onClick: () => navigateTo('simon'),
+      className: "bg-white rounded-[2.5rem] overflow-hidden border border-rose-50 shadow-xl hover:shadow-2xl transition-all group flex flex-col cursor-pointer"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "relative h-56 overflow-hidden"
+    }, /*#__PURE__*/React.createElement("img", {
+      src: "simon_game_thumbnail.png",
+      alt: "Secuencia de Colores",
+      className: "w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "absolute inset-0 bg-gradient-to-t from-rose-950/60 to-transparent"
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "absolute bottom-4 left-6 flex items-center gap-3"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "w-12 h-12 bg-rose-600 text-white rounded-xl flex items-center justify-center text-2xl shadow-lg border border-rose-400/30"
+    }, /*#__PURE__*/React.createElement(Icons.Brain, null)), /*#__PURE__*/React.createElement("span", {
+      className: "text-white font-bold text-lg"
+    }, "Memoria de Secuencia"))), /*#__PURE__*/React.createElement("div", {
+      className: "p-8 flex flex-col flex-1"
+    }, /*#__PURE__*/React.createElement("h3", {
+      className: "font-display text-2xl font-bold text-brand-900 mb-4"
+    }, "Secuencia de Colores"), /*#__PURE__*/React.createElement("p", {
+      className: "text-gray-600 text-lg mb-8 flex-1 leading-relaxed"
+    }, "Observa la secuencia de luces y sonidos y rep\xEDtela en el mismo orden exacto. Entrena la atenci\xF3n y la memoria de trabajo."), /*#__PURE__*/React.createElement("button", {
+      className: "w-full py-4 bg-rose-900 text-white rounded-2xl font-bold text-lg group-hover:bg-rose-800 transition-all flex items-center justify-center gap-3 shadow-lg shadow-rose-900/20"
     }, "Jugar ahora", /*#__PURE__*/React.createElement(Icons.ArrowRight, null))))), !isStandalone && /*#__PURE__*/React.createElement("div", {
       className: "bg-emerald-50 border-l-4 border-emerald-500 p-8 rounded-r-3xl shadow-sm text-left max-w-3xl mx-auto"
     }, /*#__PURE__*/React.createElement("div", {
@@ -3006,13 +3031,94 @@ const SectionDailyChallenge = function SectionDailyChallenge({
                     ${tile.used ? 'bg-gray-100 text-gray-300 border border-gray-200 opacity-40 pointer-events-none scale-90' : 'bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 active:scale-95 cursor-pointer'}`
     }, tile.char))));
   };
+  const SimonSubGame = ({
+    onComplete
+  }) => {
+    const [sequence] = useState(() => [Math.floor(Math.random() * 4), Math.floor(Math.random() * 4), Math.floor(Math.random() * 4), Math.floor(Math.random() * 4)]);
+    const [userIndex, setUserIndex] = useState(0);
+    const [activePad, setActivePad] = useState(null);
+    const [isSimonTurn, setIsSimonTurn] = useState(true);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const playPadAnimation = useCallback(padId => {
+      setActivePad(padId);
+      playSimonTone(SIMON_PADS[padId].freq, 400);
+      setTimeout(() => setActivePad(null), 400);
+    }, []);
+    useEffect(() => {
+      setIsSimonTurn(true);
+      sequence.forEach((padId, index) => {
+        setTimeout(() => {
+          playPadAnimation(padId);
+          if (index === sequence.length - 1) {
+            setTimeout(() => setIsSimonTurn(false), 500);
+          }
+        }, (index + 1) * 600);
+      });
+    }, [sequence, playPadAnimation]);
+    const handlePadClick = padId => {
+      if (isSimonTurn || isSuccess) return;
+      playPadAnimation(padId);
+      if (padId === sequence[userIndex]) {
+        if (userIndex + 1 === sequence.length) {
+          setIsSuccess(true);
+          setTimeout(onComplete, 800);
+        } else {
+          setUserIndex(prev => prev + 1);
+        }
+      } else {
+        playSimonTone(150, 450, 'error');
+        setTimeout(() => {
+          setUserIndex(0);
+          setIsSimonTurn(true);
+          sequence.forEach((pId, idx) => {
+            setTimeout(() => {
+              playPadAnimation(pId);
+              if (idx === sequence.length - 1) {
+                setTimeout(() => setIsSimonTurn(false), 500);
+              }
+            }, (idx + 1) * 600);
+          });
+        }, 800);
+      }
+    };
+    return /*#__PURE__*/React.createElement("div", {
+      className: "bg-white rounded-[3rem] p-8 shadow-2xl border-8 border-brand-100 anim-scale-in max-w-lg mx-auto w-full text-center"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "text-brand-400 font-bold uppercase tracking-widest text-sm mb-2 block"
+    }, "Reto: Secuencia de Colores"), /*#__PURE__*/React.createElement("h3", {
+      className: "text-xl font-bold text-brand-900 mb-4"
+    }, "Repite el patr\xF3n de 4 colores"), /*#__PURE__*/React.createElement("div", {
+      className: "mb-6"
+    }, isSuccess ? /*#__PURE__*/React.createElement("div", {
+      className: "py-2 px-6 bg-emerald-500 text-white rounded-full font-bold text-base inline-flex items-center gap-2"
+    }, /*#__PURE__*/React.createElement("span", null, "\xA1Secuencia Correcta!"), " \u2728") : isSimonTurn ? /*#__PURE__*/React.createElement("div", {
+      className: "inline-flex items-center gap-2 bg-brand-900 text-white px-5 py-2 rounded-full text-xs font-bold animate-pulse"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"
+    }), /*#__PURE__*/React.createElement("span", null, "Memoriza la secuencia...")) : /*#__PURE__*/React.createElement("div", {
+      className: "inline-flex items-center gap-2 bg-emerald-500 text-white px-5 py-2 rounded-full text-xs font-bold"
+    }, /*#__PURE__*/React.createElement("span", null, "\xA1Tu turno! (", userIndex, "/4)"))), /*#__PURE__*/React.createElement("div", {
+      className: "relative w-56 h-56 mx-auto grid grid-cols-2 gap-3 p-3 bg-brand-900 rounded-full shadow-xl border-4 border-brand-800"
+    }, SIMON_PADS.map(pad => {
+      const isActive = activePad === pad.id;
+      return /*#__PURE__*/React.createElement("button", {
+        key: pad.id,
+        onClick: () => handlePadClick(pad.id),
+        disabled: isSimonTurn || isSuccess,
+        className: `relative rounded-2xl transition-all duration-150 cursor-pointer active:scale-95 disabled:cursor-not-allowed
+                      ${isActive ? pad.bgActive : pad.bgNormal}`
+      }, /*#__PURE__*/React.createElement("span", {
+        className: "sr-only"
+      }, pad.name));
+    })));
+  };
 
   // Random selection logic for the daily challenge
   const dailyGames = useMemo(() => {
     const todayStr = new Date().toISOString().split('T')[0];
     let seed = 0;
     for (let i = 0; i < todayStr.length; i++) seed += todayStr.charCodeAt(i);
-    const pool = ['math', 'order', 'visual', 'memory', 'wordsearch', 'intruder', 'wordbuilder'];
+    const pool = ['math', 'order', 'visual', 'memory', 'wordsearch', 'intruder', 'wordbuilder', 'simon'];
     const result = [];
     const available = [...pool];
     for (let i = 0; i < 3; i++) {
@@ -3050,6 +3156,10 @@ const SectionDailyChallenge = function SectionDailyChallenge({
         });
       case 'wordbuilder':
         return /*#__PURE__*/React.createElement(WordBuilderSubGame, {
+          onComplete: onComplete
+        });
+      case 'simon':
+        return /*#__PURE__*/React.createElement(SimonSubGame, {
           onComplete: onComplete
         });
       default:
@@ -3130,7 +3240,7 @@ const SectionDailyChallenge = function SectionDailyChallenge({
     className: "text-[10px] text-brand-400 font-bold uppercase mb-1"
   }, "Juego ", i + 1), /*#__PURE__*/React.createElement("p", {
     className: "text-xs font-bold text-brand-900"
-  }, g === 'math' ? 'Cálculo' : g === 'order' ? 'Orden' : g === 'visual' ? 'Agudeza' : g === 'memory' ? 'Memoria' : g === 'wordsearch' ? 'Rastreo' : g === 'intruder' ? 'Intruso' : 'Juego')))), /*#__PURE__*/React.createElement("button", {
+  }, g === 'math' ? 'Cálculo' : g === 'order' ? 'Orden' : g === 'visual' ? 'Agudeza' : g === 'memory' ? 'Memoria' : g === 'wordsearch' ? 'Rastreo' : g === 'intruder' ? 'Intruso' : g === 'wordbuilder' ? 'Palabras' : g === 'simon' ? 'Secuencia' : 'Juego')))), /*#__PURE__*/React.createElement("button", {
     onClick: startChallenge,
     className: "w-full sm:w-auto px-12 py-5 bg-brand-900 text-white rounded-2xl font-bold text-2xl hover:bg-brand-800 shadow-xl transition-all hover:scale-105 active:scale-95 btn-pulse"
   }, "Empezar Desaf\xEDo")) : step >= 1 && step <= 3 ? /*#__PURE__*/React.createElement("div", {
@@ -4493,6 +4603,392 @@ const SectionWordBuilderGame = function SectionWordBuilderGame({
   }, levelIdx < WORDBUILDER_LEVELS.length - 1 ? 'Siguiente Nivel' : 'Volver al Inicio')))))));
 };
 
+// --- SECTION SIMON GAME (SECUENCIA DE COLORES) ---
+const SIMON_LEVELS = [{
+  id: 1,
+  name: 'Fácil',
+  desc: 'Secuencia pausada (hasta 7 pasos)',
+  speed: 750,
+  targetRounds: 7,
+  isInfinite: false
+}, {
+  id: 2,
+  name: 'Medio',
+  desc: 'Velocidad estándar (hasta 10 pasos)',
+  speed: 500,
+  targetRounds: 10,
+  isInfinite: false
+}, {
+  id: 3,
+  name: 'Difícil',
+  desc: 'Secuencia rápida (hasta 14 pasos)',
+  speed: 350,
+  targetRounds: 14,
+  isInfinite: false
+}, {
+  id: 4,
+  name: 'Infinito ♾️',
+  desc: '¡Sin límite de pasos! Aumenta velocidad',
+  speed: 650,
+  targetRounds: Infinity,
+  isInfinite: true
+}];
+const SIMON_PADS = [{
+  id: 0,
+  name: 'Rojo',
+  color: 'rose',
+  bgNormal: 'bg-rose-500 hover:bg-rose-600 active:bg-rose-400 border-rose-600',
+  bgActive: 'bg-rose-300 ring-8 ring-rose-200 scale-105 shadow-[0_0_35px_rgba(244,63,94,0.8)] z-10',
+  freq: 261.63
+}, {
+  id: 1,
+  name: 'Verde',
+  color: 'emerald',
+  bgNormal: 'bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-400 border-emerald-600',
+  bgActive: 'bg-emerald-300 ring-8 ring-emerald-200 scale-105 shadow-[0_0_35px_rgba(16,185,129,0.8)] z-10',
+  freq: 329.63
+}, {
+  id: 2,
+  name: 'Azul',
+  color: 'sky',
+  bgNormal: 'bg-sky-500 hover:bg-sky-600 active:bg-sky-400 border-sky-600',
+  bgActive: 'bg-sky-300 ring-8 ring-sky-200 scale-105 shadow-[0_0_35px_rgba(14,165,233,0.8)] z-10',
+  freq: 392.00
+}, {
+  id: 3,
+  name: 'Amarillo',
+  color: 'amber',
+  bgNormal: 'bg-amber-400 hover:bg-amber-500 active:bg-amber-300 border-amber-500',
+  bgActive: 'bg-amber-200 ring-8 ring-amber-100 scale-105 shadow-[0_0_35px_rgba(251,191,36,0.8)] z-10',
+  freq: 523.25
+}];
+const playSimonTone = (freq, duration = 350, type = 'normal') => {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const now = ctx.currentTime;
+    if (type === 'error') {
+      [130.81, 123.47].forEach(f => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(f, now);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.45);
+      });
+      return;
+    }
+    const osc1 = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type = 'triangle';
+    osc1.frequency.setValueAtTime(freq, now);
+    gain1.gain.setValueAtTime(0.001, now);
+    gain1.gain.linearRampToValueAtTime(0.25, now + 0.015);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + duration / 1000);
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(freq * 2, now);
+    gain2.gain.setValueAtTime(0.001, now);
+    gain2.gain.linearRampToValueAtTime(0.08, now + 0.015);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.7 / 1000);
+    osc1.connect(gain1);
+    osc2.connect(gain2);
+    gain1.connect(ctx.destination);
+    gain2.connect(ctx.destination);
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + duration / 1000);
+    osc2.stop(now + duration / 1000);
+  } catch (e) {}
+};
+const SectionSimonGame = function SectionSimonGame({
+  isStandalone,
+  navigateTo
+}) {
+  const {
+    useState,
+    useEffect,
+    useCallback
+  } = React;
+  const [gameStarted, setGameStarted] = useState(false);
+  const [levelIdx, setLevelIdx] = useState(0);
+  const [sequence, setSequence] = useState([]);
+  const [userIndex, setUserIndex] = useState(0);
+  const [activePad, setActivePad] = useState(null);
+  const [isSimonTurn, setIsSimonTurn] = useState(false);
+  const [gameStatus, setGameStatus] = useState('playing'); // 'playing', 'won', 'lost'
+  const [roundCount, setRoundCount] = useState(0);
+  const [startTime, setStartTime] = useState(0);
+  const [finalTime, setFinalTime] = useState(0);
+  const [stars, setStars] = useState(0);
+  const [isNewRecord, setIsNewRecord] = useState(false);
+  const currentLevel = SIMON_LEVELS[levelIdx];
+  const getCurrentSpeed = useCallback(stepCount => {
+    if (!currentLevel.isInfinite) return currentLevel.speed;
+    if (stepCount <= 4) return 650;
+    if (stepCount <= 8) return 500;
+    if (stepCount <= 12) return 400;
+    if (stepCount <= 16) return 320;
+    return 240;
+  }, [currentLevel]);
+  const playPadAnimation = useCallback((padId, speed) => {
+    setActivePad(padId);
+    playSimonTone(SIMON_PADS[padId].freq, speed * 0.7);
+    setTimeout(() => {
+      setActivePad(null);
+    }, speed * 0.7);
+  }, []);
+  const playSequence = useCallback((seq, speed) => {
+    setIsSimonTurn(true);
+    setActivePad(null);
+    seq.forEach((padId, index) => {
+      setTimeout(() => {
+        playPadAnimation(padId, speed);
+        if (index === seq.length - 1) {
+          setTimeout(() => {
+            setIsSimonTurn(false);
+          }, speed);
+        }
+      }, (index + 1) * speed * 1.2);
+    });
+  }, [playPadAnimation]);
+  const startNextRound = useCallback(currentSeq => {
+    const nextPad = Math.floor(Math.random() * 4);
+    const newSeq = [...currentSeq, nextPad];
+    setSequence(newSeq);
+    setUserIndex(0);
+    setRoundCount(newSeq.length);
+    const currentSpeed = getCurrentSpeed(newSeq.length);
+    playSequence(newSeq, currentSpeed);
+  }, [getCurrentSpeed, playSequence]);
+  const startGame = idx => {
+    setLevelIdx(idx);
+    setGameStarted(true);
+    setGameStatus('playing');
+    setIsNewRecord(false);
+    setStartTime(Date.now());
+    const initialPad = Math.floor(Math.random() * 4);
+    const initialSeq = [initialPad];
+    setSequence(initialSeq);
+    setUserIndex(0);
+    setRoundCount(1);
+    const speed = SIMON_LEVELS[idx].isInfinite ? 650 : SIMON_LEVELS[idx].speed;
+    playSequence(initialSeq, speed);
+  };
+  const handlePadClick = padId => {
+    if (isSimonTurn || gameStatus !== 'playing') return;
+    const currentSpeed = getCurrentSpeed(sequence.length);
+    playPadAnimation(padId, currentSpeed);
+    if (padId === sequence[userIndex]) {
+      if (userIndex + 1 === sequence.length) {
+        if (!currentLevel.isInfinite && sequence.length >= currentLevel.targetRounds) {
+          const timeTaken = (Date.now() - startTime) / 1000;
+          setFinalTime(timeTaken.toFixed(1));
+          setGameStatus('won');
+          setStars(levelIdx === 0 ? 3 : levelIdx === 1 ? 4 : 5);
+          if (window.confetti) window.confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: {
+              y: 0.6
+            }
+          });
+        } else {
+          setIsSimonTurn(true);
+          setTimeout(() => {
+            startNextRound(sequence);
+          }, 700);
+        }
+      } else {
+        setUserIndex(prev => prev + 1);
+      }
+    } else {
+      const timeTaken = (Date.now() - startTime) / 1000;
+      setFinalTime(timeTaken.toFixed(1));
+      setGameStatus('lost');
+      playSimonTone(150, 450, 'error');
+      if (currentLevel.isInfinite) {
+        const stepsCompleted = sequence.length - 1;
+        const prevRecord = parseInt(localStorage.getItem('simon_infinite_record') || '0', 10);
+        if (stepsCompleted > prevRecord) {
+          localStorage.setItem('simon_infinite_record', stepsCompleted.toString());
+          setIsNewRecord(true);
+          if (window.confetti) window.confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: {
+              y: 0.6
+            }
+          });
+        } else {
+          setIsNewRecord(false);
+        }
+        let s = 3;
+        if (stepsCompleted >= 15) s = 5;else if (stepsCompleted >= 10) s = 4;else if (stepsCompleted < 5) s = 2;
+        setStars(s);
+      }
+    }
+  };
+  const nextLevel = () => {
+    if (levelIdx < SIMON_LEVELS.length - 1) {
+      startGame(levelIdx + 1);
+    } else {
+      startGame(0);
+    }
+  };
+  return /*#__PURE__*/React.createElement("section", {
+    className: `pt-36 pb-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-36' : ''}`
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "max-w-4xl w-full"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex justify-start mb-8"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => navigateTo('cognitive'),
+    className: "inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-100 group"
+  }, /*#__PURE__*/React.createElement(Icons.ArrowLeft, {
+    className: "w-5 h-5 group-hover:-translate-x-1 transition-transform"
+  }), /*#__PURE__*/React.createElement("span", null, "Volver"))), !gameStarted ? /*#__PURE__*/React.createElement("div", {
+    className: "max-w-2xl mx-auto"
+  }, /*#__PURE__*/React.createElement("h2", {
+    className: "font-display text-4xl font-bold text-brand-900 mb-8 text-center"
+  }, "Secuencia de Colores"), /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-[3rem] border border-brand-100 shadow-2xl p-10 anim-scale-in text-center"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-6xl mb-6"
+  }, "\uD83D\uDD14"), /*#__PURE__*/React.createElement("h3", {
+    className: "text-2xl font-bold text-brand-900 mb-4"
+  }, "Selecciona la dificultad"), /*#__PURE__*/React.createElement("p", {
+    className: "text-gray-600 mb-8 text-lg"
+  }, "Memoriza el patr\xF3n de luces y sonidos y rep\xEDtelo en el mismo orden exacto."), /*#__PURE__*/React.createElement("div", {
+    className: "grid grid-cols-1 sm:grid-cols-2 gap-4"
+  }, SIMON_LEVELS.map((lvl, idx) => /*#__PURE__*/React.createElement("button", {
+    key: idx,
+    onClick: () => startGame(idx),
+    className: `group p-6 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 text-center
+                          ${lvl.isInfinite ? 'border-amber-400 bg-amber-50/50 hover:bg-amber-100/60 shadow-md' : 'border-brand-50 hover:border-brand-500 hover:bg-brand-50'}`
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-brand-900 font-bold text-xl"
+  }, lvl.name), /*#__PURE__*/React.createElement("span", {
+    className: "text-brand-500 text-xs font-medium"
+  }, lvl.desc)))))) : /*#__PURE__*/React.createElement("div", {
+    className: "max-w-xl mx-auto w-full"
+  }, /*#__PURE__*/React.createElement(GameHeader, {
+    title: "Secuencia de Colores",
+    subtitle: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("span", {
+      className: "bg-brand-900 text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-widest"
+    }, "Nivel: ", currentLevel.name), /*#__PURE__*/React.createElement("span", {
+      className: "text-brand-600 font-bold uppercase tracking-widest"
+    }, currentLevel.isInfinite ? `Paso ${sequence.length} (Récord: ${localStorage.getItem('simon_infinite_record') || 0})` : `Paso ${sequence.length} de ${currentLevel.targetRounds}`)),
+    onBack: () => navigateTo('cognitive'),
+    onRestart: () => startGame(levelIdx),
+    onLevels: () => setGameStarted(false),
+    isStandalone: isStandalone
+  }), gameStatus === 'playing' ? /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-[3rem] border border-brand-100 shadow-2xl p-8 text-center anim-scale-in"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "mb-8"
+  }, isSimonTurn ? /*#__PURE__*/React.createElement("div", {
+    className: "inline-flex items-center gap-3 bg-brand-900 text-white px-6 py-2.5 rounded-full text-sm font-bold animate-pulse shadow-md"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "w-3 h-3 rounded-full bg-amber-400 animate-ping"
+  }), /*#__PURE__*/React.createElement("span", null, "Memoriza la secuencia de colores...")) : /*#__PURE__*/React.createElement("div", {
+    className: "inline-flex items-center gap-3 bg-emerald-500 text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-md shadow-emerald-500/20"
+  }, /*#__PURE__*/React.createElement("span", null, "\xA1Tu turno! Repite la secuencia (", userIndex, "/", sequence.length, ")"))), /*#__PURE__*/React.createElement("div", {
+    className: "relative w-64 h-64 sm:w-80 sm:h-80 mx-auto grid grid-cols-2 gap-4 p-4 bg-brand-900 rounded-full shadow-2xl border-8 border-brand-800"
+  }, SIMON_PADS.map(pad => {
+    const isActive = activePad === pad.id;
+    return /*#__PURE__*/React.createElement("button", {
+      key: pad.id,
+      onClick: () => handlePadClick(pad.id),
+      disabled: isSimonTurn,
+      className: `relative rounded-3xl transition-all duration-200 border-4 cursor-pointer active:scale-95 disabled:cursor-not-allowed
+                              ${isActive ? pad.bgActive : pad.bgNormal}`,
+      title: pad.name
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "sr-only"
+    }, pad.name));
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "absolute inset-0 m-auto w-24 h-24 bg-brand-900 border-4 border-brand-700 rounded-full flex flex-col items-center justify-center shadow-xl z-20 pointer-events-none"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-white font-display font-bold text-lg"
+  }, roundCount), /*#__PURE__*/React.createElement("span", {
+    className: "text-[10px] text-brand-300 uppercase tracking-widest font-bold"
+  }, "Pasos")))) : gameStatus === 'won' ? /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-[3rem] p-10 shadow-2xl border border-brand-100 text-center anim-scale-in"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-6xl mb-6"
+  }, "\uD83C\uDFC6"), /*#__PURE__*/React.createElement("h3", {
+    className: "text-3xl font-bold text-brand-900 mb-2"
+  }, "\xA1Memoria Prodigiosa!"), /*#__PURE__*/React.createElement("p", {
+    className: "text-brand-500 font-bold uppercase tracking-widest mb-6"
+  }, "Has superado los ", currentLevel.targetRounds, " pasos en nivel ", currentLevel.name), /*#__PURE__*/React.createElement(StarRating, {
+    stars: stars
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "bg-brand-50 p-6 rounded-2xl mb-8 flex justify-around"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    className: "text-brand-400 text-xs font-bold uppercase mb-1"
+  }, "Tiempo Total"), /*#__PURE__*/React.createElement("p", {
+    className: "text-3xl font-bold text-brand-900"
+  }, finalTime, "s")), /*#__PURE__*/React.createElement("div", {
+    className: "border-l border-brand-200 h-12 my-auto"
+  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    className: "text-brand-400 text-xs font-bold uppercase mb-1"
+  }, "Secuencia"), /*#__PURE__*/React.createElement("p", {
+    className: "text-3xl font-bold text-brand-900"
+  }, sequence.length, " pasos"))), /*#__PURE__*/React.createElement(ShareButtons, {
+    game: "Secuencia de Colores",
+    time: finalTime
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-col gap-3 mt-8"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: nextLevel,
+    className: "w-full py-4 bg-brand-900 text-white rounded-2xl font-bold text-lg hover:bg-brand-800 transition-all shadow-xl shadow-brand-900/20"
+  }, levelIdx < SIMON_LEVELS.length - 1 ? 'Siguiente Dificultad' : 'Volver a Jugar'), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setGameStarted(false),
+    className: "w-full py-3 text-brand-600 font-bold hover:bg-brand-50 rounded-xl transition-all"
+  }, "Cambiar Dificultad"))) : /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-[3rem] p-10 shadow-2xl border border-brand-100 text-center anim-scale-in"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-6xl mb-6"
+  }, currentLevel.isInfinite && isNewRecord ? '🎉🏆' : '💥'), /*#__PURE__*/React.createElement("h3", {
+    className: "text-3xl font-bold text-brand-900 mb-2"
+  }, currentLevel.isInfinite ? isNewRecord ? '¡NUEVO RÉCORD PERSONAL!' : '¡Excelente Intento!' : '¡Error en la secuencia!'), currentLevel.isInfinite && /*#__PURE__*/React.createElement("div", {
+    className: "my-4"
+  }, /*#__PURE__*/React.createElement(StarRating, {
+    stars: stars
+  })), /*#__PURE__*/React.createElement("p", {
+    className: "text-gray-600 mb-6"
+  }, "Alcanzaste ", /*#__PURE__*/React.createElement("strong", {
+    className: "text-brand-900 font-bold"
+  }, sequence.length - 1, " pasos consecutivos"), " en esta partida."), currentLevel.isInfinite && /*#__PURE__*/React.createElement("div", {
+    className: "bg-amber-50 border border-amber-200 p-6 rounded-2xl mb-8 flex justify-around"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    className: "text-amber-800 text-xs font-bold uppercase mb-1"
+  }, "Pasos Logrados"), /*#__PURE__*/React.createElement("p", {
+    className: "text-3xl font-bold text-amber-900"
+  }, sequence.length - 1)), /*#__PURE__*/React.createElement("div", {
+    className: "border-l border-amber-300 h-12 my-auto"
+  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    className: "text-amber-800 text-xs font-bold uppercase mb-1"
+  }, "R\xE9cord M\xE1ximo"), /*#__PURE__*/React.createElement("p", {
+    className: "text-3xl font-bold text-amber-900"
+  }, localStorage.getItem('simon_infinite_record') || 0))), /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-col gap-3 mt-8"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => startGame(levelIdx),
+    className: "w-full py-4 bg-brand-900 text-white rounded-2xl font-bold text-lg hover:bg-brand-800 transition-all shadow-xl shadow-brand-900/20"
+  }, currentLevel.isInfinite ? 'Jugar Modo Infinito de Nuevo' : 'Reintentar'), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setGameStarted(false),
+    className: "w-full py-3 text-brand-600 font-bold hover:bg-brand-50 rounded-xl transition-all"
+  }, "Cambiar Dificultad"))))));
+};
+
 // --- APP ---
 function App() {
   const {
@@ -4528,7 +5024,7 @@ function App() {
     const params = new URLSearchParams(window.location.search);
     const pageParam = params.get('page');
     let newPage = 'cognitive';
-    if (pageParam === 'memory') newPage = 'memory';else if (pageParam === 'order') newPage = 'order';else if (pageParam === 'wordsearch') newPage = 'wordsearch';else if (pageParam === 'math') newPage = 'math';else if (pageParam === 'challenge') newPage = 'challenge';else if (pageParam === 'visual') newPage = 'visual';else if (pageParam === 'intruder') newPage = 'intruder';else if (pageParam === 'sudoku') newPage = 'sudoku';else if (pageParam === 'wordbuilder' || pageParam === 'builder') newPage = 'wordbuilder';else if (pageParam === 'games') newPage = 'cognitive';
+    if (pageParam === 'memory') newPage = 'memory';else if (pageParam === 'order') newPage = 'order';else if (pageParam === 'wordsearch') newPage = 'wordsearch';else if (pageParam === 'math') newPage = 'math';else if (pageParam === 'challenge') newPage = 'challenge';else if (pageParam === 'visual') newPage = 'visual';else if (pageParam === 'intruder') newPage = 'intruder';else if (pageParam === 'sudoku') newPage = 'sudoku';else if (pageParam === 'wordbuilder' || pageParam === 'builder') newPage = 'wordbuilder';else if (pageParam === 'simon') newPage = 'simon';else if (pageParam === 'games') newPage = 'cognitive';
     setCurrentPage(newPage);
     document.title = "IAdapta | Gimnasio Cerebral";
   }, []);
@@ -4538,7 +5034,7 @@ function App() {
     return () => window.removeEventListener('popstate', syncPageFromUrl);
   }, [syncPageFromUrl]);
   const navigateTo = useCallback((page, section = null) => {
-    const localPages = ['cognitive', 'memory', 'order', 'wordsearch', 'math', 'visual', 'intruder', 'challenge', 'sudoku', 'wordbuilder', 'games'];
+    const localPages = ['cognitive', 'memory', 'order', 'wordsearch', 'math', 'visual', 'intruder', 'challenge', 'sudoku', 'wordbuilder', 'simon', 'games'];
     if (localPages.includes(page)) {
       const urlPage = page === 'cognitive' || page === 'games' ? 'games' : page;
       window.history.pushState({
@@ -4560,7 +5056,7 @@ function App() {
   }, []);
   const params = new URLSearchParams(window.location.search);
   const pageParam = params.get('page');
-  const isStandalone = isInApp && sessionStorage.getItem('allowWebInApp') !== 'true' || ['memory', 'order', 'wordsearch', 'math', 'visual', 'intruder', 'challenge', 'sudoku', 'wordbuilder'].includes(pageParam);
+  const isStandalone = isInApp && sessionStorage.getItem('allowWebInApp') !== 'true' || ['memory', 'order', 'wordsearch', 'math', 'visual', 'intruder', 'challenge', 'sudoku', 'wordbuilder', 'simon'].includes(pageParam);
   return /*#__PURE__*/React.createElement(React.Fragment, null, showInstaller && /*#__PURE__*/React.createElement("div", {
     className: "fixed inset-x-0 bottom-0 z-[100] p-4 anim-slide-up"
   }, /*#__PURE__*/React.createElement("div", {
@@ -4627,6 +5123,9 @@ function App() {
     isStandalone: isStandalone,
     navigateTo: navigateTo
   }), currentPage === 'wordbuilder' && /*#__PURE__*/React.createElement(SectionWordBuilderGame, {
+    isStandalone: isStandalone,
+    navigateTo: navigateTo
+  }), currentPage === 'simon' && /*#__PURE__*/React.createElement(SectionSimonGame, {
     isStandalone: isStandalone,
     navigateTo: navigateTo
   }), currentPage === 'challenge' && /*#__PURE__*/React.createElement(SectionDailyChallenge, {
