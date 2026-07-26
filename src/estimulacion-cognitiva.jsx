@@ -1265,6 +1265,33 @@ const { Icons, Navbar, Footer, CookieBanner } = window;
                     </div>
                   </div>
 
+                  {/* Game 8: Formar Palabras */}
+                  <div 
+                    onClick={() => navigateTo('wordbuilder')}
+                    className="bg-white rounded-[2.5rem] overflow-hidden border border-amber-50 shadow-xl hover:shadow-2xl transition-all group flex flex-col cursor-pointer"
+                  >
+                    <div className="relative h-56 overflow-hidden">
+                      <img src="word_builder_thumbnail.png" alt="Formar Palabras" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-amber-950/60 to-transparent"></div>
+                      <div className="absolute bottom-4 left-6 flex items-center gap-3">
+                        <div className="w-12 h-12 bg-amber-600 text-white rounded-xl flex items-center justify-center text-2xl shadow-lg border border-amber-400/30">
+                          <Icons.BookOpen />
+                        </div>
+                        <span className="text-white font-bold text-lg">Lenguaje</span>
+                      </div>
+                    </div>
+                    <div className="p-8 flex flex-col flex-1">
+                      <h3 className="font-display text-2xl font-bold text-brand-900 mb-4">Formar Palabras</h3>
+                      <p className="text-gray-600 text-lg mb-8 flex-1 leading-relaxed">
+                        Ordena las letras desordenadas para descubrir la palabra secreta. Entrena la memoria semántica y el acceso al léxico.
+                      </p>
+                      <button className="w-full py-4 bg-amber-900 text-white rounded-2xl font-bold text-lg group-hover:bg-amber-800 transition-all flex items-center justify-center gap-3 shadow-lg shadow-amber-900/20">
+                        Jugar ahora
+                        <Icons.ArrowRight />
+                      </button>
+                    </div>
+                  </div>
+
                 </div>
 
                 {/* Consejo de la TO */}
@@ -2847,13 +2874,103 @@ const { Icons, Navbar, Footer, CookieBanner } = window;
         );
       };
 
+      const WordBuilderSubGame = ({ onComplete }) => {
+        const words = ['COCINA', 'RELOJ', 'SALUD', 'VESTIR', 'PASEAR', 'LIBRO', 'DUCHA', 'PLATO'];
+        const [targetWord] = useState(() => words[Math.floor(Math.random() * words.length)]);
+        const [scrambled, setScrambled] = useState([]);
+        const [userWord, setUserWord] = useState([]);
+        const [isSuccess, setIsSuccess] = useState(false);
+        const [isError, setIsError] = useState(false);
+
+        useEffect(() => {
+          const letters = targetWord.split('');
+          let shuffled = [...letters];
+          let attempts = 0;
+          while (shuffled.join('') === targetWord && attempts < 10) {
+            shuffled.sort(() => Math.random() - 0.5);
+            attempts++;
+          }
+          setScrambled(shuffled.map((char, index) => ({ id: index, char, used: false })));
+        }, [targetWord]);
+
+        const handleSelectTile = (tile) => {
+          if (tile.used || isSuccess) return;
+          const newUserWord = [...userWord, tile];
+          setUserWord(newUserWord);
+          const newScrambled = scrambled.map(t => t.id === tile.id ? { ...t, used: true } : t);
+          setScrambled(newScrambled);
+
+          if (newUserWord.length === targetWord.length) {
+            const formed = newUserWord.map(t => t.char).join('');
+            if (isWordValidAnagram(formed, targetWord)) {
+              setIsSuccess(true);
+              setTimeout(onComplete, 800);
+            } else {
+              setIsError(true);
+              setTimeout(() => {
+                setIsError(false);
+                setUserWord([]);
+                setScrambled(newScrambled.map(t => ({ ...t, used: false })));
+              }, 650);
+            }
+          }
+        };
+
+        const handleRemoveLetter = (indexToRemove) => {
+          if (isSuccess) return;
+          const tile = userWord[indexToRemove];
+          if (!tile) return;
+          setUserWord(userWord.filter((_, idx) => idx !== indexToRemove));
+          setScrambled(scrambled.map(t => t.id === tile.id ? { ...t, used: false } : t));
+          setIsError(false);
+        };
+
+        return (
+          <div className="bg-white rounded-[3rem] p-8 shadow-2xl border-8 border-brand-100 anim-scale-in max-w-lg mx-auto w-full text-center">
+            <span className="text-brand-400 font-bold uppercase tracking-widest text-sm mb-2 block">Reto: Agilidad Léxica</span>
+            <h3 className="text-xl font-bold text-brand-900 mb-6">Ordena las letras para formar la palabra</h3>
+            
+            <div className={`flex flex-wrap justify-center gap-2 mb-6 min-h-[56px] items-center p-3 rounded-2xl transition-all duration-300 ${isError ? 'bg-red-50 ring-4 ring-red-300' : isSuccess ? 'bg-emerald-50 ring-4 ring-emerald-300' : 'bg-brand-50 border border-brand-100'}`}>
+              {Array.from({ length: targetWord.length }).map((_, idx) => {
+                const tile = userWord[idx];
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => handleRemoveLetter(idx)}
+                    disabled={!tile || isSuccess}
+                    className={`w-10 h-12 rounded-xl flex items-center justify-center font-bold text-xl transition-all
+                      ${tile ? isSuccess ? 'bg-emerald-500 text-white shadow-md' : isError ? 'bg-red-500 text-white shadow-md' : 'bg-brand-900 text-white shadow-md cursor-pointer' : 'bg-white border border-dashed border-brand-200 text-transparent pointer-events-none'}`}
+                  >
+                    {tile ? tile.char : ''}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-2">
+              {scrambled.map((tile) => (
+                <button
+                  key={tile.id}
+                  onClick={() => handleSelectTile(tile)}
+                  disabled={tile.used || isSuccess}
+                  className={`w-10 h-12 rounded-xl flex items-center justify-center font-bold text-xl shadow-sm transition-all
+                    ${tile.used ? 'bg-gray-100 text-gray-300 border border-gray-200 opacity-40 pointer-events-none scale-90' : 'bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 active:scale-95 cursor-pointer'}`}
+                >
+                  {tile.char}
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      };
+
       // Random selection logic for the daily challenge
       const dailyGames = useMemo(() => {
         const todayStr = new Date().toISOString().split('T')[0];
         let seed = 0;
         for (let i = 0; i < todayStr.length; i++) seed += todayStr.charCodeAt(i);
         
-        const pool = ['math', 'order', 'visual', 'memory', 'wordsearch', 'intruder'];
+        const pool = ['math', 'order', 'visual', 'memory', 'wordsearch', 'intruder', 'wordbuilder'];
         const result = [];
         const available = [...pool];
         
@@ -2873,6 +2990,7 @@ const { Icons, Navbar, Footer, CookieBanner } = window;
           case 'memory': return <MemorySubGame onComplete={onComplete} />;
           case 'wordsearch': return <WordSearchSubGame onComplete={onComplete} />;
           case 'intruder': return <IntruderSubGame onComplete={onComplete} />;
+          case 'wordbuilder': return <WordBuilderSubGame onComplete={onComplete} />;
           default: return null;
         }
       };
@@ -4078,7 +4196,389 @@ const { Icons, Navbar, Footer, CookieBanner } = window;
       );
     };
 
-    // --- SECTION RESOURCES FOR PROFESSIONALS ---
+    // --- SECTION WORD BUILDER GAME (FORMAR PALABRAS / PALABRAS DESORDENADAS) ---
+    const WORDBUILDER_LEVELS = [
+      { 
+        id: 1, 
+        name: 'Muy Fácil', 
+        desc: 'Palabras cortas (3 - 4 letras)', 
+        rounds: 5, 
+        pool: ['AGUA', 'CAMA', 'SOFA', 'MESA', 'ROPA', 'PAN', 'VASO', 'PIE', 'MANO', 'LUZ', 'SOL', 'SOPA', 'TAZA', 'PATO', 'LUNA', 'CASA', 'BOCA', 'BOTE', 'COLA', 'LOCO', 'ALTO', 'ROCA', 'CARO', 'ARCO', 'SINO', 'ROSA', 'RATO', 'OTRA', 'ROTA', 'LIMA', 'MIRA', 'AMOR', 'ROMA', 'RAMO', 'MORA', 'PELO', 'NUBE', 'LAGO', 'RICO', 'VIDA', 'VINO', 'NIDO'] 
+      },
+      { 
+        id: 2, 
+        name: 'Fácil', 
+        desc: 'Palabras cotidianas (5 letras)', 
+        rounds: 5, 
+        pool: ['DUCHA', 'PLATO', 'RADIO', 'RELOJ', 'LIBRO', 'SALUD', 'SUEÑO', 'GAFAS', 'FRUTA', 'AYUDA', 'PASO', 'PLAYA', 'SILLA', 'ARBOL', 'JABON', 'BARCO', 'COBRA', 'CLAVE', 'VERBA', 'CORTO', 'MARCO', 'PADRE', 'PARED', 'TABLA', 'PALTA', 'RATON', 'FORMA', 'CARTA', 'CERRO', 'COSTA', 'DULCE', 'MUNDO', 'CAMPO', 'VERDE', 'NOCHE', 'QUESO', 'CALOR', 'SUELO', 'SABOR'] 
+      },
+      { 
+        id: 3, 
+        name: 'Medio', 
+        desc: 'Palabras medianas (6 letras)', 
+        rounds: 5, 
+        pool: ['COCINA', 'VESTIR', 'PASEAR', 'LLAVES', 'TIEMPO', 'JARDIN', 'MUSICA', 'AFECTO', 'RECETA', 'CAMINO', 'ABUELO', 'COMIDA', 'LAPIZ', 'MADRE', 'MADERA', 'CIUDAD', 'CUARTO', 'PUERTA', 'CAMISA', 'MAQUINA', 'CENTRO', 'CORRER', 'CANTAR', 'SALTAR', 'AMIGO', 'REGALO', 'FLORES', 'VERANO', 'MEDICO', 'ABUELA', 'JUEGOS', 'FUTBOL', 'SONIDO', 'DIBUJO', 'CUENTO', 'DIARIO'] 
+      },
+      { 
+        id: 4, 
+        name: 'Difícil', 
+        desc: 'Palabras complejas (7 - 8 letras)', 
+        rounds: 6, 
+        pool: ['CUIDADOR', 'ZAPATOS', 'PASILLO', 'ESPEJO', 'PASTILLA', 'TARJETA', 'DESCANSO', 'MEMORIA', 'FAMILIA', 'VENTANA', 'CUADERNO', 'HOSPITAL', 'FAMILIAR', 'PACIENTE', 'GIMNASIO', 'PANTALLA', 'LINTERNA', 'HISTORIA', 'CANCION', 'DESAYUNO', 'CUIDADOS', 'APOYO', 'BIENESTAR', 'ABRAZOS', 'SONRISA', 'SALUDABLE', 'CARTERA', 'RECUERDO'] 
+      },
+      { 
+        id: 5, 
+        name: 'Experto', 
+        desc: 'Desafío léxico (9+ letras)', 
+        rounds: 6, 
+        pool: ['CAMINADOR', 'TELEFONO', 'ALIMENTOS', 'MOVILIDAD', 'EJERCICIO', 'AUTONOMIA', 'BIENESTAR', 'MEDICACION', 'ACTIVIDADES', 'REHABILITACION', 'TERAPEUTA', 'ACCESIBILIDAD', 'ESTIMULACION', 'CONCENTRACION', 'PREVENCION', 'INDEPENDENCIA', 'HERRAMIENTAS', 'COMPAÑEROS', 'TRANQUILIDAD', 'COMUNICACION', 'ESPECIALISTA', 'ORGANIZACION', 'APRENDIZAJE', 'SATISFACCION', 'CONVIVENCIA'] 
+      }
+    ];
+
+    // Diccionario completo de palabras reales en español para todos los niveles
+    const REAL_SPANISH_DICTIONARY = new Set([
+      // 3 y 4 letras
+      'AGUA', 'CAMA', 'MACA', 'SOFA', 'FOSA', 'POSA', 'MESA', 'SEMA', 'ROPA', 'PARO', 'PROA', 'RAPO', 'ARPO',
+      'PAN', 'VASO', 'PIE', 'MANO', 'MONA', 'NOMA', 'LUZ', 'SOL', 'SOPA', 'PASO', 'TAZA', 'PATO', 'TAPO', 'TOPA',
+      'OPTA', 'POTA', 'APTO', 'LUNA', 'NULA', 'CASA', 'SACA', 'COLA', 'LOCO', 'ALTO', 'TOLA', 'ROCA', 'CARO',
+      'ARCO', 'ORCA', 'CORA', 'BOCA', 'CABO', 'BOTE', 'BETO', 'SINO', 'ROSA', 'ORAS', 'AROS', 'SORA', 'RASO',
+      'RATO', 'TROA', 'OTRA', 'ROTA', 'TARO', 'LIMA', 'MILA', 'MIRA', 'AMOR', 'ROMA', 'RAMO', 'MORA', 'ARMO',
+      'RANO', 'ORNA', 'PELO', 'NUBE', 'LAGO', 'RICO', 'VIDA', 'VINO', 'NIDO', 'FUEGO',
+
+      // 5 letras
+      'DUCHA', 'PLATO', 'PALTO', 'RADIO', 'ARDO', 'DARIO', 'RELOJ', 'LIBRO', 'SALUD', 'SUEÑO', 'SUENO',
+      'GAFAS', 'FRUTA', 'TRUFA', 'AYUDA', 'PASO', 'POSA', 'SOPA', 'PLAYA', 'SILLA', 'ARBOL', 'BALOR',
+      'JABON', 'BAJON', 'BARCO', 'COBRA', 'CLAVE', 'VERBA', 'CORTO', 'TROCO', 'MARCO', 'PADRE', 'PARED',
+      'TABLA', 'PALTA', 'RATON', 'TRANO', 'FORMA', 'CARTA', 'CATAR', 'CERRO', 'CORRE', 'COSTA', 'TACO',
+      'DULCE', 'MUNDO', 'CAMPO', 'VERDE', 'NOCHE', 'QUESO', 'CALOR', 'SUELO', 'SABOR',
+
+      // 6 letras
+      'COCINA', 'VESTIR', 'SERVIR', 'PASEAR', 'ARAPES', 'LLAVES', 'TIEMPO', 'JARDIN', 'MUSICA', 'AFECTO',
+      'RECETA', 'CARETO', 'COTREA', 'CAMINO', 'COMANI', 'ABUELO', 'COMIDA', 'LAPIZ', 'MADRE', 'MADERA',
+      'CIUDAD', 'CUARTO', 'PUERTA', 'CAMISA', 'MAQUINA', 'CENTRO', 'CORRER', 'CANTAR', 'SALTAR', 'AMIGO',
+      'REGALO', 'FLORES', 'VERANO', 'MEDICO', 'ABUELA', 'JUEGOS', 'FUTBOL', 'SONIDO', 'DIBUJO', 'CUENTO', 'DIARIO',
+
+      // 7-8 letras
+      'CUIDADOR', 'ZAPATOS', 'PASILLO', 'ESPEJO', 'PASTILLA', 'TARJETA', 'DESCANSO', 'CONDENAS', 'MEMORIA',
+      'FAMILIA', 'VENTANA', 'CUADERNO', 'HOSPITAL', 'FAMILIAR', 'PACIENTE', 'GIMNASIO', 'PANTALLA', 'LINTERNA',
+      'HISTORIA', 'CANCION', 'DESAYUNO', 'CUIDADOS', 'APOYO', 'BIENESTAR', 'ABRAZOS', 'SONRISA', 'SALUDABLE',
+      'CARTERA', 'RECUERDO',
+
+      // 9+ letras
+      'CAMINADOR', 'TELEFONO', 'ALIMENTOS', 'MOVILIDAD', 'EJERCICIO', 'AUTONOMIA', 'BIENESTAR', 'MEDICACION',
+      'ACTIVIDADES', 'REHABILITACION', 'TERAPEUTA', 'ACCESIBILIDAD', 'ESTIMULACION', 'CONCENTRACION',
+      'PREVENCION', 'INDEPENDENCIA', 'HERRAMIENTAS', 'COMPAÑEROS', 'TRANQUILIDAD', 'COMUNICACION',
+      'ESPECIALISTA', 'ORGANIZACION', 'APRENDIZAJE', 'SATISFACCION', 'CONVIVENCIA'
+    ]);
+
+    // Helper para verificar palabras válidas (exclusivamente palabras reales en español)
+    const isWordValidAnagram = (formedStr, targetWord) => {
+      if (!formedStr || !targetWord) return false;
+      const normalize = (str) => str.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const normFormed = normalize(formedStr);
+      const normTarget = normalize(targetWord);
+
+      // 1. Coincidencia directa con la palabra objetivo
+      if (normFormed === normTarget) return true;
+
+      const sortedFormed = normFormed.split('').sort().join('');
+      const sortedTarget = normTarget.split('').sort().join('');
+
+      // 2. Comprobar que usa exactamente las mismas letras
+      if (sortedFormed !== sortedTarget) return false;
+
+      // 3. Buscar exclusivamente en el diccionario de palabras reales en español
+      return REAL_SPANISH_DICTIONARY.has(normFormed);
+    };
+
+    const SectionWordBuilderGame = function SectionWordBuilderGame({ isStandalone, navigateTo }) {
+      const { useState, useEffect, useCallback, useMemo } = React;
+
+      const [gameStarted, setGameStarted] = useState(false);
+      const [levelIdx, setLevelIdx] = useState(0);
+      const [round, setRound] = useState(0);
+      const [targetWord, setTargetWord] = useState('');
+      const [scrambled, setScrambled] = useState([]);
+      const [userWord, setUserWord] = useState([]);
+      const [hintsUsed, setHintsUsed] = useState(0);
+      const [gameStatus, setGameStatus] = useState('playing');
+      const [roundWords, setRoundWords] = useState([]);
+      const [startTime, setStartTime] = useState(0);
+      const [finalTime, setFinalTime] = useState(0);
+      const [stars, setStars] = useState(0);
+      const [isError, setIsError] = useState(false);
+
+      const currentLevel = WORDBUILDER_LEVELS[levelIdx];
+
+      const shuffleLetters = (word) => {
+        const letters = word.split('');
+        let shuffled = [...letters];
+        let attempts = 0;
+        while (shuffled.join('') === word && attempts < 10) {
+          shuffled.sort(() => Math.random() - 0.5);
+          attempts++;
+        }
+        return shuffled.map((char, index) => ({
+          id: index,
+          char,
+          used: false
+        }));
+      };
+
+      const initRound = useCallback((word) => {
+        setTargetWord(word);
+        setScrambled(shuffleLetters(word));
+        setUserWord([]);
+        setHintsUsed(0);
+        setIsError(false);
+      }, []);
+
+      const startGame = (idx) => {
+        setLevelIdx(idx);
+        const levelData = WORDBUILDER_LEVELS[idx];
+        const pool = [...levelData.pool].sort(() => Math.random() - 0.5);
+        const selected = pool.slice(0, levelData.rounds);
+        setRoundWords(selected);
+        setRound(0);
+        setGameStarted(true);
+        setGameStatus('playing');
+        setStartTime(Date.now());
+        initRound(selected[0]);
+      };
+
+      const handleSelectScrambled = (tile) => {
+        if (tile.used || gameStatus !== 'playing') return;
+        
+        const newUserWord = [...userWord, tile];
+        setUserWord(newUserWord);
+
+        const newScrambled = scrambled.map(t => t.id === tile.id ? { ...t, used: true } : t);
+        setScrambled(newScrambled);
+
+        if (newUserWord.length === targetWord.length) {
+          const formedStr = newUserWord.map(t => t.char).join('');
+          if (isWordValidAnagram(formedStr, targetWord)) {
+            if (round < currentLevel.rounds - 1) {
+              setGameStatus('round_complete');
+              setTimeout(() => {
+                const nextR = round + 1;
+                setRound(nextR);
+                setGameStatus('playing');
+                initRound(roundWords[nextR]);
+              }, 700);
+            } else {
+              const timeTaken = (Date.now() - startTime) / 1000;
+              setFinalTime(timeTaken.toFixed(1));
+              setGameStatus('won');
+
+              const baseTime = currentLevel.rounds * 8;
+              let s = 3;
+              if (timeTaken < baseTime * 0.6) s = 5;
+              else if (timeTaken < baseTime * 0.9) s = 4;
+              else if (timeTaken > baseTime * 1.5) s = 2;
+              setStars(s);
+
+              if (window.confetti) window.confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }
+          } else {
+            setIsError(true);
+            setTimeout(() => {
+              setIsError(false);
+              setUserWord([]);
+              setScrambled(newScrambled.map(t => ({ ...t, used: false })));
+            }, 650);
+          }
+        }
+      };
+
+      const handleRemoveUserLetter = (indexToRemove) => {
+        if (gameStatus !== 'playing') return;
+        const tileToRemove = userWord[indexToRemove];
+        if (!tileToRemove) return;
+
+        setUserWord(userWord.filter((_, idx) => idx !== indexToRemove));
+        setScrambled(scrambled.map(t => t.id === tileToRemove.id ? { ...t, used: false } : t));
+        setIsError(false);
+      };
+
+      const handleClear = () => {
+        if (gameStatus !== 'playing') return;
+        setUserWord([]);
+        setScrambled(scrambled.map(t => ({ ...t, used: false })));
+        setIsError(false);
+      };
+
+      const handleHint = () => {
+        if (gameStatus !== 'playing') return;
+        const currentLen = userWord.length;
+        if (currentLen >= targetWord.length) return;
+
+        const nextNeededChar = targetWord[currentLen];
+        const matchingTile = scrambled.find(t => !t.used && t.char === nextNeededChar);
+        if (matchingTile) {
+          handleSelectScrambled(matchingTile);
+          setHintsUsed(prev => prev + 1);
+        }
+      };
+
+      const nextLevel = () => {
+        if (levelIdx < WORDBUILDER_LEVELS.length - 1) {
+          startGame(levelIdx + 1);
+        } else {
+          setGameStarted(false);
+        }
+      };
+
+      return (
+        <section className={`pt-36 pb-20 px-4 min-h-screen bg-brand-50 flex flex-col items-center ${isStandalone ? 'pt-36' : ''}`}>
+          <div className="max-w-4xl w-full">
+            {!gameStarted ? (
+              <div className="max-w-2xl mx-auto text-center">
+                <div className="flex justify-start mb-8">
+                  <button onClick={() => navigateTo('cognitive')} className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-100 group">
+                    <Icons.ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                    <span>Volver</span>
+                  </button>
+                </div>
+                <h2 className="font-display text-4xl font-bold text-brand-900 mb-8">Formar Palabras</h2>
+                <div className="bg-white rounded-[3rem] border border-brand-100 shadow-2xl p-10 anim-scale-in">
+                  <div className="text-6xl mb-6">🔤</div>
+                  <h3 className="text-2xl font-bold text-brand-900 mb-2">Selecciona la dificultad</h3>
+                  <p className="text-brand-500 font-medium text-sm mb-6">Ordena las letras desordenadas para descubrir la palabra secreta</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {WORDBUILDER_LEVELS.map((lvl, idx) => (
+                      <button key={lvl.id} onClick={() => startGame(idx)} className="group p-6 rounded-2xl border-2 border-brand-50 hover:border-brand-500 hover:bg-brand-50 transition-all flex flex-col items-center gap-2">
+                        <span className="text-brand-900 font-bold text-xl">{lvl.name}</span>
+                        <span className="text-brand-500 text-sm font-medium">{lvl.desc}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <>
+                <GameHeader 
+                  title="Formar Palabras"
+                  subtitle={(
+                    <>
+                      <span className="bg-brand-900 text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-widest">{currentLevel.name}</span>
+                      <span className="text-brand-600 font-bold uppercase tracking-widest">Palabra {round + 1} de {currentLevel.rounds}</span>
+                    </>
+                  )}
+                  onBack={() => navigateTo('cognitive')}
+                  onRestart={() => startGame(levelIdx)}
+                  onLevels={() => setGameStarted(false)}
+                  isStandalone={isStandalone}
+                />
+
+                <div className="flex flex-col items-center gap-8">
+                  {gameStatus !== 'won' ? (
+                    <div className="bg-white p-6 sm:p-10 rounded-[2.5rem] shadow-2xl border border-brand-100 w-full max-w-2xl text-center relative anim-scale-in">
+                      
+                      <div className="mb-8">
+                        <span className="inline-block bg-teal-50 text-teal-800 font-bold text-xs px-4 py-1.5 rounded-full uppercase tracking-wider mb-2">
+                          Agilidad Léxica y Memoria Semántica
+                        </span>
+                        <p className="text-brand-600 font-medium text-sm">Toca las letras en el orden correcto para formar la palabra:</p>
+                      </div>
+
+                      <div className={`flex flex-wrap justify-center gap-2 sm:gap-3 mb-10 min-h-[70px] items-center p-4 rounded-3xl transition-all duration-300 ${isError ? 'bg-red-50 ring-4 ring-red-300' : gameStatus === 'round_complete' ? 'bg-emerald-50 ring-4 ring-emerald-300' : 'bg-brand-50/70 border-2 border-dashed border-brand-200'}`}>
+                        {Array.from({ length: targetWord.length }).map((_, idx) => {
+                          const tile = userWord[idx];
+                          return (
+                            <button
+                              key={idx}
+                              onClick={() => handleRemoveUserLetter(idx)}
+                              disabled={!tile || gameStatus !== 'playing'}
+                              className={`w-12 h-14 sm:w-14 sm:h-16 rounded-2xl flex items-center justify-center font-display text-2xl sm:text-3xl font-bold shadow-md transition-all duration-300
+                                ${tile 
+                                  ? isError 
+                                    ? 'bg-red-500 text-white scale-105 shadow-red-500/30' 
+                                    : gameStatus === 'round_complete'
+                                      ? 'bg-emerald-500 text-white scale-105 shadow-emerald-500/30'
+                                      : 'bg-brand-900 text-white hover:bg-brand-800 active:scale-95 cursor-pointer shadow-brand-900/20' 
+                                  : 'bg-white border-2 border-dashed border-brand-200 text-transparent pointer-events-none'}`}
+                              title={tile ? 'Toca para quitar esta letra' : ''}
+                            >
+                              {tile ? tile.char : ''}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {gameStatus === 'round_complete' && (
+                        <div className="mb-6 py-2 px-6 bg-emerald-500 text-white rounded-full font-bold text-lg inline-flex items-center gap-2 anim-scale-in shadow-lg shadow-emerald-500/20">
+                          <span>¡Correcto!</span> ✨
+                        </div>
+                      )}
+
+                      <div className="mb-10">
+                        <p className="text-xs font-bold text-brand-400 uppercase tracking-widest mb-4">Letras disponibles:</p>
+                        <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+                          {scrambled.map((tile) => (
+                            <button
+                              key={tile.id}
+                              onClick={() => handleSelectScrambled(tile)}
+                              disabled={tile.used || gameStatus !== 'playing'}
+                              className={`w-12 h-14 sm:w-14 sm:h-16 rounded-2xl flex items-center justify-center font-display text-2xl sm:text-3xl font-bold transition-all duration-200 shadow-md
+                                ${tile.used 
+                                  ? 'bg-gray-100 text-gray-300 border border-gray-200 shadow-none opacity-40 pointer-events-none scale-90' 
+                                  : 'bg-amber-100 hover:bg-amber-200 text-amber-900 border-2 border-amber-300 hover:scale-105 active:scale-95 cursor-pointer shadow-amber-200/50'}`}
+                            >
+                              {tile.char}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap justify-center gap-3 pt-6 border-t border-brand-100">
+                        <button
+                          onClick={handleHint}
+                          disabled={gameStatus !== 'playing' || userWord.length >= targetWord.length}
+                          className="px-5 py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl text-sm transition-all shadow-md flex items-center gap-2 disabled:opacity-40"
+                          title="Revelar la siguiente letra de la palabra"
+                        >
+                          <span>💡 Pista</span>
+                        </button>
+                        <button
+                          onClick={() => handleRemoveUserLetter(userWord.length - 1)}
+                          disabled={gameStatus !== 'playing' || userWord.length === 0}
+                          className="px-5 py-3 bg-brand-100 hover:bg-brand-200 text-brand-800 font-bold rounded-xl text-sm transition-all flex items-center gap-2 disabled:opacity-40"
+                        >
+                          <span>⌫ Borrar</span>
+                        </button>
+                        <button
+                          onClick={handleClear}
+                          disabled={gameStatus !== 'playing' || userWord.length === 0}
+                          className="px-5 py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold rounded-xl text-sm transition-all border border-gray-200 disabled:opacity-40"
+                        >
+                          <span>🔄 Limpiar</span>
+                        </button>
+                      </div>
+
+                    </div>
+                  ) : (
+                    <div className="bg-white rounded-[3rem] p-10 shadow-2xl border border-brand-100 text-center anim-scale-in max-w-lg w-full">
+                      <div className="text-7xl mb-6">🔤✨</div>
+                      <h3 className="text-3xl font-bold text-brand-900 mb-2">¡Palabras Completadas!</h3>
+                      <StarRating stars={stars} />
+                      <p className="text-xl text-gray-600 mb-6">Has completado el nivel en <span className="font-bold text-brand-700">{finalTime}s</span>.</p>
+                      <ShareButtons game="Formar Palabras" time={finalTime} />
+                      <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
+                        <button onClick={() => setGameStarted(false)} className="px-8 py-3 bg-brand-100 text-brand-700 font-bold rounded-xl hover:bg-brand-200 transition-all">Cambiar Nivel</button>
+                        <button onClick={nextLevel} className="px-8 py-3 bg-brand-900 text-white font-bold rounded-xl hover:bg-brand-800 shadow-lg transition-all btn-pulse">
+                          {levelIdx < WORDBUILDER_LEVELS.length - 1 ? 'Siguiente Nivel' : 'Volver al Inicio'}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        </section>
+      );
+    };
 
     // --- APP ---
     function App() {
@@ -4121,6 +4621,7 @@ const { Icons, Navbar, Footer, CookieBanner } = window;
         else if (pageParam === 'visual') newPage = 'visual';
         else if (pageParam === 'intruder') newPage = 'intruder';
         else if (pageParam === 'sudoku') newPage = 'sudoku';
+        else if (pageParam === 'wordbuilder' || pageParam === 'builder') newPage = 'wordbuilder';
         else if (pageParam === 'games') newPage = 'cognitive';
 
         setCurrentPage(newPage);
@@ -4134,7 +4635,7 @@ const { Icons, Navbar, Footer, CookieBanner } = window;
       }, [syncPageFromUrl]);
 
       const navigateTo = useCallback((page, section = null) => {
-        const localPages = ['cognitive', 'memory', 'order', 'wordsearch', 'math', 'visual', 'intruder', 'challenge', 'sudoku', 'games'];
+        const localPages = ['cognitive', 'memory', 'order', 'wordsearch', 'math', 'visual', 'intruder', 'challenge', 'sudoku', 'wordbuilder', 'games'];
         
         if (localPages.includes(page)) {
           const urlPage = page === 'cognitive' || page === 'games' ? 'games' : page;
@@ -4157,7 +4658,7 @@ const { Icons, Navbar, Footer, CookieBanner } = window;
 
       const params = new URLSearchParams(window.location.search);
       const pageParam = params.get('page');
-      const isStandalone = (isInApp && sessionStorage.getItem('allowWebInApp') !== 'true') || ['memory', 'order', 'wordsearch', 'math', 'visual', 'intruder', 'challenge', 'sudoku'].includes(pageParam);
+      const isStandalone = (isInApp && sessionStorage.getItem('allowWebInApp') !== 'true') || ['memory', 'order', 'wordsearch', 'math', 'visual', 'intruder', 'challenge', 'sudoku', 'wordbuilder'].includes(pageParam);
 
       return (
         <>
@@ -4223,6 +4724,9 @@ const { Icons, Navbar, Footer, CookieBanner } = window;
             )}
             {currentPage === 'sudoku' && (
               <SectionSudokuGame isStandalone={isStandalone} navigateTo={navigateTo} />
+            )}
+            {currentPage === 'wordbuilder' && (
+              <SectionWordBuilderGame isStandalone={isStandalone} navigateTo={navigateTo} />
             )}
             {currentPage === 'challenge' && (
               <SectionDailyChallenge isStandalone={isStandalone} navigateTo={navigateTo} />
