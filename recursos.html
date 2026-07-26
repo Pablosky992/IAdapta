@@ -26,6 +26,63 @@
   <meta property="twitter:description" content="Calculadoras de rampas, catálogo PAO CatSalut y modelos 3D." />
   <meta property="twitter:image" content="https://iadapta.es/assets/iadapta_logo_social.jpg" />
 
+  <!-- JSON-LD Structured Data for Professional Tools -->
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "MedicalWebPage",
+      "name": "Recursos Profesionales de Terapia Ocupacional | IAdapta",
+      "description": "Herramientas clínicas avanzadas para Terapeutas Ocupacionales: generador de fichas de estimulación, calculadora de rampas según normativa CTE DB-SUA, buscador PAO CatSalut, modelos de impresión 3D y Consultor IA.",
+      "url": "https://iadapta.es/recursos.html",
+      "medicalAudience": {
+        "@type": "MedicalAudience",
+        "audienceType": "HealthProfessional"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Pablo Narciso Millán",
+        "jobTitle": "Terapeuta Ocupacional",
+        "url": "https://iadapta.es/cv.html"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Calculadoras y Herramientas Clínicas de TO - IAdapta",
+      "operatingSystem": "All",
+      "applicationCategory": "BusinessApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Cómo calcula la herramienta la pendiente máxima de una rampa según el CTE?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La calculadora aplica las fórmulas del Documento Básico de Seguridad de Utilización y Accesibilidad (CTE DB-SUA), estableciendo límites máximos de pendiente según el desnivel a salvar (12% para desniveles menores a 20 cm, 10% para tramos hasta 50 cm y 8% para el resto de tramos)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué es el Buscador PAO de prestaciones ortoprotésicas?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Es una herramienta de consulta rápida sobre el catálogo de prestaciones ortoprotésicas del Servei Català de la Salut (CatSalut), que permite filtrar por código, prescripción médica y porcentaje de cobertura."
+          }
+        }
+      ]
+    }
+  ]
+  </script>
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 

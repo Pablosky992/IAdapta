@@ -37,24 +37,68 @@
 
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "MedicalBusiness",
-    "name": "IAdapta",
-    "alternateName": "IAdapta Terapia Ocupacional",
-    "description": "Plataforma de Terapia Ocupacional especializada en accesibilidad y estimulación cognitiva.",
-    "url": "https://iadapta.es",
-    "logo": "https://iadapta.es/assets/iadapta_logo.png",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "España"
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "IAdapta | Terapia Ocupacional y Accesibilidad",
+      "url": "https://iadapta.es/",
+      "description": "Plataforma de Terapia Ocupacional especializada en accesibilidad, adaptación del hogar, recursos para cuidadores y estimulación cognitiva.",
+      "inLanguage": "es"
     },
-    "medicalSpecialty": ["OccupationalTherapy", "PhysicalTherapy", "Geriatrics"],
-    "offers": {
-      "@type": "Offer",
-      "name": "Recursos para Profesionales y Juegos Cognitivos"
+    {
+      "@context": "https://schema.org",
+      "@type": "MedicalBusiness",
+      "@id": "https://iadapta.es/#organization",
+      "name": "IAdapta",
+      "alternateName": "IAdapta Terapia Ocupacional",
+      "description": "Servicios y herramientas de Terapia Ocupacional especializada en accesibilidad, prevención de caídas y estimulación cognitiva.",
+      "url": "https://iadapta.es",
+      "logo": "https://iadapta.es/assets/iadapta_logo.png",
+      "image": "https://iadapta.es/narciso_millan_portrait.jpg",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "España"
+      },
+      "medicalSpecialty": ["OccupationalTherapy", "PhysicalTherapy", "Geriatrics"],
+      "founder": {
+        "@type": "Person",
+        "name": "Pablo Narciso Millán",
+        "jobTitle": "Terapeuta Ocupacional",
+        "url": "https://iadapta.es/cv.html"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Qué es la Terapia Ocupacional y cómo ayuda a la autonomía?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La Terapia Ocupacional es una profesión sociosanitaria que evalúa las capacidades físicas, cognitivas y el entorno del paciente para adaptar las actividades de la vida diaria (AVD), prescribir productos de apoyo y garantizar la máxima independencia en el hogar."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo funciona la valoración de accesibilidad de la estancia con IA?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Subiendo una fotografía o respondiendo un breve cuestionario sobre el espacio (baño, cocina o accesos), nuestra Inteligencia Artificial evalúa las barreras arquitectónicas existentes y sugiere productos de apoyo y adaptaciones personalizadas."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué recursos ofrece IAdapta para cuidadores de personas dependientes?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "IAdapta dispone de un área dedicada al cuidador con el Test de Zarit de sobrecarga, un Asistente Virtual IA para dudas de movilización, un Diario de Registro de constantes y salud descargable en PDF y un catálogo de productos de apoyo recomendados."
+          }
+        }
+      ]
     }
-  }
+  ]
   </script>
 
   <!-- Open Graph / Facebook -->
