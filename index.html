@@ -4,22 +4,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="IAdapta: Expertos en Terapia Ocupacional, Accesibilidad y Estimulación Cognitiva. Guías para la adaptación del hogar, recursos para profesionales y retos mentales diarios." />
-  <meta name="keywords" content="terapia ocupacional, accesibilidad, estimulacion cognitiva, adaptacion hogar, recursos para profesionales, juegos de memoria, autonomia personal, salud mental, productos de apoyo" />
+  <meta name="description" content="IAdapta: Plataforma de Terapia Ocupacional, Accesibilidad y Estimulación Cognitiva. Valoración de estancias con IA, guías de adaptación del hogar, recursos para cuidadores (Test de Zarit, Diario PDF, Asistente IA), banco de ortesis 3D y juegos mentales diarios." />
+  <meta name="keywords" content="terapia ocupacional, accesibilidad, estimulacion cognitiva, adaptacion hogar, recursos cuidadores, test de zarit, diario cuidador pdf, asistente IA cuidados, impresion 3d ortesis, juegos de memoria, autonomia personal, prevencion de caidas, productos de apoyo" />
   <link rel="canonical" href="https://iadapta.es/" />
   
   <link rel="icon" type="image/png" href="assets/iadapta_logo.png" />
   
-  <title>IAdapta | Terapia Ocupacional y Accesibilidad</title>
+  <title>IAdapta | Terapia Ocupacional, Accesibilidad y Mente Activa</title>
 
   <!-- Redirección Legacy para SPA / PWA -->
   <script>
     const params = new URLSearchParams(window.location.search);
     const p = params.get('page');
-    if (p === 'games' || p === 'cognitive' || p === 'memory' || p === 'order' || p === 'wordsearch' || p === 'math' || p === 'visual' || p === 'intruder' || p === 'challenge' || p === 'sudoku') {
+    if (p === 'games' || p === 'cognitive' || p === 'memory' || p === 'order' || p === 'wordsearch' || p === 'math' || p === 'visual' || p === 'intruder' || p === 'challenge' || p === 'sudoku' || p === 'wordbuilder' || p === 'simon') {
       window.location.replace('estimulacion-cognitiva.html' + window.location.search);
     } else if (p === 'resources') {
       window.location.replace('recursos.html' + window.location.search);
+    } else if (p === 'caregiver_resources' || p === 'cuidador') {
+      window.location.replace('recursos-cuidador.html' + window.location.search);
     } else if (p === 'guides') {
       window.location.replace('guias.html' + window.location.search);
     } else if (p === 'analyzer') {
@@ -43,7 +45,7 @@
       "@type": "WebSite",
       "name": "IAdapta | Terapia Ocupacional y Accesibilidad",
       "url": "https://iadapta.es/",
-      "description": "Plataforma de Terapia Ocupacional especializada en accesibilidad, adaptación del hogar, recursos para cuidadores y estimulación cognitiva.",
+      "description": "Plataforma de Terapia Ocupacional especializada en accesibilidad, adaptación del hogar, recursos para cuidadores y gimnasio cerebral.",
       "inLanguage": "es"
     },
     {
@@ -52,7 +54,7 @@
       "@id": "https://iadapta.es/#organization",
       "name": "IAdapta",
       "alternateName": "IAdapta Terapia Ocupacional",
-      "description": "Servicios y herramientas de Terapia Ocupacional especializada en accesibilidad, prevención de caídas y estimulación cognitiva.",
+      "description": "Servicios y herramientas de Terapia Ocupacional especializada en accesibilidad, apoyo al cuidador, prevención de caídas y estimulación cognitiva.",
       "url": "https://iadapta.es",
       "logo": "https://iadapta.es/assets/iadapta_logo.png",
       "image": "https://iadapta.es/narciso_millan_portrait.jpg",
@@ -66,6 +68,52 @@
         "name": "Pablo Narciso Millán",
         "jobTitle": "Terapeuta Ocupacional",
         "url": "https://iadapta.es/cv.html"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Servicios de Terapia Ocupacional y Herramientas Digitales",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Valoración de la estancia con Inteligencia Artificial",
+              "url": "https://iadapta.es/valoracion-estancia.html"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Guías de Adaptación del Hogar y Accesibilidad",
+              "url": "https://iadapta.es/guias.html"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Gimnasio Cerebral y Juegos de Estimulación Cognitiva",
+              "url": "https://iadapta.es/estimulacion-cognitiva.html"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Recursos para el Cuidador: Test de Zarit, Asistente IA y Diario PDF",
+              "url": "https://iadapta.es/recursos-cuidador.html"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Recursos para Profesionales de TO y Diseños 3D de Ortesis",
+              "url": "https://iadapta.es/recursos.html"
+            }
+          }
+        ]
       }
     },
     {
@@ -94,6 +142,14 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "IAdapta dispone de un área dedicada al cuidador con el Test de Zarit de sobrecarga, un Asistente Virtual IA para dudas de movilización, un Diario de Registro de constantes y salud descargable en PDF y un catálogo de productos de apoyo recomendados."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué juegos y ejercicios incluye el Gimnasio Cerebral de IAdapta?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Incluye 9 juegos interactivos: Reto Diario, Memoriza Parejas, Secuencia Numérica, Sopa de Letras, Cálculo Mental, Agudeza Visual, El Intruso, Sudoku, Formar Palabras y Secuencia de Colores."
           }
         }
       ]
@@ -282,32 +338,80 @@
         </p>
       </section>
 
-      <!-- Servicios principales -->
+      <!-- Servicios y Herramientas principales -->
       <section class="max-w-7xl mx-auto px-4 py-12">
-        <h2 class="font-display text-3xl font-bold text-center text-brand-900 mb-12">Servicios y Herramientas</h2>
-        <div class="grid md:grid-cols-3 gap-8">
-          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8">
-            <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">Valoración de la estancia con IA</h3>
-            <p class="text-gray-600 mb-6">
-              Introduce las características de tu hogar o espacio y nuestra inteligencia artificial evaluará las barreras arquitectónicas existentes, sugiriendo las mejores adaptaciones.
-            </p>
+        <h2 class="font-display text-3xl font-bold text-center text-brand-900 mb-12">Servicios y Herramientas de Terapia Ocupacional</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- 1. Valoración con IA -->
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-400 mb-2 block">Inteligencia Artificial</span>
+              <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">Valoración de la estancia con IA</h3>
+              <p class="text-gray-600 mb-6">
+                Evaluación inteligente de estancias (baño, cocina, accesos y zonas comunes) mediante imágenes o cuestionario. Detecta barreras arquitectónicas y propone adaptaciones personalizadas.
+              </p>
+            </div>
             <a href="valoracion-estancia.html" class="text-brand-600 font-bold hover:underline">Valorar estancia &rarr;</a>
           </article>
 
-          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8">
-            <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">Guías de Adaptación</h3>
-            <p class="text-gray-600 mb-6">
-              Consejos prácticos, normativas y descripciones detalladas de productos de apoyo para adaptar el baño, cocina, dormitorio y zonas comunes del hogar, previniendo caídas.
-            </p>
+          <!-- 2. Guías de Adaptación -->
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-400 mb-2 block">Recursos y Guías</span>
+              <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">Guías de Adaptación del Hogar</h3>
+              <p class="text-gray-600 mb-6">
+                Consejos técnicos, normativas de accesibilidad y catálogo de productos de apoyo para baño, dormitorio, movilidad, prevención de caídas y manejo de patologías (ictus, Parkinson, artritis).
+              </p>
+            </div>
             <a href="guias.html" class="text-brand-600 font-bold hover:underline">Explorar guías &rarr;</a>
           </article>
 
-          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8">
-            <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">Estimulación Cognitiva</h3>
-            <p class="text-gray-600 mb-6">
-              Ejercicios prácticos, retos diarios de memoria, cálculo numérico, sopas de letras y atención visual diseñados para fortalecer la agilidad mental y promover la autonomía personal.
-            </p>
+          <!-- 3. Estimulación Cognitiva -->
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-400 mb-2 block">Gimnasio Cerebral</span>
+              <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">Gimnasio Cerebral y Juegos</h3>
+              <p class="text-gray-600 mb-6">
+                Ejercicios interactivos con retos diarios, memoria de secuencia (Secuencia de Colores), agilidad léxica (Formar Palabras), sopas de letras, cálculo mental, agudeza visual y sudokus.
+              </p>
+            </div>
             <a href="estimulacion-cognitiva.html" class="text-brand-600 font-bold hover:underline">Entrenar mente &rarr;</a>
+          </article>
+
+          <!-- 4. Recursos para Cuidadores -->
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-400 mb-2 block">Área del Cuidador</span>
+              <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">Recursos para el Cuidador</h3>
+              <p class="text-gray-600 mb-6">
+                Test de Zarit de sobrecarga del cuidador, Asistente Virtual IA para dudas de movilización y cuidados, Diario de constantes de salud exportable en PDF y fichas descargables.
+              </p>
+            </div>
+            <a href="recursos-cuidador.html" class="text-brand-600 font-bold hover:underline">Ver recursos cuidador &rarr;</a>
+          </article>
+
+          <!-- 5. Recursos para Profesionales -->
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-400 mb-2 block">Área Profesional y Ortesis 3D</span>
+              <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">Recursos para Profesionales</h3>
+              <p class="text-gray-600 mb-6">
+                Banco de modelos 3D STL gratuitos para la fabricación de productos de apoyo y adaptaciones de bajo coste, junto con escalas de valoración estandarizadas en Terapia Ocupacional.
+              </p>
+            </div>
+            <a href="recursos.html" class="text-brand-600 font-bold hover:underline">Ver área profesional &rarr;</a>
+          </article>
+
+          <!-- 6. Perfil y CV -->
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-400 mb-2 block">Perfil Profesional</span>
+              <h3 class="font-display text-2xl font-bold text-brand-900 mb-4">Trayectoria y Experiencia</h3>
+              <p class="text-gray-600 mb-6">
+                Conoce la trayectoria de Pablo Narciso Millán, Terapeuta Ocupacional graduado en 2015 especialista en geriatría, ortopedia, accesibilidad e impresión 3D asistencial.
+              </p>
+            </div>
+            <a href="cv.html" class="text-brand-600 font-bold hover:underline">Ver currículum &rarr;</a>
           </article>
         </div>
       </section>

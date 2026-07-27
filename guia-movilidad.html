@@ -3,28 +3,78 @@
 
 <head>
   <meta charset="UTF-8" />
-  
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="IAdapta Guías: Guías ilustradas y prácticas de adaptación y accesibilidad del hogar. Baño, cocina, dormitorio, etc." />
-  <meta name="keywords" content="accesibilidad hogar, adaptacion bano, adaptacion cocina, productos apoyo amazon, iadapta" />
-  <link rel="canonical" href="https://iadapta.es/guias.html" />
+  <meta name="description" content="Criterios clínicos para seleccionar bastones, andadores de interior/exterior, muletas ergonómicas y técnicas de marcha segura." />
+  <meta name="keywords" content="andador interior, andador ruedas exterior, baston ingles, muletas ergonomicas, cinturon transferencia, marcha segura, iadapta" />
+  <link rel="canonical" href="https://iadapta.es/guia-movilidad.html" />
   <link rel="icon" type="image/png" href="assets/iadapta_logo.png" />
-  <title>IAdapta | Guías de Adaptación</title>
+  <title>Guía de Prescripción de Movilidad y Productos de Apoyo | IAdapta</title>
 
   <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://iadapta.es/guias.html" />
-  <meta property="og:title" content="IAdapta | Guías de Accesibilidad" />
-  <meta property="og:description" content="Guías completas para adaptar tu baño, cocina and hogar." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://iadapta.es/guia-movilidad.html" />
+  <meta property="og:title" content="Guía de Prescripción de Movilidad y Productos de Apoyo | IAdapta" />
+  <meta property="og:description" content="Criterios clínicos para seleccionar bastones, andadores de interior/exterior, muletas ergonómicas y técnicas de marcha segura." />
   <meta property="og:image" content="https://iadapta.es/assets/iadapta_logo_social.jpg" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://iadapta.es/guias.html" />
-  <meta property="twitter:title" content="IAdapta | Guías de Adaptación" />
-  <meta property="twitter:description" content="Guías completas para adaptar tu baño, cocina and hogar." />
+  <meta property="twitter:url" content="https://iadapta.es/guia-movilidad.html" />
+  <meta property="twitter:title" content="Guía de Prescripción de Movilidad y Productos de Apoyo | IAdapta" />
+  <meta property="twitter:description" content="Criterios clínicos para seleccionar bastones, andadores de interior/exterior, muletas ergonómicas y técnicas de marcha segura." />
   <meta property="twitter:image" content="https://iadapta.es/assets/iadapta_logo_social.jpg" />
+
+  <!-- JSON-LD Structured Data for Adaptation Guide -->
+  <script type="application/ld+json">
+  [
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalWebPage",
+    "name": "Movilidad y Prescripción de Productos de Apoyo | IAdapta",
+    "description": "Criterios clínicos para seleccionar bastones, andadores de interior/exterior, muletas ergonómicas y técnicas de marcha segura.",
+    "url": "https://iadapta.es/guia-movilidad.html",
+    "author": {
+      "@type": "Person",
+      "name": "Pablo Narciso Millán",
+      "jobTitle": "Terapeuta Ocupacional",
+      "url": "https://iadapta.es/cv.html"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Movilidad y Prescripción de Productos de Apoyo",
+    "description": "Criterios clínicos para seleccionar bastones, andadores de interior/exterior, muletas ergonómicas y técnicas de marcha segura.",
+    "url": "https://iadapta.es/guia-movilidad.html",
+    "author": {
+      "@type": "Person",
+      "name": "Pablo Narciso Millán"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "IAdapta Terapia Ocupacional",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://iadapta.es/assets/iadapta_logo.png"
+      }
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Cuándo elegir un andador de 2 ruedas vs 4 ruedas?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "El andador de 2 ruedas se recomienda para interiores y marcha más lenta, mientras que el de 4 ruedas con asiento es ideal para desplazamientos exteriores y fatiga."
+        }
+      }
+    ]
+  }
+]
+  </script>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -39,8 +89,6 @@
   <!-- React 18 CDN -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-
-
 
   <!-- Marked.js for Markdown parsing -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -89,7 +137,6 @@
   <link rel="stylesheet" href="css/styles.css" />
 
   <!-- PWA Manifest -->
-
   <link rel="apple-touch-icon" href="assets/iadapta_brand_icon.png">
   <meta name="theme-color" content="#1A3052" />
 
@@ -152,151 +199,31 @@
 
     <main id="main-content" class="pt-36 pb-12">
       <!-- Section Title & Intro -->
-      <section class="max-w-7xl mx-auto px-4 text-center py-12">
-        <span class="inline-block bg-brand-100 text-brand-700 rounded-full px-5 py-2 text-sm font-bold uppercase tracking-widest mb-4">Guías Prácticas</span>
+      <section class="max-w-7xl mx-auto px-4 text-center py-8">
+        <span class="inline-block bg-brand-100 text-brand-700 rounded-full px-5 py-2 text-sm font-bold uppercase tracking-widest mb-4">Guía Especializada</span>
         <h1 class="font-display text-4xl md:text-5xl font-bold text-brand-900 mb-6">
-          Guías de Adaptación y Accesibilidad del Hogar
+          Movilidad y Prescripción de Productos de Apoyo
         </h1>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-          Descubre cómo hacer tu hogar más accesible, seguro y adaptado a tus necesidades diarias. Artículos redactados por terapeutas ocupacionales con recomendaciones de productos específicos.
+          Criterios clínicos para seleccionar bastones, andadores de interior/exterior, muletas ergonómicas y técnicas de marcha segura.
         </p>
       </section>
 
-      <!-- Category Tabs (Visual Fallback) -->
-      <section class="max-w-7xl mx-auto px-4 py-6">
-        <div class="flex flex-wrap justify-center gap-4 mb-12">
-          <a href="guias.html?cat=banyo" class="px-6 py-3 bg-brand-900 text-white rounded-full font-bold shadow-md hover:bg-brand-800 transition-colors flex items-center gap-2">
-            <span>🚿</span> Baño
-          </a>
-          <a href="guias.html?cat=dormitorio" class="px-6 py-3 bg-gray-100 text-gray-700 rounded-full font-bold shadow-sm hover:bg-gray-200 transition-colors flex items-center gap-2">
-            <span>🛏️</span> Dormitorio
-          </a>
-          <a href="guias.html?cat=cocina" class="px-6 py-3 bg-gray-100 text-gray-700 rounded-full font-bold shadow-sm hover:bg-gray-200 transition-colors flex items-center gap-2">
-            <span>🍳</span> Cocina y Alimentación
-          </a>
-        </div>
+      
+      <section class="max-w-4xl mx-auto px-4 py-8">
+        <h2 class="font-display text-3xl font-bold text-brand-900 mb-6">Soluciones para la Movilidad</h2>
+        <p class="text-gray-700 text-lg leading-relaxed mb-6">
+          Los productos de apoyo a la marcha garantizan la estabilidad, disminuyen el riesgo de tropiezos y promueven la autonomía en desplazamientos.
+        </p>
       </section>
+    
 
-      <!-- Articles list -->
-      <section class="max-w-7xl mx-auto px-4 py-6">
-        <div class="space-y-16">
-          <!-- Article 1: Baño -->
-          <article class="border-b border-gray-100 pb-16">
-            <div class="flex flex-col lg:flex-row gap-10">
-              <div class="flex-1">
-                <h2 class="text-3xl font-display font-bold text-brand-900 mb-4">Adaptación integral del cuarto de baño</h2>
-                <div class="space-y-4 text-gray-700 text-lg leading-relaxed">
-                  <p>
-                    El cuarto de baño es una de las estancias clave en el hogar donde la seguridad y la intimidad deben preservarse. Desde la perspectiva de la Terapia Ocupacional, la adaptación del baño previene caídas y fomenta la autonomía del usuario durante el aseo diario.
-                  </p>
-                  <h3 class="font-bold text-brand-900 text-xl mt-6">Puntos clave en la adaptación del baño:</h3>
-                  <ul class="list-disc pl-5 space-y-2">
-                    <li><strong>Eliminación de barreras:</strong> Cambiar bañera por un plato de ducha extraplano para un acceso a ras de suelo sin tropiezos.</li>
-                    <li><strong>Apoyo y estabilidad:</strong> Instalación de barras de seguridad antideslizantes fijadas a la pared en zonas estratégicas.</li>
-                    <li><strong>Materiales recomendados:</strong> Uso de tablas de bañera, banquetas antideslizantes para ducha y elevadores de inodoro.</li>
-                  </ul>
-                </div>
-                <a href="guias.html?cat=banyo" class="inline-block mt-6 px-6 py-2.5 bg-brand-100 text-brand-900 font-bold rounded-full text-sm hover:bg-brand-200 transition-colors">
-                  Ver guía detallada del Baño &rarr;
-                </a>
-              </div>
-              <div class="lg:w-1/3 bg-gray-50 rounded-2xl p-6 border border-brand-100 shadow-sm self-start">
-                <h4 class="font-bold text-brand-800 uppercase tracking-wide text-xs mb-4">Material de apoyo para baño</h4>
-                <ul class="space-y-3">
-                  <li class="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
-                    <span class="font-semibold block text-sm text-gray-900">Tabla de bañera</span>
-                    <span class="text-xs text-gray-500">Ideal para ducharse sentado sobre la bañera de forma segura.</span>
-                  </li>
-                  <li class="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
-                    <span class="font-semibold block text-sm text-gray-900">Asiento giratorio para bañera</span>
-                    <span class="text-xs text-gray-500">Facilita la transferencia al girar sobre la bañera.</span>
-                  </li>
-                  <li class="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
-                    <span class="font-semibold block text-sm text-gray-900">Asiento para ducha</span>
-                    <span class="text-xs text-gray-500">Banqueta o silla estable con conteras antideslizantes.</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </article>
-
-          <!-- Article 2: Dormitorio -->
-          <article class="border-b border-gray-100 pb-16">
-            <div class="flex flex-col lg:flex-row gap-10">
-              <div class="flex-1">
-                <h2 class="text-3xl font-display font-bold text-brand-900 mb-4">Seguridad en el Dormitorio: Prevención de Caídas</h2>
-                <div class="space-y-4 text-gray-700 text-lg leading-relaxed">
-                  <p>
-                    El descanso nocturno y las transferencias de la cama al ponerse de pie son momentos críticos de caídas en adultos mayores o personas en convalecencia. Adecuar el entorno del dormitorio mejora la comodidad y evita riesgos de atrapamiento.
-                  </p>
-                  <h3 class="font-bold text-brand-900 text-xl mt-6">Estrategias recomendadas:</h3>
-                  <ul class="list-disc pl-5 space-y-2">
-                    <li><strong>Altura de la cama:</strong> La cama debe estar a una altura que permita sentarse apoyando los pies planos en el suelo y manteniendo las rodillas a 90 grados.</li>
-                    <li><strong>Facilitar la incorporación:</strong> Uso de barandillas o asideros cortos de transferencia bajo el colchón para un punto de agarre firme.</li>
-                    <li><strong>Rutas libres de obstáculos:</strong> Iluminación nocturna automática con sensores de movimiento y pasillos despejados.</li>
-                  </ul>
-                </div>
-                <a href="guias.html?cat=dormitorio" class="inline-block mt-6 px-6 py-2.5 bg-brand-100 text-brand-900 font-bold rounded-full text-sm hover:bg-brand-200 transition-colors">
-                  Ver guía detallada del Dormitorio &rarr;
-                </a>
-              </div>
-              <div class="lg:w-1/3 bg-gray-50 rounded-2xl p-6 border border-brand-100 shadow-sm self-start">
-                <h4 class="font-bold text-brand-800 uppercase tracking-wide text-xs mb-4">Material de apoyo para dormitorio</h4>
-                <ul class="space-y-3">
-                  <li class="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
-                    <span class="font-semibold block text-sm text-gray-900">Barandilla / Asidero de cama</span>
-                    <span class="text-xs text-gray-500">Punto de agarre para incorporarse y evitar caídas laterales.</span>
-                  </li>
-                  <li class="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
-                    <span class="font-semibold block text-sm text-gray-900">Tacos elevadores de muebles</span>
-                    <span class="text-xs text-gray-500">Permiten elevar de forma segura patas de camas o sofás.</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </article>
-
-          <!-- Article 3: Cocina -->
-          <article class="pb-16">
-            <div class="flex flex-col lg:flex-row gap-10">
-              <div class="flex-1">
-                <h2 class="text-3xl font-display font-bold text-brand-900 mb-4">Accesibilidad en la Cocina y Alimentación Autónoma</h2>
-                <div class="space-y-4 text-gray-700 text-lg leading-relaxed">
-                  <p>
-                    Cocinar y comer de forma independiente son actividades cotidianas esenciales. Cuando existen problemas de movilidad, debilidad muscular o hemiparesia (uso de un solo brazo), los utensilios adaptados y la disposición ergonómica permiten seguir elaborando recetas de forma segura.
-                  </p>
-                  <h3 class="font-bold text-brand-900 text-xl mt-6">Adaptaciones recomendadas en cocina:</h3>
-                  <ul class="list-disc pl-5 space-y-2">
-                    <li><strong>Utensilios ergonómicos:</strong> Cubiertos con mangos engrosados para un agarre más cómodo y seguro en procesos como la artrosis.</li>
-                    <li><strong>Preparación a una mano:</strong> Tablas de cortar adaptadas con clavos de sujeción para fijar alimentos y rebordes antideslizantes.</li>
-                    <li><strong>Alimentación sin derrames:</strong> Platos con bordes altos o ventosas integradas y vasos con escotaduras nasales para disfagia.</li>
-                  </ul>
-                </div>
-                <a href="guias.html?cat=cocina" class="inline-block mt-6 px-6 py-2.5 bg-brand-100 text-brand-900 font-bold rounded-full text-sm hover:bg-brand-200 transition-colors">
-                  Ver guía detallada de Cocina &rarr;
-                </a>
-              </div>
-              <div class="lg:w-1/3 bg-gray-50 rounded-2xl p-6 border border-brand-100 shadow-sm self-start">
-                <h4 class="font-bold text-brand-800 uppercase tracking-wide text-xs mb-4">Material de apoyo para cocina</h4>
-                <ul class="space-y-3">
-                  <li class="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
-                    <span class="font-semibold block text-sm text-gray-900">Cubiertos adaptados</span>
-                    <span class="text-xs text-gray-500">De mango grueso y ligero, ideales para problemas articulares.</span>
-                  </li>
-                  <li class="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
-                    <span class="font-semibold block text-sm text-gray-900">Tabla de corte a una mano</span>
-                    <span class="text-xs text-gray-500">Facilita pelar y cortar sujetando los alimentos con clavos o mordazas.</span>
-                  </li>
-                  <li class="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
-                    <span class="font-semibold block text-sm text-gray-900">Vasos y platos adaptados</span>
-                    <span class="text-xs text-gray-500">Vasos con escotadura nasal y platos con reborde y ventosas.</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </article>
-        </div>
-      </section>
+      <!-- Volver a Guías -->
+      <div class="max-w-4xl mx-auto px-4 py-6 text-center">
+        <a href="guias.html" class="inline-block px-6 py-3 bg-brand-900 text-white font-bold rounded-xl shadow-md hover:bg-brand-800 transition-all">
+          &larr; Volver al Directorio de Guías
+        </a>
+      </div>
     </main>
 
     <footer class="bg-brand-900 text-white py-12">
