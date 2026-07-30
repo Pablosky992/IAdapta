@@ -13,6 +13,11 @@ body {
   background: #F2F0E9;
 }
 
+/* Explicit container fix for header max-width across all pages */
+.max-w-\[1400px\] {
+  max-width: 1400px !important;
+}
+
 /* ===================================================
    ACCESSIBILITY
    =================================================== */

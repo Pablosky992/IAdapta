@@ -114,7 +114,7 @@ const CaregiverSubNav = function CaregiverSubNav({ currentView, onViewChange }) 
   ];
 
   return (
-    <div className="w-full max-w-6xl mx-auto mb-10">
+    <div className="w-full max-w-7xl mx-auto mb-10">
       <div className="flex items-center justify-between gap-4 flex-wrap border-b border-brand-100 pb-5">
         {/* Volver button */}
         <button 
@@ -3509,7 +3509,7 @@ const CaregiverPrintablesComponent = function CaregiverPrintablesComponent() {
   if (currentView === 'menu') {
     return (
       <section id="caregiver-resources" className="pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen">
-        <div className="max-w-6xl mx-auto transition-all duration-300">
+        <div className="max-w-7xl mx-auto transition-all duration-300">
           <div className="text-center mb-16">
             <span className="inline-block bg-brand-100 text-brand-700 rounded-full px-5 py-2 text-base font-bold uppercase tracking-widest mb-4">
               Área del Cuidador
@@ -3720,7 +3720,7 @@ const CaregiverPrintablesComponent = function CaregiverPrintablesComponent() {
   if (currentView === 'products') {
     return (
       <section id="caregiver-resources" className="pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen">
-        <div className="max-w-6xl mx-auto transition-all duration-300">
+        <div className="max-w-7xl mx-auto transition-all duration-300">
           <CaregiverSubNav currentView="products" onViewChange={setCurrentView} />
 
         <div className="mb-10 text-center">
@@ -3843,7 +3843,7 @@ const CaregiverPrintablesComponent = function CaregiverPrintablesComponent() {
 
     return (
       <section id="caregiver-resources" className="pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen">
-        <div className="max-w-6xl mx-auto transition-all duration-300">
+        <div className="max-w-7xl mx-auto transition-all duration-300">
           <CaregiverSubNav currentView="zarit" onViewChange={setCurrentView} />
 
         <div className="max-w-4xl mx-auto">
@@ -4085,7 +4085,7 @@ const CaregiverPrintablesComponent = function CaregiverPrintablesComponent() {
   if (currentView === 'chat') {
     return (
       <section id="caregiver-resources" className="pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen">
-        <div className="max-w-6xl mx-auto transition-all duration-300">
+        <div className="max-w-7xl mx-auto transition-all duration-300">
           <CaregiverSubNav currentView="chat" onViewChange={setCurrentView} />
           
           <div className="mb-8 text-center">
@@ -4107,7 +4107,7 @@ const CaregiverPrintablesComponent = function CaregiverPrintablesComponent() {
   if (currentView === 'log') {
     return (
       <section id="caregiver-resources" className="pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen">
-        <div className="max-w-6xl mx-auto transition-all duration-300">
+        <div className="max-w-7xl mx-auto transition-all duration-300">
           <CaregiverSubNav currentView="log" onViewChange={setCurrentView} />
           
           <div className="mb-10 text-center">
@@ -4132,7 +4132,7 @@ const CaregiverPrintablesComponent = function CaregiverPrintablesComponent() {
   if (currentView === 'wizard') {
     return (
       <section id="caregiver-resources" className="pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen">
-        <div className="max-w-6xl mx-auto transition-all duration-300">
+        <div className="max-w-7xl mx-auto transition-all duration-300">
           <CaregiverSubNav currentView="wizard" onViewChange={setCurrentView} />
           
           <div className="mb-10 text-center">
@@ -4157,7 +4157,7 @@ const CaregiverPrintablesComponent = function CaregiverPrintablesComponent() {
   if (currentView === 'printables') {
     return (
       <section id="caregiver-resources" className="pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen">
-        <div className="max-w-6xl mx-auto transition-all duration-300">
+        <div className="max-w-7xl mx-auto transition-all duration-300">
           <CaregiverSubNav currentView="printables" onViewChange={setCurrentView} />
           
           <div className="mb-10 text-center">

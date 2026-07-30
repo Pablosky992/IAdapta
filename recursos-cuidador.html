@@ -197,29 +197,39 @@
     <!-- Contenido estático de respaldo para SEO, Accesibilidad y AdSense -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-[#F2F0E9] border-b border-brand-900/10 shadow-sm">
       <div class="max-w-[1400px] mx-auto px-4 sm:px-8 flex items-center justify-between h-24 md:h-28">
-        <a href="index.html" class="flex items-center hover:scale-105 transition-transform">
-          <img src="assets/iadapta_logo.png" alt="IAdapta" class="h-16 md:h-20 object-contain" />
+        <a href="index.html" class="flex items-center hover:scale-105 transition-transform flex-shrink-0">
+          <img src="assets/iadapta_logo.png" alt="IAdapta" class="h-16 md:h-20 object-contain flex-shrink-0" />
         </a>
-        <nav class="hidden xl:flex items-center gap-1">
-          <a href="index.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Inicio</a>
-          <a href="valoracion-estancia.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
-            <span>Valoración de</span><span>la estancia</span>
-          </a>
-          <a href="guias.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
-            <span>Guías de</span><span>adaptación</span>
-          </a>
-          <a href="estimulacion-cognitiva.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
-            <span>Área</span><span>Cognitiva</span>
-          </a>
-          <a href="recursos.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
-            <span>Recursos para</span><span>profesionales</span>
-          </a>
-          <a href="recursos-cuidador.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
-            <span>Recursos para</span><span>el cuidador</span>
-          </a>
-          <a href="contacto.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Contacto</a>
-          <a href="cv.html" class="px-4 py-2.5 text-sm xl:text-base font-bold text-white bg-accent-coral rounded-xl transition-all ml-2">Mi CV</a>
-        </nav>
+        <div class="hidden xl:flex items-center gap-4">
+          <nav class="flex items-center gap-1">
+            <a href="index.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Inicio</a>
+            <a href="valoracion-estancia.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+              <span>Valoración de</span><span>la estancia</span>
+            </a>
+            <a href="guias.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+              <span>Guías de</span><span>adaptación</span>
+            </a>
+            <a href="estimulacion-cognitiva.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+              <span>Área</span><span>Cognitiva</span>
+            </a>
+            <a href="recursos.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+              <span>Recursos para</span><span>profesionales</span>
+            </a>
+            <a href="recursos-cuidador.html" class="px-3 py-1.5 text-sm xl:text-base font-bold bg-brand-900 text-white shadow-sm rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+              <span>Recursos para</span><span>el cuidador</span>
+            </a>
+            <a href="contacto.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Contacto</a>
+            <a href="cv.html" class="px-4 py-2.5 text-sm xl:text-base font-bold text-accent-coral hover:bg-white/50 border-2 border-accent-coral/10 rounded-xl transition-all ml-2 whitespace-nowrap">Sobre mí</a>
+          </nav>
+          <div class="h-8 w-px bg-brand-900/10 mx-2"></div>
+          <button class="px-5 py-2 rounded-xl transition-all duration-200 bg-brand-900 text-white shadow-lg flex items-center gap-2.5">
+            <svg class="w-5 h-5 fill-white text-white" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <span class="flex flex-col items-start text-xs xl:text-sm font-black leading-none text-left">
+              <span>Apoyar</span>
+              <span>proyecto</span>
+            </span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -235,80 +245,130 @@
         </p>
       </section>
 
-      <!-- Grid de Herramientas Estáticas para SEO -->
+      <!-- Grid de Herramientas Estáticas para SEO (6 Herramientas del Cuidador) -->
       <section class="max-w-7xl mx-auto px-4 py-6">
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          
           <!-- 1. Test de Zarit -->
-          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between">
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between hover:shadow-xl transition-all">
             <div>
-              <span class="text-3xl mb-3 block">📋</span>
-              <h2 class="font-display text-2xl font-bold text-brand-900 mb-3">Test de Sobrecarga Zarit</h2>
-              <p class="text-gray-600 mb-6 text-sm">
-                Evaluación científica validada de 22 preguntas para medir objetivamente el nivel de sobrecarga física y emocional del cuidador con orientación clínica.
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-3xl">📋</span>
+                <span class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-xs font-bold uppercase tracking-wider">Cuestionario Científico</span>
+              </div>
+              <h2 class="font-display text-2xl font-bold text-brand-900 mb-3">Test de Sobrecarga del Cuidador de Zarit</h2>
+              <p class="text-gray-600 mb-4 text-sm leading-relaxed">
+                Escala clínica validada de 22 preguntas diseñada para evaluar de forma objetiva la sobrecarga física, mental y emocional del cuidador familiar con interpretación de resultado y recomendaciones.
               </p>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="px-2 py-0.5 bg-indigo-50 text-indigo-800 rounded-md text-[11px] font-semibold">22 Preguntas</span>
+                <span class="px-2 py-0.5 bg-indigo-50 text-indigo-800 rounded-md text-[11px] font-semibold">Escala Likert</span>
+                <span class="px-2 py-0.5 bg-indigo-50 text-indigo-800 rounded-md text-[11px] font-semibold">Criterio Clínico</span>
+              </div>
             </div>
-            <a href="recursos-cuidador.html?tab=zarit" class="text-brand-600 font-bold hover:underline text-sm">Realizar Test de Zarit &rarr;</a>
+            <a href="recursos-cuidador.html?tab=zarit" class="inline-block w-full py-3.5 text-center bg-brand-900 text-white rounded-xl font-bold hover:bg-brand-800 transition-colors text-sm shadow-md">Realizar Test de Zarit &rarr;</a>
           </article>
 
           <!-- 2. Diario del Cuidador -->
-          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between">
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between hover:shadow-xl transition-all">
             <div>
-              <span class="text-3xl mb-3 block">📝</span>
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-3xl">📝</span>
+                <span class="px-3 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-bold uppercase tracking-wider">Exportable a PDF</span>
+              </div>
               <h2 class="font-display text-2xl font-bold text-brand-900 mb-3">Diario de Registro y Reporte PDF</h2>
-              <p class="text-gray-600 mb-6 text-sm">
-                Registro diario de medicación, constantes de salud, horas de sueño y apetito. Genera informes estructurados en PDF para presentar al médico o especialista.
+              <p class="text-gray-600 mb-4 text-sm leading-relaxed">
+                Registro diario de constantes vitales (tensión, glucemia), tomas de medicación (mañana, tarde, noche), horas de descanso e ingesta de agua con generación de informe profesional en PDF para el médico.
               </p>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="px-2 py-0.5 bg-amber-50 text-amber-800 rounded-md text-[11px] font-semibold">Tension & Glucemia</span>
+                <span class="px-2 py-0.5 bg-amber-50 text-amber-800 rounded-md text-[11px] font-semibold">Control Medicación</span>
+                <span class="px-2 py-0.5 bg-amber-50 text-amber-800 rounded-md text-[11px] font-semibold">Informe Médico PDF</span>
+              </div>
             </div>
-            <a href="recursos-cuidador.html?tab=log" class="text-brand-600 font-bold hover:underline text-sm">Abrir Diario de Registro &rarr;</a>
+            <a href="recursos-cuidador.html?tab=log" class="inline-block w-full py-3.5 text-center bg-brand-900 text-white rounded-xl font-bold hover:bg-brand-800 transition-colors text-sm shadow-md">Abrir Diario de Registro &rarr;</a>
           </article>
 
           <!-- 3. Asistente IA del Cuidador -->
-          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between">
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between hover:shadow-xl transition-all">
             <div>
-              <span class="text-3xl mb-3 block">💬</span>
-              <h2 class="font-display text-2xl font-bold text-brand-900 mb-3">Asistente Virtual con IA</h2>
-              <p class="text-gray-600 mb-6 text-sm">
-                Chat en tiempo real para resolver dudas de movilización física, ergonomía de espalda, prevención de escaras y productos de apoyo recomendados.
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-3xl">💬</span>
+                <span class="px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-xs font-bold uppercase tracking-wider">Inteligencia Artificial</span>
+              </div>
+              <h2 class="font-display text-2xl font-bold text-brand-900 mb-3">Asistente Virtual del Cuidador (IA)</h2>
+              <p class="text-gray-600 mb-4 text-sm leading-relaxed">
+                Consultas clínicas instantáneas sobre técnicas ergonómicas de movilización en cama y silla, protección de la espalda, manejo de conductas en demencias y productos de apoyo recomendados.
               </p>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="px-2 py-0.5 bg-teal-50 text-teal-800 rounded-md text-[11px] font-semibold">Ergonomía Espalda</span>
+                <span class="px-2 py-0.5 bg-teal-50 text-teal-800 rounded-md text-[11px] font-semibold">Movilización Cama</span>
+                <span class="px-2 py-0.5 bg-teal-50 text-teal-800 rounded-md text-[11px] font-semibold">Atención 24/7</span>
+              </div>
             </div>
-            <a href="recursos-cuidador.html?tab=chat" class="text-brand-600 font-bold hover:underline text-sm">Consultar Asistente IA &rarr;</a>
+            <a href="recursos-cuidador.html?tab=chat" class="inline-block w-full py-3.5 text-center bg-brand-900 text-white rounded-xl font-bold hover:bg-brand-800 transition-colors text-sm shadow-md">Consultar Asistente IA &rarr;</a>
           </article>
 
           <!-- 4. Orientador de Caso -->
-          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between">
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between hover:shadow-xl transition-all">
             <div>
-              <span class="text-3xl mb-3 block">🧙‍♂️</span>
-              <h2 class="font-display text-2xl font-bold text-brand-900 mb-3">Orientador de Caso y Necesidades</h2>
-              <p class="text-gray-600 mb-6 text-sm">
-                Cuestionario adaptativo que analiza el grado de dependencia del paciente y recomienda soluciones técnicas y de accesibilidad a medida.
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-3xl">🧙‍♂️</span>
+                <span class="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-bold uppercase tracking-wider">Asistente Guiado</span>
+              </div>
+              <h2 class="font-display text-2xl font-bold text-brand-900 mb-3">Orientador de Caso y Dependencia</h2>
+              <p class="text-gray-600 mb-4 text-sm leading-relaxed">
+                Wizard interactivo que evalúa el nivel de autonomía del paciente en movilidad, aseo, nutrición y cognición para sugerir un plan personalizado de adaptación técnica del hogar.
               </p>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 rounded-md text-[11px] font-semibold">Evaluación AVD</span>
+                <span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 rounded-md text-[11px] font-semibold">Plan Personalizado</span>
+                <span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 rounded-md text-[11px] font-semibold">Pautas Clínicas</span>
+              </div>
             </div>
-            <a href="recursos-cuidador.html?tab=wizard" class="text-brand-600 font-bold hover:underline text-sm">Iniciar Orientador &rarr;</a>
+            <a href="recursos-cuidador.html?tab=wizard" class="inline-block w-full py-3.5 text-center bg-brand-900 text-white rounded-xl font-bold hover:bg-brand-800 transition-colors text-sm shadow-md">Iniciar Orientador &rarr;</a>
           </article>
 
           <!-- 5. Fichas Imprimibles -->
-          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between">
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between hover:shadow-xl transition-all">
             <div>
-              <span class="text-3xl mb-3 block">🖨️</span>
-              <h2 class="font-display text-2xl font-bold text-brand-900 mb-3">Fichas Imprimibles y Descargables</h2>
-              <p class="text-gray-600 mb-6 text-sm">
-                Infografías visuales, guías ergonómicas de transferencia de la cama a la silla y recomendaciones de autocuidado para llevar o imprimir.
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-3xl">🖨️</span>
+                <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold uppercase tracking-wider">Descargables PDF</span>
+              </div>
+              <h2 class="font-display text-2xl font-bold text-brand-900 mb-3">Fichas Imprimibles de Movilización</h2>
+              <p class="text-gray-600 mb-4 text-sm leading-relaxed">
+                Infografías ilustradas paso a paso: transferencia de la cama a la silla de ruedas, postura corporal para el cuidador, cambios posturales en cama e higiene autónoma.
               </p>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="px-2 py-0.5 bg-blue-50 text-blue-800 rounded-md text-[11px] font-semibold">Guías Ilustradas</span>
+                <span class="px-2 py-0.5 bg-blue-50 text-blue-800 rounded-md text-[11px] font-semibold">Paso a Paso</span>
+                <span class="px-2 py-0.5 bg-blue-50 text-blue-800 rounded-md text-[11px] font-semibold">Imprimir / Guardar</span>
+              </div>
             </div>
-            <a href="recursos-cuidador.html?tab=printables" class="text-brand-600 font-bold hover:underline text-sm">Ver Fichas Imprimibles &rarr;</a>
+            <a href="recursos-cuidador.html?tab=printables" class="inline-block w-full py-3.5 text-center bg-brand-900 text-white rounded-xl font-bold hover:bg-brand-800 transition-colors text-sm shadow-md">Ver Fichas Imprimibles &rarr;</a>
           </article>
 
           <!-- 6. Productos Recomendados -->
-          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between">
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between hover:shadow-xl transition-all">
             <div>
-              <span class="text-3xl mb-3 block">🛒</span>
-              <h2 class="font-display text-2xl font-bold text-brand-900 mb-3">Catálogo de Productos de Apoyo</h2>
-              <p class="text-gray-600 mb-6 text-sm">
-                Catálogo de productos de apoyo categorizados (baño, dormitorio, movilidad, cocina) con análisis técnico ergonómico de Terapia Ocupacional.
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-3xl">🛒</span>
+                <span class="px-3 py-1 bg-rose-50 text-rose-700 rounded-full text-xs font-bold uppercase tracking-wider">Catálogo Clínico</span>
+              </div>
+              <h2 class="font-display text-2xl font-bold text-brand-900 mb-3">Catálogo de Productos para Cuidadores</h2>
+              <p class="text-gray-600 mb-4 text-sm leading-relaxed">
+                Catálogo especializado de productos de apoyo (sábanas deslizantes, cinturones de movilización, discos giratorios, arneses de transferencia y elevadores) analizados por Terapeutas Ocupacionales.
               </p>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="px-2 py-0.5 bg-rose-50 text-rose-800 rounded-md text-[11px] font-semibold">Sábanas Deslizantes</span>
+                <span class="px-2 py-0.5 bg-rose-50 text-rose-800 rounded-md text-[11px] font-semibold">Cinturón Transferencia</span>
+                <span class="px-2 py-0.5 bg-rose-50 text-rose-800 rounded-md text-[11px] font-semibold">Análisis TO</span>
+              </div>
             </div>
-            <a href="recursos-cuidador.html?tab=products" class="text-brand-600 font-bold hover:underline text-sm">Ver Productos Recomendados &rarr;</a>
+            <a href="recursos-cuidador.html?tab=products" class="inline-block w-full py-3.5 text-center bg-brand-900 text-white rounded-xl font-bold hover:bg-brand-800 transition-colors text-sm shadow-md">Ver Catálogo de Productos &rarr;</a>
           </article>
+
         </div>
       </section>
     </main>

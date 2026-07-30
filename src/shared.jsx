@@ -333,14 +333,14 @@ const Navbar = function Navbar({ currentPage }) {
               <img src="assets/iadapta_logo.png" alt="IAdapta" className={`object-contain transition-all duration-300 flex-shrink-0 ${scrolled ? 'h-14' : 'h-16 md:h-20 lg:h-24'}`} />
             </a>
 
-            <div className="hidden xl:flex items-center gap-4">
+            <div className="hidden xl:flex items-center gap-2">
               <ul className="flex items-center gap-1 list-none m-0 p-0">
                 {linksMain.map(link => (
                   <li key={link.id}>
                     <a 
                       href={link.href} 
                       onClick={(e) => handleLinkClick(e, link)}
-                      className={`px-3 py-1.5 rounded-xl text-sm xl:text-base font-bold transition-all duration-200 inline-block text-center ${
+                      className={`px-3.5 py-2 rounded-xl text-sm xl:text-base font-bold transition-all duration-200 inline-flex items-center justify-center text-center min-h-[44px] ${
                         isLinkActive(link.id)
                         ? 'bg-brand-900 text-white shadow-sm' 
                         : 'text-brand-900/70 hover:text-brand-900 hover:bg-white/50'
@@ -358,19 +358,19 @@ const Navbar = function Navbar({ currentPage }) {
                   </li>
                 ))}
                 <li>
-                  <a href="cv.html" className={`px-4 py-2.5 rounded-xl text-sm xl:text-base font-bold transition-all duration-200 whitespace-nowrap inline-block ${
-                    currentPage === 'cv' ? 'bg-accent-coral text-white shadow-md' : 'text-accent-coral hover:bg-white/50 border-2 border-accent-coral/10 ml-2'
+                  <a href="cv.html" className={`px-4 py-2 rounded-xl text-sm xl:text-base font-bold transition-all duration-200 whitespace-nowrap inline-flex items-center justify-center min-h-[44px] ${
+                    currentPage === 'cv' ? 'bg-accent-coral text-white shadow-md' : 'text-accent-coral hover:bg-white/50 border-2 border-accent-coral/10 ml-1'
                   }`}>
                     Sobre mí
                   </a>
                 </li>
               </ul>
               
-              <div className="h-8 w-px bg-brand-900/10 mx-2"></div>
+              <div className="h-8 w-px bg-brand-900/10 mx-1"></div>
               
               <button 
                 onClick={() => setDonateModalOpen(true)}
-                className="px-5 py-2 rounded-xl transition-all duration-200 bg-brand-900 text-white shadow-lg hover:bg-brand-800 flex items-center gap-2.5 group"
+                className="px-4 py-2 rounded-xl transition-all duration-200 bg-brand-900 text-white shadow-lg hover:bg-brand-800 flex items-center gap-2.5 group min-h-[44px]"
               >
                 <Icons.Heart className="group-hover:fill-red-500 group-hover:text-red-500 transition-all duration-300 w-5 h-5 flex-shrink-0" />
                 <span className="flex flex-col items-start text-xs xl:text-sm font-black leading-none text-left">

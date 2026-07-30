@@ -4610,15 +4610,16 @@ const { Icons, Navbar, Footer, CookieBanner } = window;
                         <p className="text-brand-600 font-medium text-sm">Toca las letras en el orden correcto para formar la palabra:</p>
                       </div>
 
-                      <div className={`flex flex-wrap justify-center gap-2 sm:gap-3 mb-10 min-h-[70px] items-center p-4 rounded-3xl transition-all duration-300 ${isError ? 'bg-red-50 ring-4 ring-red-300' : gameStatus === 'round_complete' ? 'bg-emerald-50 ring-4 ring-emerald-300' : 'bg-brand-50/70 border-2 border-dashed border-brand-200'}`}>
+                      <div className={`flex flex-nowrap justify-center gap-1.5 sm:gap-2.5 mb-10 min-h-[70px] items-center p-3 sm:p-5 rounded-3xl w-full max-w-full overflow-x-auto transition-all duration-300 ${isError ? 'bg-red-50 ring-4 ring-red-300' : gameStatus === 'round_complete' ? 'bg-emerald-50 ring-4 ring-emerald-300' : 'bg-brand-50/70 border-2 border-dashed border-brand-200'}`}>
                         {Array.from({ length: targetWord.length }).map((_, idx) => {
                           const tile = userWord[idx];
+                          const fontSizeClass = targetWord.length > 10 ? 'text-sm sm:text-xl' : targetWord.length > 7 ? 'text-base sm:text-2xl' : 'text-xl sm:text-3xl';
                           return (
                             <button
                               key={idx}
                               onClick={() => handleRemoveUserLetter(idx)}
                               disabled={!tile || gameStatus !== 'playing'}
-                              className={`w-12 h-14 sm:w-14 sm:h-16 rounded-2xl flex items-center justify-center font-display text-2xl sm:text-3xl font-bold shadow-md transition-all duration-300
+                              className={`flex-1 shrink min-w-0 max-w-[56px] aspect-[4/5] h-auto rounded-xl sm:rounded-2xl flex items-center justify-center font-display font-bold shadow-md transition-all duration-300 ${fontSizeClass}
                                 ${tile 
                                   ? isError 
                                     ? 'bg-red-500 text-white scale-105 shadow-red-500/30' 

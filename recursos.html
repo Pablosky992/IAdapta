@@ -215,27 +215,39 @@
     <!-- Contenido estático de respaldo para SEO, Accesibilidad y AdSense -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-[#F2F0E9] border-b border-brand-900/10 shadow-sm">
       <div class="max-w-[1400px] mx-auto px-4 sm:px-8 flex items-center justify-between h-24 md:h-28">
-        <a href="index.html" class="flex items-center hover:scale-105 transition-transform">
-          <img src="assets/iadapta_logo.png" alt="IAdapta" class="h-16 md:h-20 object-contain" />
+        <a href="index.html" class="flex items-center hover:scale-105 transition-transform flex-shrink-0">
+          <img src="assets/iadapta_logo.png" alt="IAdapta" class="h-16 md:h-20 object-contain flex-shrink-0" />
         </a>
-        <nav class="hidden xl:flex items-center gap-1">
-          <a href="index.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Inicio</a>
-          <a href="valoracion-estancia.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
-            <span>Valoración de</span><span>la estancia</span>
-          </a>
-          <a href="guias.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
-            <span>Guías de</span><span>adaptación</span>
-          </a>
-          <a href="estimulacion-cognitiva.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
-            <span>Área</span><span>Cognitiva</span>
-          </a>
-          <a href="recursos.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
-            <span>Recursos para</span><span>profesionales</span>
-          </a>
-          <a href="index.html#about" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Sobre Mí</a>
-          <a href="contacto.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Contacto</a>
-          <a href="cv.html" class="px-4 py-2.5 text-sm xl:text-base font-bold text-white bg-accent-coral rounded-xl transition-all ml-2">Mi CV</a>
-        </nav>
+        <div class="hidden xl:flex items-center gap-4">
+          <nav class="flex items-center gap-1">
+            <a href="index.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Inicio</a>
+            <a href="valoracion-estancia.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+              <span>Valoración de</span><span>la estancia</span>
+            </a>
+            <a href="guias.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+              <span>Guías de</span><span>adaptación</span>
+            </a>
+            <a href="estimulacion-cognitiva.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+              <span>Área</span><span>Cognitiva</span>
+            </a>
+            <a href="recursos.html" class="px-3 py-1.5 text-sm xl:text-base font-bold bg-brand-900 text-white shadow-sm rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+              <span>Recursos para</span><span>profesionales</span>
+            </a>
+            <a href="recursos-cuidador.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+              <span>Recursos para</span><span>el cuidador</span>
+            </a>
+            <a href="contacto.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Contacto</a>
+            <a href="cv.html" class="px-4 py-2.5 text-sm xl:text-base font-bold text-accent-coral hover:bg-white/50 border-2 border-accent-coral/10 rounded-xl transition-all ml-2 whitespace-nowrap">Sobre mí</a>
+          </nav>
+          <div class="h-8 w-px bg-brand-900/10 mx-2"></div>
+          <button class="px-5 py-2 rounded-xl transition-all duration-200 bg-brand-900 text-white shadow-lg flex items-center gap-2.5">
+            <svg class="w-5 h-5 fill-white text-white" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <span class="flex flex-col items-start text-xs xl:text-sm font-black leading-none text-left">
+              <span>Apoyar</span>
+              <span>proyecto</span>
+            </span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -251,146 +263,168 @@
         </p>
       </section>
 
-      <!-- Tools Grid -->
+      <!-- Tools Grid (6 Herramientas Profesionales) -->
       <section class="max-w-7xl mx-auto px-4 py-12">
         <div class="grid md:grid-cols-2 gap-8">
-          <!-- Generador de Fichas -->
-          <article class="bg-white rounded-3xl border border-gray-200 shadow-md p-8 flex flex-col justify-between">
+          
+          <!-- 1. Generador de Fichas -->
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between hover:shadow-xl transition-all">
             <div>
-              <div class="flex items-center gap-4 mb-6">
-                <div class="w-12 h-12 bg-brand-900 text-white rounded-xl flex items-center justify-center text-2xl">
-                  📄
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 bg-brand-900 text-white rounded-xl flex items-center justify-center text-2xl shadow-sm">
+                    📄
+                  </div>
+                  <h2 class="font-display text-2xl font-bold text-brand-900">Generador de Fichas Cognitivas</h2>
                 </div>
-                <h2 class="font-display text-2xl font-bold text-brand-900">Generador de Fichas Cognitivas</h2>
+                <span class="px-3 py-1 bg-brand-50 text-brand-700 rounded-full text-xs font-bold uppercase tracking-wider hidden sm:inline-block">Exportable a PDF</span>
               </div>
               <p class="text-gray-600 text-base leading-relaxed mb-6">
-                Diseña sesiones de entrenamiento cognitivo a la medida de cada usuario de forma rápida y eficaz. Con nuestro generador, dispones de material ilimitado, aleatorio y adaptado a diferentes niveles de complejidad (cálculo, atención y lenguaje) en formato PDF. Una solución práctica para enriquecer tus herramientas terapéuticas sin invertir horas en preparación administrativa.
+                Diseña sesiones de entrenamiento cognitivo a la medida de cada usuario de forma rápida y eficaz. Con nuestro generador dinámico, dispones de material ilimitado, aleatorio y adaptado a diferentes niveles de complejidad (cálculo mental, atención selectiva y fluidez verbal) exportable directamente a PDF.
               </p>
-              <ul class="list-disc pl-5 mb-6 text-sm text-gray-500 space-y-1">
-                <li>Ejercicios matemáticos adaptados</li>
-                <li>Sopas de letras con generador dinámico</li>
-                <li>Pruebas de rastreo y agudeza visual</li>
-              </ul>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="px-2 py-0.5 bg-brand-50 text-brand-800 rounded-md text-[11px] font-semibold">Cálculo Aritmético</span>
+                <span class="px-2 py-0.5 bg-brand-50 text-brand-800 rounded-md text-[11px] font-semibold">Sopas de Letras</span>
+                <span class="px-2 py-0.5 bg-brand-50 text-brand-800 rounded-md text-[11px] font-semibold">Rastreo Visual</span>
+                <span class="px-2 py-0.5 bg-brand-50 text-brand-800 rounded-md text-[11px] font-semibold">PDF Listo para Imprimir</span>
+              </div>
             </div>
-            <a href="recursos.html?tool=math" class="inline-block text-brand-600 font-bold hover:underline">
+            <a href="recursos.html?tool=math" class="inline-block w-full py-3.5 text-center bg-brand-900 text-white rounded-xl font-bold hover:bg-brand-800 transition-colors text-sm shadow-md">
               Abrir Generador de Fichas &rarr;
             </a>
           </article>
 
-          <!-- Calculadora de Rampas -->
-          <article class="bg-white rounded-3xl border border-gray-200 shadow-md p-8 flex flex-col justify-between">
+          <!-- 2. Calculadora de Rampas -->
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between hover:shadow-xl transition-all">
             <div>
-              <div class="flex items-center gap-4 mb-6">
-                <div class="w-12 h-12 bg-emerald-600 text-white rounded-xl flex items-center justify-center text-2xl">
-                  📐
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 bg-emerald-600 text-white rounded-xl flex items-center justify-center text-2xl shadow-sm">
+                    📐
+                  </div>
+                  <h2 class="font-display text-2xl font-bold text-brand-900">Calculadora de Rampas CTE</h2>
                 </div>
-                <h2 class="font-display text-2xl font-bold text-brand-900">Calculadora de Rampas CTE</h2>
+                <span class="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-bold uppercase tracking-wider hidden sm:inline-block">CTE DB-SUA</span>
               </div>
               <p class="text-gray-600 text-base leading-relaxed mb-6">
-                La accesibilidad física es el primer paso para garantizar la autonomía en el entorno. Con esta herramienta, puedes verificar en segundos la viabilidad técnica de cualquier rampa bajo el marco del CTE de España. Diseña con la seguridad de que tus propuestas de adaptación cumplen con los estándares legales de seguridad y funcionalidad.
+                Verifica en segundos la viabilidad técnica de cualquier rampa bajo la normativa española del CTE (Código Técnico de la Edificación DB-SUA). Comprueba pendientes máximas permitidas (12%, 10%, 8%), la necesidad de descansos intermedios y pasamanos.
               </p>
-              <ul class="list-disc pl-5 mb-6 text-sm text-gray-500 space-y-1">
-                <li>Verificación del porcentaje de pendiente máximo</li>
-                <li>Validaciones automáticas según longitud del tramo</li>
-                <li>Normativa española de accesibilidad edificatoria</li>
-              </ul>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 rounded-md text-[11px] font-semibold">Pendiente Máxima</span>
+                <span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 rounded-md text-[11px] font-semibold">Longitud de Tramo</span>
+                <span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 rounded-md text-[11px] font-semibold">Desnivel en mm</span>
+                <span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 rounded-md text-[11px] font-semibold">CTE DB-SUA</span>
+              </div>
             </div>
-            <a href="recursos.html?tool=ramp" class="inline-block text-brand-600 font-bold hover:underline">
+            <a href="recursos.html?tool=ramp" class="inline-block w-full py-3.5 text-center bg-brand-900 text-white rounded-xl font-bold hover:bg-brand-800 transition-colors text-sm shadow-md">
               Abrir Calculadora de Rampa &rarr;
             </a>
           </article>
 
-          <!-- Calculadora de Diámetro y Perímetro -->
-          <article class="bg-white rounded-3xl border border-gray-200 shadow-md p-8 flex flex-col justify-between">
+          <!-- 3. Calculadora de Diámetro y Perímetro -->
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between hover:shadow-xl transition-all">
             <div>
-              <div class="flex items-center gap-4 mb-6">
-                <div class="w-12 h-12 bg-accent-coral text-white rounded-xl flex items-center justify-center text-2xl">
-                  ⭕
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 bg-accent-coral text-white rounded-xl flex items-center justify-center text-2xl shadow-sm">
+                    ⭕
+                  </div>
+                  <h2 class="font-display text-2xl font-bold text-brand-900">Calculadora de Diámetro y Perímetro</h2>
                 </div>
-                <h2 class="font-display text-2xl font-bold text-brand-900">Calculadora de Diámetro y Perímetro</h2>
+                <span class="px-3 py-1 bg-rose-50 text-accent-coral rounded-full text-xs font-bold uppercase tracking-wider hidden sm:inline-block">Diseño 3D</span>
               </div>
               <p class="text-gray-600 text-base leading-relaxed mb-6">
-                Optimiza el proceso de diseño geométrico en tus intervenciones. Esta herramienta automatiza el cálculo de perímetros y diámetros cilíndricos a partir de una sola medida. Una solución rápida y funcional pensada para trasladar los datos de las valoraciones clínicas directamente al entorno de fabricación digital o personalización de herramientas de autonomía.
+                Automatiza la conversión milimétrica bidireccional entre perímetro y diámetro cilíndrico en tiempo real mediante la constante Pi (π). Herramienta imprescindible para el modelado en 3D de engrosadores de manguitos, mangos ergonómicos y férulas ortopédicas.
               </p>
-              <ul class="list-disc pl-5 mb-6 text-sm text-gray-500 space-y-1">
-                <li>Cálculo instantáneo bidireccional en milímetros (mm)</li>
-                <li>Fórmula de conversión precisa según la relación Pi (π)</li>
-                <li>Útil para el diseño de férulas, engrosadores y órtesis</li>
-              </ul>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="px-2 py-0.5 bg-rose-50 text-rose-800 rounded-md text-[11px] font-semibold">Perímetro a Diámetro</span>
+                <span class="px-2 py-0.5 bg-rose-50 text-rose-800 rounded-md text-[11px] font-semibold">Conversión en mm</span>
+                <span class="px-2 py-0.5 bg-rose-50 text-rose-800 rounded-md text-[11px] font-semibold">Órtesis y Engrosadores</span>
+              </div>
             </div>
-            <a href="recursos.html?tool=circle" class="inline-block text-brand-600 font-bold hover:underline">
+            <a href="recursos.html?tool=circle" class="inline-block w-full py-3.5 text-center bg-brand-900 text-white rounded-xl font-bold hover:bg-brand-800 transition-colors text-sm shadow-md">
               Abrir Calculadora de Círculo &rarr;
             </a>
           </article>
 
-          <!-- Buscador PAO -->
-          <article class="bg-white rounded-3xl border border-gray-200 shadow-md p-8 flex flex-col justify-between">
+          <!-- 4. Buscador PAO -->
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between hover:shadow-xl transition-all">
             <div>
-              <div class="flex items-center gap-4 mb-6">
-                <div class="w-12 h-12 bg-blue-900 text-white rounded-xl flex items-center justify-center text-2xl">
-                  🔍
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 bg-blue-900 text-white rounded-xl flex items-center justify-center text-2xl shadow-sm">
+                    🔍
+                  </div>
+                  <h2 class="font-display text-2xl font-bold text-brand-900">Buscador PAO CatSalut</h2>
                 </div>
-                <h2 class="font-display text-2xl font-bold text-brand-900">Buscador PAO CatSalut</h2>
+                <span class="px-3 py-1 bg-blue-50 text-blue-800 rounded-full text-xs font-bold uppercase tracking-wider hidden sm:inline-block">CatSalut Oficial</span>
               </div>
               <p class="text-gray-600 text-base leading-relaxed mb-6">
-                Optimiza el tiempo dedicado a la gestión documental en tus intervenciones. Encuentra rápidamente las especificaciones, códigos y descripciones oficiales de los productos de apoyo financiados por el sistema de salud de Cataluña. Introduce el nombre del recurso o el código técnico para verificar los datos necesarios de forma centralizada y sin necesidad de consultar extensos manuales en PDF.
+                Buscador especializado del catálogo de prestaciones ortoprotésicas del Servei Català de la Salut (PAO CatSalut). Consulta al instante por código técnico o descripción de producto, importes de reembolso, la aportación del usuario y requisitos de prescripción médica.
               </p>
-              <ul class="list-disc pl-5 mb-6 text-sm text-gray-500 space-y-1">
-                <li>Consulta de importes de copago y reembolso</li>
-                <li>Especificaciones del material financiables</li>
-                <li>Actualizado con los códigos vigentes de CatSalut</li>
-              </ul>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="px-2 py-0.5 bg-blue-50 text-blue-800 rounded-md text-[11px] font-semibold">Códigos Ortoprotésicos</span>
+                <span class="px-2 py-0.5 bg-blue-50 text-blue-800 rounded-md text-[11px] font-semibold">Importes Reembolso</span>
+                <span class="px-2 py-0.5 bg-blue-50 text-blue-800 rounded-md text-[11px] font-semibold">Sillas y Protesis CatSalut</span>
+              </div>
             </div>
-            <a href="recursos.html?tool=pao" class="inline-block text-brand-600 font-bold hover:underline">
+            <a href="recursos.html?tool=pao" class="inline-block w-full py-3.5 text-center bg-brand-900 text-white rounded-xl font-bold hover:bg-brand-800 transition-colors text-sm shadow-md">
               Abrir Buscador PAO &rarr;
             </a>
           </article>
 
-          <!-- Impresión 3D -->
-          <article class="bg-white rounded-3xl border border-gray-200 shadow-md p-8 flex flex-col justify-between">
+          <!-- 5. Impresión 3D -->
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between hover:shadow-xl transition-all">
             <div>
-              <div class="flex items-center gap-4 mb-6">
-                <div class="w-12 h-12 bg-orange-500 text-white rounded-xl flex items-center justify-center text-2xl">
-                  🖨️
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 bg-orange-500 text-white rounded-xl flex items-center justify-center text-2xl shadow-sm">
+                    🖨️
+                  </div>
+                  <h2 class="font-display text-2xl font-bold text-brand-900">Catálogo e Impresión 3D (STL)</h2>
                 </div>
-                <h2 class="font-display text-2xl font-bold text-brand-900">Catálogo de Impresión 3D</h2>
+                <span class="px-3 py-1 bg-orange-50 text-orange-700 rounded-full text-xs font-bold uppercase tracking-wider hidden sm:inline-block">Archivos STL Gratis</span>
               </div>
               <p class="text-gray-600 text-base leading-relaxed mb-6">
-                Explora archivos digitales abiertos de productos de apoyo para su fabricación mediante impresoras 3D domésticas. Descarga abridores de botellas, portallaves ergonómicos y engrosadores de bolígrafos de forma gratuita.
+                Catálogo abierto de modelos en formato STL listos para descargar e imprimir en 3D: abrelatas ergonómicos, engrosadores de llaves, adaptadores de bolígrafos y sujeta-platos de bajo coste para la autonomía en el hogar.
               </p>
-              <ul class="list-disc pl-5 mb-6 text-sm text-gray-500 space-y-1">
-                <li>Descarga directa de archivos en formato STL</li>
-                <li>Instrucciones y parámetros de impresión recomendados</li>
-                <li>Fabricación digital a bajo coste de soluciones de apoyo</li>
-              </ul>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="px-2 py-0.5 bg-orange-50 text-orange-800 rounded-md text-[11px] font-semibold">Descarga STL</span>
+                <span class="px-2 py-0.5 bg-orange-50 text-orange-800 rounded-md text-[11px] font-semibold">Parámetros Relleno</span>
+                <span class="px-2 py-0.5 bg-orange-50 text-orange-800 rounded-md text-[11px] font-semibold">Fabricación Digital</span>
+              </div>
             </div>
-            <a href="recursos.html?tool=3dprint" class="inline-block text-brand-600 font-bold hover:underline">
+            <a href="recursos.html?tool=3dprint" class="inline-block w-full py-3.5 text-center bg-brand-900 text-white rounded-xl font-bold hover:bg-brand-800 transition-colors text-sm shadow-md">
               Explorar Modelos 3D &rarr;
             </a>
           </article>
 
-          <!-- Chatbot Ocupacional -->
-          <article class="bg-white rounded-3xl border border-gray-200 shadow-md p-8 flex flex-col justify-between">
+          <!-- 6. Chatbot Ocupacional -->
+          <article class="bg-white rounded-3xl border border-gray-100 shadow-md p-8 flex flex-col justify-between hover:shadow-xl transition-all">
             <div>
-              <div class="flex items-center gap-4 mb-6">
-                <div class="w-12 h-12 bg-indigo-600 text-white rounded-xl flex items-center justify-center text-2xl">
-                  💬
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 bg-indigo-600 text-white rounded-xl flex items-center justify-center text-2xl shadow-sm">
+                    💬
+                  </div>
+                  <h2 class="font-display text-2xl font-bold text-brand-900">Consultor Clínico IA en Terapia Ocupacional</h2>
                 </div>
-                <h2 class="font-display text-2xl font-bold text-brand-900">Consultor de Terapia Ocupacional</h2>
+                <span class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-xs font-bold uppercase tracking-wider hidden sm:inline-block">Consultor Experto</span>
               </div>
               <p class="text-gray-600 text-base leading-relaxed mb-6">
-                Asistente conversacional experto y técnico. Obtén asesoramiento clínico inmediato para tus casos prácticos de terapia ocupacional, rehabilitación, ayudas técnicas y adaptaciones del hogar.
+                Asistente virtual conversacional con tono clínico formal y especializado. Resuelve dudas sobre adaptaciones complejas de la vivienda, prescripción de productos de apoyo, intervención en hemiparesia y razonamiento clínico.
               </p>
-              <ul class="list-disc pl-5 mb-6 text-sm text-gray-500 space-y-1">
-                <li>Asesoramiento formal y técnico clínico</li>
-                <li>Recomendación de órtesis y productos de apoyo</li>
-                <li>Preguntas de refinamiento para afinar la intervención</li>
-              </ul>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="px-2 py-0.5 bg-indigo-50 text-indigo-800 rounded-md text-[11px] font-semibold">Razonamiento Clínico</span>
+                <span class="px-2 py-0.5 bg-indigo-50 text-indigo-800 rounded-md text-[11px] font-semibold">Asesoramiento TO</span>
+                <span class="px-2 py-0.5 bg-indigo-50 text-indigo-800 rounded-md text-[11px] font-semibold">Adaptación Técnica</span>
+              </div>
             </div>
-            <a href="recursos.html?tool=chatbot" class="inline-block text-brand-600 font-bold hover:underline">
+            <a href="recursos.html?tool=chatbot" class="inline-block w-full py-3.5 text-center bg-brand-900 text-white rounded-xl font-bold hover:bg-brand-800 transition-colors text-sm shadow-md">
               Abrir Consultor de TO &rarr;
             </a>
           </article>
+
         </div>
       </section>
     </main>

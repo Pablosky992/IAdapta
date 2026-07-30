@@ -132,27 +132,39 @@
     <!-- Contenido estático de respaldo para SEO, Accesibilidad y AdSense -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-[#F2F0E9] border-b border-brand-900/10 shadow-sm">
       <div class="max-w-[1400px] mx-auto px-4 sm:px-8 flex items-center justify-between h-24 md:h-28">
-        <a href="index.html" class="flex items-center hover:scale-105 transition-transform">
-          <img src="assets/iadapta_logo.png" alt="IAdapta" class="h-16 md:h-20 object-contain" />
+        <a href="index.html" class="flex items-center hover:scale-105 transition-transform flex-shrink-0">
+          <img src="assets/iadapta_logo.png" alt="IAdapta" class="h-16 md:h-20 object-contain flex-shrink-0" />
         </a>
-        <nav class="hidden xl:flex items-center gap-1">
-          <a href="index.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Inicio</a>
-          <a href="valoracion-estancia.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
-            <span>Valoración de</span><span>la estancia</span>
-          </a>
-          <a href="guias.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
-            <span>Guías de</span><span>adaptación</span>
-          </a>
-          <a href="estimulacion-cognitiva.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
-            <span>Área</span><span>Cognitiva</span>
-          </a>
-          <a href="recursos.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
-            <span>Recursos para</span><span>profesionales</span>
-          </a>
-          <a href="index.html#about" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Sobre Mí</a>
-          <a href="contacto.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Contacto</a>
-          <a href="cv.html" class="px-4 py-2.5 text-sm xl:text-base font-bold text-white bg-accent-coral rounded-xl transition-all ml-2">Mi CV</a>
-        </nav>
+        <div class="hidden xl:flex items-center gap-4">
+          <nav class="flex items-center gap-1">
+            <a href="index.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all">Inicio</a>
+            <a href="valoracion-estancia.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+              <span>Valoración de</span><span>la estancia</span>
+            </a>
+            <a href="guias.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+              <span>Guías de</span><span>adaptación</span>
+            </a>
+            <a href="estimulacion-cognitiva.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+              <span>Área</span><span>Cognitiva</span>
+            </a>
+            <a href="recursos.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+              <span>Recursos para</span><span>profesionales</span>
+            </a>
+            <a href="recursos-cuidador.html" class="px-3 py-1.5 text-sm xl:text-base font-bold text-brand-900/70 hover:text-brand-900 hover:bg-white/50 rounded-xl transition-all text-center leading-tight flex flex-col items-center">
+              <span>Recursos para</span><span>el cuidador</span>
+            </a>
+            <a href="contacto.html" class="px-3 py-1.5 text-sm xl:text-base font-bold bg-brand-900 text-white shadow-sm rounded-xl transition-all">Contacto</a>
+            <a href="cv.html" class="px-4 py-2.5 text-sm xl:text-base font-bold text-accent-coral hover:bg-white/50 border-2 border-accent-coral/10 rounded-xl transition-all ml-2 whitespace-nowrap">Sobre mí</a>
+          </nav>
+          <div class="h-8 w-px bg-brand-900/10 mx-2"></div>
+          <button class="px-5 py-2 rounded-xl transition-all duration-200 bg-brand-900 text-white shadow-lg flex items-center gap-2.5">
+            <svg class="w-5 h-5 fill-white text-white" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <span class="flex flex-col items-start text-xs xl:text-sm font-black leading-none text-left">
+              <span>Apoyar</span>
+              <span>proyecto</span>
+            </span>
+          </button>
+        </div>
       </div>
     </header>
 

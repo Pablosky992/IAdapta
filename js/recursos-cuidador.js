@@ -391,7 +391,7 @@ const CaregiverSubNav = function CaregiverSubNav({
     color: 'bg-teal-600 border-teal-600'
   }];
   return /*#__PURE__*/React.createElement("div", {
-    className: "w-full max-w-6xl mx-auto mb-10"
+    className: "w-full max-w-7xl mx-auto mb-10"
   }, /*#__PURE__*/React.createElement("div", {
     className: "flex items-center justify-between gap-4 flex-wrap border-b border-brand-100 pb-5"
   }, /*#__PURE__*/React.createElement("button", {
@@ -3392,7 +3392,7 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
       id: "caregiver-resources",
       className: "pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "max-w-6xl mx-auto transition-all duration-300"
+      className: "max-w-7xl mx-auto transition-all duration-300"
     }, /*#__PURE__*/React.createElement("div", {
       className: "text-center mb-16"
     }, /*#__PURE__*/React.createElement("span", {
@@ -3564,7 +3564,7 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
       id: "caregiver-resources",
       className: "pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "max-w-6xl mx-auto transition-all duration-300"
+      className: "max-w-7xl mx-auto transition-all duration-300"
     }, /*#__PURE__*/React.createElement(CaregiverSubNav, {
       currentView: "products",
       onViewChange: setCurrentView
@@ -3654,7 +3654,7 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
       id: "caregiver-resources",
       className: "pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "max-w-6xl mx-auto transition-all duration-300"
+      className: "max-w-7xl mx-auto transition-all duration-300"
     }, /*#__PURE__*/React.createElement(CaregiverSubNav, {
       currentView: "zarit",
       onViewChange: setCurrentView
@@ -3831,7 +3831,7 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
       id: "caregiver-resources",
       className: "pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "max-w-6xl mx-auto transition-all duration-300"
+      className: "max-w-7xl mx-auto transition-all duration-300"
     }, /*#__PURE__*/React.createElement(CaregiverSubNav, {
       currentView: "chat",
       onViewChange: setCurrentView
@@ -3850,7 +3850,7 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
       id: "caregiver-resources",
       className: "pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "max-w-6xl mx-auto transition-all duration-300"
+      className: "max-w-7xl mx-auto transition-all duration-300"
     }, /*#__PURE__*/React.createElement(CaregiverSubNav, {
       currentView: "log",
       onViewChange: setCurrentView
@@ -3871,7 +3871,7 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
       id: "caregiver-resources",
       className: "pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "max-w-6xl mx-auto transition-all duration-300"
+      className: "max-w-7xl mx-auto transition-all duration-300"
     }, /*#__PURE__*/React.createElement(CaregiverSubNav, {
       currentView: "wizard",
       onViewChange: setCurrentView
@@ -3894,7 +3894,7 @@ const SectionCaregiverResources = function SectionCaregiverResources() {
       id: "caregiver-resources",
       className: "pt-36 pb-24 px-4 bg-brand-50/50 min-h-screen"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "max-w-6xl mx-auto transition-all duration-300"
+      className: "max-w-7xl mx-auto transition-all duration-300"
     }, /*#__PURE__*/React.createElement(CaregiverSubNav, {
       currentView: "printables",
       onViewChange: setCurrentView

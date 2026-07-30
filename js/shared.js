@@ -1591,7 +1591,7 @@ const Navbar = function Navbar({
     alt: "IAdapta",
     className: `object-contain transition-all duration-300 flex-shrink-0 ${scrolled ? 'h-14' : 'h-16 md:h-20 lg:h-24'}`
   })), /*#__PURE__*/React.createElement("div", {
-    className: "hidden xl:flex items-center gap-4"
+    className: "hidden xl:flex items-center gap-2"
   }, /*#__PURE__*/React.createElement("ul", {
     className: "flex items-center gap-1 list-none m-0 p-0"
   }, linksMain.map(link => /*#__PURE__*/React.createElement("li", {
@@ -1599,17 +1599,17 @@ const Navbar = function Navbar({
   }, /*#__PURE__*/React.createElement("a", {
     href: link.href,
     onClick: e => handleLinkClick(e, link),
-    className: `px-3 py-1.5 rounded-xl text-sm xl:text-base font-bold transition-all duration-200 inline-block text-center ${isLinkActive(link.id) ? 'bg-brand-900 text-white shadow-sm' : 'text-brand-900/70 hover:text-brand-900 hover:bg-white/50'}`
+    className: `px-3.5 py-2 rounded-xl text-sm xl:text-base font-bold transition-all duration-200 inline-flex items-center justify-center text-center min-h-[44px] ${isLinkActive(link.id) ? 'bg-brand-900 text-white shadow-sm' : 'text-brand-900/70 hover:text-brand-900 hover:bg-white/50'}`
   }, Array.isArray(link.label) ? /*#__PURE__*/React.createElement("span", {
     className: "flex flex-col items-center leading-tight"
   }, /*#__PURE__*/React.createElement("span", null, link.label[0]), /*#__PURE__*/React.createElement("span", null, link.label[1])) : link.label))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
     href: "cv.html",
-    className: `px-4 py-2.5 rounded-xl text-sm xl:text-base font-bold transition-all duration-200 whitespace-nowrap inline-block ${currentPage === 'cv' ? 'bg-accent-coral text-white shadow-md' : 'text-accent-coral hover:bg-white/50 border-2 border-accent-coral/10 ml-2'}`
+    className: `px-4 py-2 rounded-xl text-sm xl:text-base font-bold transition-all duration-200 whitespace-nowrap inline-flex items-center justify-center min-h-[44px] ${currentPage === 'cv' ? 'bg-accent-coral text-white shadow-md' : 'text-accent-coral hover:bg-white/50 border-2 border-accent-coral/10 ml-1'}`
   }, "Sobre m\xED"))), /*#__PURE__*/React.createElement("div", {
-    className: "h-8 w-px bg-brand-900/10 mx-2"
+    className: "h-8 w-px bg-brand-900/10 mx-1"
   }), /*#__PURE__*/React.createElement("button", {
     onClick: () => setDonateModalOpen(true),
-    className: "px-5 py-2 rounded-xl transition-all duration-200 bg-brand-900 text-white shadow-lg hover:bg-brand-800 flex items-center gap-2.5 group"
+    className: "px-4 py-2 rounded-xl transition-all duration-200 bg-brand-900 text-white shadow-lg hover:bg-brand-800 flex items-center gap-2.5 group min-h-[44px]"
   }, /*#__PURE__*/React.createElement(Icons.Heart, {
     className: "group-hover:fill-red-500 group-hover:text-red-500 transition-all duration-300 w-5 h-5 flex-shrink-0"
   }), /*#__PURE__*/React.createElement("span", {
