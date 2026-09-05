@@ -175,7 +175,7 @@ const SectionContact = function SectionContact() {
       className: "w-7 h-7 text-white"
     }),
     label: 'Correo electrónico',
-    value: 'iadaptato@gmail.com',
+    value: 'contacto@iadapta.es',
     href: '#',
     onClick: e => {
       e.preventDefault();
