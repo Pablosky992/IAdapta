@@ -9,7 +9,7 @@ const SectionContact = function SectionContact() {
     { 
       icon: <Icons.Mail className="w-7 h-7 text-white" />, 
       label: 'Correo electrónico', 
-      value: 'iadaptato@gmail.com', 
+      value: 'contacto@iadapta.es', 
       href: '#',
       onClick: (e) => { e.preventDefault(); setIsModalOpen(true); },
       iconBg: 'bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-md shadow-indigo-100',

@@ -19,7 +19,7 @@ const db = getFirestore(app);
 
 // Configure VAPID keys for Web Push
 webpush.setVapidDetails(
-  'mailto:iadaptato@gmail.com',
+  'mailto:contacto@iadapta.es',
   'BMYMyTsyO73fZSOP6B5HJP0Ii2YNFx4aFg4kIMaB830gpOv7vYhNF0xi7g9HhK50CZAPsezb9sDHcKVQxEBMS-k', // Public Key
   'POVdO0SFh200XwLUj1yXQncRsgfaCj5n5ISPzbawcKY' // Private Key
 );

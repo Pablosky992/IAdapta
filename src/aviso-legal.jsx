@@ -34,7 +34,7 @@ const SectionLegal = function SectionLegal() {
                 <ul className="mt-4 space-y-2 list-disc pl-6">
                   <li><strong>Titular:</strong> Pablo Narciso Millán (IAdapta)</li>
                   <li><strong>Actividad:</strong> Terapeuta Ocupacional & Especialista en Accesibilidad</li>
-                  <li><strong>Email:</strong> iadaptato@gmail.com</li>
+                  <li><strong>Email:</strong> contacto@iadapta.es</li>
                   <li><strong>Sitio Web:</strong> iadapta.es</li>
                 </ul>
               </section>
