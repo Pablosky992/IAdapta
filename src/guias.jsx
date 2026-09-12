@@ -203,6 +203,39 @@ const SectionGuides = function SectionGuides() {
       link: 'guia-cognitivos.html',
       category: 'autonomia',
       tags: ['memoria', 'atencion', 'lenguaje', 'calculo', 'cerebro', 'cognitivo', 'juegos', 'rompecabezas', 'entrenamiento']
+    },
+    {
+      id: 'accesos',
+      title: 'Accesos y Pasillos',
+      icon: '🚪',
+      color: 'bg-amber-100 text-amber-700',
+      description: 'Accesibilidad en accesos, pasillos y escaleras: rampas, pasamanos y puertas.',
+      image: 'assets/guia_accesos.png',
+      link: 'guia-accesos.html',
+      category: 'hogar',
+      tags: ['rampa', 'accesos', 'entrada', 'puerta', 'escaleras', 'desnivel', 'pasillo', 'salvaescaleras', 'pasamanos']
+    },
+    {
+      id: 'incontinencia',
+      title: 'Incontinencia y Aseo',
+      icon: '💧',
+      color: 'bg-teal-100 text-teal-700',
+      description: 'Higiene y manejo de la incontinencia: pautas de aseo, empapadores y bidé acoplable.',
+      image: 'assets/guia_incontinencia.png',
+      link: 'guia-incontinencia.html',
+      category: 'autonomia',
+      tags: ['incontinencia', 'orina', 'panal', 'empapador', 'aseo intimo', 'bide', 'piel', 'cuna', 'botella urinaria']
+    },
+    {
+      id: 'baja-vision',
+      title: 'Baja Visión',
+      icon: '👁️',
+      color: 'bg-cyan-100 text-cyan-700',
+      description: 'Adaptaciones para baja visión y ceguera: contraste cromático, iluminación y macrotipos.',
+      image: 'assets/guia_baja_vision.png',
+      link: 'guia-baja-vision.html',
+      category: 'patologias',
+      tags: ['vision', 'baja vision', 'ciego', 'ojo', 'lupa', 'contraste', 'macrotipo', 'glaucoma', 'cataratas', 'luz', 'tactil']
     }
   ];
 
